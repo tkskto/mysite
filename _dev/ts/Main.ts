@@ -1,0 +1,69 @@
+///<reference path="config/Config.ts" />
+///<reference path="Model.ts" />
+///<reference path="Utils.ts" />
+
+///<reference path="./Text/W.ts" />
+///<reference path="./Text/H.ts" />
+///<reference path="./Text/O.ts" />
+
+///<reference path="scenes/First.ts" />
+
+///<reference path="./svg/SVGController.ts" />
+
+import Model = model.Model;
+
+(function (win, doc, undefined) {
+    'use strict';
+
+    let _model:Model = new Model();
+
+    function init() {
+
+        win.addEventListener('resize', function () {
+            _model.screen = {
+                width: win.innerWidth,
+                height: win.innerHeight
+            };
+        });
+
+        _model.screen = {
+            width: win.innerWidth,
+            height: win.innerHeight
+        };
+
+        let mainCamera:THREE.PerspectiveCamera = new THREE.PerspectiveCamera( 60, _model.screen.width / _model.screen.height, 1, 1000 );
+        mainCamera.position.set( 0, 0, 37 );
+
+        let ratio = window.devicePixelRatio;
+
+        let renderer:THREE.WebGLRenderer = new THREE.WebGLRenderer({
+            antialias: true,
+            stencil: false
+        });
+
+        renderer.setPixelRatio(ratio);
+
+        renderer.setSize(
+            _model.screen.width, _model.screen.height
+        );
+
+        document.getElementById('mv-canvas').appendChild(renderer.domElement);
+
+        let first:scene.First = new scene.First(_model, renderer, mainCamera);
+
+        let _who:NodeList = document.querySelectorAll('.mv-svg');
+        for (let i = 0; i < _who.length; i++) {
+            let _svg:svg.SVGController = new svg.SVGController(_who.item(i) as SVGElement, _model);
+            _svg.show();
+        }
+    }
+
+    // 読み込みが完了してたらそのままinit
+    if (doc.readyState !== 'loading') {
+        init();
+    // 読み込み中の場合は完了をまってからinit
+    } else {
+        doc.addEventListener('DOMContentLoaded', init);
+    }
+
+})(window, document);

@@ -1,0 +1,23 @@
+{
+  "name": "mysite",
+  "version": "0.1.0",
+  "description": "description",
+  "scripts": {
+    "dev": "nodemon -e .scss -x \"npm run sass\"",
+    "sass": "node-sass ./_dev/scss/style.scss ./css/style.css --output-style expanded --source-map true",
+    "css": "npm run sass && npm run prefix && npm run comb",
+    "prefix": "postcss --use autoprefixer -b \"last 2 versions, Android >= 5.1, iOS >= 10\" ./css/style.css -o ./css/style.css",
+    "comb": "csscomb ./css/style.css"
+  },
+  "devDependencies": {
+    "@types/three": "^0.84.21",
+    "autoprefixer": "^7.1.3",
+    "csscomb": "^4.2.0",
+    "node-sass": "*",
+    "nodemon": "^1.11.0",
+    "opener": "^1.4.3",
+    "postcss-cli": "^4.1.0"
+  },
+  "author": "kato",
+  "license": "ISC"
+}

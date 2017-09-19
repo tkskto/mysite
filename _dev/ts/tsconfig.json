@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "outFile": "../../js/run.js",
+    "sourceMap": true
+  },
+  "files": [
+    "Main.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

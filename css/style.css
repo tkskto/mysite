@@ -1,0 +1,68 @@
+@charset "UTF-8";
+html, body, div {
+  margin: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background: #000;
+}
+
+canvas {
+  vertical-align: top;
+}
+
+/**
+ メインビジュアル
+ */
+#mv {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mv-svg-wrapper {
+  width: 300px;
+}
+
+.mv-canvas-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.mv-canvas-wrapper canvas {
+  width: 100vw;
+  height: 100vh;
+}
+
+.svg-path {
+  stroke: #fff;
+  stroke-width: 0.1;
+  fill: none;
+}
+
+.mv-svg {
+  stroke-dasharray: 32.5 32.5;
+  stroke-dashoffset: 32.5;
+  transition: stroke-dashoffset 3s ease;
+  vertical-align: top;
+}
+
+.mv-svg.show {
+  stroke-dashoffset: 0;
+}
+
+.mv-svg.hide {
+  display: none;
+}
+
+/*# sourceMappingURL=style.css.map */

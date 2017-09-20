@@ -1,3 +1,5 @@
 node_modules/
 .idea/
 lib/three.js-master/
+*.map
+_dev/**/*.js

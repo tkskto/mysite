@@ -40,10 +40,13 @@ module scene {
             meshH.position.set(0, 2, 0);
             this._group.add(meshH);
 
-            let shapeO:text.O = new text.O();
+            let shapeO:text.O = new text.O(2, 32, 5);
+            extrudeOption['extrudePath'] = shapeO.path;
+            extrudeOption['steps'] = 100;
             let o:THREE.ExtrudeGeometry = new THREE.ExtrudeGeometry(shapeO, extrudeOption);
             let meshO:THREE.Mesh = new THREE.Mesh(o, material);
-            meshO.position.set(2, 2, 0);
+            meshO.position.set(5, 0, 0);
+            meshO.rotateY(Math.PI / 2);
             this._group.add(meshO);
 
 

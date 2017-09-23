@@ -670,17 +670,33 @@ var text;
 (function (text) {
     var O = (function (_super) {
         __extends(O, _super);
-        function O() {
+        function O(rad, row, depth) {
             var _this = _super.call(this) || this;
-            _this.moveTo(2, -2);
-            _this.bezierCurveTo(25, 25, 20, 0, 0, 0);
-            _this.bezierCurveTo(30, 0, 30, 35, 30, 35);
-            _this.bezierCurveTo(30, 55, 10, 77, 25, 95);
-            _this.bezierCurveTo(60, 77, 80, 55, 80, 35);
-            _this.bezierCurveTo(80, 35, 80, 0, 50, 0);
-            _this.bezierCurveTo(35, 0, 25, 25, 25, 25);
+            var PI2 = Math.PI * 2;
+            _this.moveTo(0, 0);
+            _this.lineTo(depth, 0);
+            _this.lineTo(depth, rad - rad * 0.5);
+            _this.lineTo(0, rad - rad * 0.5);
+            var points = [];
+            //外側の頂点
+            for (var i = 0; i < row * 2; i++) {
+                var r = PI2 / row * i;
+                var rx = Math.cos(r) * rad;
+                var ry = Math.sin(r) * rad;
+                points.push(new THREE.Vector3(0.0, rx, ry));
+            }
+            _this._path = new THREE.CatmullRomCurve3(points);
+            _this._path['type'] = 'catmullrom';
+            _this._path['closed'] = true;
             return _this;
         }
+        Object.defineProperty(O.prototype, "path", {
+            get: function () {
+                return this._path;
+            },
+            enumerable: true,
+            configurable: true
+        });
         return O;
     }(THREE.Shape));
     text.O = O;
@@ -717,10 +733,13 @@ var scene;
                 var meshH = new THREE.Mesh(h, material);
                 meshH.position.set(0, 2, 0);
                 _this._group.add(meshH);
-                var shapeO = new text.O();
+                var shapeO = new text.O(2, 32, 5);
+                extrudeOption['extrudePath'] = shapeO.path;
+                extrudeOption['steps'] = 100;
                 var o = new THREE.ExtrudeGeometry(shapeO, extrudeOption);
                 var meshO = new THREE.Mesh(o, material);
-                meshO.position.set(2, 2, 0);
+                meshO.position.set(5, 0, 0);
+                meshO.rotateY(Math.PI / 2);
                 _this._group.add(meshO);
                 _this._model.addEventListener(Model.EVENT_SCENE_CHANGE, _this.onSceneChanged);
             };

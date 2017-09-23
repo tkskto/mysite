@@ -1,15 +1,36 @@
 module text {
     export class O extends THREE.Shape{
-        constructor() {
+
+        private _path:THREE.CatmullRomCurve3;
+
+        constructor(rad, row, depth) {
             super();
 
-            this.moveTo( 2, -2 );
-            this.bezierCurveTo( 25, 25, 20, 0, 0, 0 );
-            this.bezierCurveTo( 30, 0, 30, 35,30,35 );
-            this.bezierCurveTo( 30, 55, 10, 77, 25, 95 );
-            this.bezierCurveTo( 60, 77, 80, 55, 80, 35 );
-            this.bezierCurveTo( 80, 35, 80, 0, 50, 0 );
-            this.bezierCurveTo( 35, 0, 25, 25, 25, 25 );
+            let PI2 = Math.PI * 2;
+
+            this.moveTo(0, 0);
+            this.lineTo(depth, 0);
+            this.lineTo(depth, rad - rad * 0.5);
+            this.lineTo(0, rad - rad * 0.5);
+
+            let points:THREE.Vector3[] = [];
+
+            //外側の頂点
+            for(let i = 0; i < row * 2; i++){
+                let r = PI2 / row * i;
+                let rx = Math.cos(r) * rad;
+                let ry = Math.sin(r) * rad;
+                points.push(new THREE.Vector3(0.0, rx, ry));
+            }
+
+            this._path = new THREE.CatmullRomCurve3(points);
+            this._path['type'] = 'catmullrom';
+            this._path['closed'] = true;
         }
+
+        get path(): THREE.CatmullRomCurve3 {
+            return this._path;
+        }
+
     }
 }

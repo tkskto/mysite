@@ -22,7 +22,7 @@ export class First {
     private _scaleI: number = 0.9;
     private _posI: number = 0;
     private _scaleAm: number = 0.9;
-    private _posAm: number = -2.0;
+    private _posAm: number = -4.5;
 
     constructor(private _model: Model, private _renderer: THREE.WebGLRenderer, private _mainCamera: THREE.PerspectiveCamera) {
         this._stage = new THREE.Scene();
@@ -52,13 +52,13 @@ export class First {
         let shapeW: W = new W();
         let w: THREE.ExtrudeGeometry = new THREE.ExtrudeGeometry(shapeW, extrudeOption);
         let meshW: THREE.Mesh = new THREE.Mesh(w, material);
-        meshW.position.set(-6, 2, 0);
+        meshW.position.set(-7, 2, 0);
         this._groupWHO.add(meshW);
 
         let shapeH: H = new H();
         let h: THREE.ExtrudeGeometry = new THREE.ExtrudeGeometry(shapeH, extrudeOption);
         let meshH: THREE.Mesh = new THREE.Mesh(h, material);
-        meshH.position.set(1, 2, 0);
+        meshH.position.set(0, 2, 0);
         this._groupWHO.add(meshH);
 
         let extrudeOptionWithPath = Object.assign({}, extrudeOption);
@@ -68,14 +68,14 @@ export class First {
         extrudeOptionWithPath['steps'] = 100;
         let o: THREE.ExtrudeGeometry = new THREE.ExtrudeGeometry(shapeO, extrudeOptionWithPath);
         let meshO: THREE.Mesh = new THREE.Mesh(o, material);
-        meshO.position.set(6, 0, 0);
+        meshO.position.set(5, 0, 0);
         meshO.rotateY(Math.PI / 2);
         this._groupWHO.add(meshO);
 
         let shapeI: I = new I();
         let i: THREE.ExtrudeGeometry = new THREE.ExtrudeGeometry(shapeI, extrudeOption);
         let meshI: THREE.Mesh = new THREE.Mesh(i, material);
-        meshI.position.set(0, 0, 0);
+        meshI.position.set(-1.5, 0, 0);
         this._groupI.add(meshI);
 
         let shapeA: A = new A();
@@ -86,18 +86,22 @@ export class First {
         });
         let meshAout: THREE.Mesh = new THREE.Mesh(out, material);
         let meshAin: THREE.Mesh = new THREE.Mesh(inner, inMaterial);
-        meshAout.position.set(-3, 0, 0);
-        meshAin.position.set(-3, 0, 0);
+        meshAout.position.set(-5, 0, 0);
+        meshAin.position.set(-5, 0, 0);
         this._groupAM.add(meshAout);
         this._groupAM.add(meshAin);
 
         let shapeM: M = new M();
         let m: THREE.ExtrudeGeometry = new THREE.ExtrudeGeometry(shapeM, extrudeOption);
         let meshM: THREE.Mesh = new THREE.Mesh(m, material);
-        meshM.position.set(1, 0, 0);
+        meshM.position.set(-1, 0, 0);
         this._groupAM.add(meshM);
 
         this._groupWHO.scale.set(this._scaleWho, this._scaleWho, this._scaleWho);
+
+        // axisHelper
+        let axisHelper = new THREE.AxisHelper(1000);  // 引数は 軸のサイズ
+        this._stage.add(axisHelper);
 
         this._model.addEventListener(Model.EVENT_SCENE_CHANGE, this.onSceneChanged);
     };
@@ -158,12 +162,12 @@ export class First {
     private addAM = () => {
 
         gsap.TweenLite.to(this, 0.3, {
-            _posWho: 7,
+            _posWho: 6.5,
             ease: gsap.Linear.ease
         });
 
         gsap.TweenLite.to(this, 0.3, {
-            _posI: 4,
+            _posI: 2.5,
             ease: gsap.Linear.ease
         });
 

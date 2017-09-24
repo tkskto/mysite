@@ -1,36 +1,36 @@
-module text {
-    export class O extends THREE.Shape{
+import * as THREE from 'three';
 
-        private _path:THREE.CatmullRomCurve3;
+export class O extends THREE.Shape{
 
-        constructor(rad, row, depth) {
-            super();
+    private _path:THREE.CatmullRomCurve3;
 
-            let PI2 = Math.PI * 2;
+    constructor(rad, row, depth) {
+        super();
 
-            this.moveTo(0, 0);
-            this.lineTo(depth, 0);
-            this.lineTo(depth, rad - rad * 0.5);
-            this.lineTo(0, rad - rad * 0.5);
+        let PI2 = Math.PI * 2;
 
-            let points:THREE.Vector3[] = [];
+        this.moveTo(0, 0);
+        this.lineTo(depth, 0);
+        this.lineTo(depth, rad - rad * 0.5);
+        this.lineTo(0, rad - rad * 0.5);
 
-            //外側の頂点
-            for(let i = 0; i < row * 2; i++){
-                let r = PI2 / row * i;
-                let rx = Math.cos(r) * rad;
-                let ry = Math.sin(r) * rad;
-                points.push(new THREE.Vector3(0.0, rx, ry));
-            }
+        let points:THREE.Vector3[] = [];
 
-            this._path = new THREE.CatmullRomCurve3(points);
-            this._path['type'] = 'catmullrom';
-            this._path['closed'] = true;
+        //外側の頂点
+        for(let i = 0; i < row * 2; i++){
+            let r = PI2 / row * i;
+            let rx = Math.cos(r) * rad;
+            let ry = Math.sin(r) * rad;
+            points.push(new THREE.Vector3(0.0, rx, ry));
         }
 
-        get path(): THREE.CatmullRomCurve3 {
-            return this._path;
-        }
-
+        this._path = new THREE.CatmullRomCurve3(points);
+        this._path['type'] = 'catmullrom';
+        this._path['closed'] = true;
     }
+
+    get path(): THREE.CatmullRomCurve3 {
+        return this._path;
+    }
+
 }

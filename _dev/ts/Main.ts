@@ -1,16 +1,9 @@
-///<reference path="config/Config.ts" />
-///<reference path="Model.ts" />
-///<reference path="Utils.ts" />
-
-///<reference path="./Text/W.ts" />
-///<reference path="./Text/H.ts" />
-///<reference path="./Text/O.ts" />
-
-///<reference path="scenes/First.ts" />
-
-///<reference path="./svg/SVGController.ts" />
-
-import Model = model.Model;
+// import {AppConfig} from './config/Config';
+// import {Utils} from './Utils';
+import * as THREE from 'three';
+import {Model} from './Model';
+import {SVGController} from './svg/SVGController';
+import {First} from './scenes/First';
 
 (function (win, doc, undefined) {
     'use strict';
@@ -49,11 +42,11 @@ import Model = model.Model;
 
         document.getElementById('mv-canvas').appendChild(renderer.domElement);
 
-        let first:scene.First = new scene.First(_model, renderer, mainCamera);
+        let first:First = new First(_model, renderer, mainCamera);
 
         let _who:NodeList = document.querySelectorAll('.mv-svg');
         for (let i = 0; i < _who.length; i++) {
-            let _svg:svg.SVGController = new svg.SVGController(_who.item(i) as SVGElement, _model);
+            let _svg:SVGController = new SVGController(_who.item(i) as SVGElement, _model);
             _svg.show();
         }
     }

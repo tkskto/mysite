@@ -1,36 +1,29 @@
-///<reference path="../data/Geometry.ts" />
+import * as THREE from 'three';
 
-module text {
-    export class I extends data.Geometry {
-        constructor(_gl:WebGLRenderingContext) {
-            super(_gl);
-            this.VERTEX = [
-                0.0,  0.0, 0.0,
-                3.0,  0.0, 0.0,
-                0.0, -1.0, 0.0,
-                3.0, -1.0, 0.0,
-                1.0, -1.0, 0.0,
-                2.0, -1.0, 0.0,
-                1.0, -3.0, 0.0,
-                2.0, -3.0, 0.0,
-                0.0, -3.0, 0.0,
-                3.0, -3.0, 0.0,
-                0.0, -4.0, 0.0,
-                3.0, -4.0, 0.0
-            ];
+export class I extends THREE.Shape {
+    constructor() {
+        super();
 
-            this.INDEX = [
-                0, 1, 2,
-                1, 3, 2,
-                4, 5, 6,
-                5, 7, 6,
-                8, 9, 10,
-                9, 11, 10
-            ];
+        let vertex = [
+            0.0,  0.0,
+            3.0,  0.0,
+            3.0, -1.0,
+            2.0, -1.0,
+            2.0, -3.0,
+            3.0, -3.0,
+            3.0, -4.0,
+            0.0, -4.0,
+            0.0, -3.0,
+            1.0, -3.0,
+            1.0, -1.0,
+            0.0, -1.0,
+            0.0, -0.0
+        ];
 
-            this.NORMAL = VertexUtils.getFaceNormalArr(this.VERTEX, this.INDEX);
+        this.moveTo(vertex[0], vertex[1]);
 
-            this.init();
+        for (let i = 2; i < vertex.length; i+=2) {
+            this.lineTo(vertex[i], vertex[i + 1]);
         }
     }
 }

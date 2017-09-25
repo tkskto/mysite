@@ -10,8 +10,8 @@
     "sass-w": "nodemon -e .scss -x \"npm run sass\"",
     "sass": "node-sass ./_dev/scss/style.scss ./public/css/style.css --output-style expanded --source-map true",
     "css": "npm run sass && npm run prefix && npm run comb",
-    "prefix": "postcss --use autoprefixer -b \"last 2 versions, Android >= 5.1, iOS >= 10\" ./css/style.css -o ./css/style.css",
-    "comb": "csscomb ./css/style.css"
+    "prefix": "postcss --use autoprefixer -b \"last 2 versions, Android >= 5.1, iOS >= 10\" ./public/css/style.css -o ./public/css/style.css",
+    "comb": "csscomb ./public/css/style.css"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.3",

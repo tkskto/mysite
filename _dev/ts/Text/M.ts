@@ -1,8 +1,14 @@
 import * as THREE from 'three';
 
-export class M extends THREE.Shape {
-    constructor() {
-        super();
+export class M {
+
+    private _shape:THREE.Shape;
+    private _geometry:THREE.ExtrudeGeometry;
+    private _mesh:THREE.Mesh;
+
+    constructor(_material:THREE.Material, _exo:{}) {
+
+        this._shape = new THREE.Shape();
 
         let vertex = [
             0.0, -4.0,
@@ -20,10 +26,17 @@ export class M extends THREE.Shape {
             1.0, -4.0
         ];
 
-        this.moveTo(vertex[0], vertex[1]);
+        this._shape.moveTo(vertex[0], vertex[1]);
 
         for (let i = 2; i < vertex.length; i+=2) {
-            this.lineTo(vertex[i], vertex[i + 1]);
+            this._shape.lineTo(vertex[i], vertex[i + 1]);
         }
+        this._geometry = new THREE.ExtrudeGeometry(this._shape, _exo);
+
+        this._mesh = new THREE.Mesh(this._geometry, _material);
+    }
+
+    get mesh(): THREE.Mesh {
+        return this._mesh;
     }
 }

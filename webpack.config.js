@@ -1,3 +1,5 @@
+const webpack = require("webpack");
+
 module.exports = {
     entry: './_dev/ts/Main.ts',
     output: {
@@ -25,6 +27,9 @@ module.exports = {
         inline: true,
         hot: true
     },
+    plugins: [
+        new webpack.optimize.UglifyJsPlugin()
+    ],
     // ソースマップを有効に
     devtool: 'source-map'
 };

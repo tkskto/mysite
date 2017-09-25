@@ -13,13 +13,16 @@ export class SVGController {
 
     private sceneChanged = () => {
         if (this._model.scene === Model.SCENE_FIRST) {
-            this._elm.classList.add('hide');
             this._model.removeEventListener(Model.EVENT_SCENE_CHANGE, this.sceneChanged);
         }
     };
 
     private transitionEnd = (e) => {
-        // start intro
-        this._model.scene = Model.SCENE_FIRST;
+        if (this._model.scene === Model.SCENE_LOAD) {
+            this._elm.classList.add('hide');
+            this._model.scene = Model.SCENE_INTRO;
+        } else if (this._model.scene === Model.SCENE_INTRO) {
+            this._model.scene = Model.SCENE_FIRST;
+        }
     }
 }

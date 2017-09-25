@@ -1,12 +1,12 @@
 import {Model} from '../Model';
 import * as THREE from 'three';
-// import {Scene,WebGLRenderer, Group, PerspectiveCamera, DirectionalLight, MeshPhongMaterial, ExtrudeGeometry, Mesh} from 'three';
 import {W} from '../Text/W';
 import {H} from '../Text/H';
 import {O} from '../Text/O';
 import {I} from '../Text/I';
 import {A} from '../Text/A';
 import {M} from '../Text/M';
+import {Hatena} from "../Text/Hatena";
 import * as gsap from 'gsap';
 
 export class First {
@@ -15,14 +15,17 @@ export class First {
     private _groupWHO: THREE.Group;
     private _groupI: THREE.Group;
     private _groupAM: THREE.Group;
+    private _groupHatena: THREE.Group;
     private _timer: number;
 
-    private _scaleWho: number = 0.9;
+    private _scaleWho: number = 0.1;
     private _posWho: number = 0;
-    private _scaleI: number = 0.9;
+    private _scaleI: number = 0.1;
     private _posI: number = 0;
-    private _scaleAm: number = 0.9;
-    private _posAm: number = -4.5;
+    private _scaleAm: number = 0.1;
+    private _posAmY: number = -4.25;
+    private _posAmX: number = 0;
+    private _scaleHatena:number = 0.1;
 
     constructor(private _model: Model, private _renderer: THREE.WebGLRenderer, private _mainCamera: THREE.PerspectiveCamera) {
         this._stage = new THREE.Scene();
@@ -34,75 +37,59 @@ export class First {
         this._groupWHO = new THREE.Group();
         this._groupI = new THREE.Group();
         this._groupAM = new THREE.Group();
+        this._groupHatena = new THREE.Group();
         this._stage.add(this._groupWHO);
 
-        let light: THREE.DirectionalLight = new THREE.DirectionalLight();
-        light.position.set(0.0, 0.7, 0.7);
+        let light: THREE.DirectionalLight = new THREE.DirectionalLight(0xffffff);
+        light.position.set(0.0, 0, 0.7);
         this._stage.add(light);
 
-        let material: THREE.MeshPhongMaterial = new THREE.MeshPhongMaterial();
-        let extrudeOption:{} = {
-            amount: 5,
-            steps: 1,
+        let material = new THREE.MeshPhongMaterial();
+
+        const EXTRUDE_OPTION:{} = {
+            amount: 10,
+            steps: 50,
             material: 1,
             extrudeMaterial: 0,
             bevelEnabled: false
         };
 
-        let shapeW: W = new W();
-        let w: THREE.ExtrudeGeometry = new THREE.ExtrudeGeometry(shapeW, extrudeOption);
-        let meshW: THREE.Mesh = new THREE.Mesh(w, material);
-        meshW.position.set(-7, 2, 0);
-        this._groupWHO.add(meshW);
 
-        let shapeH: H = new H();
-        let h: THREE.ExtrudeGeometry = new THREE.ExtrudeGeometry(shapeH, extrudeOption);
-        let meshH: THREE.Mesh = new THREE.Mesh(h, material);
-        meshH.position.set(0, 2, 0);
-        this._groupWHO.add(meshH);
+        let shapeW: W = new W(material, EXTRUDE_OPTION);
+        shapeW.mesh.position.set(-7, 2, 0);
+        this._groupWHO.add(shapeW.mesh);
 
-        let extrudeOptionWithPath = Object.assign({}, extrudeOption);
+        let shapeH: H = new H(material, EXTRUDE_OPTION);
+        shapeH.mesh.position.set(0, 2, 0);
+        this._groupWHO.add(shapeH.mesh);
 
-        let shapeO: O = new O(2, 32, 5);
-        extrudeOptionWithPath['extrudePath'] = shapeO.path;
-        extrudeOptionWithPath['steps'] = 100;
-        let o: THREE.ExtrudeGeometry = new THREE.ExtrudeGeometry(shapeO, extrudeOptionWithPath);
-        let meshO: THREE.Mesh = new THREE.Mesh(o, material);
-        meshO.position.set(5, 0, 0);
-        meshO.rotateY(Math.PI / 2);
-        this._groupWHO.add(meshO);
+        let shapeO: O = new O(2, 32, 10, material, EXTRUDE_OPTION);
+        shapeO.mesh.position.set(5, 0, 0);
+        shapeO.mesh.rotateY(Math.PI / 2);
+        this._groupWHO.add(shapeO.mesh);
 
-        let shapeI: I = new I();
-        let i: THREE.ExtrudeGeometry = new THREE.ExtrudeGeometry(shapeI, extrudeOption);
-        let meshI: THREE.Mesh = new THREE.Mesh(i, material);
-        meshI.position.set(-1.5, 0, 0);
-        this._groupI.add(meshI);
+        let shapeI: I = new I(material, EXTRUDE_OPTION);
+        shapeI.mesh.position.set(-1.5, 0, 0);
+        this._groupI.add(shapeI.mesh);
 
-        let shapeA: A = new A();
-        let out: THREE.ExtrudeGeometry = new THREE.ExtrudeGeometry(shapeA.outer, extrudeOption);
-        let inner: THREE.ExtrudeGeometry = new THREE.ExtrudeGeometry(shapeA.inner, extrudeOption);
-        let inMaterial: THREE.MeshPhongMaterial = new THREE.MeshPhongMaterial({
-            color:0x333333,
-        });
-        let meshAout: THREE.Mesh = new THREE.Mesh(out, material);
-        let meshAin: THREE.Mesh = new THREE.Mesh(inner, inMaterial);
-        meshAout.position.set(-5, 0, 0);
-        meshAin.position.set(-5, 0, 0);
-        this._groupAM.add(meshAout);
-        this._groupAM.add(meshAin);
+        let shapeA: A = new A(material, EXTRUDE_OPTION);
+        shapeA.outer.position.set(-5, 0, 0);
+        shapeA.inner.position.set(-5, 0, 0);
+        this._groupAM.add(shapeA.outer);
+        this._groupAM.add(shapeA.inner);
 
-        let shapeM: M = new M();
-        let m: THREE.ExtrudeGeometry = new THREE.ExtrudeGeometry(shapeM, extrudeOption);
-        let meshM: THREE.Mesh = new THREE.Mesh(m, material);
-        meshM.position.set(-1, 0, 0);
-        this._groupAM.add(meshM);
+        let shapeM: M = new M(material, EXTRUDE_OPTION);
+        shapeM.mesh.position.set(-1, 0, 0);
+        this._groupAM.add(shapeM.mesh);
+
+        let shapeHatena: Hatena = new Hatena(material, EXTRUDE_OPTION);
+        shapeHatena.upper.position.set(0, 0, 0);
+        shapeHatena.lower.position.set(0, 0, 0);
+        this._groupHatena.add(shapeHatena.upper);
+        this._groupHatena.add(shapeHatena.lower);
+        this._groupHatena.position.set(5.0, -4.5, 0);
 
         this._groupWHO.scale.set(this._scaleWho, this._scaleWho, this._scaleWho);
-
-        // axisHelper
-        let axisHelper = new THREE.AxisHelper(1000);  // 引数は 軸のサイズ
-        this._stage.add(axisHelper);
-
         this._model.addEventListener(Model.EVENT_SCENE_CHANGE, this.onSceneChanged);
     };
 
@@ -117,14 +104,18 @@ export class First {
     private update = () => {
         this._timer = requestAnimationFrame(this.update);
 
-        this._groupWHO.scale.set(this._scaleWho, this._scaleWho, this._scaleWho);
-        this._groupWHO.position.set(0, this._posWho, 0);
+        if (this._model.scene === Model.SCENE_FIRST) {
+            this._groupWHO.scale.set(this._scaleWho, this._scaleWho, this._scaleWho);
+            this._groupWHO.position.set(0, this._posWho, 0);
 
-        this._groupI.scale.set(this._scaleI, this._scaleI, this._scaleI);
-        this._groupI.position.set(0, this._posI, 0);
+            this._groupI.scale.set(this._scaleI, this._scaleI, this._scaleI);
+            this._groupI.position.set(0, this._posI, 0);
 
-        this._groupAM.scale.set(this._scaleAm, this._scaleAm, this._scaleAm);
-        this._groupAM.position.set(0, this._posAm, 0);
+            this._groupAM.scale.set(this._scaleAm, this._scaleAm, this._scaleAm);
+            this._groupAM.position.set(this._posAmX, this._posAmY, 0);
+
+            this._groupHatena.scale.set(this._scaleHatena, this._scaleHatena, this._scaleHatena);
+        }
 
         this.render();
     };
@@ -138,9 +129,12 @@ export class First {
 
         gsap.TweenLite.to(this, 1, {
             _scaleWho: 1.2,
-            ease: gsap.Elastic.easeOut,
-            onComplete: this.addI
+            ease: gsap.Elastic.easeOut
         });
+
+        setTimeout(() => { this.addI(); }, 200);
+        setTimeout(() => { this.addAM(); }, 300);
+        setTimeout(() => { this.addHatena(); }, 400);
     };
 
     private addI = () => {
@@ -154,8 +148,7 @@ export class First {
 
         gsap.TweenLite.to(this, 1, {
             _scaleI: 1.2,
-            ease: gsap.Elastic.easeOut,
-            onComplete: this.addAM
+            ease: gsap.Elastic.easeOut
         });
     };
 
@@ -167,7 +160,7 @@ export class First {
         });
 
         gsap.TweenLite.to(this, 0.3, {
-            _posI: 2.5,
+            _posI: 3.0,
             ease: gsap.Linear.ease
         });
 
@@ -177,6 +170,25 @@ export class First {
             _scaleAm: 1.2,
             ease: gsap.Elastic.easeOut
         });
+    };
+
+    private addHatena = () => {
+        gsap.TweenLite.to(this, 1, {
+            _posAmX: -2.0,
+            ease: gsap.Elastic.easeOut
+        });
+
+        this._stage.add(this._groupHatena);
+
+        gsap.TweenLite.to(this, 1, {
+            _scaleHatena: 1.2,
+            ease: gsap.Elastic.easeOut,
+            onComplete: this.sceneFinish
+        });
+    };
+
+    private sceneFinish = () => {
+        this._model.scene = Model.SCENE_SECOND;
     };
 
     public pause = () => {

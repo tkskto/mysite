@@ -35,4 +35,15 @@ export class Model extends EventDispatcher {
         this._scene = value;
         this.dispatchEvent(Model.EVENT_SCENE_CHANGE);
     }
+
+    private _textureLoader:THREE.TextureLoader;
+
+    get textureLoader(): THREE.TextureLoader {
+        return this._textureLoader;
+    }
+
+    set textureLoader(value: THREE.TextureLoader) {
+        this._textureLoader = value;
+    }
+
 }

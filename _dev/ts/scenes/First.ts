@@ -8,6 +8,7 @@ import {A} from '../Text/A';
 import {M} from '../Text/M';
 import {Hatena} from "../Text/Hatena";
 import * as gsap from 'gsap';
+import {ToonShader} from "../shader/ToonShader";
 
 export class First {
 
@@ -17,6 +18,8 @@ export class First {
     private _groupAM: THREE.Group;
     private _groupHatena: THREE.Group;
     private _timer: number;
+
+    private _material:THREE.MeshPhongMaterial;
 
     private _scaleWho: number = 0.1;
     private _posWho: number = 0;
@@ -40,13 +43,22 @@ export class First {
         this._groupHatena = new THREE.Group();
         this._stage.add(this._groupWHO);
 
-        let light: THREE.DirectionalLight = new THREE.DirectionalLight(0xffffff);
+        // 自然光
+        let ambientLight = new THREE.AmbientLight(0x333333);
+        this._stage.add(ambientLight);
+
+        let light: THREE.DirectionalLight = new THREE.DirectionalLight(0xcccccc, 0.8);
         light.position.set(0.0, 0, 0.7);
         this._stage.add(light);
 
-        let material = new THREE.MeshPhongMaterial();
+        this._material = new THREE.MeshPhongMaterial({
+            color:0xffff99,
+            specular: 0x333333,
+            shininess: 30
+        });
 
         const EXTRUDE_OPTION:{} = {
+            curveSegments: 24,
             amount: 10,
             steps: 50,
             material: 1,
@@ -54,35 +66,34 @@ export class First {
             bevelEnabled: false
         };
 
-
-        let shapeW: W = new W(material, EXTRUDE_OPTION);
+        let shapeW: W = new W(this._material, EXTRUDE_OPTION);
         shapeW.mesh.position.set(-7, 2, 0);
         this._groupWHO.add(shapeW.mesh);
 
-        let shapeH: H = new H(material, EXTRUDE_OPTION);
+        let shapeH: H = new H(this._material, EXTRUDE_OPTION);
         shapeH.mesh.position.set(0, 2, 0);
         this._groupWHO.add(shapeH.mesh);
 
-        let shapeO: O = new O(2, 32, 10, material, EXTRUDE_OPTION);
+        let shapeO: O = new O(2, 32, 10, this._material, EXTRUDE_OPTION);
         shapeO.mesh.position.set(5, 0, 0);
         shapeO.mesh.rotateY(Math.PI / 2);
         this._groupWHO.add(shapeO.mesh);
 
-        let shapeI: I = new I(material, EXTRUDE_OPTION);
+        let shapeI: I = new I(this._material, EXTRUDE_OPTION);
         shapeI.mesh.position.set(-1.5, 0, 0);
         this._groupI.add(shapeI.mesh);
 
-        let shapeA: A = new A(material, EXTRUDE_OPTION);
+        let shapeA: A = new A(this._material, EXTRUDE_OPTION);
         shapeA.outer.position.set(-5, 0, 0);
         shapeA.inner.position.set(-5, 0, 0);
         this._groupAM.add(shapeA.outer);
         this._groupAM.add(shapeA.inner);
 
-        let shapeM: M = new M(material, EXTRUDE_OPTION);
+        let shapeM: M = new M(this._material, EXTRUDE_OPTION);
         shapeM.mesh.position.set(-1, 0, 0);
         this._groupAM.add(shapeM.mesh);
 
-        let shapeHatena: Hatena = new Hatena(material, EXTRUDE_OPTION);
+        let shapeHatena: Hatena = new Hatena(this._material, EXTRUDE_OPTION);
         shapeHatena.upper.position.set(0, 0, 0);
         shapeHatena.lower.position.set(0, 0, 0);
         this._groupHatena.add(shapeHatena.upper);
@@ -90,6 +101,7 @@ export class First {
         this._groupHatena.position.set(5.0, -4.5, 0);
 
         this._groupWHO.scale.set(this._scaleWho, this._scaleWho, this._scaleWho);
+
         this._model.addEventListener(Model.EVENT_SCENE_CHANGE, this.onSceneChanged);
     };
 
@@ -117,10 +129,6 @@ export class First {
             this._groupHatena.scale.set(this._scaleHatena, this._scaleHatena, this._scaleHatena);
         }
 
-        this.render();
-    };
-
-    private render = () => {
         this._renderer.render(this._stage, this._mainCamera);
     };
 
@@ -188,7 +196,7 @@ export class First {
     };
 
     private sceneFinish = () => {
-        this._model.scene = Model.SCENE_SECOND;
+        //this._model.scene = Model.SCENE_SECOND;
     };
 
     public pause = () => {

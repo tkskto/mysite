@@ -17,12 +17,21 @@ import {First} from './scenes/First';
                 width: win.innerWidth,
                 height: win.innerHeight
             };
+
+            renderer.setSize(
+                _model.screen.width, _model.screen.height
+            );
+
+            mainCamera.aspect = _model.screen.width / _model.screen.height;
+            mainCamera.updateProjectionMatrix();
         });
 
         _model.screen = {
             width: win.innerWidth,
             height: win.innerHeight
         };
+
+        _model.textureLoader = new THREE.TextureLoader();
 
         let mainCamera:THREE.PerspectiveCamera = new THREE.PerspectiveCamera( 60, _model.screen.width / _model.screen.height, 1, 1000 );
         mainCamera.position.set( 0, 0, 37 );
@@ -39,6 +48,12 @@ import {First} from './scenes/First';
         renderer.setSize(
             _model.screen.width, _model.screen.height
         );
+
+        renderer.sortObjects = false;
+        renderer.setClearColor(0x000000, 1);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFShadowMap;
+        renderer.autoClear = true;
 
         document.getElementById('mv-canvas').appendChild(renderer.domElement);
 

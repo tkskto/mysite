@@ -28,8 +28,8 @@ export class Hatena {
 
         this._lower.moveTo(1, -3.25);
         this._lower.lineTo(2, -3.25);
-        this._lower.lineTo(2, -4);
-        this._lower.lineTo(1, -4);
+        this._lower.lineTo(2, -3.75);
+        this._lower.lineTo(1, -3.75);
         this._lower.closePath();
 
         this._upperGeometry = new THREE.ExtrudeGeometry(this._upper, _exo);

@@ -34,13 +34,14 @@ import {First} from './scenes/First';
         _model.textureLoader = new THREE.TextureLoader();
 
         let mainCamera:THREE.PerspectiveCamera = new THREE.PerspectiveCamera( 60, _model.screen.width / _model.screen.height, 1, 1000 );
-        mainCamera.position.set( 0, 0, 37 );
+        mainCamera.position.set( 0, 0, 60 );
 
         let ratio = window.devicePixelRatio;
 
         let renderer:THREE.WebGLRenderer = new THREE.WebGLRenderer({
             antialias: true,
-            stencil: false
+            stencil: false,
+            alpha: true
         });
 
         renderer.setPixelRatio(ratio);
@@ -49,10 +50,8 @@ import {First} from './scenes/First';
             _model.screen.width, _model.screen.height
         );
 
-        renderer.sortObjects = false;
-        renderer.setClearColor(0x000000, 1);
+        // renderer.setClearColor(0xcccccc, 1);
         renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFShadowMap;
         renderer.autoClear = true;
 
         document.getElementById('mv-canvas').appendChild(renderer.domElement);

@@ -28,7 +28,7 @@ module.exports = {
         hot: true
     },
     plugins: [
-        new webpack.optimize.UglifyJsPlugin()
+        //new webpack.optimize.UglifyJsPlugin()
     ],
     // ソースマップを有効に
     devtool: 'source-map'

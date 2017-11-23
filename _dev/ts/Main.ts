@@ -34,7 +34,7 @@ import {First} from './scenes/First';
         _model.textureLoader = new THREE.TextureLoader();
 
         let mainCamera:THREE.PerspectiveCamera = new THREE.PerspectiveCamera( 60, _model.screen.width / _model.screen.height, 1, 1000 );
-        mainCamera.position.set( 0, 0, 60 );
+        mainCamera.position.set( 0, 0, 50 );
 
         let ratio = window.devicePixelRatio;
 
@@ -50,9 +50,10 @@ import {First} from './scenes/First';
             _model.screen.width, _model.screen.height
         );
 
-        // renderer.setClearColor(0xcccccc, 1);
+        renderer.setClearColor(0x000000, 1);
         renderer.shadowMap.enabled = true;
         renderer.autoClear = true;
+        renderer.clear();
 
         document.getElementById('mv-canvas').appendChild(renderer.domElement);
 

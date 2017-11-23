@@ -44,26 +44,16 @@ export class First {
         this._stage.add(this._groupWHO);
 
         // 自然光
-        let ambientLight = new THREE.AmbientLight(0x333333);
+        let ambientLight = new THREE.AmbientLight(0x44ccbb, 1.0);
         this._stage.add(ambientLight);
 
-        let light: THREE.DirectionalLight = new THREE.DirectionalLight(0xcccccc, 0.8);
-        light.position.set(0.0, 300, 0);
-        light.castShadow = true;
+        let light: THREE.DirectionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
+        light.position.set(0.0, 10, 300);
         this._stage.add(light);
 
-        light.shadow.camera.near = 100;
-        light.shadow.camera.far = 450;
-        light.shadow.camera.top = 40;
-        light.shadow.camera.bottom = -40;
-        light.shadow.camera.left = 40;
-        light.shadow.camera.right = -40;
-        light.shadow.mapSize.width = 200;
-        light.shadow.mapSize.height = 200;
-
         this._material = new THREE.MeshPhongMaterial({
-            color:0xffff99,
-            specular: 0x333333,
+            color:0xcccccc,
+            specular: 0xffff99,
             shininess: 10
         });
 
@@ -81,8 +71,7 @@ export class First {
         this._groupWHO.add(shapeW.mesh);
 
         let shapeH: H = new H(this._material, EXTRUDE_OPTION);
-        shapeH.mesh.position.set(0, -0.4, 10);
-        shapeH.mesh.scale.set(0.67, 0.67, 0.67);
+        shapeH.mesh.position.set(0, 2, 0);
         this._groupWHO.add(shapeH.mesh);
 
         let shapeO: O = new O(2, 32, 10, this._material, EXTRUDE_OPTION);
@@ -91,8 +80,7 @@ export class First {
         this._groupWHO.add(shapeO.mesh);
 
         let shapeI: I = new I(this._material, EXTRUDE_OPTION);
-        shapeI.mesh.position.set(-0.5, -1.7, 20);
-        shapeI.mesh.scale.set(0.34, 0.34, 0.34);
+        shapeI.mesh.position.set(-1.5, 0, 0);
         this._groupI.add(shapeI.mesh);
 
         let shapeA: A = new A(this._material, EXTRUDE_OPTION);
@@ -115,31 +103,12 @@ export class First {
         this._groupWHO.scale.set(this._scaleWho, this._scaleWho, this._scaleWho);
 
         // axisHelper
-        // let axisHelper = new THREE.AxisHelper(1000);  // 引数は 軸のサイズ
-        // this._stage.add(axisHelper);
-
-        var directionalLightHelper = new THREE.DirectionalLightHelper(light);
-        this._stage.add( directionalLightHelper);
-
-        var directionalLightShadowHelper = new THREE.CameraHelper( light.shadow.camera);
-        this._stage.add( directionalLightShadowHelper);
+        let axisHelper = new THREE.AxisHelper(1000);  // 引数は 軸のサイズ
+        this._stage.add(axisHelper);
 
         this._model.addEventListener(Model.EVENT_SCENE_CHANGE, this.onSceneChanged);
 
         let cameraPos = 0;
-
-        //床
-        let floorGeometry:THREE.PlaneGeometry = new THREE.PlaneGeometry(100, 100);
-        let floorMaterial:THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
-        let floor:THREE.Mesh = new THREE.Mesh(floorGeometry, floorMaterial);
-        floor.receiveShadow = true;
-        floor.position.set(0, -15, 0);
-        floor.rotateX(Math.PI * -0.5);
-        this._stage.add(floor);
-
-        this._groupWHO.castShadow = true;
-        this._groupI.castShadow = true;
-        this._groupAM.castShadow = true;
 
         window.addEventListener('wheel', (e) => {
             e.preventDefault();

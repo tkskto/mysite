@@ -34,7 +34,7 @@ import {First} from './scenes/First';
         _model.textureLoader = new THREE.TextureLoader();
 
         let mainCamera:THREE.PerspectiveCamera = new THREE.PerspectiveCamera( 60, _model.screen.width / _model.screen.height, 1, 1000 );
-        mainCamera.position.set( 0, 0, 50 );
+        mainCamera.position.set( 0, 0, 45 );
 
         let ratio = window.devicePixelRatio;
 

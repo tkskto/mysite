@@ -103,8 +103,8 @@ export class First {
         this._groupWHO.scale.set(this._scaleWho, this._scaleWho, this._scaleWho);
 
         // axisHelper
-        let axisHelper = new THREE.AxisHelper(1000);  // 引数は 軸のサイズ
-        this._stage.add(axisHelper);
+        // let axisHelper = new THREE.AxisHelper(1000);  // 引数は 軸のサイズ
+        // this._stage.add(axisHelper);
 
         this._model.addEventListener(Model.EVENT_SCENE_CHANGE, this.onSceneChanged);
 

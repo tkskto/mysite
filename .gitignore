@@ -1,5 +1,13 @@
-node_modules/
-.idea/
-lib/three.js-master/
-*.map
-_dev/**/*.js
+# dependencies
+node_modules
+
+# logs
+npm-debug.log
+
+# Nuxt build
+.nuxt
+
+# Nuxt generate
+dist
+
+.idea

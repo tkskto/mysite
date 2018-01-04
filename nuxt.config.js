@@ -1,7 +1,4 @@
 module.exports = {
-    /*
-    ** Headers of the page
-    */
     head: {
         title: 'takeshi kato',
         meta: [
@@ -13,29 +10,26 @@ module.exports = {
             { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
         ]
     },
-    /*
-    ** Customize the progress bar color
-    */
     loading: { color: '#3B8070' },
-    /*
-    ** Build configuration
-    */
     build: {
-        /*
-        ** Run ESLint on save
-        */
-        extend (config, ctx) {
+        extend: function (config, ctx) {
             if (ctx.dev && ctx.isClient) {
                 config.module.rules.push({
                     enforce: 'pre',
                     test: /\.(js|vue)$/,
                     loader: 'eslint-loader',
                     exclude: /(node_modules)/
-                })
+                });
             }
+            config.module.rules.push({
+                test: /\.js$/,
+                loader: 'babel-loader',
+                exclude: /node_modules(?!(\/|\\)@nuxtjs)/,
+                options: Object.assign({}, this.babelOptions)
+            });
+            config.plugins = config.plugins.filter((plugin) => plugin.constructor.name !== 'UglifyJsPlugin');
         },
         ssr: false,
-        vendor: ['babel-polyfill', 'three']
+        vendor: ['babel-polyfill', 'three', 'gsap']
     },
-    mode: 'spa'
 };

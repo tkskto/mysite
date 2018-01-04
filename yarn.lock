@@ -14,6 +14,20 @@
   version "0.16.0"
   resolved "https://registry.yarnpkg.com/@std/esm/-/esm-0.16.0.tgz#2a7a33ecb7f1701cebd4c87df6d0d945ed51f730"
 
+"@types/gsap@^1.19.1":
+  version "1.19.1"
+  resolved "https://registry.yarnpkg.com/@types/gsap/-/gsap-1.19.1.tgz#ee93590b1ef7dc86b0b779e94e38b5bad6e8c678"
+
+"@types/three@^0.89.0":
+  version "0.89.0"
+  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.89.0.tgz#c38fe39b7809d40ee00d16d08499dc4da26dcb4a"
+  dependencies:
+    "@types/webvr-api" "*"
+
+"@types/webvr-api@*":
+  version "0.0.31"
+  resolved "https://registry.yarnpkg.com/@types/webvr-api/-/webvr-api-0.0.31.tgz#f6061fe88a035d34a8b6a0c55f8758901ec8a08e"
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -2535,6 +2549,10 @@ globule@^1.0.0:
 graceful-fs@^4.1.2, graceful-fs@^4.1.6:
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
+
+gsap@^1.20.3:
+  version "1.20.3"
+  resolved "https://registry.yarnpkg.com/gsap/-/gsap-1.20.3.tgz#c9a6e7be057cf59417483448f925472fa2f73cd7"
 
 gzip-size@^3.0.0:
   version "3.0.0"
@@ -5480,6 +5498,10 @@ tar@^2.0.0, tar@^2.2.1:
 text-table@~0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
+
+three@^0.89.0:
+  version "0.89.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.89.0.tgz#4442d819a6168871b8d2cb37ad12a24310c170f5"
 
 through@^2.3.6:
   version "2.3.8"

@@ -1,0 +1,4 @@
+{
+    "presets": ["vue-app", "es2015"],
+    "useBuiltIns": true
+}

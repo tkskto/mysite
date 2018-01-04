@@ -1,8 +1,12 @@
 import {Model} from '../Model';
+import {EventDispatcher} from '../events/EventDispatcher';
 
-export class SVGController {
-    constructor(private _elm:SVGElement, private _model:Model) {
-        this._model.addEventListener(Model.EVENT_SCENE_CHANGE, this.sceneChanged);
+export class SVGController extends EventDispatcher {
+
+    public static TRANSITION_END_EVENT: string = 'transitionEnd';
+
+    constructor(private _elm:SVGElement) {
+        super();
         this._elm.classList.remove('show');
     }
 
@@ -11,18 +15,13 @@ export class SVGController {
         this._elm.classList.add('show');
     };
 
-    private sceneChanged = () => {
-        if (this._model.scene === Model.SCENE_FIRST) {
-            this._model.removeEventListener(Model.EVENT_SCENE_CHANGE, this.sceneChanged);
-        }
-    };
-
-    private transitionEnd = (e) => {
-        if (this._model.scene === Model.SCENE_LOAD) {
+    private transitionEnd = () => {
+        if (!this._elm.classList.contains('hide')) {
             this._elm.classList.add('hide');
-            this._model.scene = Model.SCENE_INTRO;
-        } else if (this._model.scene === Model.SCENE_INTRO) {
-            this._model.scene = Model.SCENE_FIRST;
+        } else {
+            this._elm.removeEventListener('transitionend', this.transitionEnd);
+            this.dispatchEvent(SVGController.TRANSITION_END_EVENT);
         }
     }
+
 }

@@ -3,3 +3,4 @@ node_modules/
 lib/three.js-master/
 *.map
 _dev/**/*.js
+public/assets/

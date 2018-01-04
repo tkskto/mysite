@@ -13,3 +13,10 @@ export class GLConfig {
     public static UNIFORM_TYPE_INT_VECTOR:string = '1iv';
     public static UNIFORM_TYPE_INT:string = '1i';
 }
+
+export class ALBUMS {
+    ARAZ: {
+        images: 9,
+        movies: 3
+    }
+}

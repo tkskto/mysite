@@ -2,8 +2,9 @@
 // import {Utils} from './Utils';
 import * as THREE from 'three';
 import {Model} from './Model';
-import {SVGController} from './svg/SVGController';
 import {First} from './scenes/First';
+import {Album} from './scenes/Album';
+import {Intro} from './scenes/Intro';
 
 (function (win, doc, undefined) {
     'use strict';
@@ -31,6 +32,11 @@ import {First} from './scenes/First';
             height: win.innerHeight
         };
 
+        win.addEventListener('hashchange', function () {
+            const hash = location.hash;
+            _model.scene = hash.split('#')[1];
+        });
+
         _model.textureLoader = new THREE.TextureLoader();
 
         let mainCamera:THREE.PerspectiveCamera = new THREE.PerspectiveCamera( 60, _model.screen.width / _model.screen.height, 1, 1000 );
@@ -57,12 +63,16 @@ import {First} from './scenes/First';
 
         document.getElementById('mv-canvas').appendChild(renderer.domElement);
 
+        let intro: Intro = new Intro(_model);
         let first:First = new First(_model, renderer, mainCamera);
+        let album:Album = new Album(_model);
 
-        let _who:NodeList = document.querySelectorAll('.mv-svg');
-        for (let i = 0; i < _who.length; i++) {
-            let _svg:SVGController = new SVGController(_who.item(i) as SVGElement, _model);
-            _svg.show();
+        const hash = location.hash;
+
+        if (hash) {
+            _model.scene = hash.split('#')[1];
+        } else {
+            location.hash = Model.SCENE_INTRO;
         }
     }
 

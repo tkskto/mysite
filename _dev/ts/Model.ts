@@ -9,6 +9,7 @@ export class Model extends EventDispatcher {
     public static SCENE_INTRO:string = 'sceneIntro';
     public static SCENE_FIRST:string = 'First';
     public static SCENE_SECOND:string = 'Second';
+    public static SCENE_ALBUM: string = 'Album';
 
     constructor() {
         super();

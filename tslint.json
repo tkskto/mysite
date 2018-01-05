@@ -58,6 +58,7 @@
         "no-trailing-whitespace": false,
         "no-unused-expression": false,
         "no-var-keyword": true,
+        "no-string-literal": false,
         "object-literal-shorthand": true,
         "one-line": [true,
             "check-open-brace",

@@ -4,6 +4,33 @@
     </div>
 </template>
 
+<script>
+
+    import {mapGetters} from 'vuex';
+
+    export default {
+        computed: {
+            ...mapGetters(['screenSize'])
+        },
+        created: function () {
+            this.resize();
+        },
+        mounted: function () {
+            window.addEventListener('resize', this.resize);
+        },
+        methods: {
+            resize: function () {
+                const width = window.innerWidth;
+                const height = window.innerHeight;
+
+            if (this.screenSize.width !== width && this.screenSize.height !== height) {
+                    this.$store.dispatch('resize', {width: width, height: height});
+                }
+            }
+        }
+    }
+</script>
+
 <style>
     html {
         font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;

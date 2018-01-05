@@ -2,19 +2,19 @@ import * as THREE from 'three';
 
 export class A {
 
-    private _outerGeometry:THREE.ExtrudeGeometry;
-    private _innerGeometry:THREE.ExtrudeGeometry;
-    private _outerMesh:THREE.Mesh;
-    private _innerMesh:THREE.Mesh;
+    private _outerGeometry: THREE.ExtrudeGeometry;
+    private _innerGeometry: THREE.ExtrudeGeometry;
+    private _outerMesh: THREE.Mesh;
+    private _innerMesh: THREE.Mesh;
 
-    private _outer:THREE.Shape;
-    private _inner:THREE.Shape;
+    private _outer: THREE.Shape;
+    private _inner: THREE.Shape;
 
-    constructor(_material:THREE.Material, _exo:{}) {
+    constructor(_material: THREE.Material, _exo: {}) {
 
         this._outer = new THREE.Shape();
 
-        let vertex1 = [
+        const vertex1 = [
             0.0, -4.0,
             1.25,  0.0,
             2.75,  0.0,
@@ -27,13 +27,13 @@ export class A {
 
         this._outer.moveTo(vertex1[0], vertex1[1]);
 
-        for (let i = 2; i < vertex1.length; i+=2) {
+        for (let i = 2; i < vertex1.length; i += 2) {
             this._outer.lineTo(vertex1[i], vertex1[i + 1]);
         }
 
         this._inner = new THREE.Shape();
 
-        let vertex2 = [
+        const vertex2 = [
             1.25, -3.0,
             1.5, -2.0,
             2.5, -2.0,
@@ -42,7 +42,7 @@ export class A {
 
         this._inner.moveTo(vertex2[0], vertex2[1]);
 
-        for (let i = 2; i < vertex2.length; i+=2) {
+        for (let i = 2; i < vertex2.length; i += 2) {
             this._inner.lineTo(vertex2[i], vertex2[i + 1]);
         }
 

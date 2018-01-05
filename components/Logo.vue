@@ -14,7 +14,7 @@
 
 <script>
     import {mapGetters} from 'vuex';
-    import {Config} from '~/assets/ts/Config.ts';
+    import {AppConfig} from '../assets/ts/config/Config';
 
     export default {
         name: 'logo',
@@ -29,12 +29,11 @@
         },
         methods: {
             transitionEnd: function () {
-                console.log(this.sceneName);
-                if (this.sceneName === Config.APPConfig.SCENE.LOAD) {
+                if (this.sceneName === AppConfig.SCENE.LOAD) {
                     this.$el.classList.add('hide');
-                    this.$store.dispatch('changeScene', Config.APPConfig.SCENE.INTRO);
-                } else if (this.sceneName === Config.APPConfig.SCENE.INTRO) {
-                    this.sceneName = Config.APPConfig.SCENE.FIRST;
+                    this.$store.dispatch('changeScene', AppConfig.SCENE.INTRO);
+                } else if (this.sceneName === AppConfig.SCENE.INTRO) {
+                    this.$store.dispatch('changeScene', AppConfig.SCENE.FIRST);
                 }
             }
         }

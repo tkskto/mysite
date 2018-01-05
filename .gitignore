@@ -15,3 +15,5 @@ dist
 static/assets/
 
 public/
+
+yarn-error.log

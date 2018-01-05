@@ -1,6 +1,19 @@
-node_modules/
-.idea/
-lib/three.js-master/
-*.map
-_dev/**/*.js
-public/assets/
+# dependencies
+node_modules
+
+# logs
+npm-debug.log
+
+# Nuxt build
+.nuxt
+
+# Nuxt generate
+dist
+
+.idea
+
+static/assets/
+
+public/
+
+yarn-error.log

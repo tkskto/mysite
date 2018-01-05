@@ -1,41 +1,45 @@
 <template>
-  <div>
-    <nuxt/>
-  </div>
+    <div class="str-root">
+        <nuxt/>
+    </div>
 </template>
 
 <style>
-html {
-  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
-}
+    html {
+        font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-size: 16px;
+        word-spacing: 1px;
+        -ms-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-font-smoothing: antialiased;
+        box-sizing: border-box;
+    }
 
-*, *:before, *:after {
-  box-sizing: border-box;
-  margin: 0;
-}
+    *, *:before, *:after {
+        box-sizing: border-box;
+        margin: 0;
+    }
 
-html, body, div, canvas {
-  margin: 0;
-}
+    html, body, div, canvas {
+        margin: 0;
+    }
 
-html, body {
-  width: 100%;
-  height: 100%;
-}
+    html, body, .str-root {
+        width: 100%;
+        height: 100%;
+    }
 
-body {
-  background: radial-gradient(#f9fbe7, #fff);
-  padding-top: 100vh;
-}
+    body > div {
+        height: 100%;
+    }
 
-canvas {
-  vertical-align: top;
-}
+    body {
+        background: #000000;
+    }
+    canvas {
+        vertical-align: top;
+    }
+
+
 </style>

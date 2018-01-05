@@ -1,7 +1,7 @@
 <template>
     <div id="mv">
         <div class="mv-svg-wrapper">
-            <svg class="mv-svg" viewBox="0, 0, 14, 4">
+            <svg ref="svg" class="mv-svg" viewBox="0, 0, 14, 4">
                 <path class="svg-path" d="M0,0 l1,0 l1,3 l1,-3 l1,0 l1,3 l1,-3 l1,0 l-1,4 l-1.5,0 l-1,-2.5 l-1,2.5 l-1.25,0 z"></path>
                 <path class="svg-path" d="M7,0 l1,0 l0,1.5 l1,0, l0,-1.5 l1,0 l0,4 l-1,0 l0,-1.5 l-1,0 l0,1.5 l-1,0 z"></path>
                 <path class="svg-path" d="M10.1,2 A 1.9,1.9 0 1,1 13.9,2 A 1.9,1.9 0 1,1 10.1,2 z"></path>
@@ -14,27 +14,31 @@
 
 <script>
     import {mapGetters} from 'vuex';
+    import {Config} from '~/assets/ts/Config.ts';
 
     export default {
-        name: "logo",
+        name: 'logo',
         computed: {
             ...mapGetters(['sceneName'])
         },
         mounted: function () {
-            this.$el.addEventListener('transitionend', this.transitionEnd);
-            this.$el.classList.add('show');
+            this.$refs.svg.addEventListener('transitionend', this.transitionEnd);
+            setTimeout(() => {
+                this.$el.classList.add('show');
+            }, 100);
         },
         methods: {
-            transitionEnd: function (e) {
-                if (this.sceneName === Model.SCENE_LOAD) {
+            transitionEnd: function () {
+                console.log(this.sceneName);
+                if (this.sceneName === Config.APPConfig.SCENE.LOAD) {
                     this.$el.classList.add('hide');
-                    this.$store.dispatch('changeScene', Model.SCENE_INTRO);
-                } else if (this.sceneName === Model.SCENE_INTRO) {
-                    this.sceneName = Model.SCENE_FIRST;
+                    this.$store.dispatch('changeScene', Config.APPConfig.SCENE.INTRO);
+                } else if (this.sceneName === Config.APPConfig.SCENE.INTRO) {
+                    this.sceneName = Config.APPConfig.SCENE.FIRST;
                 }
             }
         }
-    }
+    };
 </script>
 
 <style scoped lang="scss">
@@ -63,14 +67,6 @@
                 transition: stroke-dashoffset 3s ease, transform 0.5s cubic-bezier(.5,-0.3,.83,.67);
                 vertical-align: top;
             }
-
-            .mv-svg.show {
-                stroke-dashoffset: 0;
-            }
-
-            .mv-svg.hide {
-                transform: scale3d(0, 0, 0) translateY(-200px);
-            }
         }
 
         .mv-canvas-wrapper {
@@ -84,5 +80,13 @@
                 height: 100vh;
             }
         }
+
+        &.show .mv-svg {
+            stroke-dashoffset: 0;
+        }
+
+        &.show.hide .mv-svg {
+        transform: scale3d(0, 0, 0) translateY(-200px);
+    }
     }
 </style>

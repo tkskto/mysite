@@ -1,14 +1,16 @@
+import * as THREE from 'three';
+
 export class A {
 
-    private _outerGeometry;
-    private _innerGeometry;
-    private _outerMesh;
-    private _innerMesh;
+    private _outerGeometry:THREE.ExtrudeGeometry;
+    private _innerGeometry:THREE.ExtrudeGeometry;
+    private _outerMesh:THREE.Mesh;
+    private _innerMesh:THREE.Mesh;
 
-    private _outer;
-    private _inner;
+    private _outer:THREE.Shape;
+    private _inner:THREE.Shape;
 
-    constructor(_material, _exo) {
+    constructor(_material:THREE.Material, _exo:{}) {
 
         this._outer = new THREE.Shape();
 
@@ -51,11 +53,11 @@ export class A {
         this._outerMesh = new THREE.Mesh(this._outerGeometry, _material);
     }
 
-    get inner() {
+    get inner(): THREE.Mesh {
         return this._innerMesh;
     }
 
-    get outer() {
+    get outer(): THREE.Mesh {
         return this._outerMesh;
     }
 }

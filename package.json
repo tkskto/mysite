@@ -8,29 +8,28 @@
         "dev": "nuxt",
         "build": "nuxt build",
         "start": "nuxt start",
-        "generate": "nuxt generate",
-        "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
-        "precommit": "npm run lint"
+        "generate": "nuxt generate"
     },
     "dependencies": {
-        "nuxt": "^1.0.0-rc11",
+        "axios": "^0.17.1",
+        "gsap": "^1.20.2",
+        "nuxt": "^1.0.0-alpha.5",
+        "nuxt-class-component": "^1.0.1",
+        "tachyons": "^4.7.4",
         "three": "^0.89.0",
-        "gsap": "^1.20.3"
+        "vue-class-component": "^5.0.2",
+        "vue-property-decorator": "^5.1.1",
+        "vuex-class": "^0.2.0"
     },
     "devDependencies": {
-        "@types/three": "^0.89.0",
+        "@types/node": "^8.0.14",
         "@types/gsap": "^1.19.1",
-        "babel-eslint": "^7.2.3",
-        "babel-loader": "^7.1.2",
-        "eslint": "^4.3.0",
-        "eslint-config-standard": "^10.2.1",
-        "eslint-loader": "^1.9.0",
-        "eslint-plugin-html": "^3.1.1",
-        "eslint-plugin-import": "^2.7.0",
-        "eslint-plugin-node": "^5.1.1",
-        "eslint-plugin-promise": "^3.5.0",
-        "eslint-plugin-standard": "^3.0.1",
+        "@types/three": "^0.89.0",
         "node-sass": "^4.7.2",
-        "sass-loader": "^6.0.6"
+        "sass-loader": "^6.0.6",
+        "ts-loader": "^2.3.0",
+        "tslint": "^5.8.0",
+        "tslint-loader": "^3.5.3",
+        "typescript": "^2.4.1"
     }
 }

@@ -1,35 +1,39 @@
 module.exports = {
+    env: {
+        baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+    },
     head: {
         title: 'takeshi kato',
         meta: [
             { charset: 'utf-8' },
             { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-            { hid: 'description', name: 'description', content: `This is my hobby and record.` }
+            {hid: 'description', name: 'description', content: 'This is my hobby and record.'}
         ],
-        link: [
-            { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-        ]
+        link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
     },
-    loading: { color: '#3B8070' },
+    /*
+    ** Customize the progress-bar color
+    */
+    loading: false,
+    loadingIndicator: false,
+    /*
+    ** Build configuration
+    */
     build: {
-        extend: function (config, ctx) {
-            if (ctx.dev && ctx.isClient) {
-                config.module.rules.push({
-                    enforce: 'pre',
-                    test: /\.(js|vue)$/,
-                    loader: 'eslint-loader',
-                    exclude: /(node_modules)/
-                });
-            }
-            config.module.rules.push({
-                test: /\.js$/,
-                loader: 'babel-loader',
-                exclude: /node_modules(?!(\/|\\)@nuxtjs)/,
-                options: Object.assign({}, this.babelOptions)
-            });
-            config.plugins = config.plugins.filter((plugin) => plugin.constructor.name !== 'UglifyJsPlugin');
+        vendor: ['three', 'gsap', 'vuex-class', 'nuxt-class-component'],
+        filenames: {
+            css: 'css/common.[contenthash].css',
+            manifest: 'js/manifest.[hash].js',
+            vendor: 'js/common.[chunkhash].js',
+            app: 'js/app.[chunkhash].js',
+            chunk: 'js/[name].[chunkhash].js'
         },
-        ssr: false,
-        vendor: ['babel-polyfill', 'three', 'gsap']
+        publicPath: '/common/',
+        ssr: false
     },
+    mode: 'spa',
+    modules: ['~modules/typescript.ts'],
+    generate: {
+        dir: 'public/'
+    }
 };

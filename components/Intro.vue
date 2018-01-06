@@ -175,7 +175,6 @@
                 }
             },
             update: function () {
-                console.log('update');
                 this._timer = requestAnimationFrame(this.update);
 
                 if (this.sceneName === AppConfig.SCENE.FIRST) {

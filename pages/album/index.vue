@@ -1,7 +1,7 @@
 <template>
-    <div class="canvasWrap">
-        <canvas></canvas>
-    </div>
+    <section class="container">
+
+    </section>
 </template>
 
 <script>

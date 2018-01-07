@@ -1,7 +1,7 @@
 <template>
     <div class="str-container">
         <div class="container-canvas" ref="canvasWrap"></div>
-        <button class="btn-dot" @click="backToAlbum">
+        <button class="btn-dot" :class="{'is-show': _viewFlg}" @click="backToAlbum">
             <svg class="svg-icon--dot" viewBox="0 0 20 9" xmlns="http://www.w3.org/2000/svg" title="一覧に戻る">
                 <circle r="1.5" fill="#fff" cx="5" cy="5"></circle>
                 <circle r="1.5" fill="#fff" cx="10" cy="5"></circle>
@@ -24,7 +24,7 @@
                 required: true
             }
         },
-        data: function () {
+        data () {
             return {
                 _canvas: null,
                 _stage: null,
@@ -38,6 +38,7 @@
                 _mouseX: 0,
                 _mouseY: 0,
                 _viewFlg: false,
+                _selectedVideoID: 0,
                 _videos: {}
             };
         },
@@ -63,11 +64,12 @@
             this._container = new THREE.Group();
             this._stage.add(this._container);
 
-            this._geometry = new THREE.SphereGeometry(300, 50, 50);
+            this._geometry = new THREE.SphereGeometry(100, 50, 50);
             this._geometry.scale(-1, 1, 1);
 
             this._material = new THREE.MeshBasicMaterial();
 
+            this._viewFlg = false;
             this._rayCaster = new THREE.Raycaster();
             this._videos = {};
         },
@@ -151,19 +153,32 @@
                     this.removeEvent();
 
                     const mesh = this._container.children[0];
+                    this._selectedVideoID = mesh.userData.id;
 
                     TweenMax.to(this._mainCamera.position, 1.0, {
                         z: mesh.position.z,
-                        ease: TweenMax.Linear.ease,
+                        ease: TweenMax.Power3.easeOut,
                         onComplete: () => {
+                            this._viewFlg = true;
+                            console.log(this._viewFlg);
                             if (mesh.userData.type === 'video') {
-                                this._videos[mesh.userData.id].play();
+                                this._videos[this._selectedVideoID].play();
                             }
                         }
                     });
                 }
             },
-            backToAlbum: function () {},
+            backToAlbum: function () {
+                this._videos[this._selectedVideoID].pause();
+                TweenMax.to(this._mainCamera.position, 1.0, {
+                    z: 1000,
+                    ease: TweenMax.Power3.easeIn,
+                    onComplete: () => {
+                        this._viewFlg = false;
+                        this.setEvent();
+                    }
+                });
+            },
             play: function () {
                 this.update();
             },
@@ -204,7 +219,7 @@
         .btn-dot {
             position: absolute;
             top: 8px;
-            left: 8px;
+            left: -52px;
             border: none;
             box-shadow: none;
             background: rgba(0, 0, 0, 0.5);
@@ -217,6 +232,10 @@
 
             .svg-icon--dot {
                 vertical-align: top;
+            }
+
+            .is-show {
+                left: 8px;
             }
         }
     }

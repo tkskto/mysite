@@ -21,6 +21,7 @@ module.exports = {
     */
     build: {
         vendor: ['three', 'gsap', 'vuex-class', 'nuxt-class-component'],
+        extactCss: true,
         filenames: {
             css: 'css/common.[contenthash].css',
             manifest: 'js/manifest.[hash].js',

@@ -1,7 +1,7 @@
 <template>
     <div class="str-container">
         <div id="canvasWrap" class="container-canvas"></div>
-        <button class="btn-dot" :class="{'is-show': _viewFlg}" @click="backToAlbum">
+        <button class="btn-dot" :class="{'is-show': $data._viewFlg}" @click="backToAlbum">
             <svg class="svg-icon--dot" viewBox="0 0 20 9" xmlns="http://www.w3.org/2000/svg" title="一覧に戻る">
                 <circle r="1.5" fill="#fff" cx="5" cy="5"></circle>
                 <circle r="1.5" fill="#fff" cx="10" cy="5"></circle>
@@ -11,44 +11,43 @@
     </div>
 </template>
 
-<script lang="ts">
-    import Vue from 'vue';
-    import Component from 'nuxt-class-component';
-    import { Getter } from 'vuex-class';
+<script>
+    import {mapGetters} from 'vuex';
     import * as THREE from 'three';
     import gsap from 'gsap';
 
-
-    @Component({
+    export default {
         name: 'album',
+        computed: {
+            ...mapGetters(['screenSize'])
+        },
         props: {
             _name: {
                 type: String,
                 required: true
             }
-        }
-    })
-    export default class Album extends Vue {
-        @Getter screenSize;
-        _name = this._name;
-        _canvas;
-        _wrapper;
-        _stage;
-        _renderer;
-        _mainCamera;
-        _container;
-        _geometry;
-        _material;
-        _rayCaster;
-        _intersects = [];
-        _mouseX = 0;
-        _mouseY = 0;
-        _viewFlg = false;
-        _selectedVideoID = 0;
-        _videos = {};
-        _timer = 0;
-        _currentTween;
-
+        },
+        data() {
+            return {
+                _canvas: null,
+                _wrapper: null,
+                _stage: null,
+                _renderer: null,
+                _mainCamera: null,
+                _container: null,
+                _geometry: null,
+                _material: null,
+                _rayCaster: null,
+                _intersects: [],
+                _mouseX: 0,
+                _mouseY: 0,
+                _viewFlg: false,
+                _selectedVideoID: 0,
+                _videos: {},
+                _timer: 0,
+                _currentTween: null
+            };
+        },
         created () {
             this._stage = new THREE.Scene();
 
@@ -74,7 +73,7 @@
 
             this._rayCaster = new THREE.Raycaster();
             this._videos = {};
-        }
+        },
 
         mounted () {
             this._renderer.setSize(
@@ -98,116 +97,108 @@
             this.setEvent();
 
             this.play();
-        }
+        },
+        methods: {
+            setEvent() {
+                document.addEventListener('mousemove', this.onMouseMove);
+                document.addEventListener('click', this.viewDetail);
+            },
+            removeEvent() {
+                document.removeEventListener('mousemove', this.onMouseMove);
+                document.removeEventListener('click', this.viewDetail);
+            },
+            addPicture(_src) {
+                const geometry = this._geometry.clone();
+                const material = this._material.clone();
+            },
+            addMovie(_src) {
+                const video = document.createElement('video');
+                this._videos[_src] = video;
+                video.preload = 'none';
+                video.loop = true;
+                video.src = `/assets/album/${this._name}/${_src}.mp4`;
 
-        setEvent () {
-            document.addEventListener('mousemove', this.onMouseMove);
-            document.addEventListener('click', this.viewDetail);
-        }
+                const geometry = this._geometry.clone();
+                const material = this._material.clone();
 
-        removeEvent () {
-            document.removeEventListener('mousemove', this.onMouseMove);
-            document.removeEventListener('click', this.viewDetail);
-        }
+                const texture = new THREE.VideoTexture(video);
+                texture.minFilter = THREE.LinearFilter;
+                texture.magFilter = THREE.LinearFilter;
+                texture.format = THREE.RGBFormat;
+                material.map = texture;
 
-        addPicture (_src) {
-            const geometry = this._geometry.clone();
-            const material = this._material.clone();
-        }
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.scale.set(0.1, 0.1, 0.1);
+                mesh.userData.type = 'video';
+                mesh.userData.id = _src;
+                this._container.add(mesh);
 
-        addMovie (_src) {
-            const video = document.createElement('video');
-            this._videos[_src] = video;
-            video.preload = 'none';
-            video.loop = true;
-            video.src = `/assets/album/${this._name}/${_src}.mp4`;
-
-            const geometry = this._geometry.clone();
-            const material = this._material.clone();
-
-            const texture = new THREE.VideoTexture(video);
-            texture.minFilter = THREE.LinearFilter;
-            texture.magFilter = THREE.LinearFilter;
-            texture.format = THREE.RGBFormat;
-            material.map = texture;
-
-            const mesh = new THREE.Mesh(geometry, material);
-            mesh.scale.set(0.1, 0.1, 0.1);
-            mesh.userData.type = 'video';
-            mesh.userData.id = _src;
-            this._container.add(mesh);
-
-            video.addEventListener('loadeddata', () => {
-                this._currentTween = new gsap.TweenMax(mesh.scale, 1.0, {
-                    x: 1.0,
-                    y: 1.0,
-                    z: 1.0,
-                    ease: gsap.Elastic.easeOut
+                video.addEventListener('loadeddata', () => {
+                    this._currentTween = new gsap.TweenMax(mesh.scale, 1.0, {
+                        x: 1.0,
+                        y: 1.0,
+                        z: 1.0,
+                        ease: gsap.Elastic.easeOut
+                    });
+                }, {
+                    once: true,
+                    passive: true,
+                    capture: false
                 });
-            }, {
-                once: true,
-                passive: true,
-                capture: false
-            });
 
-            video.load();
-        }
+                video.load();
+            },
+            onMouseMove(event) {
+                this._mouseX = (event.clientX / this.screenSize.width) * 2 - 1;
+                this._mouseY = -(event.clientY / this.screenSize.height) * 2 + 1;
+                this._rayCaster.setFromCamera({x: this._mouseX, y: this._mouseY}, this._mainCamera);
+                this._intersects = this._rayCaster.intersectObjects(this._container.children);
+            },
+            viewDetail() {
+                if (this._intersects.length > 0) {
+                    this.removeEvent();
 
-        onMouseMove (event) {
-            this._mouseX = (event.clientX / this.screenSize.width) * 2 - 1;
-            this._mouseY = - (event.clientY / this.screenSize.height) * 2 + 1;
-            this._rayCaster.setFromCamera({x: this._mouseX, y: this._mouseY}, this._mainCamera);
-            this._intersects = this._rayCaster.intersectObjects(this._container.children);
-        }
+                    const mesh = this._container.children[0];
+                    this._selectedVideoID = mesh.userData.id;
 
-        viewDetail () {
-            if (this._intersects.length > 0) {
-                this.removeEvent();
-
-                const mesh = this._container.children[0];
-                this._selectedVideoID = mesh.userData.id;
-
-                this._currentTween = new gsap.TweenMax(this._mainCamera.position, 1.0, {
-                    z: mesh.position.z,
-                    ease: gsap.Power3.easeOut,
-                    onComplete: () => {
-                        this._viewFlg = true;
-                        if (mesh.userData.type === 'video') {
-                            this._videos[this._selectedVideoID].play();
+                    this._currentTween = new gsap.TweenMax(this._mainCamera.position, 1.0, {
+                        z: mesh.position.z,
+                        ease: gsap.Power3.easeOut,
+                        onComplete: () => {
+                            this.$data._viewFlg = true;
+                            if (mesh.userData.type === 'video') {
+                                this._videos[this._selectedVideoID].play();
+                            }
                         }
+                    });
+                }
+            },
+            backToAlbum() {
+                this._videos[this._selectedVideoID].pause();
+                this._currentTween = new gsap.TweenMax(this._mainCamera.position, 1.0, {
+                    z: 1000,
+                    ease: gsap.Power3.easeIn,
+                    onComplete: () => {
+                        this.$data._viewFlg = false;
+                        this.setEvent();
                     }
                 });
-            }
-        }
-
-        backToAlbum () {
-            this._videos[this._selectedVideoID].pause();
-            this._currentTween = new gsap.TweenMax(this._mainCamera.position, 1.0, {
-                z: 1000,
-                ease: gsap.Power3.easeIn,
-                onComplete: () => {
-                    this._viewFlg = false;
-                    this.setEvent();
+            },
+            play() {
+                this.update();
+            },
+            pause() {
+                if (this._timer) {
+                    cancelAnimationFrame(this._timer);
+                    this._timer = -1;
                 }
-            });
-        }
-
-        play () {
-            this.update();
-        }
-
-        pause () {
-            if (this._timer) {
-                cancelAnimationFrame(this._timer);
-                this._timer = -1;
+            },
+            update() {
+                this._timer = requestAnimationFrame(this.update);
+                this._renderer.render(this._stage, this._mainCamera);
             }
         }
-
-        update () {
-            this._timer = requestAnimationFrame(this.update);
-            this._renderer.render(this._stage, this._mainCamera);
-        }
-    }
+    };
 </script>
 
 <style scoped lang="scss">
@@ -243,12 +234,13 @@
             text-align: center;
             padding: 0;
             border-radius: 2px;
+            transition: left 0.5s ease;
 
             .svg-icon--dot {
                 vertical-align: top;
             }
 
-            .is-show {
+            &.is-show {
                 left: 8px;
             }
         }

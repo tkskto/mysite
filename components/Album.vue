@@ -19,7 +19,7 @@
     export default {
         name: 'album',
         computed: {
-            ...mapGetters(['screenSize'])
+            ...mapGetters(['screenSize', 'getCurrentAlbumData'])
         },
         props: {
             _name: {
@@ -42,16 +42,18 @@
                 _mouseX: 0,
                 _mouseY: 0,
                 _viewFlg: false,
+                _textureLoader: null,
                 _selectedVideoID: 0,
                 _videos: {},
                 _timer: 0,
+                _column: 3,
                 _currentTween: null
             };
         },
         created () {
             this._stage = new THREE.Scene();
 
-            this._mainCamera = new THREE.PerspectiveCamera(60, this.screenSize.width / this.screenSize.height, 1, 10000);
+            this._mainCamera = new THREE.PerspectiveCamera(60, this.screenSize.width / this.screenSize.height, 1, 2000);
             this._mainCamera.position.set(0, 0, 1000);
 
             const ratio = window.devicePixelRatio;
@@ -70,7 +72,7 @@
             this._geometry = new THREE.SphereGeometry(100, 50, 50);
             this._geometry.scale(-1, 1, 1);
             this._material = new THREE.MeshBasicMaterial();
-
+            this._textureLoader = new THREE.TextureLoader();
             this._rayCaster = new THREE.Raycaster();
             this._videos = {};
         },
@@ -92,7 +94,15 @@
                 this._wrapper.appendChild(this._canvas);
             }
 
-            this.addMovie('01');
+            for (let i = 0, len = this.getCurrentAlbumData.images; i < len; i++) {
+                const _name = i < 10 ? `0${i + 1}` : `${i + 1}`;
+                this.addPicture(i, _name);
+            }
+
+            for (let i = 0, len = this.getCurrentAlbumData.movies; i < len; i++) {
+                const _name = i < 10 ? `0${i + 1}` : `${i + 1}`;
+                this.addMovie(i, _name);
+            }
 
             this.setEvent();
 
@@ -107,11 +117,31 @@
                 document.removeEventListener('mousemove', this.onMouseMove);
                 document.removeEventListener('click', this.viewDetail);
             },
-            addPicture(_src) {
+            addPicture(_index, _src) {
                 const geometry = this._geometry.clone();
                 const material = this._material.clone();
+
+                this._textureLoader.load(
+                    `/assets/album/${this._name}/${_src}.jpg`,
+                    (_texture) => {
+                        material.map = texture;
+                        const mesh = new THREE.Mesh(geometry, material);
+                        mesh.scale.set(0.1, 0.1, 0.1);
+                        mesh.position.set(_index * 300, 0, 0);
+                        mesh.userData.type = 'picture';
+                        mesh.userData.id = _src;
+                        this._container.add(mesh);
+
+                        this._currentTween = new gsap.TweenMax(mesh.scale, 1.0, {
+                            x: 1.0,
+                            y: 1.0,
+                            z: 1.0,
+                            ease: gsap.Elastic.easeOut
+                        });
+                    }
+                );
             },
-            addMovie(_src) {
+            addMovie(_index, _src) {
                 const video = document.createElement('video');
                 this._videos[_src] = video;
                 video.preload = 'none';
@@ -129,6 +159,7 @@
 
                 const mesh = new THREE.Mesh(geometry, material);
                 mesh.scale.set(0.1, 0.1, 0.1);
+                mesh.position.set(_index * 300, 0, 0);
                 mesh.userData.type = 'video';
                 mesh.userData.id = _src;
                 this._container.add(mesh);
@@ -153,29 +184,38 @@
                 this._mouseY = -(event.clientY / this.screenSize.height) * 2 + 1;
                 this._rayCaster.setFromCamera({x: this._mouseX, y: this._mouseY}, this._mainCamera);
                 this._intersects = this._rayCaster.intersectObjects(this._container.children);
+                console.log(this._intersects);
             },
             viewDetail() {
                 if (this._intersects.length > 0) {
                     this.removeEvent();
 
-                    const mesh = this._container.children[0];
-                    this._selectedVideoID = mesh.userData.id;
+                    const mesh = this._intersects[0].object;
+                    console.log(mesh.userData.id);
 
                     this._currentTween = new gsap.TweenMax(this._mainCamera.position, 1.0, {
+                        x: mesh.position.x,
                         z: mesh.position.z,
                         ease: gsap.Power3.easeOut,
                         onComplete: () => {
                             this.$data._viewFlg = true;
                             if (mesh.userData.type === 'video') {
+                                this._selectedVideoID = mesh.userData.id;
                                 this._videos[this._selectedVideoID].play();
+                            } else {
+                                this._selectedVideoID = -1;
                             }
                         }
                     });
                 }
             },
             backToAlbum() {
-                this._videos[this._selectedVideoID].pause();
+                if (this._selectedVideoID !== -1) {
+                    this._videos[this._selectedVideoID].pause();
+                }
+
                 this._currentTween = new gsap.TweenMax(this._mainCamera.position, 1.0, {
+                    x: 0,
                     z: 1000,
                     ease: gsap.Power3.easeIn,
                     onComplete: () => {

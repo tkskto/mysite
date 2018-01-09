@@ -6,10 +6,3 @@ export class AppConfig {
         SECOND: 'second'
     };
 }
-
-export class ALBUMS {
-    public static ARAZ = {
-        images: 9,
-        movies: 3
-    };
-}

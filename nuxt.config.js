@@ -20,7 +20,7 @@ module.exports = {
     ** Build configuration
     */
     build: {
-        vendor: ['three', 'gsap', 'vuex-class', 'nuxt-class-component'],
+        vendor: ['three', 'three-orbit-controls', 'gsap', 'vuex-class', 'nuxt-class-component'],
         extactCss: true,
         filenames: {
             css: 'css/common.[contenthash].css',

@@ -23,7 +23,7 @@
                 const width = window.innerWidth;
                 const height = window.innerHeight;
 
-            if (this.screenSize.width !== width && this.screenSize.height !== height) {
+            if (this.screenSize.width !== width || this.screenSize.height !== height) {
                     this.$store.dispatch('resize', {width: width, height: height});
                 }
             }

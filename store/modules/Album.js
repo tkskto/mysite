@@ -1,6 +1,6 @@
 const state = {
     Araz: {
-        images: 9,
+        images: 7,
         movies: 3
     },
     currentAlbumName: 'Araz'

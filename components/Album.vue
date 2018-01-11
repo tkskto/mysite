@@ -17,7 +17,9 @@
     import {mapGetters} from 'vuex';
     import * as THREE from 'three';
     import gsap from 'gsap';
-    const OrbitControls = require('three-orbit-controls')(THREE);
+    import {CustomPerspectiveCamera} from "../assets/ts/Camera/CustomPerspectiveCamera";
+    import {CustomSPPerspectiveCamera} from "../assets/ts/Camera/CustomPerspectiveSPCamera";
+    // const OrbitControls = require('three-orbit-controls')(THREE);
 
     export default {
         name: 'album',
@@ -37,6 +39,7 @@
                 _stage: null,
                 _renderer: null,
                 _mainCamera: null,
+                _cameraTarget: {},
                 _container: null,
                 _geometry: null,
                 _material: null,
@@ -54,17 +57,15 @@
                 _albumNum: 0,
                 _loadedAlbumNum: 0,
                 _currentTween: null,
+                _isTouch: false,
                 _controls: null
             };
         },
         created () {
-            this._stage = new THREE.Scene();
-
-            this._mainCamera = new THREE.PerspectiveCamera(60, this.screenSize.width / this.screenSize.height, 1, 2000);
-            this._mainCamera.position.set(0, 0, 1000);
-
             const ratio = window.devicePixelRatio;
 
+            this._isTouch = 'ontouchstart' in window;
+            this._stage = new THREE.Scene();
             this._renderer = new THREE.WebGLRenderer({
                 antialias: true,
                 stencil: false,
@@ -83,11 +84,6 @@
             this._material = new THREE.MeshBasicMaterial();
             this._textureLoader = new THREE.TextureLoader();
             this._rayCaster = new THREE.Raycaster();
-            this._controls = new OrbitControls(this._mainCamera);
-            this._controls.enableDamping = true;
-            this._controls.dampingFactor = 0.2;
-            this._controls.enablePan = false;
-            this._controls.enableRotate = false;
             this._videos = {};
         },
 
@@ -95,15 +91,22 @@
             this._renderer.setSize(
                 this.screenSize.width, this.screenSize.height
             );
-
             this._renderer.clear();
-            this._canvas = this._renderer.domElement;
 
+            this._canvas = this._renderer.domElement;
             this._wrapper = document.getElementById('canvasWrap');
 
             if (this._wrapper) {
                 this._wrapper.appendChild(this._canvas);
             }
+
+            if (this._isTouch) {
+                this._mainCamera = new CustomSPPerspectiveCamera(this._canvas, 60, this.screenSize.width / this.screenSize.height, 1, 2000);
+            } else {
+                this._mainCamera = new CustomPerspectiveCamera(this._canvas, 60, this.screenSize.width / this.screenSize.height, 1, 2000);
+            }
+            this._stage.add(this._mainCamera);
+            this._mainCamera.position.set(0, 0, 1000);
 
             this._loadedAlbumNum = 0;
             this._albumNum = this.getCurrentAlbumData.images + this.getCurrentAlbumData.movies;
@@ -117,19 +120,21 @@
                 const _name = i < 10 ? `0${i + 1}` : `${i + 1}`;
                 this.addMovie(i, _name);
             }
-
-            this.setEvent();
-
-            this.play();
         },
         methods: {
-            setEvent() {
+            setDetectEvent() {
                 document.addEventListener('mousemove', this.onMouseMove);
                 document.addEventListener('click', this.viewDetail);
             },
-            removeEvent() {
+            removeDetectEvent() {
                 document.removeEventListener('mousemove', this.onMouseMove);
                 document.removeEventListener('click', this.viewDetail);
+            },
+            setCameraEvent() {
+                this._mainCamera.setEvent();
+            },
+            removeCameraEvent() {
+                this._mainCamera.removeEvent();
             },
             addPicture(_index, _src) {
                 const geometry = this._geometry.clone();
@@ -200,7 +205,7 @@
                             onComplete: () => {
                                 finished++;
                                 if (finished === this._albumNum) {
-                                    this.setEvent();
+                                    this.setDetectEvent();
                                 }
                             }
                         });
@@ -208,34 +213,50 @@
                 }
             },
             onMouseMove(event) {
-                this._mouseX = (event.clientX / this.screenSize.width) * 2 - 1;
-                this._mouseY = -(event.clientY / this.screenSize.height) * 2 + 1;
-                this._rayCaster.setFromCamera({x: this._mouseX, y: this._mouseY}, this._mainCamera);
+                let x = event.clientX;
+                let y = event.clientY;
+
+                if (this._isTouch) {
+                    const touch = event.touches[0];
+                    x = touch.pageX;
+                    y = touch.pageY;
+                }
+
+                const mouseX = (x / this.screenSize.width) * 2 - 1;
+                const mouseY = -(y / this.screenSize.height) * 2 + 1;
+                this._rayCaster.setFromCamera({x: mouseX, y: mouseY}, this._mainCamera.camera);
                 this._intersects = this._rayCaster.intersectObjects(this._container.children);
 
-                this.$data._isOvered = this._intersects.length > 0;
+                if (this._intersects) {
+                    this.$data._isOvered = this._intersects.length > 0;
+                }
             },
-            viewDetail() {
+            viewDetail(event) {
+
+                if (this._isTouch) {
+                    this.onMouseMove(event);
+                }
+
                 if (this._intersects.length > 0) {
-                    this.removeEvent();
+                    this.removeDetectEvent();
 
                     const mesh = this._intersects[0].object;
 
                     this._currentTween = new gsap.TweenMax(this._mainCamera.position, 1.0, {
                         x: mesh.position.x,
-                        z: mesh.position.z + 0.1,
+                        z: mesh.position.z,
                         ease: gsap.Power3.easeOut,
                         onComplete: () => {
                             this.$data._viewFlg = true;
+
                             if (mesh.userData.type === 'video') {
                                 this._selectedVideoID = mesh.userData.id;
                                 this._videos[this._selectedVideoID].play();
                             } else {
                                 this._selectedVideoID = -1;
                             }
-                            this._controls.enablePan = true;
-                            this._controls.enableRotate = true;
-                            console.log(this._controls);
+
+                            this.setCameraEvent();
                         }
                     });
                 }
@@ -245,20 +266,19 @@
                     this._videos[this._selectedVideoID].pause();
                 }
 
+                this._mainCamera.reset();
                 this._currentTween = new gsap.TweenMax(this._mainCamera.position, 1.0, {
                     x: 0,
                     z: 1000,
                     ease: gsap.Power3.easeIn,
                     onComplete: () => {
                         this.$data._viewFlg = false;
-                        this._controls.enablePan = false;
-                        this._controls.enableRotate = false;
-                        this.setEvent();
+                        this.removeCameraEvent();
+                        this.setDetectEvent();
                     }
                 });
             },
             play() {
-                this._controls.update();
                 this.update();
             },
             pause() {
@@ -269,7 +289,8 @@
             },
             update() {
                 this._timer = requestAnimationFrame(this.update);
-                this._renderer.render(this._stage, this._mainCamera);
+                this._mainCamera.update();
+                this._renderer.render(this._stage, this._mainCamera.camera);
             }
         },
         watch: {
@@ -278,9 +299,20 @@
                     const width = this.$el.clientWidth;
                     const height = this.$el.clientHeight;
                     this._renderer.setSize(width, height);
-                    this._mainCamera.ratio = width / height;
-                    this._mainCamera.updateProjectionMatrix();
+                    this._mainCamera.setRatio(width / height);
                 }
+            }
+        },
+        beforeDestroy: function () {
+            this.removeDetectEvent();
+            this.removeCameraEvent();
+
+            if (this._mainCamera) {
+                this._mainCamera.dispose();
+            }
+
+            if (this._renderer) {
+                this._renderer.dispose();
             }
         }
     };

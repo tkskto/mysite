@@ -34,7 +34,7 @@ export class CustomPerspectiveCamera extends CustomCamera {
     };
 
     public removeEvent = () => {
-        this._canvas.removeEventListener('mousedown', this.onMouseDown);
+        document.removeEventListener('mousedown', this.onMouseDown);
         document.removeEventListener('mousemove', this.onMouseMove);
         document.removeEventListener('mouseup', this.onMouseUp);
     };
@@ -52,8 +52,6 @@ export class CustomPerspectiveCamera extends CustomCamera {
     };
 
     public dispose = () => {
-        this._canvas.removeEventListener('mousedown', this.onMouseDown);
-        document.removeEventListener('mousemove', this.onMouseMove);
-        document.removeEventListener('mouseup', this.onMouseUp);
+        this.removeEvent();
     }
 }

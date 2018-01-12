@@ -19,7 +19,6 @@
     import gsap from 'gsap';
     import {CustomPerspectiveCamera} from "../assets/ts/Camera/CustomPerspectiveCamera";
     import {CustomSPPerspectiveCamera} from "../assets/ts/Camera/CustomPerspectiveSPCamera";
-    // const OrbitControls = require('three-orbit-controls')(THREE);
 
     export default {
         name: 'album',
@@ -88,23 +87,22 @@
         },
 
         mounted () {
+            this._column = this.screenSize.width / 200;
+
             this._renderer.setSize(
                 this.screenSize.width, this.screenSize.height
             );
-            this._renderer.clear();
 
             this._canvas = this._renderer.domElement;
             this._wrapper = document.getElementById('canvasWrap');
-
-            if (this._wrapper) {
-                this._wrapper.appendChild(this._canvas);
-            }
+            this._wrapper.appendChild(this._canvas);
 
             if (this._isTouch) {
                 this._mainCamera = new CustomSPPerspectiveCamera(this._canvas, 60, this.screenSize.width / this.screenSize.height, 1, 2000);
             } else {
                 this._mainCamera = new CustomPerspectiveCamera(this._canvas, 60, this.screenSize.width / this.screenSize.height, 1, 2000);
             }
+
             this._stage.add(this._mainCamera);
             this._mainCamera.position.set(0, 0, 1000);
 
@@ -146,7 +144,7 @@
                         material.map = _texture;
                         const mesh = new THREE.Mesh(geometry, material);
                         mesh.scale.set(0.1, 0.1, 0.1);
-                        mesh.position.set(_index * 300 - 1000, 0, 0);
+                        mesh.position.set(_index * 300 - 900, 150, 0);
                         mesh.userData.type = 'picture';
                         this._container.add(mesh);
 
@@ -163,8 +161,8 @@
 
                 const geometry = this._geometry.clone();
                 const material = this._material.clone();
-
                 const texture = new THREE.VideoTexture(video);
+
                 texture.minFilter = THREE.LinearFilter;
                 texture.magFilter = THREE.LinearFilter;
                 texture.format = THREE.RGBFormat;
@@ -172,7 +170,7 @@
 
                 const mesh = new THREE.Mesh(geometry, material);
                 mesh.scale.set(0.1, 0.1, 0.1);
-                mesh.position.set(_index * 300 - 1000, -300, 0);
+                mesh.position.set(_index * 300 - 900, -150, 0);
                 mesh.userData.type = 'video';
                 mesh.userData.id = _src;
                 this._container.add(mesh);
@@ -237,13 +235,14 @@
                     this.onMouseMove(event);
                 }
 
-                if (this._intersects.length > 0) {
+                if (this._intersects && this._intersects.length > 0) {
                     this.removeDetectEvent();
 
                     const mesh = this._intersects[0].object;
 
                     this._currentTween = new gsap.TweenMax(this._mainCamera.position, 1.0, {
                         x: mesh.position.x,
+                        y: mesh.position.y,
                         z: mesh.position.z,
                         ease: gsap.Power3.easeOut,
                         onComplete: () => {
@@ -256,6 +255,13 @@
                                 this._selectedVideoID = -1;
                             }
 
+                            for (let i = 0; i < this._albumNum; i++) {
+                                const child = this._container.children[i];
+                                if (child !== mesh) {
+                                    child.visible = false;
+                                }
+                            }
+
                             this.setCameraEvent();
                         }
                     });
@@ -266,9 +272,14 @@
                     this._videos[this._selectedVideoID].pause();
                 }
 
+                for (let i = 0; i < this._albumNum; i++) {
+                    this._container.children[i].visible = true;
+                }
+
                 this._mainCamera.reset();
                 this._currentTween = new gsap.TweenMax(this._mainCamera.position, 1.0, {
                     x: 0,
+                    y: 0,
                     z: 1000,
                     ease: gsap.Power3.easeIn,
                     onComplete: () => {

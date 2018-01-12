@@ -30,8 +30,8 @@ export class CustomSPPerspectiveCamera extends CustomCamera {
         let touchObj:Touch = e.changedTouches[0];
         this.mouseStart.x = touchObj.pageX;
         this.mouseStart.y = touchObj.pageY;
-        window.addEventListener('touchmove', this.onTouchMove);
-        window.addEventListener('touchend touchcancel', this.onTouchUp);
+        document.addEventListener('touchmove', this.onTouchMove);
+        document.addEventListener('touchend touchcancel', this.onTouchUp);
     };
     private onTouchMove = (e:TouchEvent) => {
         let touchObj:Touch = e.changedTouches[0];
@@ -39,19 +39,19 @@ export class CustomSPPerspectiveCamera extends CustomCamera {
         this.subtract = this.mouseStart.subtract(touchObj.pageX, touchObj.pageY);
     };
     private onTouchUp = (e:TouchEvent) => {
-        window.removeEventListener('touchmove', this.onTouchMove);
-        window.removeEventListener('touchend touchcancel', this.onTouchUp);
+        document.removeEventListener('touchmove', this.onTouchMove);
+        document.removeEventListener('touchend touchcancel', this.onTouchUp);
         this.subtract.x = 0;
         this.subtract.y = 0;
         this.subtract.reset();
     };
     public setEvent = () => {
-        this._canvas.addEventListener("touchstart", this.onTouchStart);
+        document.addEventListener("touchstart", this.onTouchStart);
     };
     public removeEvent = () => {
-        this._canvas.removeEventListener("touchstart", this.onTouchStart);
-        window.removeEventListener('touchmove', this.onTouchMove);
-        window.removeEventListener('touchend touchcancel', this.onTouchUp);
+        document.removeEventListener("touchstart", this.onTouchStart);
+        document.removeEventListener('touchmove', this.onTouchMove);
+        document.removeEventListener('touchend touchcancel', this.onTouchUp);
     };
     public update = () => {
         //スマホのジャイロセンサーを使うとき
@@ -94,4 +94,7 @@ export class CustomSPPerspectiveCamera extends CustomCamera {
             this.orientationController.update();
         }
     };
+    public dispose = () => {
+        this.removeEvent();
+    }
 }

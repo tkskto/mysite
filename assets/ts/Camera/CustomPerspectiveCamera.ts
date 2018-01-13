@@ -1,14 +1,14 @@
-import {CustomCamera} from '~/assets/ts/Camera/CustomCamera';
+import {CustomCamera} from './CustomCamera';
 
 // TODO: コメント
 
 export class CustomPerspectiveCamera extends CustomCamera {
 
-    constructor(public _canvas:HTMLCanvasElement, public fov?: number, public aspect?: number, public near?: number, public far?: number) {
+    constructor(public _canvas: HTMLCanvasElement, public fov?: number, public aspect?: number, public near?: number, public far?: number) {
         super(_canvas, fov, aspect, near, far);
     }
 
-    private onMouseDown = (e:MouseEvent) => {
+    private onMouseDown = (e: MouseEvent) => {
         e.preventDefault();
         this.mouseStart.x = e.screenX;
         this.mouseStart.y = e.screenY;
@@ -16,12 +16,12 @@ export class CustomPerspectiveCamera extends CustomCamera {
         document.addEventListener('mouseup', this.onMouseUp);
     };
 
-    private onMouseMove = (e:MouseEvent) => {
+    private onMouseMove = (e: MouseEvent) => {
         this.moveFlg = true;
         this.subtract = this.mouseStart.subtract(e.screenX, e.screenY);
     };
 
-    private onMouseUp = (e:MouseEvent) => {
+    private onMouseUp = (e: MouseEvent) => {
         e.preventDefault();
         document.removeEventListener('mousemove', this.onMouseMove);
         document.removeEventListener('mouseup', this.onMouseUp);
@@ -42,9 +42,9 @@ export class CustomPerspectiveCamera extends CustomCamera {
     public update = () => {
         this.angle.x += this.subtract.x * 0.0001;
         this.angle.y -= this.subtract.y * 0.0001;
-        if(this.angle.y > this.maxY) {
+        if (this.angle.y > this.maxY) {
             this.angle.y = this.maxY;
-        } else if(this.angle.y < this.minY) {
+        } else if (this.angle.y < this.minY) {
             this.angle.y = this.minY;
         }
         this.rotation.set(0, -this.angle.x, 0);

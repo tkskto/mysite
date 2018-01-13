@@ -18,7 +18,7 @@
     import * as THREE from 'three';
     import gsap from 'gsap';
     import {CustomPerspectiveCamera} from "../assets/ts/Camera/CustomPerspectiveCamera";
-    import {CustomSPPerspectiveCamera} from "../assets/ts/Camera/CustomPerspectiveSPCamera";
+    import {CustomPerspectiveSPCamera} from "../assets/ts/Camera/CustomPerspectiveSPCamera";
 
     export default {
         name: 'album',
@@ -98,7 +98,7 @@
             this._wrapper.appendChild(this._canvas);
 
             if (this._isTouch) {
-                this._mainCamera = new CustomSPPerspectiveCamera(this._canvas, 60, this.screenSize.width / this.screenSize.height, 1, 2000);
+                this._mainCamera = new CustomPerspectiveSPCamera(this._canvas, 60, this.screenSize.width / this.screenSize.height, 1, 2000);
             } else {
                 this._mainCamera = new CustomPerspectiveCamera(this._canvas, 60, this.screenSize.width / this.screenSize.height, 1, 2000);
             }

@@ -1,5 +1,6 @@
 const state = {
     Araz: {
+        all: 10,
         images: 7,
         movies: 3
     },

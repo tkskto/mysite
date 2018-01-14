@@ -16,6 +16,7 @@
 <script>
     import {mapGetters} from 'vuex';
     import * as THREE from 'three';
+    // import Stats from 'stats-js';
     import gsap from 'gsap';
     import {CustomPerspectiveCamera} from "../assets/ts/Camera/CustomPerspectiveCamera";
     import {CustomPerspectiveSPCamera} from "../assets/ts/Camera/CustomPerspectiveSPCamera";
@@ -57,9 +58,13 @@
                 _albumNum: 0,
                 _addedAlbumNum: 0,
                 _loadedAlbumNum: 0,
+                _minTextures: {},
+                _textures: {},
                 _currentTween: null,
                 _isTouch: false,
                 _controls: null
+                // _controls: null,
+                // _stats: null // TODO: remove
             };
         },
         created () {
@@ -68,29 +73,37 @@
             this._isTouch = 'ontouchstart' in window;
             this._stage = new THREE.Scene();
             this._renderer = new THREE.WebGLRenderer({
-                antialias: true,
+                antialias: false,
                 stencil: false,
                 alpha: true
             });
 
             this._renderer.setPixelRatio(ratio);
-            this._renderer.setClearColor(new THREE.Color(0x000000), 0.3);
+            this._renderer.setClearColor(new THREE.Color(0x000000), 0);
 
             this._container = new THREE.Group();
             this._stage.add(this._container);
 
-            this._geometry = new THREE.SphereGeometry(100, 50, 50);
+            this._geometry = new THREE.SphereGeometry(10, 32, 32);
             this._geometry.scale(-1, 1, 1);
 
             this._material = new THREE.MeshBasicMaterial();
             this._textureLoader = new THREE.TextureLoader();
             this._rayCaster = new THREE.Raycaster();
+            this._minTextures = {};
+            this._textures = {};
             this._videos = {};
+
+            // this._stats = new Stats();
+            // this._stats.domElement.style.position = 'absolute';
+            // this._stats.domElement.style.left = '0px';
+            // this._stats.domElement.style.bottom = '0px';
+            // document.body.appendChild( this._stats.domElement );
         },
 
         mounted () {
             this._column = Math.round(this.screenSize.width / 200);
-            this._offset = {x: (this._column - 1) * -150, y: 400};
+            this._offset = {x: (this._column - 1) * -15, y: 40};
 
             this._renderer.setSize(
                 this.screenSize.width, this.screenSize.height
@@ -101,21 +114,32 @@
             this._wrapper.appendChild(this._canvas);
 
             if (this._isTouch) {
-                this._mainCamera = new CustomPerspectiveSPCamera(this._canvas, 60, this.screenSize.width / this.screenSize.height, 1, 2000);
+                this._mainCamera = new CustomPerspectiveSPCamera(this._canvas, 60, this.screenSize.width / this.screenSize.height, 1, 1000);
             } else {
-                this._mainCamera = new CustomPerspectiveCamera(this._canvas, 60, this.screenSize.width / this.screenSize.height, 1, 2000);
+                this._mainCamera = new CustomPerspectiveCamera(this._canvas, 60, this.screenSize.width / this.screenSize.height, 1, 1000);
             }
 
+            this._mainCamera.position.set(0, 0, 100);
             this._stage.add(this._mainCamera);
-            this._mainCamera.position.set(0, 0, 1000);
-
             this._loadedAlbumNum = 0;
             this._addedAlbumNum = 0;
-            this._albumNum = this.getCurrentAlbumData.images + this.getCurrentAlbumData.movies;
+            this._albumNum = this.getCurrentAlbumData.all;
 
             for (let i = 0, len = this.getCurrentAlbumData.images; i < len; i++) {
                 const _name = i < 10 ? `0${i + 1}` : `${i + 1}`;
-                this.addPicture(_name);
+                this._textureLoader.load(
+                    `/assets/album/${this._name}/${_name}_min.jpg`,
+                    (_tex) => {
+                        this._minTextures[_name] = _tex;
+                        this.addPicture(_tex, _name);
+                    }
+                );
+                this._textureLoader.load(
+                    `/assets/album/${this._name}/${_name}.jpg`,
+                    (_tex) => {
+                        this._textures[_name] = _tex;
+                    }
+                );
             }
 
             for (let i = 0, len = this.getCurrentAlbumData.movies; i < len; i++) {
@@ -127,10 +151,12 @@
             setDetectEvent() {
                 document.addEventListener('mousemove', this.onMouseMove);
                 document.addEventListener('click', this.viewDetail);
+                document.addEventListener('wheel', this.onScroll);
             },
             removeDetectEvent() {
                 document.removeEventListener('mousemove', this.onMouseMove);
                 document.removeEventListener('click', this.viewDetail);
+                document.removeEventListener('wheel', this.onScroll);
             },
             setCameraEvent() {
                 this._mainCamera.setEvent();
@@ -138,37 +164,37 @@
             removeCameraEvent() {
                 this._mainCamera.removeEvent();
             },
-            addPicture(_src) {
+            addPicture(_tex, _name) {
                 const geometry = this._geometry.clone();
                 const material = this._material.clone();
+                const col = (this._addedAlbumNum % this._column);
+                const row = Math.floor(this._addedAlbumNum / this._column);
+                const x = this._offset.x + col * 30;
+                const y = this._offset.y - row * 30;
+                material.map = _tex;
 
-                this._textureLoader.load(
-                    `/assets/album/${this._name}/${_src}.jpg`,
-                    (_texture) => {
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.scale.set(0.1, 0.1, 0.1);
+                mesh.position.set(x, y, 0);
+                mesh.userData.id = _name;
+                mesh.userData.type = 'picture';
+                this._container.add(mesh);
+                this._addedAlbumNum++;
 
-                        const col = (this._addedAlbumNum % this._column);
-                        const row = Math.floor(this._addedAlbumNum / this._column);
-                        const x = this._offset.x + col * 300;
-                        const y = this._offset.y - row * 300;
-                        material.map = _texture;
-
-                        const mesh = new THREE.Mesh(geometry, material);
-                        mesh.scale.set(0.1, 0.1, 0.1);
-                        mesh.position.set(x, y, 0);
-                        mesh.userData.type = 'picture';
-                        this._container.add(mesh);
-                        this._addedAlbumNum++;
-
-                        this.onLoadComplete();
-                    }
-                );
+                this.onLoadComplete();
             },
             addMovie(_src) {
                 const video = document.createElement('video');
                 this._videos[_src] = video;
-                video.preload = 'none';
+                video.setAttribute('playsinline', '');
+                video.setAttribute('webkit-playsinline', '');
                 video.loop = true;
+                video.autoplay = false;
                 video.src = `/assets/album/${this._name}/${_src}.mp4`;
+                video.addEventListener('loadeddata', () => {
+                    video.pause();
+                    this.onLoadComplete();
+                });
 
                 const geometry = this._geometry.clone();
                 const material = this._material.clone();
@@ -182,8 +208,8 @@
                 const mesh = new THREE.Mesh(geometry, material);
                 const col = (this._addedAlbumNum % this._column);
                 const row = Math.floor(this._addedAlbumNum / this._column);
-                const x = this._offset.x + col * 300;
-                const y = this._offset.y - row * 300;
+                const x = this._offset.x + col * 30;
+                const y = this._offset.y - row * 30;
 
                 mesh.scale.set(0.1, 0.1, 0.1);
                 mesh.position.set(x, y, 0);
@@ -192,26 +218,15 @@
                 this._container.add(mesh);
                 this._addedAlbumNum++;
 
-                video.addEventListener('loadeddata', () => {
-                    this.onLoadComplete();
-                }, {
-                    once: true,
-                    passive: true,
-                    capture: false
-                });
-
                 video.load();
             },
             onLoadComplete() {
                 this._loadedAlbumNum++;
-
                 if (this._loadedAlbumNum === this._albumNum) {
-                    this.play();
-
                     let finished = 0;
 
                     for (let i = 0, len = this._container.children.length; i < len; i++ ) {
-                        new gsap.TweenMax(this._container.children[i].scale, 1.0, {
+                        this._currentTween = new gsap.TweenMax(this._container.children[i].scale, 1.0, {
                             x: 1.0,
                             y: 1.0,
                             z: 1.0,
@@ -225,16 +240,21 @@
                             }
                         });
                     }
+
+                    this.play();
                 }
             },
             onMouseMove(event) {
-                let x = event.clientX;
-                let y = event.clientY;
+                let x;
+                let y;
 
                 if (this._isTouch) {
                     const touch = event.touches[0];
                     x = touch.pageX;
                     y = touch.pageY;
+                } else {
+                    x = event.clientX;
+                    y = event.clientY;
                 }
 
                 const mouseX = (x / this.screenSize.width) * 2 - 1;
@@ -247,7 +267,6 @@
                 }
             },
             viewDetail(event) {
-
                 if (this._isTouch) {
                     this.onMouseMove(event);
                 }
@@ -263,18 +282,22 @@
                         z: mesh.position.z,
                         ease: gsap.Power3.easeOut,
                         onComplete: () => {
+                            const id = mesh.userData.id;
+                            const type = mesh.userData.type;
+
                             this.$data._viewFlg = true;
 
-                            if (mesh.userData.type === 'video') {
-                                this._selectedVideoID = mesh.userData.id;
+                            if (type === 'video') {
+                                this._selectedVideoID = id;
                                 this._videos[this._selectedVideoID].play();
                             } else {
+                                mesh.material.map = this._textures[id];
                                 this._selectedVideoID = -1;
                             }
 
                             for (let i = 0; i < this._albumNum; i++) {
                                 const child = this._container.children[i];
-                                if (child !== mesh) {
+                                if (child.userData.id !== id) {
                                     child.visible = false;
                                 }
                             }
@@ -293,11 +316,14 @@
                     this._container.children[i].visible = true;
                 }
 
+                const mesh = this._intersects[0].object;
+                mesh.material.map = this._minTextures[mesh.userData.id];
+
                 this._mainCamera.reset();
                 this._currentTween = new gsap.TweenMax(this._mainCamera.position, 1.0, {
                     x: 0,
                     y: 0,
-                    z: 1000,
+                    z: 100,
                     ease: gsap.Power3.easeIn,
                     onComplete: () => {
                         this.$data._viewFlg = false;
@@ -306,9 +332,14 @@
                     }
                 });
             },
+            onScroll(e) {
+                e.preventDefault();
+                const cameraPosY = this._mainCamera.position.y + e.deltaY * 0.01;
+                this._mainCamera.position.setY(cameraPosY);
+            },
             // TODO: resize
             onResize() {
-                // TODO: set position off sphere
+                // TODO: set position of sphere
             },
             play() {
                 this.update();
@@ -320,9 +351,11 @@
                 }
             },
             update() {
+                // this._stats.begin();
                 this._timer = requestAnimationFrame(this.update);
                 this._mainCamera.update();
                 this._renderer.render(this._stage, this._mainCamera.camera);
+                // this._stats.end();
             }
         },
         watch: {

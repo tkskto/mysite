@@ -57,11 +57,12 @@
         height: 100%;
     }
 
-    body > div {
+    body > #__nuxt {
         height: 100%;
     }
 
     body {
+        position: relative;
         background: #000000;
     }
     canvas {

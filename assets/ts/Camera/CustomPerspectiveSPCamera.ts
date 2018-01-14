@@ -90,9 +90,9 @@ export class CustomPerspectiveSPCamera extends CustomCamera {
         this.rotation.set(0, -this.angle.x, 0);
         this.camera.rotation.set(this.angle.y, 0, 0);
 
-        if (this.subtract.x === 0 && this.subtract.y === 0) {
-            this.orientationController.update();
-        }
+        // if (this.subtract.x === 0 && this.subtract.y === 0) {
+        //     this.orientationController.update();
+        // }
     };
     public dispose = () => {
         this.removeEvent();

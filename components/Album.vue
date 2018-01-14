@@ -53,7 +53,9 @@
                 _videos: {},
                 _timer: 0,
                 _column: 3,
+                _offset: {x: 0, y: 0},
                 _albumNum: 0,
+                _addedAlbumNum: 0,
                 _loadedAlbumNum: 0,
                 _currentTween: null,
                 _isTouch: false,
@@ -87,7 +89,8 @@
         },
 
         mounted () {
-            this._column = this.screenSize.width / 200;
+            this._column = Math.round(this.screenSize.width / 200);
+            this._offset = {x: (this._column - 1) * -150, y: 400};
 
             this._renderer.setSize(
                 this.screenSize.width, this.screenSize.height
@@ -107,16 +110,17 @@
             this._mainCamera.position.set(0, 0, 1000);
 
             this._loadedAlbumNum = 0;
+            this._addedAlbumNum = 0;
             this._albumNum = this.getCurrentAlbumData.images + this.getCurrentAlbumData.movies;
 
             for (let i = 0, len = this.getCurrentAlbumData.images; i < len; i++) {
                 const _name = i < 10 ? `0${i + 1}` : `${i + 1}`;
-                this.addPicture(i, _name);
+                this.addPicture(_name);
             }
 
             for (let i = 0, len = this.getCurrentAlbumData.movies; i < len; i++) {
                 const _name = i < 10 ? `0${i + 1}` : `${i + 1}`;
-                this.addMovie(i, _name);
+                this.addMovie(_name);
             }
         },
         methods: {
@@ -134,25 +138,32 @@
             removeCameraEvent() {
                 this._mainCamera.removeEvent();
             },
-            addPicture(_index, _src) {
+            addPicture(_src) {
                 const geometry = this._geometry.clone();
                 const material = this._material.clone();
 
                 this._textureLoader.load(
                     `/assets/album/${this._name}/${_src}.jpg`,
                     (_texture) => {
+
+                        const col = (this._addedAlbumNum % this._column);
+                        const row = Math.floor(this._addedAlbumNum / this._column);
+                        const x = this._offset.x + col * 300;
+                        const y = this._offset.y - row * 300;
                         material.map = _texture;
+
                         const mesh = new THREE.Mesh(geometry, material);
                         mesh.scale.set(0.1, 0.1, 0.1);
-                        mesh.position.set(_index * 300 - 900, 150, 0);
+                        mesh.position.set(x, y, 0);
                         mesh.userData.type = 'picture';
                         this._container.add(mesh);
+                        this._addedAlbumNum++;
 
                         this.onLoadComplete();
                     }
                 );
             },
-            addMovie(_index, _src) {
+            addMovie(_src) {
                 const video = document.createElement('video');
                 this._videos[_src] = video;
                 video.preload = 'none';
@@ -169,11 +180,17 @@
                 material.map = texture;
 
                 const mesh = new THREE.Mesh(geometry, material);
+                const col = (this._addedAlbumNum % this._column);
+                const row = Math.floor(this._addedAlbumNum / this._column);
+                const x = this._offset.x + col * 300;
+                const y = this._offset.y - row * 300;
+
                 mesh.scale.set(0.1, 0.1, 0.1);
-                mesh.position.set(_index * 300 - 900, -150, 0);
+                mesh.position.set(x, y, 0);
                 mesh.userData.type = 'video';
                 mesh.userData.id = _src;
                 this._container.add(mesh);
+                this._addedAlbumNum++;
 
                 video.addEventListener('loadeddata', () => {
                     this.onLoadComplete();
@@ -288,6 +305,10 @@
                         this.setDetectEvent();
                     }
                 });
+            },
+            // TODO: resize
+            onResize() {
+                // TODO: set position off sphere
             },
             play() {
                 this.update();

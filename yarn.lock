@@ -3340,13 +3340,6 @@ number-is-nan@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
 
-nuxt-class-component@^1.0.1:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/nuxt-class-component/-/nuxt-class-component-1.1.3.tgz#7f85e05dd83e867e7d0d12681817b9406be06fbb"
-  dependencies:
-    vue-class-component "^6.1.1"
-    vuex-class "^0.3.0"
-
 nuxt@^1.0.0-alpha.5:
   version "1.0.0-rc11"
   resolved "https://registry.yarnpkg.com/nuxt/-/nuxt-1.0.0-rc11.tgz#e30ea7f203cb936b3643527d897501e45eb0965e"
@@ -4442,10 +4435,6 @@ reduce-function-call@^1.0.1, reduce-function-call@^1.0.2:
   dependencies:
     balanced-match "^0.4.2"
 
-reflect-metadata@^0.1.9:
-  version "0.1.10"
-  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.10.tgz#b4f83704416acad89988c9b15635d47e03b9344a"
-
 regenerate@^1.2.1:
   version "1.3.3"
   resolved "https://registry.yarnpkg.com/regenerate/-/regenerate-1.3.3.tgz#0c336d3980553d755c39b586ae3b20aa49c82b7f"
@@ -5356,14 +5345,6 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
-vue-class-component@^5.0.0, vue-class-component@^5.0.2:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-5.0.2.tgz#3dcdc005c58c4e88d8ec2d46e01c74f4d90135c8"
-
-vue-class-component@^6.1.1:
-  version "6.1.2"
-  resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-6.1.2.tgz#87ac0265b0db71a3f49f10d90e4f69f9be9c2fbd"
-
 vue-hot-reload-api@^2.2.0:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.2.4.tgz#683bd1d026c0d3b3c937d5875679e9a87ec6cd8f"
@@ -5393,13 +5374,6 @@ vue-meta@^1.1.0:
     deepmerge "^2.0.0"
     lodash.isplainobject "^4.0.6"
     object-assign "^4.1.1"
-
-vue-property-decorator@^5.1.1:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-5.3.0.tgz#f0fa1d0efd3c569ff2009fe9546cd2fb33ed7f43"
-  dependencies:
-    reflect-metadata "^0.1.9"
-    vue-class-component "^5.0.0"
 
 vue-router@^2.7.0:
   version "2.8.1"
@@ -5439,14 +5413,6 @@ vue-template-es2015-compiler@^1.6.0:
 vue@~2.4.2:
   version "2.4.4"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.4.4.tgz#ea9550b96a71465fd2b8b17b61673b3561861789"
-
-vuex-class@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/vuex-class/-/vuex-class-0.2.0.tgz#84fb2f34ddbf7384381576ed3222b3d2abad5649"
-
-vuex-class@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/vuex-class/-/vuex-class-0.3.0.tgz#25047ab042580fd4ff3e64cc76603ac217c9190d"
 
 vuex@^2.4.0:
   version "2.5.0"

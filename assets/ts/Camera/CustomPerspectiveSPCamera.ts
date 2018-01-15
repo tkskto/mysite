@@ -27,20 +27,26 @@ export class CustomPerspectiveSPCamera extends CustomCamera {
         //     }
         // };
     private onTouchStart = (e: TouchEvent) => {
+        e.preventDefault();
         const touchObj: Touch = e.changedTouches[0];
         this.mouseStart.x = touchObj.pageX;
         this.mouseStart.y = touchObj.pageY;
+        // TODO: documentだとボタンタップできないので調整
         document.addEventListener('touchmove', this.onTouchMove);
-        document.addEventListener('touchend touchcancel', this.onTouchUp);
+        document.addEventListener('touchend', this.onTouchUp);
+        document.addEventListener('touchcancel', this.onTouchUp);
     };
     private onTouchMove = (e: TouchEvent) => {
+        e.preventDefault();
         const touchObj: Touch = e.changedTouches[0];
         this.moveFlg = true;
         this.subtract = this.mouseStart.subtract(touchObj.pageX, touchObj.pageY);
     };
     private onTouchUp = (e: TouchEvent) => {
+        e.preventDefault();
         document.removeEventListener('touchmove', this.onTouchMove);
-        document.removeEventListener('touchend touchcancel', this.onTouchUp);
+        document.removeEventListener('touchend', this.onTouchUp);
+        document.removeEventListener('touchcancel', this.onTouchUp);
         this.subtract.x = 0;
         this.subtract.y = 0;
         this.subtract.reset();
@@ -51,7 +57,8 @@ export class CustomPerspectiveSPCamera extends CustomCamera {
     public removeEvent = () => {
         document.removeEventListener('touchstart', this.onTouchStart);
         document.removeEventListener('touchmove', this.onTouchMove);
-        document.removeEventListener('touchend touchcancel', this.onTouchUp);
+        document.removeEventListener('touchend', this.onTouchUp);
+        document.removeEventListener('touchcancel', this.onTouchUp);
     };
     public update = () => {
         // スマホのジャイロセンサーを使うとき

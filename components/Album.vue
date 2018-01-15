@@ -84,7 +84,7 @@
             this._container = new THREE.Group();
             this._stage.add(this._container);
 
-            this._geometry = new THREE.SphereGeometry(10, 32, 32);
+            this._geometry = new THREE.SphereGeometry(10, 50, 50);
             this._geometry.scale(-1, 1, 1);
 
             this._material = new THREE.MeshBasicMaterial();
@@ -114,9 +114,9 @@
             this._wrapper.appendChild(this._canvas);
 
             if (this._isTouch) {
-                this._mainCamera = new CustomPerspectiveSPCamera(this._canvas, 60, this.screenSize.width / this.screenSize.height, 1, 1000);
+                this._mainCamera = new CustomPerspectiveSPCamera(this._canvas, 60, this.screenSize.width / this.screenSize.height, 1, 2000);
             } else {
-                this._mainCamera = new CustomPerspectiveCamera(this._canvas, 60, this.screenSize.width / this.screenSize.height, 1, 1000);
+                this._mainCamera = new CustomPerspectiveCamera(this._canvas, 60, this.screenSize.width / this.screenSize.height, 1, 2000);
             }
 
             this._mainCamera.position.set(0, 0, 100);
@@ -150,11 +150,16 @@
         methods: {
             setDetectEvent() {
                 document.addEventListener('mousemove', this.onMouseMove);
-                document.addEventListener('click', this.viewDetail);
+                if (this._isTouch) {
+                    document.addEventListener('touchend', this.onTouchEnd);
+                } else {
+                    document.addEventListener('click', this.viewDetail);
+                }
                 document.addEventListener('wheel', this.onScroll);
             },
             removeDetectEvent() {
                 document.removeEventListener('mousemove', this.onMouseMove);
+                document.removeEventListener('touchend', this.onTouchEnd);
                 document.removeEventListener('click', this.viewDetail);
                 document.removeEventListener('wheel', this.onScroll);
             },
@@ -245,18 +250,19 @@
                 }
             },
             onMouseMove(event) {
-                let x;
-                let y;
+                const x = event.clientX;
+                const y = event.clientY;
 
-                if (this._isTouch) {
-                    const touch = event.touches[0];
-                    x = touch.pageX;
-                    y = touch.pageY;
-                } else {
-                    x = event.clientX;
-                    y = event.clientY;
-                }
-
+                this.getIntersects(x, y);
+            },
+            onTouchEnd(event) {
+                const touch = event.changedTouches[0];
+                const x = touch.pageX;
+                const y = touch.pageY;
+                this.getIntersects(x, y);
+                this.viewDetail(event);
+            },
+            getIntersects(x, y) {
                 const mouseX = (x / this.screenSize.width) * 2 - 1;
                 const mouseY = -(y / this.screenSize.height) * 2 + 1;
                 this._rayCaster.setFromCamera({x: mouseX, y: mouseY}, this._mainCamera.camera);
@@ -267,10 +273,6 @@
                 }
             },
             viewDetail(event) {
-                if (this._isTouch) {
-                    this.onMouseMove(event);
-                }
-
                 if (this._intersects && this._intersects.length > 0) {
                     this.removeDetectEvent();
 
@@ -317,7 +319,10 @@
                 }
 
                 const mesh = this._intersects[0].object;
-                mesh.material.map = this._minTextures[mesh.userData.id];
+
+                if (mesh.userData.type === 'picture') {
+                    mesh.material.map = this._minTextures[mesh.userData.id];
+                }
 
                 this._mainCamera.reset();
                 this._currentTween = new gsap.TweenMax(this._mainCamera.position, 1.0, {

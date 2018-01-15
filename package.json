@@ -13,14 +13,10 @@
     "dependencies": {
         "gsap": "^1.20.2",
         "nuxt": "^1.0.0-alpha.5",
-        "nuxt-class-component": "^1.0.1",
         "stats-js": "^1.0.0-alpha1",
         "three": "^0.89.0",
         "three-device-orientation": "^1.0.3",
-        "vue-class-component": "^5.0.2",
-        "vue-property-decorator": "^5.1.1",
-        "vuex": "^3.0.1",
-        "vuex-class": "^0.2.0"
+        "vuex": "^3.0.1"
     },
     "devDependencies": {
         "@types/gsap": "^1.19.1",

@@ -32,9 +32,9 @@ export class CustomPerspectiveSPCamera extends CustomCamera {
         this.mouseStart.x = touchObj.pageX;
         this.mouseStart.y = touchObj.pageY;
         // TODO: documentだとボタンタップできないので調整
-        document.addEventListener('touchmove', this.onTouchMove);
-        document.addEventListener('touchend', this.onTouchUp);
-        document.addEventListener('touchcancel', this.onTouchUp);
+        this._canvas.addEventListener('touchmove', this.onTouchMove);
+        this._canvas.addEventListener('touchend', this.onTouchUp);
+        this._canvas.addEventListener('touchcancel', this.onTouchUp);
     };
     private onTouchMove = (e: TouchEvent) => {
         e.preventDefault();
@@ -44,21 +44,21 @@ export class CustomPerspectiveSPCamera extends CustomCamera {
     };
     private onTouchUp = (e: TouchEvent) => {
         e.preventDefault();
-        document.removeEventListener('touchmove', this.onTouchMove);
-        document.removeEventListener('touchend', this.onTouchUp);
-        document.removeEventListener('touchcancel', this.onTouchUp);
+        this._canvas.removeEventListener('touchmove', this.onTouchMove);
+        this._canvas.removeEventListener('touchend', this.onTouchUp);
+        this._canvas.removeEventListener('touchcancel', this.onTouchUp);
         this.subtract.x = 0;
         this.subtract.y = 0;
         this.subtract.reset();
     };
     public setEvent = () => {
-        document.addEventListener('touchstart', this.onTouchStart);
+        this._canvas.addEventListener('touchstart', this.onTouchStart);
     };
     public removeEvent = () => {
-        document.removeEventListener('touchstart', this.onTouchStart);
-        document.removeEventListener('touchmove', this.onTouchMove);
-        document.removeEventListener('touchend', this.onTouchUp);
-        document.removeEventListener('touchcancel', this.onTouchUp);
+        this._canvas.removeEventListener('touchstart', this.onTouchStart);
+        this._canvas.removeEventListener('touchmove', this.onTouchMove);
+        this._canvas.removeEventListener('touchend', this.onTouchUp);
+        this._canvas.removeEventListener('touchcancel', this.onTouchUp);
     };
     public update = () => {
         // スマホのジャイロセンサーを使うとき

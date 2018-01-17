@@ -31,7 +31,6 @@ export class CustomPerspectiveSPCamera extends CustomCamera {
         const touchObj: Touch = e.changedTouches[0];
         this.mouseStart.x = touchObj.pageX;
         this.mouseStart.y = touchObj.pageY;
-        // TODO: documentだとボタンタップできないので調整
         this._canvas.addEventListener('touchmove', this.onTouchMove);
         this._canvas.addEventListener('touchend', this.onTouchUp);
         this._canvas.addEventListener('touchcancel', this.onTouchUp);
@@ -53,12 +52,22 @@ export class CustomPerspectiveSPCamera extends CustomCamera {
     };
     public setEvent = () => {
         this._canvas.addEventListener('touchstart', this.onTouchStart);
+        document.addEventListener('touchstart', this.preventScroll, false);
+    };
+    private preventScroll = (e:TouchEvent) => {
+        const target: HTMLElement = e.target as HTMLElement;
+        if (target.nodeName === 'CANVAS' || target.nodeName === 'BUTTON') {
+            e.stopPropagation();
+        } else {
+            e.preventDefault();
+        }
     };
     public removeEvent = () => {
         this._canvas.removeEventListener('touchstart', this.onTouchStart);
         this._canvas.removeEventListener('touchmove', this.onTouchMove);
         this._canvas.removeEventListener('touchend', this.onTouchUp);
         this._canvas.removeEventListener('touchcancel', this.onTouchUp);
+        document.removeEventListener('touchstart', this.preventScroll, false);
     };
     public update = () => {
         // スマホのジャイロセンサーを使うとき

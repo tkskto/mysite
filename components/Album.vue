@@ -2,6 +2,7 @@
     <div class="str-container" :class="{'is-overed': $data._isOvered}">
         <div id="canvasWrap" class="container-canvas">
             <div class="cover" :style="`background: url('/assets/album/${_name}/poster.webp') no-repeat center; background-size: cover;`"></div>
+            <canvas id="myCanvas"></canvas>
         </div>
         <button class="btn-dot" :class="{'is-show': $data._viewFlg}" @click="backToAlbum">
             <svg class="svg-icon--dot" viewBox="0 0 20 9" xmlns="http://www.w3.org/2000/svg" title="一覧に戻る">
@@ -35,7 +36,6 @@
         data() {
             return {
                 _canvas: null,
-                _wrapper: null,
                 _stage: null,
                 _renderer: null,
                 _mainCamera: null,
@@ -68,19 +68,8 @@
             };
         },
         created () {
-            const ratio = window.devicePixelRatio;
-
             this._isTouch = 'ontouchstart' in window;
             this._stage = new THREE.Scene();
-            this._renderer = new THREE.WebGLRenderer({
-                antialias: false,
-                stencil: false,
-                alpha: true
-            });
-
-            this._renderer.setPixelRatio(ratio);
-            this._renderer.setClearColor(new THREE.Color(0x000000), 0);
-
             this._container = new THREE.Group();
             this._stage.add(this._container);
 
@@ -102,16 +91,25 @@
         },
 
         mounted () {
+            const ratio = window.devicePixelRatio;
+
+            this._canvas = document.getElementById('myCanvas');
+            this._renderer = new THREE.WebGLRenderer({
+                antialias: false,
+                stencil: false,
+                alpha: true,
+                canvas: this._canvas
+            });
+
+            this._renderer.setPixelRatio(ratio);
+            this._renderer.setClearColor(new THREE.Color(0x000000), 0);
+
             this._column = Math.round(this.screenSize.width / 200);
             this._offset = {x: (this._column - 1) * -15, y: 40};
 
             this._renderer.setSize(
                 this.screenSize.width, this.screenSize.height
             );
-
-            this._canvas = this._renderer.domElement;
-            this._wrapper = document.getElementById('canvasWrap');
-            this._wrapper.appendChild(this._canvas);
 
             if (this._isTouch) {
                 this._mainCamera = new CustomPerspectiveSPCamera(this._canvas, 60, this.screenSize.width / this.screenSize.height, 1, 2000);
@@ -291,6 +289,7 @@
 
                             if (type === 'video') {
                                 this._selectedVideoID = id;
+                                // TODO: iOSだと再生されない
                                 this._videos[this._selectedVideoID].play();
                             } else {
                                 mesh.material.map = this._textures[id];
@@ -399,7 +398,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            z-index: -1;
+            z-index: 0;
             width: 100%;
             height: 100%;
 

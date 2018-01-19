@@ -12,7 +12,7 @@
     import {A} from '~/assets/ts/Text/A';
     import {M} from '~/assets/ts/Text/M';
     import {Hatena} from "~/assets/ts/Text/Hatena";
-    import {AppConfig} from '../assets/ts/config/Config';
+    import {AppConfig} from '../../assets/ts/album/config/Config';
     import TweenMax from 'gsap'
 
     export default {

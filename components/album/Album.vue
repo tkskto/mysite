@@ -19,8 +19,8 @@
     import * as THREE from 'three';
     // import Stats from 'stats-js';
     import gsap from 'gsap';
-    import {CustomPerspectiveCamera} from "../assets/ts/Camera/CustomPerspectiveCamera";
-    import {CustomPerspectiveSPCamera} from "../assets/ts/Camera/CustomPerspectiveSPCamera";
+    import {CustomPerspectiveCamera} from "../../assets/ts/album/Camera/CustomPerspectiveCamera";
+    import {CustomPerspectiveSPCamera} from "../../assets/ts/album/Camera/CustomPerspectiveSPCamera";
 
     export default {
         name: 'album',
@@ -259,7 +259,7 @@
             getIntersects(x, y) {
                 const mouseX = (x / this.screenSize.width) * 2 - 1;
                 const mouseY = -(y / this.screenSize.height) * 2 + 1;
-                
+
                 this._rayCaster.setFromCamera({x: mouseX, y: mouseY}, this._mainCamera.camera);
                 this._intersects = this._rayCaster.intersectObjects(this._container.children);
 

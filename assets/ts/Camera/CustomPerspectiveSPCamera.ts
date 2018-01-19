@@ -54,7 +54,7 @@ export class CustomPerspectiveSPCamera extends CustomCamera {
         this._canvas.addEventListener('touchstart', this.onTouchStart);
         document.addEventListener('touchstart', this.preventScroll, false);
     };
-    private preventScroll = (e:TouchEvent) => {
+    private preventScroll = (e: TouchEvent) => {
         const target: HTMLElement = e.target as HTMLElement;
         if (target.nodeName === 'CANVAS' || target.nodeName === 'BUTTON') {
             e.stopPropagation();

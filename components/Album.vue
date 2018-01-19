@@ -39,7 +39,6 @@
                 _stage: null,
                 _renderer: null,
                 _mainCamera: null,
-                _cameraTarget: {},
                 _container: null,
                 _geometry: null,
                 _material: null,
@@ -51,19 +50,14 @@
                 _viewFlg: false,
                 _textureLoader: null,
                 _selectedVideoID: 0,
-                _videos: {},
                 _timer: 0,
-                _column: 3,
-                _offset: {x: 0, y: 0},
                 _albumNum: 0,
-                _addedAlbumNum: 0,
                 _loadedAlbumNum: 0,
                 _minTextures: {},
                 _textures: {},
+                _videos: {},
                 _currentTween: null,
-                _isTouch: false,
-                _controls: null
-                // _controls: null,
+                _isTouch: false
                 // _stats: null // TODO: remove
             };
         },
@@ -103,10 +97,6 @@
 
             this._renderer.setPixelRatio(ratio);
             this._renderer.setClearColor(new THREE.Color(0x000000), 0);
-
-            this._column = Math.round(this.screenSize.width / 200);
-            this._offset = {x: (this._column - 1) * -15, y: 40};
-
             this._renderer.setSize(
                 this.screenSize.width, this.screenSize.height
             );
@@ -120,9 +110,9 @@
             this._mainCamera.position.set(0, 0, 100);
             this._stage.add(this._mainCamera);
             this._loadedAlbumNum = 0;
-            this._addedAlbumNum = 0;
             this._albumNum = this.getCurrentAlbumData.all;
 
+            // 画像の追加
             for (let i = 0, len = this.getCurrentAlbumData.images; i < len; i++) {
                 const _name = i < 10 ? `0${i + 1}` : `${i + 1}`;
                 this._textureLoader.load(
@@ -140,6 +130,7 @@
                 );
             }
 
+            // 動画の追加
             for (let i = 0, len = this.getCurrentAlbumData.movies; i < len; i++) {
                 const _name = i < 10 ? `0${i + 1}` : `${i + 1}`;
                 this.addMovie(_name);
@@ -170,19 +161,13 @@
             addPicture(_tex, _name) {
                 const geometry = this._geometry.clone();
                 const material = this._material.clone();
-                const col = (this._addedAlbumNum % this._column);
-                const row = Math.floor(this._addedAlbumNum / this._column);
-                const x = this._offset.x + col * 30;
-                const y = this._offset.y - row * 30;
                 material.map = _tex;
 
                 const mesh = new THREE.Mesh(geometry, material);
-                mesh.scale.set(0.1, 0.1, 0.1);
-                mesh.position.set(x, y, 0);
+                mesh.scale.set(0.01, 0.01, 0.01);
                 mesh.userData.id = _name;
                 mesh.userData.type = 'picture';
                 this._container.add(mesh);
-                this._addedAlbumNum++;
 
                 this.onLoadComplete();
             },
@@ -202,24 +187,18 @@
                 const geometry = this._geometry.clone();
                 const material = this._material.clone();
                 const texture = new THREE.VideoTexture(video);
-
                 texture.minFilter = THREE.LinearFilter;
                 texture.magFilter = THREE.LinearFilter;
                 texture.format = THREE.RGBFormat;
                 material.map = texture;
 
                 const mesh = new THREE.Mesh(geometry, material);
-                const col = (this._addedAlbumNum % this._column);
-                const row = Math.floor(this._addedAlbumNum / this._column);
-                const x = this._offset.x + col * 30;
-                const y = this._offset.y - row * 30;
-
-                mesh.scale.set(0.1, 0.1, 0.1);
-                mesh.position.set(x, y, 0);
+                mesh.scale.set(0.01, 0.01, 0.01);
                 mesh.userData.type = 'video';
                 mesh.userData.id = _src;
+                mesh.visible = false;
+
                 this._container.add(mesh);
-                this._addedAlbumNum++;
 
                 video.load();
             },
@@ -229,6 +208,7 @@
                     let finished = 0;
 
                     for (let i = 0, len = this._container.children.length; i < len; i++ ) {
+                        this._container.children[i].visible = true;
                         this._currentTween = new gsap.TweenMax(this._container.children[i].scale, 1.0, {
                             x: 1.0,
                             y: 1.0,
@@ -244,7 +224,22 @@
                         });
                     }
 
+                    this.setPosition();
                     this.play();
+                }
+            },
+            setPosition() {
+                const column = Math.round(this.screenSize.width / 200);
+                const offset = {x: (column - 1) * -15, y: 40};
+                const children = this._container.children;
+
+                for (let i = 0; i < this._albumNum; i++) {
+                    const mesh = children[i];
+                    const col = i % column;
+                    const row = Math.floor(i / column);
+                    const x = offset.x + col * 30;
+                    const y = offset.y - row * 30;
+                    mesh.position.set(x, y, 0);
                 }
             },
             onMouseMove(event) {
@@ -257,12 +252,14 @@
                 const touch = event.changedTouches[0];
                 const x = touch.pageX;
                 const y = touch.pageY;
+
                 this.getIntersects(x, y);
                 this.viewDetail(event);
             },
             getIntersects(x, y) {
                 const mouseX = (x / this.screenSize.width) * 2 - 1;
                 const mouseY = -(y / this.screenSize.height) * 2 + 1;
+                
                 this._rayCaster.setFromCamera({x: mouseX, y: mouseY}, this._mainCamera.camera);
                 this._intersects = this._rayCaster.intersectObjects(this._container.children);
 
@@ -270,26 +267,23 @@
                     this.$data._isOvered = this._intersects.length > 0;
                 }
             },
-            viewDetail(event) {
+            viewDetail() {
                 if (this._intersects && this._intersects.length > 0) {
                     this.removeDetectEvent();
 
+                    this.$data._viewFlg = true;
                     const mesh = this._intersects[0].object;
+                    const id = mesh.userData.id;
+                    const type = mesh.userData.type;
+                    const duration = 1.0;
 
-                    this._currentTween = new gsap.TweenMax(this._mainCamera.position, 1.0, {
+                    this._currentTween = new gsap.TweenMax(this._mainCamera.position, duration, {
                         x: mesh.position.x,
                         y: mesh.position.y,
                         z: mesh.position.z,
                         ease: gsap.Power3.easeOut,
                         onComplete: () => {
-                            const id = mesh.userData.id;
-                            const type = mesh.userData.type;
-
-                            this.$data._viewFlg = true;
-
                             if (type === 'video') {
-                                this._selectedVideoID = id;
-                                // TODO: iOSだと再生されない
                                 this._videos[this._selectedVideoID].play();
                             } else {
                                 mesh.material.map = this._textures[id];
@@ -306,6 +300,11 @@
                             this.setCameraEvent();
                         }
                     });
+
+                    if (type === 'video') {
+                        this._selectedVideoID = id;
+                        this._videos[this._selectedVideoID].load();
+                    }
                 }
             },
             backToAlbum() {
@@ -341,9 +340,8 @@
                 const cameraPosY = this._mainCamera.position.y + e.deltaY * 0.01;
                 this._mainCamera.position.setY(cameraPosY);
             },
-            // TODO: resize
             onResize() {
-                // TODO: set position of sphere
+                this.setPosition();
             },
             play() {
                 this.update();
@@ -369,6 +367,7 @@
                     const height = this.$el.clientHeight;
                     this._renderer.setSize(width, height);
                     this._mainCamera.setRatio(width / height);
+                    this.onResize();
                 }
             }
         },

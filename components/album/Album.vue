@@ -97,9 +97,7 @@
 
             this._renderer.setPixelRatio(ratio);
             this._renderer.setClearColor(new THREE.Color(0x000000), 0);
-            this._renderer.setSize(
-                this.screenSize.width, this.screenSize.height
-            );
+            this._renderer.setSize(this.screenSize.width, this.screenSize.height);
 
             if (this._isTouch) {
                 this._mainCamera = new CustomPerspectiveSPCamera(this._canvas, 60, this.screenSize.width / this.screenSize.height, 1, 2000);
@@ -115,6 +113,7 @@
             // 画像の追加
             for (let i = 0, len = this.getCurrentAlbumData.images; i < len; i++) {
                 const _name = i < 10 ? `0${i + 1}` : `${i + 1}`;
+                // 一覧時は解像度低いやつをつかう
                 this._textureLoader.load(
                     `/assets/album/${this._name}/${_name}_min.jpg`,
                     (_tex) => {
@@ -122,6 +121,7 @@
                         this.addPicture(_tex, _name);
                     }
                 );
+                // 詳細時に使う解像度高い画像のテクスチャも用意しておく
                 this._textureLoader.load(
                     `/assets/album/${this._name}/${_name}.jpg`,
                     (_tex) => {
@@ -137,7 +137,10 @@
             }
         },
         methods: {
-            setDetectEvent() {
+            /**
+             * 一覧時のイベントを設定
+             */
+            setDetectEvent(e) {
                 document.addEventListener('mousemove', this.onMouseMove);
                 if (this._isTouch) {
                     document.addEventListener('touchend', this.onTouchEnd);
@@ -146,18 +149,32 @@
                 }
                 document.addEventListener('wheel', this.onScroll);
             },
+            /**
+             * 一覧時のイベントを削除
+             */
             removeDetectEvent() {
                 document.removeEventListener('mousemove', this.onMouseMove);
                 document.removeEventListener('touchend', this.onTouchEnd);
                 document.removeEventListener('click', this.viewDetail);
                 document.removeEventListener('wheel', this.onScroll);
             },
+            /**
+             * カスタムカメラ側のイベントを設定
+             */
             setCameraEvent() {
                 this._mainCamera.setEvent();
             },
+            /**
+             * カスタムカメラ側のイベントを削除
+             */
             removeCameraEvent() {
                 this._mainCamera.removeEvent();
             },
+            /**
+             * 画像の球を追加
+             * @param {THREE.Texture} _tex
+             * @param {string} _name
+             */
             addPicture(_tex, _name) {
                 const geometry = this._geometry.clone();
                 const material = this._material.clone();
@@ -171,6 +188,10 @@
 
                 this.onLoadComplete();
             },
+            /**
+             * 動画の球を追加
+             * @param {string} _src
+             */
             addMovie(_src) {
                 const video = document.createElement('video');
                 this._videos[_src] = video;
@@ -182,7 +203,7 @@
                 video.addEventListener('loadeddata', () => {
                     video.pause();
                     this.onLoadComplete();
-                });
+                }, {once: true});
 
                 const geometry = this._geometry.clone();
                 const material = this._material.clone();
@@ -202,6 +223,9 @@
 
                 video.load();
             },
+            /**
+             * 全ての画像と動画の読み込みが終わったら
+             */
             onLoadComplete() {
                 this._loadedAlbumNum++;
                 if (this._loadedAlbumNum === this._albumNum) {
@@ -228,6 +252,9 @@
                     this.play();
                 }
             },
+            /**
+             * 球の位置を設定
+             */
             setPosition() {
                 const column = Math.round(this.screenSize.width / 200);
                 const offset = {x: (column - 1) * -15, y: 40};
@@ -242,12 +269,20 @@
                     mesh.position.set(x, y, 0);
                 }
             },
+            /**
+             * マウスの位置に球があるかをチェックする
+             * @param event
+             */
             onMouseMove(event) {
                 const x = event.clientX;
                 const y = event.clientY;
 
                 this.getIntersects(x, y);
             },
+            /**
+             * タップした位置に球があるかをチェックする
+             * @param event
+             */
             onTouchEnd(event) {
                 const touch = event.changedTouches[0];
                 const x = touch.pageX;
@@ -256,6 +291,11 @@
                 this.getIntersects(x, y);
                 this.viewDetail(event);
             },
+            /**
+             * x, y座標からメッシュを検索
+             * @param {number} x
+             * @param {number} y
+             */
             getIntersects(x, y) {
                 const mouseX = (x / this.screenSize.width) * 2 - 1;
                 const mouseY = -(y / this.screenSize.height) * 2 + 1;
@@ -267,6 +307,9 @@
                     this.$data._isOvered = this._intersects.length > 0;
                 }
             },
+            /**
+             * 詳細をみる
+             */
             viewDetail() {
                 if (this._intersects && this._intersects.length > 0) {
                     this.removeDetectEvent();
@@ -307,6 +350,9 @@
                     }
                 }
             },
+            /**
+             * 一覧に戻る
+             */
             backToAlbum() {
                 if (this._selectedVideoID !== -1) {
                     this._videos[this._selectedVideoID].pause();
@@ -335,23 +381,39 @@
                     }
                 });
             },
+            /**
+             * スクロール時にカメラを動かす
+             * @param e
+             */
             onScroll(e) {
                 e.preventDefault();
                 const cameraPosY = this._mainCamera.position.y + e.deltaY * 0.01;
                 this._mainCamera.position.setY(cameraPosY);
             },
+            /**
+             * リサイズ時に球の位置を調整
+             */
             onResize() {
                 this.setPosition();
             },
+            /**
+             * レンダリングを開始
+             */
             play() {
                 this.update();
             },
+            /**
+             * レンダリングを停止
+             */
             pause() {
                 if (this._timer) {
                     cancelAnimationFrame(this._timer);
                     this._timer = -1;
                 }
             },
+            /**
+             * 再帰関数
+             */
             update() {
                 // this._stats.begin();
                 this._timer = requestAnimationFrame(this.update);

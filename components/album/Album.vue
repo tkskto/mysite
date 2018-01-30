@@ -46,6 +46,7 @@
                 _intersects: [],
                 _mouseX: 0,
                 _mouseY: 0,
+                _touchY: 0,
                 _isOvered: false,
                 _viewFlg: false,
                 _textureLoader: null,
@@ -147,7 +148,9 @@
                 } else {
                     document.addEventListener('click', this.viewDetail);
                 }
-                document.addEventListener('wheel', this.onScroll);
+                document.addEventListener('wheel', this.onWheel);
+                document.addEventListener('touchstart', this.onTouchStart);
+                document.addEventListener('touchmove', this.onTouchMove);
             },
             /**
              * 一覧時のイベントを削除
@@ -156,7 +159,9 @@
                 document.removeEventListener('mousemove', this.onMouseMove);
                 document.removeEventListener('touchend', this.onTouchEnd);
                 document.removeEventListener('click', this.viewDetail);
-                document.removeEventListener('wheel', this.onScroll);
+                document.removeEventListener('wheel', this.onWheel);
+                document.removeEventListener('touchstart', this.onTouchStart);
+                document.removeEventListener('touchmove', this.onTouchMove);
             },
             /**
              * カスタムカメラ側のイベントを設定
@@ -385,9 +390,35 @@
              * スクロール時にカメラを動かす
              * @param e
              */
-            onScroll(e) {
+            onWheel(e) {
                 e.preventDefault();
                 const cameraPosY = this._mainCamera.position.y + e.deltaY * 0.01;
+                this.scroll(cameraPosY);
+            },
+            /**
+             * タッチの開始点を保存
+             * @param e
+             */
+            onTouchStart(e) {
+                e.preventDefault();
+
+                const touch = e.touches[0];
+                this._touchY = touch.pageY;
+            },
+            /**
+             * タッチムーブ時にカメラを動かす
+             */
+            onTouchMove(e) {
+                e.preventDefault();
+
+                const touch = e.touches[0];
+                this.scroll(this._touchY - touch.pageY);
+            },
+            /**
+             * 実際にスクロールする部分
+             * @param {number} y
+             */
+            scroll(y) {
                 this._mainCamera.position.setY(cameraPosY);
             },
             /**

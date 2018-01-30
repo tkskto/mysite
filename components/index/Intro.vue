@@ -5,14 +5,14 @@
 <script>
     import {mapGetters} from 'vuex';
     import * as THREE from 'three';
-    import {W} from '~/assets/ts/Text/W';
-    import {H} from '~/assets/ts/Text/H';
-    import {O} from '~/assets/ts/Text/O';
-    import {I} from '~/assets/ts/Text/I';
-    import {A} from '~/assets/ts/Text/A';
-    import {M} from '~/assets/ts/Text/M';
-    import {Hatena} from "~/assets/ts/Text/Hatena";
-    import {AppConfig} from '../../assets/ts/album/config/Config';
+    import {W} from '~/assets/ts/index/Text/W';
+    import {H} from '~/assets/ts/index/Text/H';
+    import {O} from '~/assets/ts/index/Text/O';
+    import {I} from '~/assets/ts/index/Text/I';
+    import {A} from '~/assets/ts/index/Text/A';
+    import {M} from '~/assets/ts/index/Text/M';
+    import {Hatena} from "~/assets/ts/index/Text/Hatena";
+    import {AppConfig} from '../../assets/ts/index/config/Config';
     import TweenMax from 'gsap'
 
     export default {

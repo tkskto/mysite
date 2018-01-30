@@ -6,8 +6,8 @@
 </template>
 
 <script>
-    import Logo from '~/components/Logo.vue';
-    import Intro from '~/components/Intro.vue';
+    import Logo from '~/components/index/Logo.vue';
+    import Intro from '~/components/index/Intro.vue';
 
     export default {
         components: {

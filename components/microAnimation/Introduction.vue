@@ -1,5 +1,5 @@
 <template>
-    <div id="intro" class="dialog">
+    <div id="intro" class="dialog" :class="{'is-show': isShow}">
         <div class="dialog-inner">
             <div class="dialog-header">
                 <h2 class="hdg2">Introduction</h2>
@@ -37,6 +37,9 @@
         components: {},
         props: {},
         data: function () {
+            return {
+                isShow: false
+            }
         },
         computed: {},
         watch: {},
@@ -52,13 +55,125 @@
         },
         destroyed: function () {
         },
-        methods: function () {
+        methods: {
         },
         renderError: function (err) {
         }
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+    .dialog {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 100%;
+        opacity: 0;
+        transition: opacity 0.5s linear;
 
+        &.is-show {
+            top: 0;
+            opacity: 1;
+        }
+
+        &.is-hide {
+            top: 0;
+        }
+
+        .dialog-overlay {
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, .2);
+        }
+
+        .dialog-inner {
+            position: absolute;
+            background: #fff;
+            border-radius: 6px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            transform: translateY(150%);
+            transition: transform 0.5s ease;
+            overflow: hidden;
+
+            .dialog-header {
+                background: #43a0ff;
+                padding: 5px 10px;
+                display: flex;
+                justify-content: space-between;
+
+                .hdg2 {
+                    color: #fff;
+                }
+
+                .btn-close-dialog {
+                    position: relative;
+                    color: #43a0ff;
+                }
+
+                .btn-close-dialog::before,
+                .btn-close-dialog::after {
+                    position: absolute;
+                    display: block;
+                    content: "";
+                    background: #fff;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    margin: auto;
+                    -webkit-transform: rotate(45deg);
+                    transform: rotate(45deg);
+                }
+
+                .btn-close-dialog::before {
+                    width: 2px;
+                    height: 15px;
+                }
+
+                .btn-close-dialog::after {
+                    width: 15px;
+                    height: 2px;
+                }
+            }
+
+            .intro-section {
+                padding: 10px 20px;
+
+                .hdg3 {
+                    margin-bottom: 10px;
+                }
+
+                .section-txt {
+                    margin-left: 10px;
+                }
+
+                .inner-section {
+                    padding: 5px 10px;
+                    margin-bottom: 10px;
+
+                    .hdg4 {
+                        margin-bottom: 5px;
+                    }
+
+                    .section-list01 {
+                        margin-top: 15px;
+                        padding-left: 30px;
+
+                        .list-item {
+                            list-style-type: disc;
+                            margin-bottom: 5px;
+                        }
+                    }
+                }
+            }
+        }
+
+        &.is-show .dialog-inner {
+            transform: translateY(0);
+        }
+    }
 </style>

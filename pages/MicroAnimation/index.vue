@@ -1,23 +1,34 @@
 <template>
     <section class="str-microAnimation">
-        <header></header>
+        <the-loading></the-loading>
+        <the-header></the-header>
         <div id="all">
-
         </div><!-- /.all -->
+        <introduction></introduction>
     </section>
 </template>
 
 <script>
-    import Header from '~/componets/microAnimation/header';
+    import TheLoading from '~/components/microAnimation/TheLoading';
+    import TheHeader from '~/components/microAnimation/TheHeader';
+    import Introduction from '~/components/microAnimation/Introduction';
 
     export default {
+        layout: 'MicroAnimation',
         components: {
-            Header
+            TheLoading,
+            TheHeader,
+            Introduction
         },
-        head() {
+        head: function() {
             return {
                 'title': 'Micro Animations'
-            }
+            };
+        },
+        data: function() {
+            return {
+                state: 'loading'
+            };
         }
     };
 </script>

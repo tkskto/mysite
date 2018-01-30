@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {GLConfig} from '~/assets/ts/common/Config';
 
 export class Methods {
     public static showError(err:string | null) {
@@ -215,8 +216,8 @@ export class GLUtils {
      * @param {WebGLRenderingContext} gl WebGLレンダリングコンテキスト
      * @returns {WebGLShader}
      */
-    public static createVertexShader(script: string, gl: WebGLRenderingContext): WebGLShader {
-        const shader: WebGLShader = gl.createShader(gl.VERTEX_SHADER);
+    public static createVertexShader(script: string, gl: WebGLRenderingContext): WebGLShader | null {
+        const shader: WebGLShader | null = gl.createShader(gl.VERTEX_SHADER);
 
         // 生成されたシェーダにソースを割り当てる
         gl.shaderSource(shader, script);
@@ -233,6 +234,7 @@ export class GLUtils {
 
             // 失敗していたらエラーログをアラートする
             Methods.showError(gl.getShaderInfoLog(shader));
+            return shader;
         }
     }
 
@@ -242,8 +244,8 @@ export class GLUtils {
      * @param {WebGLRenderingContext} gl WebGLレンダリングコンテキスト
      * @returns {WebGLShader}
      */
-    public static createFragmentShader(script: string, gl: WebGLRenderingContext): WebGLShader {
-        const shader: WebGLShader = gl.createShader(gl.FRAGMENT_SHADER);
+    public static createFragmentShader(script: string, gl: WebGLRenderingContext): WebGLShader | null {
+        const shader: WebGLShader | null = gl.createShader(gl.FRAGMENT_SHADER);
 
         // 生成されたシェーダにソースを割り当てる
         gl.shaderSource(shader, script);
@@ -260,6 +262,7 @@ export class GLUtils {
 
             // 失敗していたらエラーログをアラートする
             Methods.showError(gl.getShaderInfoLog(shader));
+            return null;
         }
     }
 
@@ -270,8 +273,8 @@ export class GLUtils {
      * @param {WebGLShader} fs
      * @returns {WebGLProgram}
      */
-    public static createProgram(gl: WebGLRenderingContext, vs: WebGLShader, fs: WebGLShader): WebGLProgram {
-        const program = gl.createProgram();
+    public static createProgram(gl: WebGLRenderingContext, vs: WebGLShader, fs: WebGLShader): WebGLProgram | null {
+        const program: WebGLProgram | null = gl.createProgram();
 
         gl.attachShader(program, vs);
         gl.attachShader(program, fs);
@@ -285,11 +288,12 @@ export class GLUtils {
             return program;
         } else {
             Methods.showError(gl.getProgramInfoLog(program));
+            return program;
         }
     }
 
-    public static createVBO(gl: WebGLRenderingContext, data: number[]): WebGLBuffer {
-        const vbo: WebGLBuffer = gl.createBuffer();
+    public static createVBO(gl: WebGLRenderingContext, data: number[]): WebGLBuffer | null {
+        const vbo: WebGLBuffer | null = gl.createBuffer();
 
         gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
@@ -298,8 +302,8 @@ export class GLUtils {
         return vbo;
     }
 
-    public static createIBO(gl: WebGLRenderingContext, data: number[]): WebGLBuffer {
-        const ibo: WebGLBuffer = gl.createBuffer();
+    public static createIBO(gl: WebGLRenderingContext, data: number[]): WebGLBuffer | null {
+        const ibo: WebGLBuffer | null = gl.createBuffer();
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Int16Array(data), gl.STATIC_DRAW);
@@ -336,18 +340,19 @@ export class GLUtils {
      * @param {WebGLRenderingContext} gl
      * @param {number} _width
      * @param {number} _height
+     * @param {number} _format
      * @returns {frameBuffer, depthBuffer, texture}
      */
-    public static createFrameBuffer(gl: WebGLRenderingContext, _width: number, _height: number, _format: number): {frameBuffer: WebGLFramebuffer, depthBuffer: WebGLRenderbuffer, texture: WebGLTexture} {
+    public static createFrameBuffer(gl: WebGLRenderingContext, _width: number, _height: number, _format: number): {frameBuffer: WebGLFramebuffer | null, depthBuffer: WebGLRenderbuffer | null, texture: WebGLTexture | null} {
 
         const textureFormat: number = _format || gl.UNSIGNED_BYTE;
 
         // フレームバッファを生成してバインド
-        const frameBuffer = gl.createFramebuffer();
+        const frameBuffer: WebGLFramebuffer | null = gl.createFramebuffer();
         gl.bindFramebuffer(gl.FRAMEBUFFER, frameBuffer);
 
         // 深度用レンダーバッファを生成してバインド
-        const depthRenderBuffer = gl.createRenderbuffer();
+        const depthRenderBuffer: WebGLRenderbuffer | null = gl.createRenderbuffer();
         gl.bindRenderbuffer(gl.RENDERBUFFER, depthRenderBuffer);
 
         // レンダーバッファを深度用に設定
@@ -357,7 +362,7 @@ export class GLUtils {
         gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depthRenderBuffer);
 
         // 空のテクスチャの生成
-        const fTexture = gl.createTexture();
+        const fTexture: WebGLTexture | null = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, fTexture);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, _width, _height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);

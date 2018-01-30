@@ -1,4 +1,4 @@
-import {Shader} from '~assets/ts/common/Shader';
+import {Shader} from '~/assets/ts/common/Shader';
 
 export class Loading extends Shader {
     constructor(_gl: WebGLRenderingContext) {
@@ -26,6 +26,7 @@ export class Loading extends Shader {
                 }
                 outColor = vec4(vec3(0.0), alpha);
             }`
-        )
+        );
+        this.compile();
     }
 }

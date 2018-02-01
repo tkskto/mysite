@@ -274,7 +274,7 @@ export class GLUtils {
      * @param {WebGLShader} fs
      * @returns {WebGLProgram}
      */
-    public static createProgram(gl: WebGLRenderingContext, vs: WebGLShader, fs: WebGLShader): WebGLProgram | null {
+    public static createProgram(gl: WebGLRenderingContext, vs: WebGLShader | null, fs: WebGLShader | null): WebGLProgram | null {
         const program: WebGLProgram | null = gl.createProgram();
 
         gl.attachShader(program, vs);
@@ -313,7 +313,7 @@ export class GLUtils {
         return ibo;
     }
 
-    public static setAttr(gl: WebGLRenderingContext, vbo: WebGLBuffer[], attl: number[], atts: number[]) {
+    public static setAttr(gl: WebGLRenderingContext, vbo: WebGLBuffer[]|null[], attl: number[], atts: number[]) {
         for (let i = 0; i < vbo.length; i++) {
             gl.bindBuffer(gl.ARRAY_BUFFER, vbo[i]);
             gl.enableVertexAttribArray(attl[i]);

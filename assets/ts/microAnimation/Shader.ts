@@ -1,4 +1,4 @@
-import {Shader} from '~/assets/ts/common/Shader';
+import {Shader} from '../common/Shader';
 
 export class Loading extends Shader {
     constructor(_gl: WebGLRenderingContext) {

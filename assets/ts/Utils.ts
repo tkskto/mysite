@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Vector } from './common/Vector';
 import {GLConfig} from './common/Config';
 
 export class Methods {
@@ -120,20 +120,20 @@ export class MatrixUtils {
      * @param {Float32Array} _dist 変換行列
      * @returns {Float32Array}
      */
-    public static lookAt(_targetPos: THREE.Vector3, _cameraPos: THREE.Vector3, _cameraUp: THREE.Vector3, _dist: Float32Array): Float32Array {
+    public static lookAt(_targetPos: Vector, _cameraPos: Vector, _cameraUp: Vector, _dist: Float32Array): Float32Array {
         // カメラの位置と見る地点が同じ場合は正方行列を返す
         if (_targetPos.x === _cameraPos.x && _targetPos.y === _cameraPos.y && _targetPos.z === _cameraPos.z) {
             return MatrixUtils.initialize(_dist);
         }
 
         // cameraPos -> targetまでの各ベクトル
-        const vecZ: THREE.Vector3 = _targetPos.sub(_cameraPos).normalize();
+        const vecZ: Vector = _targetPos.subtract(_cameraPos).normalize();
 
         // 上部ベクトルとz軸ベクトルの外積をとると、x軸ベクトルが求められる
-        const vecX: THREE.Vector3 = _cameraUp.cross(vecZ).normalize();
+        const vecX: Vector = _cameraUp.cross(vecZ).normalize();
 
         // z軸ベクトルとx軸ベクトルの外積をとると、y軸ベクトルが求められる
-        const vecY: THREE.Vector3 = vecZ.cross(vecX).normalize();
+        const vecY: Vector = vecZ.cross(vecX).normalize();
 
         // 最終的に座標変換用の行列をつくる
         _dist[0] = vecX.x; _dist[1] = vecY.x; _dist[2]  = vecZ.x; _dist[3]  = 0;
@@ -181,12 +181,12 @@ export class VectorUtils {
             const _index2: number = _indexArr[i] * 3;
             const _index3: number = _indexArr[i] * 3;
 
-            const _vec1: THREE.Vector3 = new THREE.Vector3(_vertexArr[_index1], _vertexArr[_index1 + 1], _vertexArr[_index1 + 2]);
-            const _vec2: THREE.Vector3 = new THREE.Vector3(_vertexArr[_index2], _vertexArr[_index2 + 1], _vertexArr[_index2 + 2]);
-            const _vec3: THREE.Vector3 = new THREE.Vector3(_vertexArr[_index3], _vertexArr[_index3 + 1], _vertexArr[_index3 + 2]);
+            const _vec1: Vector = new Vector(_vertexArr[_index1], _vertexArr[_index1 + 1], _vertexArr[_index1 + 2]);
+            const _vec2: Vector = new Vector(_vertexArr[_index2], _vertexArr[_index2 + 1], _vertexArr[_index2 + 2]);
+            const _vec3: Vector = new Vector(_vertexArr[_index3], _vertexArr[_index3 + 1], _vertexArr[_index3 + 2]);
 
-            const v1: THREE.Vector3 = _vec2.sub(_vec1).normalize();
-            const v2: THREE.Vector3 = _vec3.sub(_vec1).normalize();
+            const v1: Vector = _vec2.subtract(_vec1).normalize();
+            const v2: Vector = _vec3.subtract(_vec1).normalize();
 
             distArr[i * 3] = v1.y * v2.z - v1.z * v2.y;
             distArr[i * 3 + 1] = v1.z * v2.x - v1.x * v2.z;
@@ -196,10 +196,10 @@ export class VectorUtils {
         return distArr;
     }
 
-    public static getFaceNormalVector(_vec1: THREE.Vector3, _vec2: THREE.Vector3, _vec3: THREE.Vector3): THREE.Vector3 {
-        const dist: THREE.Vector3 = new THREE.Vector3();
-        const v1: THREE.Vector3 = _vec2.sub(_vec1).normalize();
-        const v2: THREE.Vector3 = _vec3.sub(_vec1).normalize();
+    public static getFaceNormalVector(_vec1: Vector, _vec2: Vector, _vec3: Vector): Vector {
+        const dist: Vector = new Vector();
+        const v1: Vector = _vec2.subtract(_vec1).normalize();
+        const v2: Vector = _vec3.subtract(_vec1).normalize();
 
         dist.x = v1.y * v2.z - v1.z * v2.y;
         dist.y = v1.z * v2.x - v1.x * v2.z;
@@ -380,38 +380,38 @@ export class GLUtils {
         return {frameBuffer, depthBuffer: depthRenderBuffer, texture: fTexture};
     }
 
-    public static setUniform(gl: WebGLRenderingContext, _uniTypes: string[], _uniLocation: WebGLUniformLocation[], _values: any[]): void {
+    public static setUniform(gl: WebGLRenderingContext, _uniTypes: string[], _uniLocation: WebGLUniformLocation[] | null[], _values: any[]): void {
         for (let i = 0; i < _uniTypes.length; i++) {
             switch (_uniTypes[i]) {
                 case GLConfig.UNIFORM_TYPE_MATRIX4:
-                    gl.uniformMatrix4fv(_uniLocation[i], false, _values[i]);
+                    gl.uniformMatrix4fv(_uniLocation[i] as WebGLUniformLocation, false, _values[i]);
                     break;
                 case GLConfig.UNIFORM_TYPE_VECTOR4:
-                    gl.uniform4fv(_uniLocation[i], _values[i]);
+                    gl.uniform4fv(_uniLocation[i] as WebGLUniformLocation, _values[i]);
                     break;
                 case GLConfig.UNIFORM_TYPE_VECTOR3:
-                    gl.uniform3fv(_uniLocation[i], _values[i]);
+                    gl.uniform3fv(_uniLocation[i] as WebGLUniformLocation, _values[i]);
                     break;
                 case GLConfig.UNIFORM_TYPE_VECTOR2:
-                    gl.uniform2fv(_uniLocation[i], _values[i]);
+                    gl.uniform2fv(_uniLocation[i] as WebGLUniformLocation, _values[i]);
                     break;
                 case GLConfig.UNIFORM_TYPE_VECTOR1:
-                    gl.uniform1fv(_uniLocation[i], _values[i]);
+                    gl.uniform1fv(_uniLocation[i] as WebGLUniformLocation, _values[i]);
                     break;
                 case GLConfig.UNIFORM_TYPE_FLOAT:
-                    gl.uniform1f(_uniLocation[i], _values[i]);
+                    gl.uniform1f(_uniLocation[i] as WebGLUniformLocation, _values[i]);
                     break;
                 case GLConfig.UNIFORM_TYPE_INT_VECTOR:
-                    gl.uniform1iv(_uniLocation[i], _values[i]);
+                    gl.uniform1iv(_uniLocation[i] as WebGLUniformLocation, _values[i]);
                     break;
                 case GLConfig.UNIFORM_TYPE_INT:
-                    gl.uniform1i(_uniLocation[i], _values[i]);
+                    gl.uniform1i(_uniLocation[i] as WebGLUniformLocation, _values[i]);
                     break;
                 case GLConfig.UNIFORM_TYPE_MATRIX3:
-                    gl.uniformMatrix3fv(_uniLocation[i], false, _values[i]);
+                    gl.uniformMatrix3fv(_uniLocation[i] as WebGLUniformLocation, false, _values[i]);
                     break;
                 case GLConfig.UNIFORM_TYPE_MATRIX2:
-                    gl.uniformMatrix2fv(_uniLocation[i], false, _values[i]);
+                    gl.uniformMatrix2fv(_uniLocation[i] as WebGLUniformLocation, false, _values[i]);
                     break;
                 default :
                     Methods.showError('unknown uniform types');

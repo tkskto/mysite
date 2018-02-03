@@ -1,6 +1,6 @@
 import { GLUtils } from '../Utils';
-import {IData} from '~assets/ts/common/IData';
-import {Plane} from '~assets/ts/common/Plane';
+import {IData} from './IData';
+import {Plane} from './Plane';
 
 export class Geometry {
     private _vbo: WebGLBuffer[] | null[] = [];

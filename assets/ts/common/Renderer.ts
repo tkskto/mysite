@@ -1,5 +1,4 @@
 import { MatrixUtils } from '../Utils';
-import { Model } from '../Model';
 import { WebGLContext } from './Context';
 import { Vector } from './Vector';
 import { Mesh } from './Mesh';
@@ -18,7 +17,7 @@ export class Renderer {
     private vpMatrix: Float32Array;
     private mvpMatrix: Float32Array;
 
-    constructor(private _ctx: WebGLContext, private _model: Model) {
+    constructor(private _ctx: WebGLContext, _camPosition: Vector) {
         this._cWidth = _ctx.canvas.clientWidth;
         this._cHeight = _ctx.canvas.clientHeight;
         this._gl = _ctx.ctx;
@@ -26,9 +25,7 @@ export class Renderer {
         this._gl.enable(this._gl.DEPTH_TEST);
         this._gl.depthFunc(this._gl.LEQUAL);
 
-        this._model.addEventListener(Model.ON_RESIZE_EVENT, this.onResize);
-        this._model.addEventListener(Model.ON_CAMERA_STATE_CHANGED, this.initializeMatrix);
-        this.initializeMatrix();
+        this.initializeMatrix(_camPosition);
     }
 
     /**
@@ -56,8 +53,6 @@ export class Renderer {
      */
     public dispose = () => {
         this._target.length = 0;
-        this._model.removeEventListener(Model.ON_RESIZE_EVENT, this.onResize);
-        this._model.removeEventListener(Model.ON_CAMERA_STATE_CHANGED, this.initializeMatrix);
     };
 
     public update = (...values: any[]) => {
@@ -75,20 +70,20 @@ export class Renderer {
         this._gl.flush();
     };
 
-    private initializeMatrix = () => {
+    private initializeMatrix = (camPosition: Vector) => {
         this.vMatrix = MatrixUtils.initialize(MatrixUtils.create());
         this.pMatrix = MatrixUtils.initialize(MatrixUtils.create());
         this.qMatrix = MatrixUtils.initialize(MatrixUtils.create());
         this.vpMatrix = MatrixUtils.initialize(MatrixUtils.create());
 
         // ビュー座標変換行列
-        MatrixUtils.lookAt(this._model.camPosition, new Vector(0.0, 0.0, 0.0), new Vector(0, 1, 0), this.vMatrix);
-        MatrixUtils.perspective(90, this._model.canvas.width / this._model.canvas.height, 0.1, 1000, this.pMatrix);
+        MatrixUtils.lookAt(camPosition, new Vector(0.0, 0.0, 0.0), new Vector(0, 1, 0), this.vMatrix);
+        MatrixUtils.perspective(90, this._ctx.canvas.width / this._ctx.canvas.height, 0.1, 1000, this.pMatrix);
         MatrixUtils.multiply(this.pMatrix, this.vMatrix, this.vpMatrix);
     };
 
-    private onResize = () => {
-        this.initializeMatrix();
+    public onResize = (camPosition: Vector) => {
+        this.initializeMatrix(camPosition);
         this._cWidth = this._ctx.canvas.clientWidth;
         this._cHeight = this._ctx.canvas.clientHeight;
         this._gl.viewport(0, 0, this._cWidth, this._cHeight);

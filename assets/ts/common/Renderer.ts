@@ -64,7 +64,7 @@ export class Renderer {
         for (const target of this._target) {
             MatrixUtils.multiply(this.vpMatrix, target.mMatrix, this.mvpMatrix);
             target.useProgram();
-            target.ready([this.mvpMatrix].concat(...values));
+            target.ready([].concat(...values));
             target.draw();
         }
         this._gl.flush();

@@ -1,7 +1,8 @@
 <template>
-    <div class="str-loading-root">
-
-    </div>
+    <transition name="fade">
+        <div class="str-loading-root">
+        </div>
+    </transition>
 </template>
 
 <script>
@@ -104,5 +105,12 @@
         margin: auto;
         width: 60px;
         height: 60px;
+    }
+
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s
+    }
+    .fade-enter, .fade-leave-to {
+        opacity: 0
     }
 </style>

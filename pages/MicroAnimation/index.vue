@@ -1,10 +1,15 @@
 <template>
     <section class="str-microAnimation">
-        <the-loading></the-loading>
-        <the-header></the-header>
-        <div id="all">
-        </div><!-- /.all -->
-        <introduction></introduction>
+        <the-loading v-if="state === 'loading'"></the-loading>
+        <transition name="fade">
+            <div v-if="state === 'complete'" class="container-microAnimation">
+                <the-header></the-header>
+                <div id="all">
+                    <animation v-for="item in getAnimation"></animation>
+                </div><!-- /.all -->
+                <introduction></introduction>
+            </div>
+        </transition>
     </section>
 </template>
 
@@ -12,13 +17,19 @@
     import TheLoading from '~/components/microAnimation/TheLoading';
     import TheHeader from '~/components/microAnimation/TheHeader';
     import Introduction from '~/components/microAnimation/Introduction';
+    import Animation from '~/components/microAnimation/Animation';
+    import mapGetters from 'vuex';
 
     export default {
         layout: 'MicroAnimation',
+        computed: {
+            ...mapGetters('getAnimation')
+        },
         components: {
             TheLoading,
             TheHeader,
-            Introduction
+            Introduction,
+            Animation
         },
         head: function() {
             return {
@@ -29,6 +40,16 @@
             return {
                 state: 'loading'
             };
+        },
+        mounted: function () {
+            fetch('/assets/microAnimation/data/list.json').then((res) => {
+                return res.json();
+            }).then((data) => {
+                this.$store.dispatch('setAnimation', data);
+                this.state = 'complete';
+            }).catch((err) => {
+                console.error(err);
+            });
         }
     };
 </script>
@@ -76,5 +97,12 @@
                 transform: translateY(150%);
             }
         }
+    }
+
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity 1.0s;
+    }
+    .fade-enter, .fade-leave-to {
+        opacity: 0;
     }
 </style>

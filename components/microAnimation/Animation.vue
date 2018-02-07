@@ -5,7 +5,7 @@
 <script>
 
     export default {
-        name: "item",
+        name: "Animation",
         components: {},
         props: {},
         data: function () {

@@ -1,7 +1,7 @@
 <template>
     <header class="str-header">
         <h1 class="hdg1">Micro Animations</h1>
-        <a id="header-link--info" class="link-info" href="#"><img src="~/assets/images/microAnimation/ico-info.png" alt="イントロダクションを見る"></a>
+        <a class="header-link-info" href="#"><img src="~/assets/images/microAnimation/ico-info.png" alt="イントロダクションを見る"></a>
     </header>
 </template>
 
@@ -42,15 +42,20 @@
         background: #ffe;
         display: flex;
         justify-content: space-between;
+        align-items: center;
 
         .hdg1 {
             color: #444;
             display: inline-block;
         }
 
-        .header-link--info {
+        .header-link-info {
             width: 44px;
             padding: 10px;
+
+            img {
+                max-width: 100%;
+            }
         }
     }
 </style>

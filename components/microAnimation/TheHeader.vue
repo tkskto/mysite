@@ -1,7 +1,7 @@
 <template>
     <header class="str-header">
         <h1 class="hdg1">Micro Animations</h1>
-        <a class="header-link-info" href="#"><img src="~/assets/images/microAnimation/ico-info.png" alt="イントロダクションを見る"></a>
+        <a class="header-link-info" href="#" @click="onClick"><img src="~/assets/images/microAnimation/ico-info.png" alt="イントロダクションを見る"></a>
     </header>
 </template>
 
@@ -30,6 +30,9 @@
         destroyed: function () {
         },
         methods: {
+            onClick: function () {
+                this.$emit('showIntroduction');
+            }
         },
         renderError: function (err) {
         }

@@ -1,15 +1,15 @@
 <template>
-    <section class="str-microAnimation">
+    <section class="str-microAnimation" :class="state">
         <the-loading v-if="state === 'loading'"></the-loading>
         <transition name="fade">
-            <div v-if="state === 'complete'" class="container-microAnimation">
-                <the-header></the-header>
-                <div id="all">
-                    <animation v-for="item in getAnimation"></animation>
+            <div v-if="state === 'complete'">
+                <the-header @showIntroduction="showIntroduction"></the-header>
+                <div class="container-animation">
+                    <category v-for="(category, key) of getAnimation" :categoryName="key" :itemArr="category" :key="key"></category>
                 </div><!-- /.all -->
-                <introduction></introduction>
             </div>
         </transition>
+        <introduction v-show="state === 'intro'"></introduction>
     </section>
 </template>
 
@@ -17,19 +17,19 @@
     import TheLoading from '~/components/microAnimation/TheLoading';
     import TheHeader from '~/components/microAnimation/TheHeader';
     import Introduction from '~/components/microAnimation/Introduction';
-    import Animation from '~/components/microAnimation/Animation';
-    import mapGetters from 'vuex';
+    import Category from '~/components/microAnimation/Category';
+    import {mapGetters} from 'vuex';
 
     export default {
         layout: 'MicroAnimation',
         computed: {
-            ...mapGetters('getAnimation')
+            ...mapGetters(['getAnimation'])
         },
         components: {
             TheLoading,
             TheHeader,
             Introduction,
-            Animation
+            Category
         },
         head: function() {
             return {
@@ -40,6 +40,11 @@
             return {
                 state: 'loading'
             };
+        },
+        methods: {
+            showIntroduction: function () {
+                this.state = 'intro';
+            }
         },
         mounted: function () {
             fetch('/assets/microAnimation/data/list.json').then((res) => {
@@ -60,42 +65,8 @@
         width: 100%;
         height: 100%;
 
-        .dialog {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 100%;
-            opacity: 0;
-            transition: opacity 0.5s linear;
-
-            &.is-show {
-                top: 0;
-                opacity: 1;
-
-                .dialog-inner {
-                    transform: translateY(0px);
-                }
-            }
-
-            .dialog-overlay {
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, .2);
-            }
-
-            .dialog-inner {
-                position: absolute;
-                background: #fff;
-                border-radius: 6px;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                margin: auto;
-                transition: transform 0.5s ease;
-                overflow: hidden;
-                transform: translateY(150%);
-            }
+        .container-animation {
+            padding: 20px 30px;
         }
     }
 

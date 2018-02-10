@@ -4,7 +4,7 @@
             <div class="dialog-inner">
                 <div class="dialog-header">
                     <h2 class="hdg2">Introduction</h2>
-                    <button type="button" class="btn-close-dialog">閉じる</button>
+                    <button type="button" class="btn-close-dialog" @click="closeDialog">閉じる</button>
                 </div>
                 <section class="intro-section">
                     <h3 class="hdg3">What？</h3>
@@ -57,6 +57,9 @@
         destroyed: function () {
         },
         methods: {
+            closeDialog: function () {
+                this.$emit('onDismiss');
+            }
         },
         renderError: function (err) {
         }
@@ -70,16 +73,20 @@
         height: 100%;
         top: 0;
         opacity: 1;
+        background: rgba(0, 0, 0, 0);
+        transform: translateY(0);
 
         .dialog-overlay {
+            position: fixed;
+            top: 0;
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, .2);
+            z-index: 0;
         }
 
         .dialog-inner {
             position: absolute;
-            background: #fff;
             border-radius: 6px;
             top: 0;
             left: 0;
@@ -88,12 +95,15 @@
             margin: auto;
             transform: translateY(0);
             overflow: hidden;
+            padding: 40px;
+            z-index: 1;
 
             .dialog-header {
                 background: #43a0ff;
                 padding: 5px 10px;
                 display: flex;
                 justify-content: space-between;
+
 
                 .hdg2 {
                     color: #fff;
@@ -102,6 +112,10 @@
                 .btn-close-dialog {
                     position: relative;
                     color: #43a0ff;
+                    background: none;
+                    border: none;
+                    box-shadow: none;
+                    cursor: pointer;
                 }
 
                 .btn-close-dialog::before,
@@ -131,6 +145,7 @@
 
             .intro-section {
                 padding: 10px 20px;
+                background: #fff;
 
                 .hdg3 {
                     margin-bottom: 10px;
@@ -163,15 +178,15 @@
     }
 
     .slide-enter-active, .slide-leave-active {
-        transition: top 1.0s, opacity 1.0s;
+        transition: transform 1.0s, opacity 1.0s;
     }
 
     .slide-enter-active .dialog-inner, .slide-leave-active .dialog-inner {
-        transition: transform 0.5s;
+        transition: transform 1.0s;
     }
 
     .slide-enter, .slide-leave-to {
-        top: 100%;
+        transform: translateY(100%);
         opacity: 0;
     }
 

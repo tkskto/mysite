@@ -9,7 +9,7 @@
                 </div><!-- /.all -->
             </div>
         </transition>
-        <introduction v-show="state === 'intro'"></introduction>
+        <introduction v-show="state === 'intro'" @onDismiss="closeIntroduction"></introduction>
     </section>
 </template>
 
@@ -44,6 +44,9 @@
         methods: {
             showIntroduction: function () {
                 this.state = 'intro';
+            },
+            closeIntroduction: function () {
+                this.state = 'complete';
             }
         },
         mounted: function () {

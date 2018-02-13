@@ -19,8 +19,8 @@
     import * as THREE from 'three';
     // import Stats from 'stats-js';
     import gsap from 'gsap';
-    import {CustomPerspectiveCamera} from "../../assets/ts/album/Camera/CustomPerspectiveCamera";
-    import {CustomPerspectiveSPCamera} from "../../assets/ts/album/Camera/CustomPerspectiveSPCamera";
+    import {CustomPerspectiveCamera} from "~/assets/ts/album/Camera/CustomPerspectiveCamera";
+    import {CustomPerspectiveSPCamera} from "~/assets/ts/album/Camera/CustomPerspectiveSPCamera";
 
     export default {
         name: 'album',

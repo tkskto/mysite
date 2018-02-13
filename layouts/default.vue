@@ -52,7 +52,7 @@
         margin: 0;
     }
 
-    html, body, .str-root {
+    html, body {
         width: 100%;
         height: 100%;
     }
@@ -63,11 +63,8 @@
 
     body {
         position: relative;
-        background: #000000;
     }
     canvas {
         vertical-align: top;
     }
-
-
 </style>

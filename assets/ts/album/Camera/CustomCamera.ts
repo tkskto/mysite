@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {Point} from '../datatype/Point';
+import {Point} from '../../common/datatype/Point';
 
 // TODO: コメント
 

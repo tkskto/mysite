@@ -12,7 +12,7 @@
     import {A} from '~/assets/ts/index/Text/A';
     import {M} from '~/assets/ts/index/Text/M';
     import {Hatena} from "~/assets/ts/index/Text/Hatena";
-    import {AppConfig} from '../../assets/ts/index/config/Config';
+    import {AppConfig} from '../../assets/ts/common/Config';
     import TweenMax from 'gsap'
 
     export default {
@@ -100,9 +100,11 @@
                 shininess: 10
             });
 
+            const depth = 15;
+
             const EXTRUDE_OPTION = {
                 curveSegments: 24,
-                amount: 10,
+                amount: depth,
                 steps: 50,
                 material: 1,
                 extrudeMaterial: 0,
@@ -117,7 +119,7 @@
             shapeH.mesh.position.set(0, 2, 0);
             this._groupWHO.add(shapeH.mesh);
 
-            let shapeO = new O(2, 32, 10, this._material, EXTRUDE_OPTION);
+            let shapeO = new O(2, 32, depth, this._material, EXTRUDE_OPTION);
             shapeO.mesh.position.set(5, 0, 0);
             shapeO.mesh.rotateY(Math.PI / 2);
             this._groupWHO.add(shapeO.mesh);
@@ -249,12 +251,14 @@
         },
         watch: {
             screenSize: function (_size) {
-                this._renderer.setSize(
-                    this.screenSize.width, this.screenSize.height
-                );
+                if (this._renderer) {
+                    this._renderer.setSize(
+                        this.screenSize.width, this.screenSize.height
+                    );
 
-                this._mainCamera.aspect = this.screenSize.width / this.screenSize.height;
-                this._mainCamera.updateProjectionMatrix();
+                    this._mainCamera.aspect = this.screenSize.width / this.screenSize.height;
+                    this._mainCamera.updateProjectionMatrix();
+                }
             }
         },
         beforeDestroy: function () {

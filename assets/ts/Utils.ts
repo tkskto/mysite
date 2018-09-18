@@ -1,8 +1,16 @@
 import * as THREE from 'three';
 
 export class Methods {
-    public static showError(err:string | null) {
+    public static showApplicationError(err: Error | null) {
         console.error(err || 'error');
+    }
+
+    public static getJsonData(url: string): Promise<Response> {
+        return fetch(url).then(res => {
+            return res.json();
+        }).catch(err => {
+            Methods.showApplicationError(err);
+        });
     }
 
     /**
@@ -11,7 +19,7 @@ export class Methods {
      * @param {number} max
      * @returns {number}
      */
-    public static getRandomNumber(min:number, max:number):number {
+    public static getRandomNumber(min: number, max: number): number {
         return Math.random() * (max - min) + min;
     }
 
@@ -23,12 +31,12 @@ export class Methods {
      * @param {number} alpha 0 - 100
      * @returns {Array}
      */
-    public static hsv2RGB(hue:number, saturation:number, value:number, alpha:number):number[] {
-        if (saturation > 100 || value > 100 || alpha > 100){
+    public static hsv2RGB(hue: number, saturation: number, value: number, alpha: number): number[] {
+        if (saturation > 100 || value > 100 || alpha > 100) {
             return [];
         }
 
-        let color: number[] = [];
+        const color: number[] = [];
 
         saturation = saturation / 100;
         value = value / 100;
@@ -37,19 +45,133 @@ export class Methods {
             color.push(value, value, value, alpha);
 
         } else {
-            let th = hue % 360;
-            let i = Math.floor(th / 60);
-            let f = th / 60 - i;
-            let m = value * (1 - saturation);
-            let n = value * (1 - saturation * f);
-            let k = value * (1 - saturation * (1 - f));
-            let r = [value, n, m, m, k, value];
-            let g = [k, value, value, n, m, m];
-            let b = [m, m, k, value, value, n];
+            const th = hue % 360;
+            const i = Math.floor(th / 60);
+            const f = th / 60 - i;
+            const m = value * (1 - saturation);
+            const n = value * (1 - saturation * f);
+            const k = value * (1 - saturation * (1 - f));
+            const r = [value, n, m, m, k, value];
+            const g = [k, value, value, n, m, m];
+            const b = [m, m, k, value, value, n];
             color.push(r[i], g[i], b[i], alpha);
         }
 
         return color;
+    }
+}
+
+export class GLUtil {
+
+    /**
+     * シェーダテキストをコンパイルしてVertexシェーダーを返します。
+     * @param _gl webGLコンテキスト
+     * @param {string} _shader
+     * @returns {WebGLShader | undefined}
+     */
+    public static compileVertexShader = (_gl: WebGLRenderingContext, _shader: string): WebGLShader | undefined => {
+        const shader: WebGLShader = _gl.createShader(_gl.VERTEX_SHADER) as WebGLShader;
+
+        _gl.shaderSource(shader, _shader);
+        _gl.compileShader(shader);
+
+        if (_gl.getShaderParameter(shader, _gl.COMPILE_STATUS)) {
+            return shader;
+        } else {
+            console.log(_gl.getShaderInfoLog(shader));
+        }
+    };
+
+    /**
+     * シェーダテキストをコンパイルしてFragmentシェーダーを返します。
+     * @param _gl
+     * @param _shader
+     */
+    public static compileFragmentShader = (_gl: WebGLRenderingContext, _shader: string): WebGLShader | undefined => {
+        const shader: WebGLShader = _gl.createShader(_gl.FRAGMENT_SHADER) as WebGLShader;
+
+        _gl.shaderSource(shader, _shader);
+        _gl.compileShader(shader);
+
+        if (_gl.getShaderParameter(shader, _gl.COMPILE_STATUS)) {
+            return shader;
+        } else {
+            console.log(_gl.getShaderInfoLog(shader));
+        }
+    };
+
+    /**
+     * 頂点情報からVBOを作成し、返す
+     * @param _gl webGLコンテキスト
+     * @param _data 頂点情報
+     * @returns {WebGLBuffer}
+     */
+    public static createVBO = (_gl: WebGLRenderingContext, _data: number[]): WebGLBuffer => {
+        const vbo: WebGLBuffer = _gl.createBuffer() as WebGLBuffer;
+
+        _gl.bindBuffer(_gl.ARRAY_BUFFER, vbo);
+        _gl.bufferData(_gl.ARRAY_BUFFER, new Float32Array(_data), _gl.STATIC_DRAW);
+        _gl.bindBuffer(_gl.ARRAY_BUFFER, null);
+
+        return vbo;
+    };
+
+    /**
+     * 頂点番号情報からIBOを作成し、返す
+     * @param _gl webGLコンテキスト
+     * @param _data 頂点の番号情報
+     * @returns {WebGLBuffer}
+     */
+    public static createIBO = (_gl: WebGLRenderingContext, _data: number[]): WebGLBuffer => {
+        const ibo: WebGLBuffer = _gl.createBuffer() as WebGLBuffer;
+
+        _gl.bindBuffer(_gl.ELEMENT_ARRAY_BUFFER, ibo);
+        _gl.bufferData(_gl.ELEMENT_ARRAY_BUFFER, new Int16Array(_data), _gl.STATIC_DRAW);
+        _gl.bindBuffer(_gl.ELEMENT_ARRAY_BUFFER, null);
+
+        return ibo;
+    };
+
+    /**
+     * 頂点シェーダにあるattribute変数とVBOを紐づける
+     * @param _gl webGLコンテキスト
+     * @param _vbo VBO
+     * @param _attL attributeLocation(シェーダの何番目にあたるか)の配列
+     * @param _attS 各attributeが何個の要素でできているかの配列
+     */
+    public static setVBO = (_gl: WebGLRenderingContext, _vbo: WebGLBuffer[], _attL, _attS) => {
+        for (const i in _vbo) {
+            _gl.bindBuffer(_gl.ARRAY_BUFFER, _vbo[i]);
+            _gl.enableVertexAttribArray(_attL[i]);
+            _gl.vertexAttribPointer(_attL[i], _attS[i], _gl.FLOAT, false, 0, 0);
+        }
+    };
+
+    public static setIBO = (_gl: WebGLRenderingContext, _ibo: WebGLBuffer) => {
+        _gl.bindBuffer(_gl.ELEMENT_ARRAY_BUFFER, _ibo);
+    };
+
+    /**
+     * attributeLocation, uniformLocationが妥当かどうかを判定する
+     * @param _attL attribuLocationの配列
+     * @param _uniL webGLUniformLocationの配列
+     */
+    public static checkLocation = (_attL: number[], _uniL: WebGLUniformLocation[]): boolean => {
+        let i;
+        for (i = 0; i < _attL.length; i++) {
+            if (_attL[i] === null || _attL[i] < 0) {
+                console.warn('◆ invalid attribute location: %c"' + _attL[i] + '"', 'color: crimson');
+                return false;
+            }
+        }
+        for (i = 0; i < _uniL.length; i++) {
+            if (_uniL[i] === null || _uniL[i] < 0) {
+                console.warn('◆ invalid uniform location: %c"' + _uniL[i] + '"', 'color: crimson');
+                return false;
+            }
+        }
+
+        return true;
     }
 }
 
@@ -58,7 +180,7 @@ export class MatrixUtils {
      * 4*4正方行列を生成
      * @returns {Float32Array}
      */
-    public static create():Float32Array {
+    public static create(): Float32Array {
         return new Float32Array(16);
     }
 
@@ -67,7 +189,7 @@ export class MatrixUtils {
      * @param {Float32Array} _mat
      * @returns {Float32Array}
      */
-    public static initialize(_mat:Float32Array):Float32Array {
+    public static initialize(_mat: Float32Array): Float32Array {
         _mat[0] = 1; _mat[1] = 0; _mat[2] = 0; _mat[3] = 0;
         _mat[4] = 0; _mat[5] = 1; _mat[6] = 0; _mat[7] = 0;
         _mat[8] = 0; _mat[9] = 0; _mat[10] = 1; _mat[11] = 0;
@@ -81,8 +203,8 @@ export class MatrixUtils {
      * @param {Float32Array} _mat2
      * @param {Float32Array} _dist
      */
-    public static multiply(_mat1:Float32Array, _mat2:Float32Array, _dist:Float32Array = MatrixUtils.initialize(new Float32Array(16))) {
-        let a = _mat1[0],  b = _mat1[1],  c = _mat1[2],  d = _mat1[3],
+    public static multiply(_mat1: Float32Array, _mat2: Float32Array, _dist: Float32Array = MatrixUtils.initialize(new Float32Array(16))) {
+        const a = _mat1[0],  b = _mat1[1],  c = _mat1[2],  d = _mat1[3],
             e = _mat1[4],  f = _mat1[5],  g = _mat1[6],  h = _mat1[7],
             i = _mat1[8],  j = _mat1[9],  k = _mat1[10], l = _mat1[11],
             m = _mat1[12], n = _mat1[13], o = _mat1[14], p = _mat1[15],
@@ -119,22 +241,22 @@ export class MatrixUtils {
      * @param {Float32Array} _dist 変換行列
      * @returns {Float32Array}
      */
-    public static lookAt(_targetPos:THREE.Vector3, _cameraPos:THREE.Vector3, _cameraUp:THREE.Vector3, _dist:Float32Array):Float32Array {
+    public static lookAt(_targetPos: THREE.Vector3, _cameraPos: THREE.Vector3, _cameraUp: THREE.Vector3, _dist: Float32Array): Float32Array {
         // カメラの位置と見る地点が同じ場合は正方行列を返す
         if (_targetPos.x === _cameraPos.x && _targetPos.y === _cameraPos.y && _targetPos.z === _cameraPos.z) {
             return MatrixUtils.initialize(_dist);
         }
 
         // cameraPos -> targetまでの各ベクトル
-        let vecZ:THREE.Vector3 = _targetPos.sub(_cameraPos).normalize();
+        const vecZ: THREE.Vector3 = _targetPos.sub(_cameraPos).normalize();
 
         // 上部ベクトルとz軸ベクトルの外積をとると、x軸ベクトルが求められる
-        let vecX:THREE.Vector3 = _cameraUp.cross(vecZ).normalize();
+        const vecX: THREE.Vector3 = _cameraUp.cross(vecZ).normalize();
 
-        //z軸ベクトルとx軸ベクトルの外積をとると、y軸ベクトルが求められる
-        let vecY:THREE.Vector3 = vecZ.cross(vecX).normalize();
+        // z軸ベクトルとx軸ベクトルの外積をとると、y軸ベクトルが求められる
+        const vecY: THREE.Vector3 = vecZ.cross(vecX).normalize();
 
-        //最終的に座標変換用の行列をつくる
+        // 最終的に座標変換用の行列をつくる
         _dist[0] = vecX.x; _dist[1] = vecY.x; _dist[2]  = vecZ.x; _dist[3]  = 0;
         _dist[4] = vecX.y; _dist[5] = vecY.y; _dist[6]  = vecZ.y; _dist[7]  = 0;
         _dist[8] = vecX.z; _dist[9] = vecY.z; _dist[10] = vecZ.z; _dist[11] = 0;
@@ -155,11 +277,11 @@ export class MatrixUtils {
      * @param {Float32Array} _dist 生成された行列
      * @returns {Float32Array}
      */
-    public static perspective(_fov:number, _aspect:number, _near:number, _far:number, _dist:Float32Array):Float32Array {
+    public static perspective(_fov: number, _aspect: number, _near: number, _far: number, _dist: Float32Array): Float32Array {
         // 近いクリップ面のy座標
-        let t:number = _near * Math.tan(_fov * Math.PI / 360);
-        let r = t * _aspect;
-        let a = r * 2, b = t * 2, c = _far - _near;
+        const t: number = _near * Math.tan(_fov * Math.PI / 360);
+        const r = t * _aspect;
+        const a = r * 2, b = t * 2, c = _far - _near;
         _dist[0]  = _near * 2 / a; _dist[1]  = 0; _dist[2]  = 0; _dist[3]  = 0;
         _dist[4]  = 0; _dist[5]  = _near * 2 / b; _dist[6]  = 0; _dist[7]  = 0;
         _dist[8]  = 0; _dist[9]  = 0; _dist[10] = -(_far + _near) / c; _dist[11] = -1;
@@ -169,22 +291,23 @@ export class MatrixUtils {
 }
 
 export class VectorUtils {
-    public static getFaceNormalArr(_vertexArr:number[], _indexArr:number[]):number[] {
+    public static getFaceNormalArr(_vertexArr: number[], _indexArr: number[]): number[] {
 
-        let i, len = _vertexArr.length / 3;
-        let distArr:number[] = [];
+        let i;
+        const len = _vertexArr.length / 3;
+        const distArr: number[] = [];
 
         for (i = 0; i < len; i++) {
-            let _index1:number = _indexArr[i] * 3;
-            let _index2:number = _indexArr[i] * 3;
-            let _index3:number = _indexArr[i] * 3;
+            const _index1: number = _indexArr[i] * 3;
+            const _index2: number = _indexArr[i] * 3;
+            const _index3: number = _indexArr[i] * 3;
 
-            let _vec1:THREE.Vector3 = new THREE.Vector3(_vertexArr[_index1], _vertexArr[_index1 + 1], _vertexArr[_index1 + 2]);
-            let _vec2:THREE.Vector3 = new THREE.Vector3(_vertexArr[_index2], _vertexArr[_index2 + 1], _vertexArr[_index2 + 2]);
-            let _vec3:THREE.Vector3 = new THREE.Vector3(_vertexArr[_index3], _vertexArr[_index3 + 1], _vertexArr[_index3 + 2]);
+            const _vec1: THREE.Vector3 = new THREE.Vector3(_vertexArr[_index1], _vertexArr[_index1 + 1], _vertexArr[_index1 + 2]);
+            const _vec2: THREE.Vector3 = new THREE.Vector3(_vertexArr[_index2], _vertexArr[_index2 + 1], _vertexArr[_index2 + 2]);
+            const _vec3: THREE.Vector3 = new THREE.Vector3(_vertexArr[_index3], _vertexArr[_index3 + 1], _vertexArr[_index3 + 2]);
 
-            let v1:THREE.Vector3 = _vec2.sub(_vec1).normalize();
-            let v2:THREE.Vector3 = _vec3.sub(_vec1).normalize();
+            const v1: THREE.Vector3 = _vec2.sub(_vec1).normalize();
+            const v2: THREE.Vector3 = _vec3.sub(_vec1).normalize();
 
             distArr[i * 3] = v1.y * v2.z - v1.z * v2.y;
             distArr[i * 3 + 1] = v1.z * v2.x - v1.x * v2.z;
@@ -194,10 +317,10 @@ export class VectorUtils {
         return distArr;
     }
 
-    public static getFaceNormalVector(_vec1:THREE.Vector3, _vec2:THREE.Vector3, _vec3:THREE.Vector3):THREE.Vector3 {
-        let dist:THREE.Vector3 = new THREE.Vector3();
-        let v1:THREE.Vector3 = _vec2.sub(_vec1).normalize();
-        let v2:THREE.Vector3 = _vec3.sub(_vec1).normalize();
+    public static getFaceNormalVector(_vec1: THREE.Vector3, _vec2: THREE.Vector3, _vec3: THREE.Vector3): THREE.Vector3 {
+        const dist: THREE.Vector3 = new THREE.Vector3();
+        const v1: THREE.Vector3 = _vec2.sub(_vec1).normalize();
+        const v2: THREE.Vector3 = _vec3.sub(_vec1).normalize();
 
         dist.x = v1.y * v2.z - v1.z * v2.y;
         dist.y = v1.z * v2.x - v1.x * v2.z;

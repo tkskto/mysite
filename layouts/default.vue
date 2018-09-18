@@ -5,7 +5,6 @@
 </template>
 
 <script>
-
     import {mapGetters} from 'vuex';
 
     export default {
@@ -32,9 +31,19 @@
 </script>
 
 <style>
+    html, body, div, span,
+    h1, h2, h3, h4, h5, h6,
+    p, pre, a, img, button,
+    ul, ol, li,
+    dl, dt, dd, table, th, td,
+    header, main, nav, footer {
+        margin: 0;
+        padding: 0;
+    }
+
     html {
-        font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        font-size: 16px;
+        font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, YuGothic, "Hiragino Kaku Gothic StdN", Meiryo, sans-serif;
+        font-size: 62.5%;
         word-spacing: 1px;
         -ms-text-size-adjust: 100%;
         -webkit-text-size-adjust: 100%;
@@ -45,7 +54,6 @@
 
     *, *:before, *:after {
         box-sizing: border-box;
-        margin: 0;
     }
 
     html, body, div, canvas {
@@ -68,6 +76,4 @@
     canvas {
         vertical-align: top;
     }
-
-
 </style>

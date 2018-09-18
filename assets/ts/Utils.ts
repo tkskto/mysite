@@ -1,7 +1,8 @@
 import * as THREE from 'three';
+import {GLConfig} from './common/Config';
 
 export class Methods {
-    public static showApplicationError(err: Error | null) {
+    public static showApplicationError(err: string | null) {
         console.error(err || 'error');
     }
 
@@ -152,6 +153,32 @@ export class GLUtil {
     };
 
     /**
+     * プログラムを作って返します。
+     * @param {WebGLRenderingContext} gl
+     * @param {WebGLShader} vs
+     * @param {WebGLShader} fs
+     * @returns {WebGLProgram}
+     */
+    public static createProgram(gl: WebGLRenderingContext, vs: WebGLShader | null, fs: WebGLShader | null): WebGLProgram | null {
+        const program: WebGLProgram | null = gl.createProgram();
+
+        gl.attachShader(program, vs);
+        gl.attachShader(program, fs);
+
+        gl.linkProgram(program);
+
+        if (gl.getProgramParameter(program, gl.LINK_STATUS)) {
+
+            gl.useProgram(program);
+
+            return program;
+        } else {
+            Methods.showApplicationError(gl.getProgramInfoLog(program));
+            return program;
+        }
+    }
+
+    /**
      * attributeLocation, uniformLocationが妥当かどうかを判定する
      * @param _attL attribuLocationの配列
      * @param _uniL webGLUniformLocationの配列
@@ -172,6 +199,113 @@ export class GLUtil {
         }
 
         return true;
+    };
+
+    public static setAttr(gl: WebGLRenderingContext, vbo: WebGLBuffer[]|null[], attl: number[], atts: number[]) {
+        for (let i = 0; i < vbo.length; i++) {
+            gl.bindBuffer(gl.ARRAY_BUFFER, vbo[i]);
+            gl.enableVertexAttribArray(attl[i]);
+            gl.vertexAttribPointer(attl[i], atts[i], gl.FLOAT, false, 0, 0);
+        }
+    }
+
+    public static createTexture = (_gl: WebGLRenderingContext, width: number, height: number, format: number): WebGLTexture | null => {
+        const texture: WebGLTexture | null = _gl.createTexture();
+
+        _gl.bindTexture(_gl.TEXTURE_2D, texture);
+        _gl.texImage2D(_gl.TEXTURE_2D, 0, _gl.RGBA, width, height, 0, _gl.RGBA, format, null);
+
+        _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_MAG_FILTER, _gl.NEAREST);
+        _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_MIN_FILTER, _gl.NEAREST);
+        _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_WRAP_S, _gl.CLAMP_TO_EDGE);
+        _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_WRAP_T, _gl.CLAMP_TO_EDGE);
+
+        return texture;
+    };
+
+
+    /**
+     * フレームバッファを生成
+     * @param {WebGLRenderingContext} gl
+     * @param {number} _width
+     * @param {number} _height
+     * @param {number} _format
+     * @returns {frameBuffer, depthBuffer, texture}
+     */
+    public static createFrameBuffer(gl: WebGLRenderingContext, _width: number, _height: number, _format: number): {frameBuffer: WebGLFramebuffer | null, depthBuffer: WebGLRenderbuffer | null, texture: WebGLTexture | null} {
+
+        const textureFormat: number = _format || gl.UNSIGNED_BYTE;
+
+        // フレームバッファを生成してバインド
+        const frameBuffer: WebGLFramebuffer | null = gl.createFramebuffer();
+        gl.bindFramebuffer(gl.FRAMEBUFFER, frameBuffer);
+
+        // 深度用レンダーバッファを生成してバインド
+        const depthRenderBuffer: WebGLRenderbuffer | null = gl.createRenderbuffer();
+        gl.bindRenderbuffer(gl.RENDERBUFFER, depthRenderBuffer);
+
+        // レンダーバッファを深度用に設定
+        gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, _width, _height);
+
+        // フレームバッファにレンダーバッファをひもづける
+        gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depthRenderBuffer);
+
+        // 空のテクスチャの生成
+        const fTexture: WebGLTexture | null = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, fTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, _width, _height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+        // フレームバッファにテクスチャを関連づける
+        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, fTexture, 0);
+
+        // バインドしたものを解放
+        gl.bindTexture(gl.TEXTURE_2D, null);
+        gl.bindRenderbuffer(gl.RENDERBUFFER, null);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
+        return {frameBuffer, depthBuffer: depthRenderBuffer, texture: fTexture};
+    }
+
+    public static setUniform(gl: WebGLRenderingContext, _uniTypes: string[], _uniLocation: WebGLUniformLocation[] | null[], _values: any[]): void {
+        for (let i = 0; i < _uniTypes.length; i++) {
+            switch (_uniTypes[i]) {
+                case GLConfig.UNIFORM_TYPE_MATRIX4:
+                    gl.uniformMatrix4fv(_uniLocation[i] as WebGLUniformLocation, false, _values[i]);
+                    break;
+                case GLConfig.UNIFORM_TYPE_VECTOR4:
+                    gl.uniform4fv(_uniLocation[i] as WebGLUniformLocation, _values[i]);
+                    break;
+                case GLConfig.UNIFORM_TYPE_VECTOR3:
+                    gl.uniform3fv(_uniLocation[i] as WebGLUniformLocation, _values[i]);
+                    break;
+                case GLConfig.UNIFORM_TYPE_VECTOR2:
+                    gl.uniform2fv(_uniLocation[i] as WebGLUniformLocation, _values[i]);
+                    break;
+                case GLConfig.UNIFORM_TYPE_VECTOR1:
+                    gl.uniform1fv(_uniLocation[i] as WebGLUniformLocation, _values[i]);
+                    break;
+                case GLConfig.UNIFORM_TYPE_FLOAT:
+                    gl.uniform1f(_uniLocation[i] as WebGLUniformLocation, _values[i]);
+                    break;
+                case GLConfig.UNIFORM_TYPE_INT_VECTOR:
+                    gl.uniform1iv(_uniLocation[i] as WebGLUniformLocation, _values[i]);
+                    break;
+                case GLConfig.UNIFORM_TYPE_INT:
+                    gl.uniform1i(_uniLocation[i] as WebGLUniformLocation, _values[i]);
+                    break;
+                case GLConfig.UNIFORM_TYPE_MATRIX3:
+                    gl.uniformMatrix3fv(_uniLocation[i] as WebGLUniformLocation, false, _values[i]);
+                    break;
+                case GLConfig.UNIFORM_TYPE_MATRIX2:
+                    gl.uniformMatrix2fv(_uniLocation[i] as WebGLUniformLocation, false, _values[i]);
+                    break;
+                default :
+                    Methods.showApplicationError('unknown uniform types');
+                    break;
+            }
+        }
     }
 }
 

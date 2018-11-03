@@ -3,11 +3,10 @@ module.exports = {
         baseUrl: process.env.BASE_URL || 'http://localhost:3000'
     },
     head: {
-        title: 'takeshi kato',
         meta: [
             { charset: 'utf-8' },
             { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-            { hid: 'description', name: 'description', content: 'This is my hobby and record.' },
+            { hid: 'description', name: 'description', content: 'This is takeshi kato\'s Web site. I\'m a frontend developer.' },
             { hid: 'http-equiv', name: 'http-equiv', content: 'IE=edge' }
         ],
         link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]

@@ -13,7 +13,7 @@
     import {M} from '~/assets/ts/index/Text/M';
     import {Hatena} from "~/assets/ts/index/Text/Hatena";
     import {AppConfig} from '../../assets/ts/common/Config';
-    import TweenMax from 'gsap'
+    import TweenMax from 'gsap';
 
     export default {
         name: 'Intro',

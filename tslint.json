@@ -58,7 +58,6 @@
         "no-trailing-whitespace": false,
         "no-unused-expression": false,
         "no-var-keyword": true,
-        "no-string-literal": false,
         "object-literal-shorthand": true,
         "one-line": [true,
             "check-open-brace",
@@ -100,7 +99,7 @@
         // Config different from tslint:latest
         "no-implicit-dependencies": [true, "dev"],
         "object-literal-key-quotes": [true, "consistent-as-needed"],
-        "variable-name": false, //[true, "ban-keywords", "check-format", "allow-leading-underscore"],
+        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
 
         "arrow-parens": false, // [true, "ban-single-arg-parens"]
         "arrow-return-shorthand": false,
@@ -114,6 +113,7 @@
         "no-eval": false,
         "no-object-literal-type-assertion": false,
         "no-shadowed-variable": false,
+        "no-string-literal": false,
         "no-submodule-imports": false,
         "no-unnecessary-initializer": false,
         "no-var-requires": false,

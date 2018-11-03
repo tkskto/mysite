@@ -5,25 +5,27 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex';
+    import {mapGetters, mapActions} from 'vuex';
 
     export default {
         computed: {
             ...mapGetters(['screenSize'])
         },
         created: function () {
-            this.resize();
+            this.onResize();
         },
         mounted: function () {
-            window.addEventListener('resize', this.resize);
+            this.setRatio(window.devicePixelRatio);
+            window.addEventListener('resize', this.onResize);
         },
         methods: {
-            resize: function () {
+            ...mapActions(['resize', 'setRatio']),
+            onResize: function () {
                 const width = window.innerWidth;
                 const height = window.innerHeight;
 
-            if (this.screenSize.width !== width || this.screenSize.height !== height) {
-                    this.$store.dispatch('resize', {width: width, height: height});
+                if (this.screenSize.width !== width || this.screenSize.height !== height) {
+                    this.resize({width: width, height: height});
                 }
             }
         }

@@ -1,9 +1,6 @@
 import {CustomCamera} from './CustomCamera';
 
-// TODO: コメント
-
 export class CustomPerspectiveCamera extends CustomCamera {
-
     constructor(public _canvas: HTMLCanvasElement, public fov?: number, public aspect?: number, public near?: number, public far?: number) {
         super(_canvas, fov, aspect, near, far);
     }

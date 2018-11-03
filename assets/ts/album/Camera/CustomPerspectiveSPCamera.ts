@@ -1,5 +1,5 @@
 import {CustomCamera} from './CustomCamera';
-const DeviceOrientationControls = require('three-device-orientation');
+const deviceOrientationControls = require('three-device-orientation');
 
 // TODO: コメント
 

@@ -11,7 +11,7 @@
             return {
                 title: 'THE心ここにあらズのアルバム',
                 meta: [
-                    { hid: 'description', name: 'description', content: 'thetaで撮った写真と動画のページです。' }
+                    { hid: 'description', name: 'description', content: 'あらズの旅行記' }
                 ]
             };
         },

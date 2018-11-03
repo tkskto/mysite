@@ -23,7 +23,10 @@
         components: {TheHeader, Dialog, Category, Loading},
         head () {
             return {
-                title: 'Micro Animations'
+                title: 'Micro Animations',
+                meta: [
+                    { hid: 'description', name: 'description', content: 'Gallery of Micro Animations.' }
+                ]
             };
         },
         computed: {

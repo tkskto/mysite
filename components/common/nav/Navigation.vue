@@ -27,18 +27,6 @@
             ...mapGetters(['screenSize']),
         },
         watch: {},
-        beforeCreate: function () {
-        },
-        created: function () {
-        },
-        beforeMount: function () {
-        },
-        mounted: function () {
-        },
-        beforeDestroy: function () {
-        },
-        destroyed: function () {
-        },
         methods: {
             onMouseMove(e) {
                 this.mouseX = e.clientX;

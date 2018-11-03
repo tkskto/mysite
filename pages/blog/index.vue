@@ -1,11 +1,16 @@
 <template>
     <div class="str-article">
-        <the-article :articleID="articleID"></the-article>
+        <the-article v-if="title && text" :title="title" :text="text"></the-article>
     </div>
 </template>
 
 <script>
+    import {AppConfig} from '~/assets/ts/common/Config';
+    import {Loader} from '~/assets/ts/blog/Loader';
     import TheArticle from '~/components/blog/TheArticle';
+    import {Utils} from '~/assets/ts/common/Utils';
+    import marked from 'marked';
+    import {mapGetters, mapActions} from 'vuex';
 
     export default {
         layout: 'blog',
@@ -17,14 +22,47 @@
         components: {
             TheArticle
         },
+        computed: {
+            ...mapGetters(['currentArticleID', 'currentCategory']),
+        },
         data: function () {
             return {
-                articleID: 'test'
+                articles: [],
+                title: '',
+                text: '',
+                loader: null,
             }
         },
-        methods: {
+        created() {
+            this.loader = new Loader();
+            this.loader.loadJson().then(res => {
+                this.articles = res.sort((a, b) => {
+                    return new Date(a.date) < new Date(b.date) ? 1 : -1;
+                });
+
+                this.init();
+            }).catch(err => {
+                this.onLoadError(err);
+            });
         },
-        mounted: function () {
+        methods: {
+            ...mapActions(['changeArticleID']),
+            init() {
+                // ID指定がない場合、最新の記事を表示する
+                if(!this.currentArticleID) {
+                    this.changeArticleID(this.articles[0].id);
+                }
+
+                this.title = Utils.getItemByKey(this.articles, 'id', this.currentArticleID).title;
+                this.loader.loadArticle(this.title).then(res => {
+                    this.text = marked(res);
+                }).catch(err => {
+                    this.onLoadError(err);
+                });
+            },
+            onLoadError(err) {
+                console.log(err);
+            }
         }
     };
 </script>

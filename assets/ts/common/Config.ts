@@ -15,6 +15,12 @@ export class AppConfig {
     public static URLS = {
         MICRO_ANIMATION_PATH: '/assets/microAnimations/data/list.json'
     };
+
+    public static CATEGORY = {
+        ALL: 'all',
+        SAUNA: 'sauna',
+        TECH: 'tech'
+    };
 }
 
 export class GLConfig {

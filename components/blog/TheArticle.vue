@@ -1,6 +1,9 @@
 <template>
     <article class="str-article--item">
-        <section class="str-article--section"></section>
+        <section class="str-article--section">
+            <h1>{{title}}</h1>
+            <div v-html="text"></div>
+        </section>
     </article>
 </template>
 
@@ -8,13 +11,14 @@
     export default {
         name: 'TheArticle',
         props: {
-            articleID: {
+            title: {
                 type: String,
-                required: true
+                required: true,
+            },
+            text: {
+                type: String,
+                required: true,
             }
-        },
-        created: function () {
-
         }
     };
 </script>

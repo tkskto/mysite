@@ -14,7 +14,7 @@
 
 <script>
     import {mapGetters} from 'vuex';
-    import {AppConfig} from '../../assets/ts/common/Config';
+    import {AppConfig} from '~/assets/ts/common/Config';
 
     export default {
         name: 'logo',

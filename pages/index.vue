@@ -9,7 +9,7 @@
 <script>
     import Logo from '~/components/index/Logo.vue';
     import Intro from '~/components/index/Intro.vue';
-    import Navs from '~/components/index/nav/Navigation.vue';
+    import Navs from '~/components/common/nav/Navigation.vue';
 
     export default {
         components: {

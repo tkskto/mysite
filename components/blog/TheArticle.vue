@@ -25,6 +25,8 @@
 
 <style scoped lang="scss">
     .str-article--item {
+        padding: 20px;
+
         .str-article--section {
             display: block;
         }

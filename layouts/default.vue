@@ -12,10 +12,10 @@
             ...mapGetters(['screenSize'])
         },
         created: function () {
+            this.setRatio(window.devicePixelRatio);
             this.onResize();
         },
         mounted: function () {
-            this.setRatio(window.devicePixelRatio);
             window.addEventListener('resize', this.onResize);
         },
         methods: {

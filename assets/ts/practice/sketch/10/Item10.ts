@@ -41,7 +41,7 @@ export class Item10 extends Sketch {
 
         this._store.commit('SET_VS_TEXT', this._shader.vertexString);
         this._store.commit('SET_FS_TEXT', this._shader.fragmentString);
-        // this._model.mouseState = true;
+        this._store.commit('SET_MOUSE_STATE', true);
 
         this.play();
     };
@@ -71,6 +71,6 @@ export class Item10 extends Sketch {
         this.clear();
         const canvasSize = this._store.getters.canvasSize;
         const mousePosition = this._store.getters.mousePosition;
-        this._renderer.update([canvasSize.width, canvasSize.height], this._time, [mousePosition.mousePosition.x, mousePosition.mousePosition.y]);
+        this._renderer.update([canvasSize.width, canvasSize.height], this._time, [mousePosition.x, mousePosition.y]);
     };
 }

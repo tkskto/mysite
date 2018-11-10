@@ -188,6 +188,11 @@
 
             document.addEventListener('keydown', this.changeSketchState);
         },
+        watch: {
+            mouseState(val, old) {
+                this.setMouseTracker();
+            }
+        },
         beforeDestroy: function () {
             window.removeEventListener('hashchange', this.onHashChange);
             document.removeEventListener('keydown', this.changeSketchState);

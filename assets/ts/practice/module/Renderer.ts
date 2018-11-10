@@ -95,7 +95,6 @@ export class Renderer {
         this.pMatrix = MatrixUtils.initialize(MatrixUtils.create());
         this.qMatrix = MatrixUtils.initialize(MatrixUtils.create());
         this.vpMatrix = MatrixUtils.initialize(MatrixUtils.create());
-
         const canvasSize = this._store.getters.canvasSize;
         const cameraPosition = this._store.getters.cameraPosition;
         const aspectRatio = canvasSize.width > canvasSize.height ? canvasSize.width / canvasSize.height : canvasSize.height / canvasSize.width;
@@ -107,9 +106,10 @@ export class Renderer {
     };
 
     private onResize = () => {
+        const canvasSize = this._store.getters.canvasSize;
         this.initializeMatrix();
-        this._cWidth = this._ctx.canvas.clientWidth;
-        this._cHeight = this._ctx.canvas.clientHeight;
+        this._cWidth = canvasSize.width;
+        this._cHeight = canvasSize.height;
         this._gl.viewport(0, 0, this._cWidth, this._cHeight);
     }
 }

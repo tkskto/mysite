@@ -43,7 +43,7 @@ export class Item8 extends Sketch {
         this._store.commit('SET_VS_TEXT', this._shader.vertexString);
         this._store.commit('SET_FS_TEXT', this._shader.fragmentString);
 
-        GLUtils.createTexture('~/assets/img/practice/lena.png', this._gl, this._gl.UNSIGNED_BYTE).then(tex => {
+        GLUtils.createTexture(require('~/assets/img/practice/lena.png'), this._gl, this._gl.UNSIGNED_BYTE).then(tex => {
             mesh.texture = tex;
             this.play();
         }, err => {

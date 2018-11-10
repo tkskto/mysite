@@ -43,9 +43,9 @@ export class Item11 extends Sketch {
         this._store.commit('SET_VS_TEXT', this._shader.vertexString);
         this._store.commit('SET_FS_TEXT', this._shader.fragmentString);
 
-        GLUtils.createTexture('/practice/img/11_1.png', this._gl, this._gl.UNSIGNED_BYTE).then(tex => {
+        GLUtils.createTexture(require('~/assets/img/practice/11_1.png'), this._gl, this._gl.UNSIGNED_BYTE).then(tex => {
             mesh.addTexture(tex);
-            return GLUtils.createTexture('/practice/img/11_2.png', this._gl, this._gl.UNSIGNED_BYTE);
+            return GLUtils.createTexture(require('~/assets/img/practice/11_2.png'), this._gl, this._gl.UNSIGNED_BYTE);
         }).then(tex => {
             mesh.addTexture(tex);
             this.play();

@@ -97,7 +97,7 @@
         ],
 
         // Config different from tslint:latest
-        "no-implicit-dependencies": [true, "dev"],
+        "no-implicit-dependencies": [true],
         "object-literal-key-quotes": [true, "consistent-as-needed"],
         "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
 

@@ -179,7 +179,7 @@ export class GLUtils {
             });
 
             img.addEventListener('error', (err) => {
-                reject(err)
+                reject(err);
             });
 
             img.src = src;

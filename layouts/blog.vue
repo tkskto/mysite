@@ -3,17 +3,75 @@
         <nuxt/>
     </div>
 </template>
+<style lang="scss">
+    @import '~/assets/css/common.css';
 
-<script>
-    export default {
+    html {
+        color: #333333;
+        line-height: 1.44;
     }
-</script>
 
-<style>
+    body {
+        background: #ffffee;
+    }
+
     .str-root--blog {
         width: 100%;
         height: 100%;
-        background: #ffffee;
-        overflow-y: scroll;
+        word-break: break-all;
+
+        h1 {
+            font-size: 4rem;
+            border-bottom: 1px solid #444444;
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        p {
+            font-size: 1.6rem;
+            font-weight: normal;
+            margin-bottom: 8px;
+        }
+
+        ul, ol {
+            margin: 0 0 12px 20px;
+            font-size: 1.6rem;
+            font-weight: normal;
+
+            ul, ol {
+                margin-bottom: 0;
+            }
+        }
+
+        code {
+            background: #f0f0f0;
+            color: #666666;
+            padding:3px;
+        }
+
+        pre {
+            margin: 8px 0;
+            white-space: normal;
+
+            > code {
+                font-size: 1.2rem;
+                white-space: pre;
+                display: block;
+                overflow: auto;
+                padding: 10px;
+                border-radius: 4px;
+                background: #444444;
+                color: #f0f0f0;
+            }
+        }
     }
 </style>

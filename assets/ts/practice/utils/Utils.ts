@@ -178,6 +178,10 @@ export class GLUtils {
                 resolve(texture);
             });
 
+            img.addEventListener('error', (err) => {
+                reject(err)
+            });
+
             img.src = src;
         });
     };

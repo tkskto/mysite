@@ -14,9 +14,12 @@
 
     export default {
         layout: 'blog',
-        head: function() {
+        head() {
             return {
-                'title': 'blog'
+                title: `${this.title} | blog | tkskto`,
+                meta: [
+                    { hid: 'description', name: 'description', content: 'These are logs of tkskto' }
+                ],
             };
         },
         components: {
@@ -24,6 +27,7 @@
         },
         computed: {
             ...mapGetters(['currentArticleID', 'currentCategory']),
+
         },
         data: function () {
             return {
@@ -48,12 +52,12 @@
         methods: {
             ...mapActions(['changeArticleID']),
             init() {
-                // ID指定がない場合、最新の記事を表示する
                 if(!this.currentArticleID) {
                     this.changeArticleID(this.articles[0].id);
                 }
 
                 this.title = Utils.getItemByKey(this.articles, 'id', this.currentArticleID).title;
+
                 this.loader.loadArticle(this.title).then(res => {
                     this.text = marked(res);
                 }).catch(err => {

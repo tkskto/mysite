@@ -11,10 +11,13 @@
         line-height: 1.44;
     }
 
+    body {
+        background: #ffffee;
+    }
+
     .str-root--blog {
         width: 100%;
         height: 100%;
-        background: #ffffee;
         word-break: break-all;
 
         h1 {

@@ -10,7 +10,7 @@ export class Loader {
     };
 
     public loadArticle = (_title): Promise<String> => {
-        return fetch(`/assets/blog/articles/${_title}.md`).then((response: Response) => {
+        return fetch(`/assets/blog/articles/${encodeURI(_title)}.md`).then((response: Response) => {
             if (response.ok) {
                 return response.text();
             }

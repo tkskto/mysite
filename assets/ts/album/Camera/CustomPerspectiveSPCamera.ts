@@ -1,8 +1,6 @@
 import {CustomCamera} from './CustomCamera';
 const deviceOrientationControls = require('three-device-orientation');
 
-// TODO: コメント
-
 export class CustomPerspectiveSPCamera extends CustomCamera {
     // private orientationCheck:HTMLInputElement;
     // private orientationFlg:boolean = false;

@@ -1,6 +1,6 @@
 <template>
     <section :id="categoryName" class="category">
-        <h3 class="hdg3">hover</h3>
+        <h3 class="hdg3">{{categoryName}}</h3>
         <div class="animations">
             <Item v-for="(item, index) in items" :key="index" :category="categoryName" :id="index + 1"></Item>
         </div>

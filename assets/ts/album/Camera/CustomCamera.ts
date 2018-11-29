@@ -1,8 +1,6 @@
 import * as THREE from 'three';
 import {Point} from '../../common/datatype/Point';
 
-// TODO: コメント
-
 export class CustomCamera extends THREE.Object3D {
 
     public _camera: THREE.PerspectiveCamera;

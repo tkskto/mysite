@@ -13,7 +13,7 @@
     import {M} from '~/assets/ts/index/Text/M';
     import {Hatena} from "~/assets/ts/index/Text/Hatena";
     import {AppConfig} from '../../assets/ts/common/Config';
-    import TweenMax from 'gsap';
+    import TweenMax, {Elastic, Linear} from 'gsap';
 
     export default {
         name: 'Intro',
@@ -163,7 +163,7 @@
                 this.update();
                 TweenMax.to(this, 1, {
                     _scaleWho: 1.2,
-                    ease: TweenMax.Elastic.easeOut
+                    ease: Elastic.easeOut
                 });
 
                 setTimeout(() => { this.addI(); }, 200);
@@ -197,45 +197,45 @@
             addI: function () {
                 TweenMax.to(this, 0.3, {
                     _posWho: 3,
-                    ease: TweenMax.Linear.ease
+                    ease: Linear.ease
                 });
 
                 this._stage.add(this._groupI);
 
                 TweenMax.to(this, 1, {
                     _scaleI: 1.2,
-                    ease: TweenMax.Elastic.easeOut
+                    ease: Elastic.easeOut
                 });
             },
             addAM: function () {
                 TweenMax.to(this, 0.3, {
                     _posWho: 6.5,
-                    ease: TweenMax.Linear.ease
+                    ease: Linear.ease
                 });
 
                 TweenMax.to(this, 0.3, {
                     _posI: 3.0,
-                    ease: TweenMax.Linear.ease
+                    ease: Linear.ease
                 });
 
                 this._stage.add(this._groupAM);
 
                 TweenMax.to(this, 1, {
                     _scaleAm: 1.2,
-                    ease: TweenMax.Elastic.easeOut
+                    ease: Elastic.easeOut
                 });
             },
             addHatena: function () {
                 TweenMax.to(this, 1, {
                     _posAmX: -2.0,
-                    ease: TweenMax.Elastic.easeOut
+                    ease: Elastic.easeOut
                 });
 
                 this._stage.add(this._groupHatena);
 
                 TweenMax.to(this, 1, {
                     _scaleHatena: 1.2,
-                    ease: TweenMax.Elastic.easeOut,
+                    ease: Elastic.easeOut,
                     onComplete: this.sceneFinish
                 });
             },

@@ -34,14 +34,7 @@ export class Default extends Shader {
                     float y = length(p) + sin(time);
                     float z = length(p) + cos(time);
                     
-                    vec2 repeat = vec2(fract(p.x * float(reps.x)), fract(p.y * float(reps.y)));
-                    vec2 distFromMid = repeat - vec2(0.5);
-                    float dist = length(distFromMid);
-                    
-                    float circ = (rad - dist) * sharpness;
-                    float alpha = 1.0 - circ;
-                    
-                    outColor = vec4(vec3(x, y, z), alpha);
+                    outColor = vec4(vec3(x, y, z), 1.0);
                 }
             `.trim());
 

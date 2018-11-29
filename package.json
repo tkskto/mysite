@@ -24,7 +24,7 @@
     "devDependencies": {
         "@types/gsap": "^1.20.0",
         "@types/node": "^8.10.38",
-        "@types/three": "^0.89.12",
+        "@types/three": "^0.93.10",
         "node-sass": "^4.10.0",
         "sass-loader": "^6.0.7",
         "stats-js": "^1.0.0-alpha1",

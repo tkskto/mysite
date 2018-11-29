@@ -1,7 +1,7 @@
 <template>
     <div class="str-root--error">
         <p>sorry, I can't find the page.</p>
-        <nuxt-link to="/">goToAndStop(home);</nuxt-link>
+        <nuxt-link to="/">gotoAndStop(home);</nuxt-link>
     </div>
 </template>
 

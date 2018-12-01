@@ -13,6 +13,7 @@
             <li class="sketch--item" id="10"><a href="#10">#10</a></li>
             <li class="sketch--item" id="11"><a href="#11">#11</a></li>
             <li class="sketch--item" id="12"><a href="#12">#12</a></li>
+            <li class="sketch--item" id="13"><a href="#13">#13</a></li>
         </ul>
 
         <div class="container-canvas">
@@ -40,7 +41,7 @@
     import {mapGetters, mapActions} from 'vuex';
     import Quote from '~/components/practice/quote.vue';
     import {AppConfig} from "~/assets/ts/practice/Config";
-    import {Vector} from '~/assets/ts/practice/module/Vector';
+    import {Vector} from '~/assets/ts/common/gl/Vector';
     import {ViewChangeBtn} from '~/assets/ts/practice/module/ViewChangeBtn';
     import {Item0} from '~/assets/ts/practice/sketch/00/Item0';
     import {Item1} from '~/assets/ts/practice/sketch/01/Item1';
@@ -55,8 +56,11 @@
     import {Item10} from '~/assets/ts/practice/sketch/10/Item10';
     import {Item11} from '~/assets/ts/practice/sketch/11/Item11';
     import {Item12} from '~/assets/ts/practice/sketch/12/Item12';
+    import {Item13} from '~/assets/ts/practice/sketch/13/Item13';
 
     export default {
+        name: 'practice',
+        layout: 'default',
         head() {
             return {
                 title: 'Practice | Takeshi Kato',
@@ -175,6 +179,9 @@
                         break;
                     case '12':
                         new Item12(this.$store, _canvasGL, id);
+                        break;
+                    case '13':
+                        new Item13(this.$store, _canvasGL, id);
                         break;
                     default:
                         throw new Error('please set id and data attribute "sketch-type"');

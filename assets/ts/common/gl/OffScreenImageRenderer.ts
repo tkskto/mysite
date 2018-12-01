@@ -1,7 +1,7 @@
-import {GLUtils, MatrixUtils} from '../utils/Utils';
+import {GLUtils, MatrixUtils} from '../../Utils';
 import { WebGLContext } from './Context';
 import {Mesh} from './Mesh';
-import {AppConfig} from '~assets/ts/practice/Config';
+import {AppConfig} from 'assets/ts/practice/Config';
 
 export class OffScreenImageRenderer {
 

@@ -2,11 +2,11 @@
  * This class has been influenced by https://wgld.org
  */
 
-import { GLUtils, MatrixUtils, Methods } from '../utils/Utils';
+import { GLUtils, MatrixUtils, Methods } from '../../Utils';
 import { Vector } from './Vector';
 import { Geometry } from './Geometry';
 import { Program } from './Program';
-import { GLConfig } from '../Config';
+import { GLConfig } from '../../Config';
 
 export class Mesh {
 

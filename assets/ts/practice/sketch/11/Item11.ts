@@ -1,13 +1,13 @@
 import { Sketch } from '../common/Sketch';
 import { Default } from './Shader';
-import { WebGLContext } from '../../module/Context';
-import { Renderer } from '../../module/Renderer';
-import { Geometry } from '../../module/Geometry';
-import { Mesh } from '../../module/Mesh';
-import { Program } from '../../module/Program';
-import { GLConfig } from '../../Config';
+import { WebGLContext } from '../../../common/gl/Context';
+import { Renderer } from '../../../common/gl/Renderer';
+import { Geometry } from '../../../common/gl/Geometry';
+import { Mesh } from '../../../common/gl/Mesh';
+import { Program } from '../../../common/gl/Program';
+import { GLConfig } from '../../../Config';
 import {Plane} from '../../utils/Plane';
-import {GLUtils} from '../../utils/Utils';
+import {GLUtils} from '../../../Utils';
 
 export class Item11 extends Sketch {
 

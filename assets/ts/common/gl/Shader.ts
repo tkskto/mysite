@@ -1,4 +1,4 @@
-import { GLUtils } from '../utils/Utils';
+import { GLUtils } from '../../Utils';
 
 export class Shader {
 

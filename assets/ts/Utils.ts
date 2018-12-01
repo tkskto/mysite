@@ -1,17 +1,9 @@
-import * as THREE from 'three';
-import {GLConfig} from './common/Config';
+import { GLConfig } from './Config';
+import { Vector } from './common/gl/Vector';
 
 export class Methods {
-    public static showApplicationError(err: string | null) {
+    public static showError(err: string | null = '') {
         console.error(err || 'error');
-    }
-
-    public static getJsonData(url: string): Promise<Response> {
-        return fetch(url).then(res => {
-            return res.json();
-        }).catch(err => {
-            Methods.showApplicationError(err);
-        });
     }
 
     /**
@@ -25,12 +17,12 @@ export class Methods {
     }
 
     /**
-     * hsvをRGBに変換する
+     * hsvをRGBAに変換する
      * @param {number} hue 0 - 360
      * @param {number} saturation 0 - 100
      * @param {number} value 0 - 100
      * @param {number} alpha 0 - 100
-     * @returns {Array}
+     * @returns {Array} 0 = R, 1 = G, 2 = B, 3 = alpha
      */
     public static hsv2RGB(hue: number, saturation: number, value: number, alpha: number): number[] {
         if (saturation > 100 || value > 100 || alpha > 100) {
@@ -43,8 +35,7 @@ export class Methods {
         value = value / 100;
 
         if (saturation === 0) {
-            color.push(value, value, value, alpha);
-
+            color.push(value, value, value, alpha / 100);
         } else {
             const th = hue % 360;
             const i = Math.floor(th / 60);
@@ -55,102 +46,72 @@ export class Methods {
             const r = [value, n, m, m, k, value];
             const g = [k, value, value, n, m, m];
             const b = [m, m, k, value, value, n];
-            color.push(r[i], g[i], b[i], alpha);
+            color.push(r[i], g[i], b[i], alpha / 100);
         }
 
         return color;
     }
 }
 
-export class GLUtil {
+export class GLUtils {
 
     /**
-     * シェーダテキストをコンパイルしてVertexシェーダーを返します。
-     * @param _gl webGLコンテキスト
-     * @param {string} _shader
-     * @returns {WebGLShader | undefined}
+     * 頂点シェーダをつくります。
+     * @param {string} script シェーダ文字列
+     * @param {WebGLRenderingContext} gl WebGLレンダリングコンテキスト
+     * @returns {WebGLShader}
      */
-    public static compileVertexShader = (_gl: WebGLRenderingContext, _shader: string): WebGLShader | undefined => {
-        const shader: WebGLShader = _gl.createShader(_gl.VERTEX_SHADER) as WebGLShader;
+    public static createVertexShader(script: string, gl: WebGLRenderingContext): WebGLShader | null {
+        const shader: WebGLShader = gl.createShader(gl.VERTEX_SHADER) as WebGLShader;
 
-        _gl.shaderSource(shader, _shader);
-        _gl.compileShader(shader);
+        // 生成されたシェーダにソースを割り当てる
+        gl.shaderSource(shader, script);
 
-        if (_gl.getShaderParameter(shader, _gl.COMPILE_STATUS)) {
+        // シェーダをコンパイルする
+        gl.compileShader(shader);
+
+        // シェーダが正しくコンパイルされたかチェック
+        if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+
+            // 成功していたらシェーダを返して終了
             return shader;
         } else {
-            console.log(_gl.getShaderInfoLog(shader));
+
+            // 失敗していたらエラーログをアラートする
+            Methods.showError(gl.getShaderInfoLog(shader));
         }
-    };
+
+        return null;
+    }
 
     /**
-     * シェーダテキストをコンパイルしてFragmentシェーダーを返します。
-     * @param _gl
-     * @param _shader
+     * フラグメントシェーダをつくります。
+     * @param {string} script シェーダ文字列
+     * @param {WebGLRenderingContext} gl WebGLレンダリングコンテキスト
+     * @returns {WebGLShader}
      */
-    public static compileFragmentShader = (_gl: WebGLRenderingContext, _shader: string): WebGLShader | undefined => {
-        const shader: WebGLShader = _gl.createShader(_gl.FRAGMENT_SHADER) as WebGLShader;
+    public static createFragmentShader(script: string, gl: WebGLRenderingContext): WebGLShader | null {
+        const shader: WebGLShader = gl.createShader(gl.FRAGMENT_SHADER) as WebGLShader;
 
-        _gl.shaderSource(shader, _shader);
-        _gl.compileShader(shader);
+        // 生成されたシェーダにソースを割り当てる
+        gl.shaderSource(shader, script);
 
-        if (_gl.getShaderParameter(shader, _gl.COMPILE_STATUS)) {
+        // シェーダをコンパイルする
+        gl.compileShader(shader);
+
+        // シェーダが正しくコンパイルされたかチェック
+        if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+
+            // 成功していたらシェーダを返して終了
             return shader;
         } else {
-            console.log(_gl.getShaderInfoLog(shader));
+
+            // 失敗していたらエラーログをアラートする
+            Methods.showError(gl.getShaderInfoLog(shader));
         }
-    };
 
-    /**
-     * 頂点情報からVBOを作成し、返す
-     * @param _gl webGLコンテキスト
-     * @param _data 頂点情報
-     * @returns {WebGLBuffer}
-     */
-    public static createVBO = (_gl: WebGLRenderingContext, _data: number[]): WebGLBuffer => {
-        const vbo: WebGLBuffer = _gl.createBuffer() as WebGLBuffer;
-
-        _gl.bindBuffer(_gl.ARRAY_BUFFER, vbo);
-        _gl.bufferData(_gl.ARRAY_BUFFER, new Float32Array(_data), _gl.STATIC_DRAW);
-        _gl.bindBuffer(_gl.ARRAY_BUFFER, null);
-
-        return vbo;
-    };
-
-    /**
-     * 頂点番号情報からIBOを作成し、返す
-     * @param _gl webGLコンテキスト
-     * @param _data 頂点の番号情報
-     * @returns {WebGLBuffer}
-     */
-    public static createIBO = (_gl: WebGLRenderingContext, _data: number[]): WebGLBuffer => {
-        const ibo: WebGLBuffer = _gl.createBuffer() as WebGLBuffer;
-
-        _gl.bindBuffer(_gl.ELEMENT_ARRAY_BUFFER, ibo);
-        _gl.bufferData(_gl.ELEMENT_ARRAY_BUFFER, new Int16Array(_data), _gl.STATIC_DRAW);
-        _gl.bindBuffer(_gl.ELEMENT_ARRAY_BUFFER, null);
-
-        return ibo;
-    };
-
-    /**
-     * 頂点シェーダにあるattribute変数とVBOを紐づける
-     * @param _gl webGLコンテキスト
-     * @param _vbo VBO
-     * @param _attL attributeLocation(シェーダの何番目にあたるか)の配列
-     * @param _attS 各attributeが何個の要素でできているかの配列
-     */
-    public static setVBO = (_gl: WebGLRenderingContext, _vbo: WebGLBuffer[], _attL, _attS) => {
-        for (const i in _vbo) {
-            _gl.bindBuffer(_gl.ARRAY_BUFFER, _vbo[i]);
-            _gl.enableVertexAttribArray(_attL[i]);
-            _gl.vertexAttribPointer(_attL[i], _attS[i], _gl.FLOAT, false, 0, 0);
-        }
-    };
-
-    public static setIBO = (_gl: WebGLRenderingContext, _ibo: WebGLBuffer) => {
-        _gl.bindBuffer(_gl.ELEMENT_ARRAY_BUFFER, _ibo);
-    };
+        return null;
+    }
 
     /**
      * プログラムを作って返します。
@@ -159,8 +120,8 @@ export class GLUtil {
      * @param {WebGLShader} fs
      * @returns {WebGLProgram}
      */
-    public static createProgram(gl: WebGLRenderingContext, vs: WebGLShader | null, fs: WebGLShader | null): WebGLProgram | null {
-        const program: WebGLProgram | null = gl.createProgram();
+    public static createProgram(gl: WebGLRenderingContext, vs: WebGLShader, fs: WebGLShader): WebGLProgram | null {
+        const program: WebGLProgram = gl.createProgram() as WebGLProgram;
 
         gl.attachShader(program, vs);
         gl.attachShader(program, fs);
@@ -173,35 +134,33 @@ export class GLUtil {
 
             return program;
         } else {
-            Methods.showApplicationError(gl.getProgramInfoLog(program));
-            return program;
+            Methods.showError(gl.getProgramInfoLog(program));
         }
+
+        return null;
     }
 
-    /**
-     * attributeLocation, uniformLocationが妥当かどうかを判定する
-     * @param _attL attribuLocationの配列
-     * @param _uniL webGLUniformLocationの配列
-     */
-    public static checkLocation = (_attL: number[], _uniL: WebGLUniformLocation[]): boolean => {
-        let i;
-        for (i = 0; i < _attL.length; i++) {
-            if (_attL[i] === null || _attL[i] < 0) {
-                console.warn('◆ invalid attribute location: %c"' + _attL[i] + '"', 'color: crimson');
-                return false;
-            }
-        }
-        for (i = 0; i < _uniL.length; i++) {
-            if (_uniL[i] === null || _uniL[i] < 0) {
-                console.warn('◆ invalid uniform location: %c"' + _uniL[i] + '"', 'color: crimson');
-                return false;
-            }
-        }
+    public static createVBO(gl: WebGLRenderingContext, data: number[]): WebGLBuffer | null {
+        const vbo: WebGLBuffer = gl.createBuffer() as WebGLBuffer;
 
-        return true;
-    };
+        gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
+        gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
-    public static setAttr(gl: WebGLRenderingContext, vbo: WebGLBuffer[]|null[], attl: number[], atts: number[]) {
+        return vbo;
+    }
+
+    public static createIBO(gl: WebGLRenderingContext, data: number[]): WebGLBuffer | null {
+        const ibo: WebGLBuffer = gl.createBuffer() as WebGLBuffer;
+
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Int16Array(data), gl.STATIC_DRAW);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+
+        return ibo;
+    }
+
+    public static setAttr(gl: WebGLRenderingContext, vbo: WebGLBuffer[], attl: number[], atts: number[]) {
         for (let i = 0; i < vbo.length; i++) {
             gl.bindBuffer(gl.ARRAY_BUFFER, vbo[i]);
             gl.enableVertexAttribArray(attl[i]);
@@ -209,11 +168,49 @@ export class GLUtil {
         }
     }
 
-    public static createTexture = (_gl: WebGLRenderingContext, width: number, height: number, format: number): WebGLTexture | null => {
-        const texture: WebGLTexture | null = _gl.createTexture();
+    public static createTexture = (src: string, _gl: WebGLRenderingContext, format: number): Promise<WebGLTexture> => {
+        return new Promise<WebGLTexture>((resolve: (value: WebGLTexture) => void, reject: (err: any) => void) => {
+            const img = new Image();
+
+            img.addEventListener('load', () => {
+                const texture = GLUtils.createWebGLTexture(img, _gl, format);
+
+                resolve(texture);
+            });
+
+            img.addEventListener('error', (err) => {
+                reject(err);
+            });
+
+            img.src = src;
+        });
+    };
+
+    public static createWebGLTexture = (img: HTMLImageElement, _gl: WebGLRenderingContext, format: number): WebGLTexture => {
+        const texture: WebGLTexture = _gl.createTexture() as WebGLTexture;
+
+        _gl.bindTexture(_gl.TEXTURE_2D, texture);
+        _gl.texImage2D(_gl.TEXTURE_2D, 0, _gl.RGBA, _gl.RGBA, format, img);
+
+        _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_MAG_FILTER, _gl.NEAREST);
+        _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_MIN_FILTER, _gl.NEAREST);
+        _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_WRAP_S, _gl.CLAMP_TO_EDGE);
+        _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_WRAP_T, _gl.CLAMP_TO_EDGE);
+
+        // ミップマップを生成
+        // gl.generateMipmap(gl.TEXTURE_2D);
+        _gl.bindTexture(_gl.TEXTURE_2D, null);
+
+        return texture;
+    };
+
+
+    public static createEmptyTexture = (_gl: WebGLRenderingContext, width: number, height: number, format: number): WebGLTexture => {
+        const texture: WebGLTexture = _gl.createTexture() as WebGLTexture;
 
         _gl.bindTexture(_gl.TEXTURE_2D, texture);
         _gl.texImage2D(_gl.TEXTURE_2D, 0, _gl.RGBA, width, height, 0, _gl.RGBA, format, null);
+        _gl.bindTexture(_gl.TEXTURE_2D, null);
 
         _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_MAG_FILTER, _gl.NEAREST);
         _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_MIN_FILTER, _gl.NEAREST);
@@ -232,16 +229,15 @@ export class GLUtil {
      * @param {number} _format
      * @returns {frameBuffer, depthBuffer, texture}
      */
-    public static createFrameBuffer(gl: WebGLRenderingContext, _width: number, _height: number, _format: number): {frameBuffer: WebGLFramebuffer | null, depthBuffer: WebGLRenderbuffer | null, texture: WebGLTexture | null} {
-
+    public static createFrameBuffer(gl: WebGLRenderingContext, _width: number, _height: number, _format: number | null): {frameBuffer: WebGLFramebuffer, depthBuffer: WebGLRenderbuffer, texture: WebGLTexture} {
         const textureFormat: number = _format || gl.UNSIGNED_BYTE;
 
         // フレームバッファを生成してバインド
-        const frameBuffer: WebGLFramebuffer | null = gl.createFramebuffer();
+        const frameBuffer: WebGLFramebuffer = gl.createFramebuffer() as WebGLFramebuffer;
         gl.bindFramebuffer(gl.FRAMEBUFFER, frameBuffer);
 
         // 深度用レンダーバッファを生成してバインド
-        const depthRenderBuffer: WebGLRenderbuffer | null = gl.createRenderbuffer();
+        const depthRenderBuffer: WebGLFramebuffer = gl.createRenderbuffer() as WebGLFramebuffer;
         gl.bindRenderbuffer(gl.RENDERBUFFER, depthRenderBuffer);
 
         // レンダーバッファを深度用に設定
@@ -251,7 +247,7 @@ export class GLUtil {
         gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depthRenderBuffer);
 
         // 空のテクスチャの生成
-        const fTexture: WebGLTexture | null = gl.createTexture();
+        const fTexture: WebGLTexture = gl.createTexture() as WebGLTexture;
         gl.bindTexture(gl.TEXTURE_2D, fTexture);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, _width, _height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -268,43 +264,42 @@ export class GLUtil {
         return {frameBuffer, depthBuffer: depthRenderBuffer, texture: fTexture};
     }
 
-    public static setUniform(gl: WebGLRenderingContext, _uniTypes: string[], _uniLocation: WebGLUniformLocation[] | null[], _values: any[]): void {
-        for (let i = 0; i < _uniTypes.length; i++) {
-            switch (_uniTypes[i]) {
-                case GLConfig.UNIFORM_TYPE_MATRIX4:
-                    gl.uniformMatrix4fv(_uniLocation[i] as WebGLUniformLocation, false, _values[i]);
-                    break;
-                case GLConfig.UNIFORM_TYPE_VECTOR4:
-                    gl.uniform4fv(_uniLocation[i] as WebGLUniformLocation, _values[i]);
-                    break;
-                case GLConfig.UNIFORM_TYPE_VECTOR3:
-                    gl.uniform3fv(_uniLocation[i] as WebGLUniformLocation, _values[i]);
-                    break;
-                case GLConfig.UNIFORM_TYPE_VECTOR2:
-                    gl.uniform2fv(_uniLocation[i] as WebGLUniformLocation, _values[i]);
-                    break;
-                case GLConfig.UNIFORM_TYPE_VECTOR1:
-                    gl.uniform1fv(_uniLocation[i] as WebGLUniformLocation, _values[i]);
-                    break;
-                case GLConfig.UNIFORM_TYPE_FLOAT:
-                    gl.uniform1f(_uniLocation[i] as WebGLUniformLocation, _values[i]);
-                    break;
-                case GLConfig.UNIFORM_TYPE_INT_VECTOR:
-                    gl.uniform1iv(_uniLocation[i] as WebGLUniformLocation, _values[i]);
-                    break;
-                case GLConfig.UNIFORM_TYPE_INT:
-                    gl.uniform1i(_uniLocation[i] as WebGLUniformLocation, _values[i]);
-                    break;
-                case GLConfig.UNIFORM_TYPE_MATRIX3:
-                    gl.uniformMatrix3fv(_uniLocation[i] as WebGLUniformLocation, false, _values[i]);
-                    break;
-                case GLConfig.UNIFORM_TYPE_MATRIX2:
-                    gl.uniformMatrix2fv(_uniLocation[i] as WebGLUniformLocation, false, _values[i]);
-                    break;
-                default :
-                    Methods.showApplicationError('unknown uniform types');
-                    break;
-            }
+    public static setUniform(gl: WebGLRenderingContext, _uniType: string, _uniLocation: WebGLUniformLocation, _value: any): void {
+        switch (_uniType) {
+            case GLConfig.UNIFORM_TYPE_MATRIX4:
+                gl.uniformMatrix4fv(_uniLocation, false, _value);
+                break;
+            case GLConfig.UNIFORM_TYPE_VECTOR4:
+                gl.uniform4fv(_uniLocation, _value);
+                break;
+            case GLConfig.UNIFORM_TYPE_VECTOR3:
+                gl.uniform3fv(_uniLocation, _value);
+                break;
+            case GLConfig.UNIFORM_TYPE_VECTOR2:
+                gl.uniform2fv(_uniLocation, _value);
+                break;
+            case GLConfig.UNIFORM_TYPE_VECTOR1:
+                gl.uniform1fv(_uniLocation, _value);
+                break;
+            case GLConfig.UNIFORM_TYPE_FLOAT:
+                gl.uniform1f(_uniLocation, _value);
+                break;
+            case GLConfig.UNIFORM_TYPE_INT_VECTOR:
+                gl.uniform1iv(_uniLocation, _value);
+                break;
+            case GLConfig.UNIFORM_TYPE_TEXTURE:
+            case GLConfig.UNIFORM_TYPE_INT:
+                gl.uniform1i(_uniLocation, _value);
+                break;
+            case GLConfig.UNIFORM_TYPE_MATRIX3:
+                gl.uniformMatrix3fv(_uniLocation, false, _value);
+                break;
+            case GLConfig.UNIFORM_TYPE_MATRIX2:
+                gl.uniformMatrix2fv(_uniLocation, false, _value);
+                break;
+            default :
+                Methods.showError('unknown uniform types');
+                break;
         }
     }
 }
@@ -369,26 +364,26 @@ export class MatrixUtils {
 
     /**
      * ワールド座標からカメラ座標へ、座標変換を行う行列を生成
-     * @param {Vector} _targetPos カメラの注視点
-     * @param {Vector} _cameraPos カメラの位置
-     * @param {Vector} _cameraUp カメラの上方向
+     * @param {number[]} _targetPos カメラの注視点
+     * @param {number[]} _cameraPos カメラの位置
+     * @param {number[]} _cameraUp カメラの上方向
      * @param {Float32Array} _dist 変換行列
      * @returns {Float32Array}
      */
-    public static lookAt(_targetPos: THREE.Vector3, _cameraPos: THREE.Vector3, _cameraUp: THREE.Vector3, _dist: Float32Array): Float32Array {
+    public static lookAt(_targetPos: Vector, _cameraPos: Vector, _cameraUp: Vector, _dist: Float32Array): Float32Array {
         // カメラの位置と見る地点が同じ場合は正方行列を返す
         if (_targetPos.x === _cameraPos.x && _targetPos.y === _cameraPos.y && _targetPos.z === _cameraPos.z) {
             return MatrixUtils.initialize(_dist);
         }
 
         // cameraPos -> targetまでの各ベクトル
-        const vecZ: THREE.Vector3 = _targetPos.sub(_cameraPos).normalize();
+        const vecZ: Vector = _targetPos.subtract(_cameraPos).normalize();
 
         // 上部ベクトルとz軸ベクトルの外積をとると、x軸ベクトルが求められる
-        const vecX: THREE.Vector3 = _cameraUp.cross(vecZ).normalize();
+        const vecX: Vector = _cameraUp.cross(vecZ).normalize();
 
         // z軸ベクトルとx軸ベクトルの外積をとると、y軸ベクトルが求められる
-        const vecY: THREE.Vector3 = vecZ.cross(vecX).normalize();
+        const vecY: Vector = vecZ.cross(vecX).normalize();
 
         // 最終的に座標変換用の行列をつくる
         _dist[0] = vecX.x; _dist[1] = vecY.x; _dist[2]  = vecZ.x; _dist[3]  = 0;
@@ -422,6 +417,44 @@ export class MatrixUtils {
         _dist[12] = 0; _dist[13] = 0; _dist[14] = -(_far * _near * 2) / c; _dist[15] = 0;
         return _dist;
     }
+
+    /**
+     * 渡した行列の逆行列を返す
+     * @param {Float32Array} _mat
+     * @return Float32Array
+     */
+    public static inverse(_mat: Float32Array): Float32Array {
+        const inversed: Float32Array = MatrixUtils.create();
+        const a: number = _mat[0],  b: number = _mat[1],  c: number = _mat[2],  d: number = _mat[3],
+            e: number = _mat[4],  f: number = _mat[5],  g: number = _mat[6],  h: number = _mat[7],
+            i: number = _mat[8],  j: number = _mat[9],  k: number = _mat[10], l: number = _mat[11],
+            m: number = _mat[12], n: number = _mat[13], o: number = _mat[14], p: number = _mat[15],
+            q: number = a * f - b * e, r: number = a * g - c * e,
+            s: number = a * h - d * e, t: number = b * g - c * f,
+            u: number = b * h - d * f, v: number = c * h - d * g,
+            w: number = i * n - j * m, x: number = i * o - k * m,
+            y: number = i * p - l * m, z: number = j * o - k * n,
+            A: number = j * p - l * n, B: number = k * p - l * o,
+            ivd: number = 1 / (q * B - r * A + s * z + t * y - u * x + v * w);
+
+        inversed[0]  = (f * B - g * A + h * z) * ivd;
+        inversed[1]  = (-b * B + c * A - d * z) * ivd;
+        inversed[2]  = (n * v - o * u + p * t) * ivd;
+        inversed[3]  = (-j * v + k * u - l * t) * ivd;
+        inversed[4]  = (-e * B + g * y - h * x) * ivd;
+        inversed[5]  = (a * B - c * y + d * x) * ivd;
+        inversed[6]  = (-m * v + o * s - p * r) * ivd;
+        inversed[7]  = (i * v - k * s + l * r) * ivd;
+        inversed[8]  = (e * A - f * y + h * w) * ivd;
+        inversed[9]  = (-a * A + b * y - d * w) * ivd;
+        inversed[10] = (m * u - n * s + p * q) * ivd;
+        inversed[11] = (-i * u + j * s - l * q) * ivd;
+        inversed[12] = (-e * z + f * x - g * w) * ivd;
+        inversed[13] = (a * z - b * x + c * w) * ivd;
+        inversed[14] = (-m * t + n * r - o * q) * ivd;
+
+        return inversed;
+    }
 }
 
 export class VectorUtils {
@@ -436,12 +469,12 @@ export class VectorUtils {
             const _index2: number = _indexArr[i] * 3;
             const _index3: number = _indexArr[i] * 3;
 
-            const _vec1: THREE.Vector3 = new THREE.Vector3(_vertexArr[_index1], _vertexArr[_index1 + 1], _vertexArr[_index1 + 2]);
-            const _vec2: THREE.Vector3 = new THREE.Vector3(_vertexArr[_index2], _vertexArr[_index2 + 1], _vertexArr[_index2 + 2]);
-            const _vec3: THREE.Vector3 = new THREE.Vector3(_vertexArr[_index3], _vertexArr[_index3 + 1], _vertexArr[_index3 + 2]);
+            const _vec1: Vector = new Vector(_vertexArr[_index1], _vertexArr[_index1 + 1], _vertexArr[_index1 + 2]);
+            const _vec2: Vector = new Vector(_vertexArr[_index2], _vertexArr[_index2 + 1], _vertexArr[_index2 + 2]);
+            const _vec3: Vector = new Vector(_vertexArr[_index3], _vertexArr[_index3 + 1], _vertexArr[_index3 + 2]);
 
-            const v1: THREE.Vector3 = _vec2.sub(_vec1).normalize();
-            const v2: THREE.Vector3 = _vec3.sub(_vec1).normalize();
+            const v1: Vector = _vec2.subtract(_vec1).normalize();
+            const v2: Vector = _vec3.subtract(_vec1).normalize();
 
             distArr[i * 3] = v1.y * v2.z - v1.z * v2.y;
             distArr[i * 3 + 1] = v1.z * v2.x - v1.x * v2.z;
@@ -451,10 +484,10 @@ export class VectorUtils {
         return distArr;
     }
 
-    public static getFaceNormalVector(_vec1: THREE.Vector3, _vec2: THREE.Vector3, _vec3: THREE.Vector3): THREE.Vector3 {
-        const dist: THREE.Vector3 = new THREE.Vector3();
-        const v1: THREE.Vector3 = _vec2.sub(_vec1).normalize();
-        const v2: THREE.Vector3 = _vec3.sub(_vec1).normalize();
+    public static getFaceNormalVector(_vec1: Vector, _vec2: Vector, _vec3: Vector): Vector {
+        const dist: Vector = new Vector();
+        const v1: Vector = _vec2.subtract(_vec1).normalize();
+        const v2: Vector = _vec3.subtract(_vec1).normalize();
 
         dist.x = v1.y * v2.z - v1.z * v2.y;
         dist.y = v1.z * v2.x - v1.x * v2.z;

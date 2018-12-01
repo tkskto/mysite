@@ -1,5 +1,5 @@
-import { GLUtils } from '../utils/Utils';
-import { IData } from '../sketch/common/IData';
+import { GLUtils } from '../../Utils';
+import { IData } from '../../practice/sketch/common/IData';
 
 export class Geometry {
     private _vbo: WebGLBuffer[] = [];

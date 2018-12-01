@@ -1,5 +1,5 @@
 import { Default } from './Shader';
-import { WebGLContext } from '../../module/Context';
+import { WebGLContext } from '../../../common/gl/Context';
 import {Plane} from '~/assets/ts/practice/sketch/common/plane/Plane';
 
 export class Item5 extends Plane {

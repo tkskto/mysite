@@ -1,94 +1,53 @@
-import {Lib} from '../../common/gl/Lib';
-import {GLUtil} from '../../Utils';
+import { GLUtils } from '../../Utils';
+import { Shader } from './Shader';
 
 export class Program {
+    private _program: WebGLProgram;
+    private _attl: number[] = [];
+    private _unil: WebGLUniformLocation[] = [];
 
-    private _prg: WebGLProgram;
-    private _gl: WebGLRenderingContext;
-
-    private _attL: number[] = [];
-    private _attS: number[] = [];
-    private _uniforms: WebGLUniformLocation[] = [];
-    private _uniTypes: string[] = [];
-
-    constructor(private _lib: Lib, private _vs: string, private _fs: string, _attL: string[], _attS: number[], _uniforms: string[], _uniTypes: string[]) {
-        this._gl = _lib.gl;
-        this._prg = this._gl.createProgram() as WebGLProgram;
-
-        const vertexShader: WebGLShader = GLUtil.compileVertexShader(this._gl, this._vs) as WebGLShader;
-        const fragmentShader: WebGLShader = GLUtil.compileFragmentShader(this._gl, this._fs) as WebGLShader;
-
-        this._gl.attachShader(this._prg, vertexShader);
-        this._gl.attachShader(this._prg, fragmentShader);
-
-        this._gl.linkProgram(this._prg);
-
-        if (this._gl.getProgramParameter(this._prg, this._gl.LINK_STATUS)) {
-            this._gl.useProgram(this._prg);
-        } else {
-            console.log(this._gl.getProgramInfoLog(this._prg));
-        }
-
-        let i;
-
-        for (i = 0; i < _attL.length; i++) {
-            this._attL[i] = this._gl.getAttribLocation(this._prg, _attL[i]);
-            this._attS[i] = _attS[i];
-        }
-
-        for (i = 0; i < _uniforms.length; i++) {
-            this._uniforms[i] = this._gl.getUniformLocation(this._prg, _uniforms[i]) as WebGLUniformLocation;
-            this._uniTypes[i] = _uniTypes[i];
-        }
-
-        GLUtil.checkLocation(this._attL, this._uniforms);
-
-        _lib.prg = this._prg;
+    /**
+     * WebGLプログラムをつくる
+     * @param {WebGLRenderingContext} _gl
+     * @param {Shader} _shader vertexシェーダーとfragmentシェーダーを持つオブジェクト
+     * @param {string[]} _attName シェーダ内のattributeの名前
+     * @param {number[]} _atts 各attributeの要素数
+     * @param {string[]} _uniName シェーダ内のuniformの名前
+     * @param {string[]} _uniType 各uniformのタイプ
+     */
+    constructor(private _gl: WebGLRenderingContext, private _shader: Shader, private _attName: string[], private _atts: number[], private _uniName: string[], private _uniType: string[]) {
+        this.init();
     }
-    public setAttrVBO = (_vbo: WebGLBuffer[]) => {
-        GLUtil.setVBO(this._gl, _vbo, this._attL, this._attS);
-    };
 
-    public setAttrIBO = (_ibo: WebGLBuffer) => {
-        GLUtil.setIBO(this._gl, _ibo);
-    };
+    private init = () => {
+        this._program = GLUtils.createProgram(this._gl, this._shader.VS, this._shader.FS) as WebGLProgram;
 
-    public pushShader = (value: any) => {
-        for (let i = 0, l = this._uniforms.length; i < l; i++) {
-            switch (this._uniTypes[i]) {
-                case 'matrix4fv':
-                    this._gl.uniformMatrix4fv(this._uniforms[i], false, value[i]);
-                    break;
-                case '4fv':
-                    this._gl.uniform4fv(this._uniforms[i], value[i]);
-                    break;
-                case '3fv':
-                    this._gl.uniform3fv(this._uniforms[i], value[i]);
-                    break;
-                case '2fv':
-                    this._gl.uniform2fv(this._uniforms[i], value[i]);
-                    break;
-                case '1fv':
-                    this._gl.uniform1fv(this._uniforms[i], value[i]);
-                    break;
-                case '1f':
-                    this._gl.uniform1f(this._uniforms[i], value[i]);
-                    break;
-                case '1iv':
-                    this._gl.uniform1iv(this._uniforms[i], value[i]);
-                    break;
-                case '1i':
-                    this._gl.uniform1i(this._uniforms[i], value[i]);
-                    break;
-                case 'matrix3fv':
-                    this._gl.uniformMatrix3fv(this._uniforms[i], false, value[i]);
-                    break;
-                case 'matrix2fv':
-                    this._gl.uniformMatrix2fv(this._uniforms[i], false, value[i]);
-                    break;
-                default :
-                    break;
-            }
+        for (let i = 0; i < this._attName.length; i++) {
+            this._attl[i] = this._gl.getAttribLocation(this._program, this._attName[i]);
+        }
+
+        for (let i = 0; i < this._uniName.length; i++) {
+            this._unil[i] = this._gl.getUniformLocation(this._program, this._uniName[i]) as WebGLUniformLocation;
         }
     };
+
+    get program(): WebGLProgram {
+        return this._program;
+    }
+
+    get attl(): number[] {
+        return this._attl;
+    }
+
+    get atts(): number[] {
+        return this._atts;
+    }
+
+    get unil(): WebGLUniformLocation[] {
+        return this._unil;
+    }
+
+    get uniType(): string[] {
+        return this._uniType;
+    }
 }

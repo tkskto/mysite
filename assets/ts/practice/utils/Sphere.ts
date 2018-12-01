@@ -1,4 +1,4 @@
-import {Methods} from './Utils';
+import {Methods} from '../../Utils';
 import {IData} from '../sketch/common/IData';
 
 export class Sphere implements IData {

@@ -1,9 +1,17 @@
-import { GLConfig } from './Config';
+import { GLConfig } from './common/Config';
 import { Vector } from './common/gl/Vector';
 
 export class Methods {
     public static showError(err: string | null = '') {
         console.error(err || 'error');
+    }
+
+    public static getJsonData(url: string): Promise<Response> {
+        return fetch(url).then(res => {
+            return res.json();
+        }).catch(err => {
+            Methods.showError(err);
+        });
     }
 
     /**

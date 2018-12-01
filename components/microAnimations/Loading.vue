@@ -3,40 +3,17 @@
 </template>
 
 <script>
-    import {mapActions} from 'vuex';
-    import {Lib} from "../../assets/ts/common/gl/Lib";
+    import {mapActions, mapGetters} from 'vuex';
     import {Program} from "../../assets/ts/common/gl/Program";
     import {Renderer} from "../../assets/ts/common/gl/Renderer";
     import {Animation} from "../../assets/ts/common/datatype/Animation";
-    const {Methods, GLUtil} = require('../../assets/ts/Utils');
-    const {AppConfig} = require('../../assets/ts/common/Config');
-
-    const VS = `
-        attribute vec3 position;
-        void main(){
-            gl_Position = vec4(position, 1.0);
-        }
-    `.trim();
-
-    const FS = `
-    precision mediump float;
-
-    uniform float time; // time
-    uniform vec2  resolution; // resolution
-    const float CIRCLE_NUM = 6.0;
-
-    void main(void){
-        vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
-        float alpha = 1.0;
-
-        for(float i = 0.0; i < CIRCLE_NUM; i++){
-            float j = i + 5.0;
-            vec2 q = p + vec2(cos(time * j), sin(time * j)) * 0.5;
-            alpha -= 1.0 - 0.25 / length(q);
-        }
-        gl_FragColor = vec4(vec3(0.0), alpha);
-    }
-    `.trim();
+    import {Methods, GLUtils} from '../../assets/ts/Utils';
+    import {AppConfig, GLConfig} from '../../assets/ts/common/Config';
+    import {Loading} from '../../assets/ts/common/shader/Loading';
+    import {LoadingData} from '../../assets/ts/common/data/Loading';
+    import {WebGLContext} from '../../assets/ts/common/gl/Context';
+    import {Geometry} from '../../assets/ts/common/gl/Geometry';
+    import {Mesh} from '../../assets/ts/common/gl/Mesh';
 
     const TIME_MIN = 3000;
 
@@ -44,59 +21,38 @@
         name: "Loading",
         data() {
             return {
-                lib: null,
                 _renderer: null,
                 _elapsed: 0,
                 _time: 0,
             }
         },
+        computed: {
+            ...mapGetters(['ratio'])
+        },
         created: function () {
+            const dLoading = new LoadingData();
             this._time = 0;
             this._elapsed = 0;
-            this._lib = new Lib();
-            this._lib.canvas = document.createElement("canvas");
-            this._lib.canvas.width = this._lib.canvas.height = 60;
-            this._lib.gl = this._lib.canvas.getContext('webgl', {stencil: false});
-
-            // モデル(頂点)データ
-            let position = [
-                -1.0, 1.0, 0.0,
-                1.0, 1.0, 0.0,
-                -1.0, -1.0, 0.0,
-                1.0, -1.0, 0.0
-            ];
-
-            // 座標データから頂点バッファを生成
-            let VBO = [
-                GLUtil.createVBO(this._lib.gl, position)
-            ];
-
-            // インデックスデータ
-            let index = [
-                0,1,2,
-                2,1,3
-            ];
-
-            let IBO = GLUtil.createIBO(this._lib.gl, index);
-
+            this.canvas = document.createElement("canvas");
+            this.canvas.width = this.canvas.height = 60;
+            const gl = new WebGLContext(this.ratio, this.canvas);
+            const data = new Loading(gl.ctx);
             let _prg = new Program(
-                this._lib,
-                VS,
-                FS,
+                gl.ctx,
+                data,
                 ['position'],
                 [3],
-                ['time','resolution'],
-                ['1f', '2fv']
+                ['mvpMatrix', 'resolution', 'time'],
+                [GLConfig.UNIFORM_TYPE_MATRIX4, GLConfig.UNIFORM_TYPE_VECTOR2, GLConfig.UNIFORM_TYPE_FLOAT]
             );
-
-            _prg.setAttrVBO(VBO);
-            _prg.setAttrIBO(IBO);
-
-            this._renderer = new Renderer(this._lib, _prg, index);
+            const plane = new Geometry(gl.ctx, dLoading).init();
+            const mesh = new Mesh(gl.ctx, _prg, plane, GLConfig.DRAW_TYPE_TRIANGLE);
+            this._renderer = new Renderer(this.$store, gl);
+            this._renderer.add(mesh);
         },
         mounted() {
             const parent = document.getElementById('loading-screen');
-            parent.appendChild(this._lib.canvas);
+            parent.appendChild(this.canvas);
 
             this.play();
 
@@ -160,6 +116,7 @@
             },
             onTransitionEnd() {
                 this.changeScene('top');
+                this.pause();
             },
             animate() {
                 this._timer = requestAnimationFrame(this.animate);
@@ -169,7 +126,7 @@
                 this.render();
             },
             render() {
-                this._renderer.render(this._time, {width: 60, height: 60});
+                this._renderer.update([60, 60], this._time);
             }
         },
         renderError: function (err) {

@@ -16,10 +16,12 @@
     import TheHeader from '../../components/microAnimations/Header';
     import Category from '../../components/microAnimations/Category';
     import Dialog from '../../components/microAnimations/Dialog';
-    import {mapGetters} from 'vuex';
+    import {Vector} from '../../assets/ts/common/gl/Vector';
+    import {mapGetters, mapActions} from 'vuex';
 
     export default {
         name: 'index',
+        layout: 'default',
         components: {TheHeader, Dialog, Category, Loading},
         head () {
             return {
@@ -31,6 +33,13 @@
         },
         computed: {
             ...mapGetters(['getAllItemData', 'dialogState', 'sceneName'])
+        },
+        methods: {
+            ...mapActions(['setCameraPosition', 'resize'])
+        },
+        created () {
+            this.setCameraPosition(new Vector(0.0, 0.0, 1,0));
+            this.resize({width: 60, height: 60});
         }
     };
 </script>

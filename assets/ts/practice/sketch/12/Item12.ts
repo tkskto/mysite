@@ -5,7 +5,7 @@ import { Renderer } from '../../../common/gl/Renderer';
 import { Geometry } from '../../../common/gl/Geometry';
 import { Mesh } from '../../../common/gl/Mesh';
 import { Program } from '../../../common/gl/Program';
-import { GLConfig } from '../../../Config';
+import { GLConfig } from '../../../common/Config';
 import {Vector} from '../../../common/gl/Vector';
 import {Cube} from '../../utils/Cube';
 import {Sphere} from '../../utils/Sphere';

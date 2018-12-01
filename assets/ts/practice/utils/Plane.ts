@@ -1,4 +1,4 @@
-import {IData} from '../sketch/common/IData';
+import {IData} from '../../common/datatype/IData';
 
 export class Plane implements IData {
 

@@ -5,7 +5,7 @@ import { Renderer } from '~/assets/ts/common/gl/Renderer';
 import { Geometry } from '~/assets/ts/common/gl/Geometry';
 import { Mesh } from '~/assets/ts/common/gl/Mesh';
 import { Program } from '~/assets/ts/common/gl/Program';
-import { GLConfig } from '~/assets/ts/Config';
+import { GLConfig } from '~/assets/ts/common/Config';
 import {Shader} from '~/assets/ts/common/gl/Shader';
 
 export class Plane extends Sketch {

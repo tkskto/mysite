@@ -5,7 +5,7 @@ import { Renderer } from '../../../common/gl/Renderer';
 import { Geometry } from '../../../common/gl/Geometry';
 import { Mesh } from '../../../common/gl/Mesh';
 import { Program } from '../../../common/gl/Program';
-import { GLConfig } from '../../../Config';
+import { GLConfig } from '../../../common/Config';
 import { Data } from './Data';
 
 export class Item10 extends Sketch {

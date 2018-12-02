@@ -8,7 +8,7 @@
     import {AppConfig} from '~/assets/ts/common/Config';
     import {Loader} from '~/assets/ts/blog/Loader';
     import TheArticle from '~/components/blog/TheArticle';
-    import {Utils} from '~/assets/ts/common/Utils';
+    import {Methods} from '~/assets/ts/common/Utils';
     import marked from 'marked';
     import {mapGetters, mapActions} from 'vuex';
 
@@ -56,7 +56,7 @@
                     this.changeArticleID(this.articles[0].id);
                 }
 
-                this.title = Utils.getItemByKey(this.articles, 'id', this.currentArticleID).title;
+                this.title = Methods.getItemByKey(this.articles, 'id', this.currentArticleID).title;
 
                 this.loader.loadArticle(this.title).then(res => {
                     this.text = marked(res);

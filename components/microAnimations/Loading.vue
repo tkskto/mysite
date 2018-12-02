@@ -7,7 +7,7 @@
     import {Program} from "../../assets/ts/common/gl/Program";
     import {Renderer} from "../../assets/ts/common/gl/Renderer";
     import {Animation} from "../../assets/ts/common/datatype/Animation";
-    import {Methods, GLUtils} from '../../assets/ts/Utils';
+    import {Methods, GLUtils} from '../../assets/ts/common/Utils';
     import {AppConfig, GLConfig} from '../../assets/ts/common/Config';
     import {Loading} from '../../assets/ts/common/shader/Loading';
     import {LoadingData} from '../../assets/ts/common/data/Loading';

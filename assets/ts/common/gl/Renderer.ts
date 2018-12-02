@@ -1,4 +1,4 @@
-import { MatrixUtils } from '../../Utils';
+import { MatrixUtils } from '../Utils';
 import { WebGLContext } from './Context';
 import { Vector } from './Vector';
 import { Mesh } from './Mesh';

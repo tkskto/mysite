@@ -1,4 +1,4 @@
-import { MatrixUtils, Methods } from '../../Utils';
+import { MatrixUtils, Methods } from '../Utils';
 import { Vector } from './Vector';
 
 /**

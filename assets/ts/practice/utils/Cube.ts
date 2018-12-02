@@ -1,4 +1,4 @@
-import {Methods} from '../../Utils';
+import {Methods} from '../../common/Utils';
 import {IData} from '../../common/datatype/IData';
 
 export class Cube implements IData {

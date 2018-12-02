@@ -1,4 +1,4 @@
-import { Methods } from '../../Utils';
+import { Methods } from '../Utils';
 
 export class WebGLContext {
     private _canvas: HTMLCanvasElement;

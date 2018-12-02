@@ -1,4 +1,4 @@
-import { GLUtils } from '../../Utils';
+import { GLUtils } from '../Utils';
 import { IData } from '../datatype/IData';
 
 export class Geometry {

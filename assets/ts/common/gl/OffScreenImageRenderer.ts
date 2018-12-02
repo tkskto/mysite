@@ -1,4 +1,4 @@
-import {GLUtils, MatrixUtils} from '../../Utils';
+import {GLUtils, MatrixUtils} from '../Utils';
 import { WebGLContext } from './Context';
 import {Mesh} from './Mesh';
 import {AppConfig} from 'assets/ts/practice/Config';

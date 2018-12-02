@@ -6,7 +6,7 @@ import { Geometry } from '../../../common/gl/Geometry';
 import { Mesh } from '../../../common/gl/Mesh';
 import { Program } from '../../../common/gl/Program';
 import { GLConfig } from '../../../common/Config';
-import { GLUtils } from '../../../Utils';
+import { GLUtils } from '../../../common/Utils';
 import {Plane} from '../../utils/Plane';
 
 export class Item8 extends Sketch {

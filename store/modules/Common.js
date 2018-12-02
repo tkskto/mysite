@@ -14,6 +14,24 @@ const mutations = {
     CHANGE_SCENE(_state, _scene) {
         _state.sceneName = _scene;
     },
+    SET_SCREEN_SIZE(_state, _size) {
+        if (_size.width) {
+            _state.screenSize.width = _size.width;
+        }
+
+        if (_size.height) {
+            _state.screenSize.height = _size.height;
+        }
+    },
+    SET_CANVAS_SIZE(_state, _size) {
+        if (_size.width) {
+            _state.canvasSize.width = _size.width * _state.ratio;
+        }
+
+        if (_size.height) {
+            _state.canvasSize.height = _size.height * _state.ratio;
+        }
+    },
     RESIZE(_state, _size) {
         if (_size.width) {
             _state.screenSize.width = _size.width;
@@ -32,6 +50,12 @@ const mutations = {
 const actions = {
     changeScene({commit}, _scene) {
         commit('CHANGE_SCENE', _scene);
+    },
+    setScreenSize({commit}, _size) {
+        commit('SET_SCREEN_SIZE', _size);
+    },
+    setCanvasSize({commit}, _size) {
+        commit('SET_CANVAS_SIZE', _size);
     },
     resize({commit}, _size) {
         commit('RESIZE', _size);

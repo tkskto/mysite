@@ -35,11 +35,11 @@
             ...mapGetters(['getAllItemData', 'dialogState', 'sceneName'])
         },
         methods: {
-            ...mapActions(['setCameraPosition', 'resize'])
+            ...mapActions(['setCameraPosition', 'setCanvasSize'])
         },
         created () {
             this.setCameraPosition(new Vector(0.0, 0.0, 1,0));
-            this.resize({width: 60, height: 60});
+            this.setCanvasSize({width: 30, height: 30});
         }
     };
 </script>

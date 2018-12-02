@@ -56,8 +56,8 @@ export class Item12 extends Sketch {
         this._renderer.add(this._mCube);
         this._renderer.add(this._mSphere);
 
-        // this._model.vertexShaderString = shader.vertexString;
-        // this._model.fragmentShaderString = shader.fragmentString;
+        this._store.commit('SET_VS_TEXT', shader.vertexString);
+        this._store.commit('SET_FS_TEXT', shader.fragmentString);
 
         this.play();
     };

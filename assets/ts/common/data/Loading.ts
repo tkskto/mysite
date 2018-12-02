@@ -1,4 +1,4 @@
-import {IData} from '../datatype/IData'
+import {IData} from '../datatype/IData';
 
 export class LoadingData implements IData {
     _vertex: number[] = [
@@ -11,8 +11,8 @@ export class LoadingData implements IData {
     _color: number[] = [];
 
     _index: number[] = [
-        0,1,2,
-        2,1,3
+        0, 1, 2,
+        2, 1, 3
     ];
 
     _normal: number[] = [];

@@ -28,7 +28,7 @@
 
         h2 {
             font-size: 2.2rem;
-            margin-bottom: 12px;
+            margin: 24px 0 8px;
         }
 
         h3 {

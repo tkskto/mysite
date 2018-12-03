@@ -19,6 +19,7 @@ export class Default extends Shader {
                 precision highp float;
                 uniform vec2 resolution;
                 uniform float time;
+                uniform float fft;
                 in vec4 vColor;
                 layout (location = 0) out vec4 outColor;
 
@@ -34,7 +35,7 @@ export class Default extends Shader {
                         vec2 center = vec2(cos(time), sin(time)) * r;
                         float dist = length(uv - center);
                         
-                        float brightness = 1.0 / pow(dist * 100.0, 2.0);
+                        float brightness = 1.0 / pow(dist * fft, 2.0);
                         vec3 col = vColor.rgb * brightness;
                         outColor.rgb += col;
                     }

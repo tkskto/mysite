@@ -2,6 +2,7 @@ export class FFT {
     private _audioContext: AudioContext;
     private _analyser: AnalyserNode;
     private _buffer: AudioBuffer;
+    private _loop: boolean;
 
     constructor() {
         this._audioContext = new AudioContext();
@@ -9,7 +10,7 @@ export class FFT {
         this._analyser.fftSize = 2048;
     }
 
-    private onLoadAudio = (value: Response):  ArrayBuffer | PromiseLike<ArrayBuffer> => {
+    private onLoadAudio = (value: Response): ArrayBuffer | PromiseLike<ArrayBuffer> => {
         return value.arrayBuffer();
     };
 
@@ -29,16 +30,19 @@ export class FFT {
         return fetch(_url).then(this.onLoadAudio).then(this.getAudioData).then(this.onComplete).catch(this.onError);
     };
 
-    public play = () => {
+    public play = (isLoop: boolean) => {
         const source = this._audioContext.createBufferSource();
         source.buffer = this._buffer;
         source.connect(this._audioContext.destination);
+        source.connect(this._analyser);
+        source.loop = isLoop;
         source.start(0);
     };
 
     public pause = () => {
         if (this._audioContext.state === 'running') {
-            this._audioContext.suspend().then(() => {});
+            this._audioContext.suspend().then(() => {
+            });
         }
     };
 

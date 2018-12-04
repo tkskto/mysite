@@ -17,24 +17,27 @@ export class Default extends Shader {
             `
                 #version 300 es
                 precision highp float;
-                in vec4 vColor;
                 uniform vec2 resolution;
                 uniform float time;
-                out vec4 outColor;
-                
+                uniform float fft;
+                in vec4 vColor;
+                layout (location = 0) out vec4 outColor;
+
                 void main(void){
                     vec2 uv = vec2(gl_FragCoord.x / resolution.x, gl_FragCoord.y / resolution.y);
                     uv -= 0.5;
                     uv /= vec2(resolution.y / resolution.x, 1.0);
                     
-                    float glow = atan(uv.y, uv.x) * time * 0.5;
+                    outColor = vec4(vec3(0.0), 1.0);
                     
-                    for (float i = 0.0; i < 10.0; i++) {
-                        float a = sin(glow * 10.0);
-                        float r = mod(i * 1.3 + time * 0.3, 0.7);
-                        vec2 center = vec2(cos(a), sin(a)) * r;
+                    for (float i = 0.0; i < 8.0; i++) {
+                        float r = i * 0.1;
+                        vec2 center = vec2(cos(time), sin(time)) * r;
+                        float dist = length(uv - center);
                         
-                        outColor += vec4(vec3(fract(uv.x - center.x), fract(uv.y - center.y), 1.0), 1.0) * 0.1; 
+                        float brightness = 1.0 / pow(dist * fft, 2.0);
+                        vec3 col = vColor.rgb * brightness;
+                        outColor.rgb += col;
                     }
                 }
             `.trim());

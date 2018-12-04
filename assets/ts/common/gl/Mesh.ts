@@ -50,6 +50,9 @@ export class Mesh {
             for (let i = 0; i < this._prg.uniType.length; i++) {
                 if (this._prg.uniType[i] === GLConfig.UNIFORM_TYPE_TEXTURE) {
                     this.setTexture(_values[i]);
+                } else if (this._prg.uniType[i] === GLConfig.UNIFORM_TYPE_AUDIO_TEXTURE) {
+                    this.updateFFTData(_values[i][1]);
+                    this.setTexture(_values[i][0]);
                 }
                 GLUtils.setUniform(this._gl, this._prg.uniType[i], this._prg.unil[i], _values[i]);
             }
@@ -75,6 +78,12 @@ export class Mesh {
         }
 
         this._gl.bindTexture(this._gl.TEXTURE_2D, texture);
+    };
+
+    updateFFTData = (_data: Uint8Array) => {
+        // TODO: 複数テクスチャに対応
+        this._gl.bindTexture(this._gl.TEXTURE_2D, this._textureArr[0]);
+        this._gl.texImage2D(this._gl.TEXTURE_2D, 0, this._gl.LUMINANCE, _data.length * 0.5, 2, 0, this._gl.LUMINANCE, this._gl.UNSIGNED_BYTE, _data);
     };
 
     private setDrawType = (_type: string) => {

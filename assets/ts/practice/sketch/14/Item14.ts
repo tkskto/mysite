@@ -8,6 +8,7 @@ import { Program } from '~/assets/ts/common/gl/Program';
 import { GLConfig } from '~/assets/ts/common/Config';
 import { Default } from './Shader';
 import { FFT } from '../../../common/audio/FFT';
+import {GLUtils} from '~/assets/ts/common/Utils';
 
 export class Item14 extends Sketch {
 
@@ -33,7 +34,7 @@ export class Item14 extends Sketch {
             ['position', 'color'],
             [3, 4],
             ['mvpMatrix', 'resolution', 'time', 'fft'],
-            [GLConfig.UNIFORM_TYPE_MATRIX4, GLConfig.UNIFORM_TYPE_VECTOR2, GLConfig.UNIFORM_TYPE_FLOAT, GLConfig.UNIFORM_TYPE_FLOAT]
+            [GLConfig.UNIFORM_TYPE_MATRIX4, GLConfig.UNIFORM_TYPE_VECTOR2, GLConfig.UNIFORM_TYPE_FLOAT, GLConfig.UNIFORM_TYPE_AUDIO_TEXTURE]
         );
         this._renderer = new Renderer(this._store, ctx);
 
@@ -47,6 +48,7 @@ export class Item14 extends Sketch {
         this._audioContext = new FFT();
         this._audioAnalyser = this._audioContext.analyser;
         this._frequency = new Uint8Array(this._audioAnalyser.frequencyBinCount);
+        mesh.addTexture(GLUtils.createAudioTexture(this._gl, this._audioAnalyser.frequencyBinCount, this._frequency));
         this._audioContext.ready('/assets/audio/bass.mp3').then(() => {
             this._audioContext.play(true);
             this.play();
@@ -80,6 +82,6 @@ export class Item14 extends Sketch {
     public animate = () => {
         this.clear();
         const canvasSize = this._store.getters.canvasSize;
-        this._renderer.update([canvasSize.width, canvasSize.height], this._time, this._frequency[0]);
+        this._renderer.update([canvasSize.width, canvasSize.height], this._time, [0, this._frequency]);
     };
 }

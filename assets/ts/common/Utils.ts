@@ -207,6 +207,23 @@ export class GLUtils {
         });
     };
 
+    public static createAudioTexture = (_gl: WebGLRenderingContext, numSamples: number, _data: Uint8Array): WebGLTexture => {
+        const texture: WebGLTexture = _gl.createTexture() as WebGLTexture;
+
+        _gl.bindTexture(_gl.TEXTURE_2D, texture);
+        _gl.pixelStorei(_gl.UNPACK_ALIGNMENT, 1);
+        _gl.texImage2D(_gl.TEXTURE_2D, 0, _gl.LUMINANCE, numSamples * 0.5, 2, 0, _gl.LUMINANCE, _gl.UNSIGNED_BYTE, _data);
+
+        _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_MIN_FILTER, _gl.NEAREST);
+        _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_MAG_FILTER, _gl.NEAREST);
+        _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_WRAP_S, _gl.CLAMP_TO_EDGE);
+        _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_WRAP_T, _gl.CLAMP_TO_EDGE);
+
+        _gl.bindTexture(_gl.TEXTURE_2D, null);
+
+        return texture;
+    };
+
     public static createWebGLTexture = (img: HTMLImageElement, _gl: WebGLRenderingContext, format: number): WebGLTexture => {
         const texture: WebGLTexture = _gl.createTexture() as WebGLTexture;
 
@@ -309,6 +326,7 @@ export class GLUtils {
                 case GLConfig.UNIFORM_TYPE_INT_VECTOR:
                     gl.uniform1iv(_uniLocation, _value);
                     break;
+                case GLConfig.UNIFORM_TYPE_AUDIO_TEXTURE:
                 case GLConfig.UNIFORM_TYPE_TEXTURE:
                 case GLConfig.UNIFORM_TYPE_INT:
                     gl.uniform1i(_uniLocation, _value);

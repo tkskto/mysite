@@ -10,6 +10,7 @@ export class GLConfig {
     public static UNIFORM_TYPE_INT_VECTOR = '1iv';
     public static UNIFORM_TYPE_INT = '1i';
     public static UNIFORM_TYPE_TEXTURE = 'texture';
+    public static UNIFORM_TYPE_AUDIO_TEXTURE = 'audioTexture';
 
     public static DRAW_TYPE_POINT = 'point';
     public static DRAW_TYPE_LINE = 'line';

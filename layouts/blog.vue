@@ -36,10 +36,20 @@
             margin-bottom: 8px;
         }
 
+        h4 {
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+        }
+
         p {
             font-size: 1.6rem;
             font-weight: normal;
             margin-bottom: 8px;
+
+            img {
+                max-width: 100%;
+                vertical-align: top;
+            }
         }
 
         ul, ol {
@@ -49,6 +59,17 @@
 
             ul, ol {
                 margin-bottom: 0;
+            }
+        }
+
+        blockquote {
+            margin: 12px 0;
+            padding: 8px;
+
+            p {
+                border-left: 4px solid #e0e0e0;
+                color: #555555;
+                padding: 16px;
             }
         }
 

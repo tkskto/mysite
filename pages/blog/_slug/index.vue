@@ -14,7 +14,7 @@
     import marked from 'marked';
     import {mapGetters, mapActions} from 'vuex';
 
-    // ブログTOP
+    // ブログ個別
 
     export default {
         layout: 'blog',
@@ -31,8 +31,7 @@
             ArticleList
         },
         computed: {
-            ...mapGetters(['currentArticleID', 'allArticleData']),
-
+            ...mapGetters(['allArticleData']),
         },
         data: function () {
             return {
@@ -44,6 +43,7 @@
         created() {
             this.loader = new Loader();
 
+            // 直接個別ページに来た時は記事の一覧を取得する
             if (this.allArticleData.length === 0) {
                 this.loader.loadJson().then(res => {
                     this.setArticles(res.sort((a, b) => {
@@ -61,12 +61,7 @@
         methods: {
             ...mapActions(['changeArticleID', 'setArticles']),
             init() {
-                // ブログトップに来た時は最新の記事を表示する
-                console.log(this.allArticleData);
-                this.changeArticleID(this.allArticleData[0].id);
-                this.title = Methods.getItemByKey(this.allArticleData, 'id', this.currentArticleID).title;
-
-                // .md読み込み
+                this.title = this.$route.params.slug;
                 this.loader.loadArticle(this.title).then(res => {
                     this.text = marked(res);
                 }).catch(err => {

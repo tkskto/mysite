@@ -1,6 +1,6 @@
 import { Default } from './Shader';
 import { WebGLContext } from '../../../common/gl/Context';
-import {Plane} from '~/assets/ts/practice/sketch/common/plane/Plane';
+import {Plane} from '../common/plane/Plane';
 
 export class Item6 extends Plane {
     constructor(_store: any, _canvas: HTMLCanvasElement, _id: string) {

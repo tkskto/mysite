@@ -1,13 +1,13 @@
 import { Sketch } from '../common/Sketch';
-import { WebGLContext } from '~/assets/ts/common/gl/Context';
+import { WebGLContext } from '../../../common/gl/Context';
 import { Data } from '../common/plane/pData';
-import { Renderer } from '~/assets/ts/common/gl/Renderer';
-import { Geometry } from '~/assets/ts/common/gl/Geometry';
-import { Mesh } from '~/assets/ts/common/gl/Mesh';
-import { Program } from '~/assets/ts/common/gl/Program';
-import { GLConfig } from '~/assets/ts/common/Config';
-import {Vector} from '~/assets/ts/common/gl/Vector';
-import {Default} from '~/assets/ts/practice/sketch/15/Shader';
+import { Renderer } from '../../../common/gl/Renderer';
+import { Geometry } from '../../../common/gl/Geometry';
+import { Mesh } from '../../../common/gl/Mesh';
+import { Program } from '../../../common/gl/Program';
+import { GLConfig } from '../../../common/Config';
+import {Vector} from '../../../common/gl/Vector';
+import {Default} from './Shader';
 
 export class Item15 extends Sketch {
 

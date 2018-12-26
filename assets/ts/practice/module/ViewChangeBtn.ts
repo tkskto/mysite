@@ -45,6 +45,12 @@ export class ViewChangeBtn {
         this._isShow = !this._isShow;
     };
 
+    public unWatch = () => {
+        if (this._unWatchStateChangeEvent) {
+            this._unWatchStateChangeEvent();
+        }
+    };
+
     private reset = () => {
         document.body.classList.remove('show-shader');
         document.body.classList.remove('pre-show');

@@ -18,6 +18,7 @@ export class Item11 extends Sketch {
     private _default: Program;
     private _renderer: Renderer;
     private _time = 0;
+    private _mesh: Mesh;
 
     constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {
         super(_store, _id);
@@ -37,17 +38,17 @@ export class Item11 extends Sketch {
         this._renderer = new Renderer(this._store, this._ctx);
 
         const plane: Geometry = new Geometry(this._gl, this._data).init();
-        const mesh: Mesh = new Mesh(this._gl, this._default, plane, GLConfig.DRAW_TYPE_TRIANGLE);
-        this._renderer.add(mesh);
+        this._mesh = new Mesh(this._gl, this._default, plane, GLConfig.DRAW_TYPE_TRIANGLE);
+        this._renderer.add(this._mesh);
 
         this._store.commit('SET_VS_TEXT', this._shader.vertexString);
         this._store.commit('SET_FS_TEXT', this._shader.fragmentString);
 
-        GLUtils.createTexture(require('~/assets/img/practice/11_1.png'), this._gl, this._gl.UNSIGNED_BYTE).then(tex => {
-            mesh.addTexture(tex);
-            return GLUtils.createTexture(require('~/assets/img/practice/11_2.png'), this._gl, this._gl.UNSIGNED_BYTE);
+        GLUtils.createTexture(require('../../../../img/practice/11_1.png'), this._gl, this._gl.UNSIGNED_BYTE).then(tex => {
+            this._mesh.addTexture(tex);
+            return GLUtils.createTexture(require('../../../../img/practice/11_2.png'), this._gl, this._gl.UNSIGNED_BYTE);
         }).then(tex => {
-            mesh.addTexture(tex);
+            this._mesh.addTexture(tex);
             this.play();
         }).catch(err => {
             console.log(err);
@@ -62,6 +63,10 @@ export class Item11 extends Sketch {
 
     public dispose = (): void => {
         this.pause();
+
+        if (this._mesh) {
+            this._mesh.dispose();
+        }
 
         if (this._renderer) {
             this._renderer.dispose();

@@ -18,6 +18,7 @@ export class Item8 extends Sketch {
     private _default: Program;
     private _renderer: Renderer;
     private _time = 0;
+    private _mesh: Mesh;
 
     constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {
         super(_store, _id);
@@ -32,19 +33,19 @@ export class Item8 extends Sketch {
             ['position', 'color', 'normal', 'uv'],
             [3, 4, 3, 2],
             ['mvpMatrix', 'resolution', 'time', 'tex'],
-            [GLConfig.UNIFORM_TYPE_MATRIX4, GLConfig.UNIFORM_TYPE_VECTOR2, GLConfig.UNIFORM_TYPE_FLOAT, GLConfig.UNIFORM_TYPE_INT]
+            [GLConfig.UNIFORM_TYPE_MATRIX4, GLConfig.UNIFORM_TYPE_VECTOR2, GLConfig.UNIFORM_TYPE_FLOAT, GLConfig.UNIFORM_TYPE_TEXTURE]
         );
         this._renderer = new Renderer(this._store, this._ctx);
 
         const plane: Geometry = new Geometry(this._gl, this._data).init();
-        const mesh: Mesh = new Mesh(this._gl, this._default, plane, GLConfig.DRAW_TYPE_TRIANGLE);
-        this._renderer.add(mesh);
+        this._mesh = new Mesh(this._gl, this._default, plane, GLConfig.DRAW_TYPE_TRIANGLE);
+        this._renderer.add(this._mesh);
 
         this._store.commit('SET_VS_TEXT', this._shader.vertexString);
         this._store.commit('SET_FS_TEXT', this._shader.fragmentString);
 
-        GLUtils.createTexture(require('~/assets/img/practice/lena.png'), this._gl, this._gl.UNSIGNED_BYTE).then(tex => {
-            mesh.texture = tex;
+        GLUtils.createTexture(require('../../../../img/practice/lena.png'), this._gl, this._gl.UNSIGNED_BYTE).then(tex => {
+            this._mesh.addTexture(tex);
             this.play();
         }, err => {
             console.log(err);
@@ -59,6 +60,10 @@ export class Item8 extends Sketch {
 
     public dispose = (): void => {
         this.pause();
+
+        if (this._mesh) {
+            this._mesh.dispose();
+        }
 
         if (this._renderer) {
             this._renderer.dispose();

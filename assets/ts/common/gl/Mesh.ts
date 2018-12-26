@@ -297,6 +297,19 @@ export class Mesh {
         this._textureArr.push(_texture);
     };
 
+    public dispose = (): void => {
+        let i = 0;
+        const len = this._textureArr.length;
+
+        for (; i < len; i++) {
+            this._gl.deleteTexture(this._textureArr[i]);
+        }
+
+        if (this._texture) {
+            this._gl.deleteTexture(this._texture);
+        }
+    };
+
     set texture(value: WebGLTexture) {
         this._texture = value;
     }

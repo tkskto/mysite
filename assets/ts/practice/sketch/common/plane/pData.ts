@@ -1,4 +1,4 @@
-import { IData } from '~/assets/ts/common/datatype/IData';
+import { IData } from '../../../../common/datatype/IData';
 
 export class Data implements IData {
     _vertex: number[] = [

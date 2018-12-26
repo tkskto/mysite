@@ -1,11 +1,11 @@
 import { Sketch } from '../common/Sketch';
-import { WebGLContext } from '~/assets/ts/common/gl/Context';
+import { WebGLContext } from '../../../common/gl/Context';
 import { Data } from '../common/plane/pData';
-import { Renderer } from '~/assets/ts/common/gl/Renderer';
-import { Geometry } from '~/assets/ts/common/gl/Geometry';
-import { Mesh } from '~/assets/ts/common/gl/Mesh';
-import { Program } from '~/assets/ts/common/gl/Program';
-import { GLConfig } from '~/assets/ts/common/Config';
+import { Renderer } from '../../../common/gl/Renderer';
+import { Geometry } from '../../../common/gl/Geometry';
+import { Mesh } from '../../../common/gl/Mesh';
+import { Program } from '../../../common/gl/Program';
+import { GLConfig } from '../../../common/Config';
 import { Default } from './Shader';
 import { FFT } from '../../../common/audio/FFT';
 

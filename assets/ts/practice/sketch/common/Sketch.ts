@@ -14,7 +14,7 @@ export class Sketch implements ISketch {
     public _type: string;
 
     constructor(public _store: any, _id: string, _quote = '') {
-        _store.watch(AppConfig.ON_STATE_CHANGED, this.onStateChanged);
+        // _store.watch(AppConfig.ON_STATE_CHANGED, this.onStateChanged);
         _store.watch(AppConfig.ON_SKETCH_CHANGED, this.onStateChanged);
         // _store.watch(AppConfig.ON_CODE_STATE_CHANGED, this.onCodeStateChanged);
         this._id = _id;

@@ -7,18 +7,26 @@
     @import '~/assets/css/common.css';
 
     html {
-        color: #333333;
+        color: #222222;
         line-height: 1.44;
     }
 
     body {
-        background: #ffffee;
+        background: #ffffff;
     }
 
     .str-root--blog {
         width: 100%;
         height: 100%;
         word-break: break-all;
+        padding: 40px;
+
+        .blog-name {
+            font-size: 3.2rem;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
 
         .title {
             font-size: 4rem;
@@ -49,7 +57,7 @@
 
         .img {
             max-width: 700px;
-            margin: 1.4em auto;
+            margin: 2.8em auto;
 
             img {
                 max-width: 100%;

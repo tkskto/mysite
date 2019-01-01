@@ -76,6 +76,11 @@
         components: {
             Quote,
         },
+        data() {
+            return {
+                viewChangeBtn: null,
+            }
+        },
         computed: {
             ...mapGetters(['screenSize', 'canvasSize', 'ratio', 'getScene', 'mouseState']),
             canvasDisplayWidth() {
@@ -122,9 +127,9 @@
                 });
             },
             changeSketchState(e) {
-                if ('Escape' === e.key && this.state === AppConfig.SCENE_SKETCH) {
+                if ('Escape' === e.key && this.getScene === AppConfig.SCENE_SKETCH) {
                     this.changeScene(AppConfig.SCENE_PAUSE);
-                } else if ('Escape' === e.key && this.state === AppConfig.SCENE_PAUSE) {
+                } else if ('Escape' === e.key && this.getScene === AppConfig.SCENE_PAUSE) {
                     this.changeScene(AppConfig.SCENE_SKETCH);
                 }
             }
@@ -198,7 +203,7 @@
                 }
             }
 
-            new ViewChangeBtn(this.$store, document.getElementById('btn--viewChange'), document.querySelector('.container-text--shader'));
+            this.viewChangeBtn = new ViewChangeBtn(this.$store, document.getElementById('btn--viewChange'), document.querySelector('.container-text--shader'));
 
             window.addEventListener('hashchange', this.onHashChange);
             this.onHashChange();
@@ -211,6 +216,10 @@
             }
         },
         beforeDestroy: function () {
+            if (this.viewChangeBtn) {
+                this.viewChangeBtn.unWatch();
+            }
+
             window.removeEventListener('hashchange', this.onHashChange);
             document.removeEventListener('keydown', this.changeSketchState);
             document.removeEventListener('mousemove', this.mouseTracking);

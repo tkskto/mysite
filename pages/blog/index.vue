@@ -1,7 +1,8 @@
 <template>
     <div class="str-article">
+        <h1 class="blog-name">So What!?</h1>
         <article-list :list="allArticleData"></article-list>
-        <the-article v-if="title && text" :title="title" :text="text"></the-article>
+        <the-article :level="2" v-if="title && text" :title="title" :text="text"></the-article>
     </div>
 </template>
 
@@ -62,7 +63,6 @@
             ...mapActions(['changeArticleID', 'setArticles']),
             init() {
                 // ブログトップに来た時は最新の記事を表示する
-                console.log(this.allArticleData);
                 this.changeArticleID(this.allArticleData[0].id);
                 this.title = Methods.getItemByKey(this.allArticleData, 'id', this.currentArticleID).title;
 

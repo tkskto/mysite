@@ -20,7 +20,7 @@
         height: 100%;
         word-break: break-all;
 
-        h1 {
+        .title {
             font-size: 4rem;
             border-bottom: 1px solid #444444;
             margin-bottom: 24px;
@@ -45,10 +45,25 @@
             font-size: 1.6rem;
             font-weight: normal;
             margin-bottom: 8px;
+        }
+
+        .img {
+            max-width: 700px;
+            margin: 1.4em auto;
 
             img {
                 max-width: 100%;
                 vertical-align: top;
+            }
+        }
+
+        .cols {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+
+            .col-item {
+                width: 50%;
             }
         }
 

@@ -1,7 +1,7 @@
 <template>
     <article class="str-article--item">
         <section class="str-article--section">
-            <h1>{{title}}</h1>
+            <component class="title" :is="tag">{{title}}</component>
             <div v-html="text"></div>
         </section>
     </article>
@@ -11,6 +11,10 @@
     export default {
         name: 'TheArticle',
         props: {
+            level: {
+                type: Number,
+                required: true,
+            },
             title: {
                 type: String,
                 required: true,
@@ -18,6 +22,11 @@
             text: {
                 type: String,
                 required: true,
+            }
+        },
+        computed: {
+            tag() {
+                return `h${this.level}`;
             }
         }
     };

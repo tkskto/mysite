@@ -1,7 +1,8 @@
 <template>
     <div class="str-article">
+        <p class="blog-name">So What!?</p>
         <article-list :list="allArticleData"></article-list>
-        <the-article v-if="title && text" :title="title" :text="text"></the-article>
+        <the-article :level="1" v-if="title && text" :title="title" :text="text"></the-article>
     </div>
 </template>
 

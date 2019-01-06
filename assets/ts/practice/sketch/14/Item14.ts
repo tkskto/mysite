@@ -49,8 +49,8 @@ export class Item14 extends Sketch {
         this._audioAnalyser = this._audioContext.analyser;
         this._frequency = new Uint8Array(this._audioAnalyser.frequencyBinCount);
         mesh.addTexture(GLUtils.createAudioTexture(this._gl, this._audioAnalyser.frequencyBinCount, this._frequency));
-        this._audioContext.ready('/assets/audio/bass.mp3').then(() => {
-            this._audioContext.play(true);
+        this._audioContext.ready('/assets/audio/1.mp3').then(() => {
+            this._audioContext.play(false);
             this.play();
         });
     };

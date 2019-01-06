@@ -2,8 +2,7 @@
     <div class="str-article">
         <h1 class="blog--name"><span>So What!?</span></h1>
         <div class="article--content">
-            <the-sidebar/>
-            <the-article :level="2" v-if="title && text" :title="title" :text="text"/>
+            <article-list :list="categoryData"/>
         </div>
     </div>
 </template>
@@ -11,13 +10,13 @@
 <script>
     import {AppConfig} from '~/assets/ts/common/Config';
     import {Loader} from '~/assets/ts/blog/Loader';
-    import TheArticle from '~/components/blog/TheArticle';
+    import ArticleList from '~/components/blog/ArticleList';
     import TheSidebar from '~/components/blog/TheSidebar';
     import {Methods} from '~/assets/ts/common/Utils';
     import marked from 'marked';
     import {mapGetters, mapActions} from 'vuex';
 
-    // ブログTOP
+    // category
 
     export default {
         layout: 'blog',
@@ -30,7 +29,7 @@
             };
         },
         components: {
-            TheArticle,
+            ArticleList,
             TheSidebar,
         },
         computed: {
@@ -38,8 +37,7 @@
         },
         data: function () {
             return {
-                title: '',
-                text: '',
+                categoryData: [],
                 loader: null,
             }
         },
@@ -63,16 +61,18 @@
         methods: {
             ...mapActions(['changeArticleID', 'setArticles']),
             init() {
-                // ブログトップに来た時は最新の記事を表示する
-                this.changeArticleID(this.allArticleData[0].id);
-                this.title = Methods.getItemByKey(this.allArticleData, 'id', this.currentArticleID).title;
+                const category = this.$route.params.slug;
+                const arr = [];
+                const len = this.allArticleData.length;
 
-                // .md読み込み
-                this.loader.loadArticle(this.title).then(res => {
-                    this.text = marked(res);
-                }).catch(err => {
-                    this.onLoadError(err);
-                });
+                for (let i = 0; i < len; i++) {
+                    const item = this.allArticleData[i];
+
+                    if (category === item.category) {
+                        arr.push(item);
+                    }
+                }
+                this.categoryData = arr;
             },
             onLoadError(err) {
                 Methods.showError(err);
@@ -80,10 +80,3 @@
         }
     };
 </script>
-<style lang="scss" scoped>
-    .str-article {
-        .article--content {
-            display: flex;
-        }
-    }
-</style>

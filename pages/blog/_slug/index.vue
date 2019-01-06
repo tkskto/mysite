@@ -1,8 +1,10 @@
 <template>
     <div class="str-article">
-        <p class="blog-name">So What!?</p>
-        <article-list :list="allArticleData"></article-list>
-        <the-article :level="1" v-if="title && text" :title="title" :text="text"></the-article>
+        <p class="blog--name"><span>So What!?</span></p>
+        <div class="article--content">
+            <the-sidebar/>
+            <the-article :level="1" v-if="title && text" :title="title" :text="text"/>
+        </div>
     </div>
 </template>
 
@@ -10,7 +12,7 @@
     import {AppConfig} from '~/assets/ts/common/Config';
     import {Loader} from '~/assets/ts/blog/Loader';
     import TheArticle from '~/components/blog/TheArticle';
-    import ArticleList from '~/components/blog/ArticleList';
+    import TheSidebar from '~/components/blog/TheSidebar';
     import {Methods} from '~/assets/ts/common/Utils';
     import marked from 'marked';
     import {mapGetters, mapActions} from 'vuex';
@@ -29,7 +31,7 @@
         },
         components: {
             TheArticle,
-            ArticleList
+            TheSidebar,
         },
         computed: {
             ...mapGetters(['allArticleData']),
@@ -70,16 +72,15 @@
                 });
             },
             onLoadError(err) {
-                console.log(err);
+                Methods.showError(err);
             }
         }
     };
 </script>
-
-<style lang="scss">
+<style lang="scss" scoped>
     .str-article {
-        .str-section {
-
+        .article--content {
+            display: flex;
         }
     }
 </style>

@@ -21,11 +21,16 @@
         word-break: break-all;
         padding: 40px;
 
-        .blog-name {
+        .blog--name {
             font-size: 3.2rem;
             text-align: center;
             font-weight: bold;
-            margin-bottom: 8px;
+            margin-bottom: 60px;
+
+            > span {
+                padding: 10px 40px;
+                border-bottom: 1px solid #999;
+            }
         }
 
         .title {
@@ -52,7 +57,7 @@
         p {
             font-size: 1.6rem;
             font-weight: normal;
-            margin-bottom: 8px;
+            margin-bottom: 2rem;
         }
 
         .img {
@@ -116,6 +121,11 @@
                 background: #444444;
                 color: #f0f0f0;
             }
+        }
+
+        .txt-supplement {
+            font-size: 1.3rem;
+            color: #999999;
         }
     }
 </style>

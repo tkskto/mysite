@@ -23,28 +23,18 @@
             <Quote></Quote>
         </div>
 
-        <button class="lyt-btn--viewChange" id="btn--viewChange">GLSL</button>
-
-        <div class="container-text--shader">
-            <div class="text--VS">
-                <h2>Vertex Shader</h2>
-                <p class="shader--text shader--vs"></p>
-            </div>
-            <div class="text--FS">
-                <h2>Fragment Shader</h2>
-                <p class="shader--text shader--fs"></p>
-            </div>
-            <div class="bg"></div>
-        </div>
+        <ViewChangeButton />
+        <ShaderView />
     </div>
 </template>
 
 <script>
     import {mapGetters, mapActions} from 'vuex';
     import Quote from '~/components/practice/quote.vue';
+    import ViewChangeButton from '~/components/practice/ViewChangeButton';
+    import ShaderView from '~/components/practice/ShaderView';
     import {AppConfig} from "~/assets/ts/practice/Config";
     import {Vector} from '~/assets/ts/common/gl/Vector';
-    import {ViewChangeBtn} from '~/assets/ts/practice/module/ViewChangeBtn';
     import {Item0} from '~/assets/ts/practice/sketch/00/Item0';
     import {Item1} from '~/assets/ts/practice/sketch/01/Item1';
     import {Item2} from '~/assets/ts/practice/sketch/02/Item2';
@@ -75,11 +65,8 @@
         },
         components: {
             Quote,
-        },
-        data() {
-            return {
-                viewChangeBtn: null,
-            }
+            ViewChangeButton,
+            ShaderView,
         },
         computed: {
             ...mapGetters(['screenSize', 'canvasSize', 'ratio', 'getScene', 'mouseState']),
@@ -203,8 +190,6 @@
                 }
             }
 
-            this.viewChangeBtn = new ViewChangeBtn(this.$store, document.getElementById('btn--viewChange'), document.querySelector('.container-text--shader'));
-
             window.addEventListener('hashchange', this.onHashChange);
             this.onHashChange();
 
@@ -216,10 +201,6 @@
             }
         },
         beforeDestroy: function () {
-            if (this.viewChangeBtn) {
-                this.viewChangeBtn.unWatch();
-            }
-
             window.removeEventListener('hashchange', this.onHashChange);
             document.removeEventListener('keydown', this.changeSketchState);
             document.removeEventListener('mousemove', this.mouseTracking);

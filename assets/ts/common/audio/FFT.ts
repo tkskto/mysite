@@ -2,6 +2,7 @@ export class FFT {
     private _audioContext: AudioContext;
     private _analyser: AnalyserNode;
     private _buffer: AudioBuffer;
+    private _source: AudioBufferSourceNode;
     private _loop: boolean;
 
     constructor() {
@@ -19,7 +20,14 @@ export class FFT {
     };
 
     private onComplete = (buffer: AudioBuffer) => {
-        this._buffer = buffer;
+        return new Promise((resolve) => {
+            this._buffer = buffer;
+            this._source = this._audioContext.createBufferSource();
+            this._source.buffer = this._buffer;
+            this._source.connect(this._audioContext.destination);
+            this._source.connect(this._analyser);
+            resolve();
+        });
     };
 
     private onError = (err) => {
@@ -31,12 +39,8 @@ export class FFT {
     };
 
     public play = (isLoop: boolean) => {
-        const source = this._audioContext.createBufferSource();
-        source.buffer = this._buffer;
-        source.connect(this._audioContext.destination);
-        source.connect(this._analyser);
-        source.loop = isLoop;
-        source.start(0);
+        this._source.loop = isLoop;
+        this._source.start(0);
     };
 
     public pause = () => {
@@ -45,6 +49,10 @@ export class FFT {
             });
         }
     };
+
+    set isLoop(flg: boolean) {
+        this._source.loop = flg;
+    }
 
     get analyser(): AnalyserNode {
         return this._analyser;

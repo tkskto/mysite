@@ -53,79 +53,6 @@ body.webGL #canvas--2d {
     text-align: center;
 }
 
-.container-text--shader {
-    position: absolute;
-    display: none;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-    z-index: 2;
-    padding: 20px;
-    justify-content: space-between;
-}
-
-.container-text--shader .text--VS,
-.container-text--shader .text--FS {
-    margin: 0;
-    width: 48%;
-    height: 100%;
-    color: #fff;
-    font-size: 1.4rem;
-    overflow-y: auto;
-    opacity: 0;
-    transform: translateY(25px);
-    transition: opacity 0.3s linear, transform 0.3s ease-out;
-}
-
-.container-text--shader .text--FS {
-    padding-left: 2%;
-}
-
-.container-text--shader .bg {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    background: #000;
-    opacity: 0;
-    transition: opacity 0.3s linear;
-    z-index: -1;
-}
-
-.container-text--shader::after {
-    content: "";
-    position: absolute;
-    width: 1px;
-    height: 95%;
-    left: 0;
-    right: 0;
-    margin: auto;
-    opacity: 0;
-    box-shadow: 0 0 3px 3px rgba(255, 253, 85, 1.0);
-    transition: opacity 0.3s linear;
-}
-
-.pre-show .container-text--shader {
-    display: flex;
-}
-
-.show-shader .container-text--shader .bg {
-    opacity: 1;
-}
-
-.show-shader .container-text--shader::after {
-    opacity: 1;
-}
-
-.show-shader .container-text--shader .text--VS,
-.show-shader .container-text--shader .text--FS {
-    opacity: 1;
-    transform: translateY(0);
-}
-
 .list-sketch {
     position: relative;
     z-index: 1;
@@ -143,21 +70,3 @@ body.webGL #canvas--2d {
     color: #fff;
 }
 
-.lyt-btn--viewChange {
-    width: 44px;
-    height: 44px;
-    position: absolute;
-    z-index: 3;
-    background: none;
-    border: none;
-    right: 10px;
-    bottom: 10px;
-    background: #fff;
-    cursor: pointer;
-}
-
-.lyt-btn--viewChange .lyt-btn--text {
-    display: block;
-    color: #7574ff;
-    font-size: 1.3rem;
-}

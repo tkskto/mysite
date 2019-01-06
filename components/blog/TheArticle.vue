@@ -35,6 +35,8 @@
 <style scoped lang="scss">
     .str-article--item {
         padding: 20px;
+        order: 1;
+        width: 70%;
 
         .str-article--section {
             display: block;

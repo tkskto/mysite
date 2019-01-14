@@ -19,7 +19,7 @@
         width: 100%;
         height: 100%;
         word-break: break-all;
-        padding: 40px;
+        padding: 3em;
 
         .blog--name {
             font-size: 3.2rem;
@@ -36,17 +36,30 @@
         .title {
             font-size: 4rem;
             border-bottom: 1px solid #444444;
+            margin-top: 0;
             margin-bottom: 24px;
+
+            @media screen and (max-width: 768px) {
+                font-size: 2.0rem;
+            }
         }
 
         h2 {
             font-size: 2.2rem;
             margin: 24px 0 8px;
+
+            @media screen and (max-width: 768px) {
+                font-size: 1.8rem;
+            }
         }
 
         h3 {
             font-size: 1.8rem;
             margin-bottom: 8px;
+
+            @media screen and (max-width: 768px) {
+                font-size: 1.6rem;
+            }
         }
 
         h4 {
@@ -126,6 +139,16 @@
         .txt-supplement {
             font-size: 1.3rem;
             color: #999999;
+        }
+
+        .str-article {
+            .article--content {
+                display: flex;
+
+                @media screen and (max-width: 768px) {
+                    flex-direction: column;
+                }
+            }
         }
     }
 </style>

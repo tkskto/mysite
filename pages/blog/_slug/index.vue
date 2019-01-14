@@ -38,10 +38,22 @@
         },
         data: function () {
             return {
-                title: '',
-                text: '',
                 loader: null,
             }
+        },
+        asyncData: async function(context) {
+            const title = context.params.slug ;
+            const loader = new Loader();
+            const text = await loader.loadArticle(title).then(res => {
+                 return marked(res);
+            }).catch(err => {
+                this.onLoadError(err);
+            });
+
+            return {
+                title,
+                text
+            };
         },
         created() {
             this.loader = new Loader();
@@ -52,35 +64,16 @@
                     this.setArticles(res.sort((a, b) => {
                         return new Date(a.date) < new Date(b.date) ? 1 : -1;
                     }));
-
-                    this.init();
                 }).catch(err => {
                     this.onLoadError(err);
                 });
-            } else {
-                this.init();
             }
         },
         methods: {
             ...mapActions(['changeArticleID', 'setArticles']),
-            init() {
-                this.title = this.$route.params.slug;
-                this.loader.loadArticle(this.title).then(res => {
-                    this.text = marked(res);
-                }).catch(err => {
-                    this.onLoadError(err);
-                });
-            },
             onLoadError(err) {
                 Methods.showError(err);
             }
         }
     };
 </script>
-<style lang="scss" scoped>
-    .str-article {
-        .article--content {
-            display: flex;
-        }
-    }
-</style>

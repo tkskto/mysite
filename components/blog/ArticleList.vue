@@ -2,7 +2,7 @@
     <nav>
         <ul>
             <li v-for="item in list" :key="item.id">
-                <nuxt-link :to="`/blog/${item.title}`">{{item.title}}</nuxt-link>
+                <nuxt-link :to="`/blog/${item.title}/`">{{item.title}}</nuxt-link>
             </li>
         </ul>
     </nav>
@@ -24,6 +24,7 @@
     nav {
         ul {
             padding: 0;
+            margin: 0;
 
             li {
                 list-style: none;

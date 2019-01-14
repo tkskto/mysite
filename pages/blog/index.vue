@@ -80,10 +80,3 @@
         }
     };
 </script>
-<style lang="scss" scoped>
-    .str-article {
-        .article--content {
-            display: flex;
-        }
-    }
-</style>

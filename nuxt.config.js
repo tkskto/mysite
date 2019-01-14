@@ -1,3 +1,12 @@
+const articles = require('./static/assets/blog/articles.json');
+
+const generateDynamicRoutes = callback => {
+    const routes = articles.map(item => {
+        return `/blog/${item.title}/`;
+    });
+    callback(null, routes);
+};
+
 module.exports = {
     env: {
         baseUrl: process.env.BASE_URL || 'http://localhost:3000'
@@ -39,7 +48,8 @@ module.exports = {
         '@nuxtjs/google-analytics'
     ],
     generate: {
-        dir: 'public/'
+        dir: 'public/',
+        routes: generateDynamicRoutes,
     },
     'google-analytics': {
         id: 'UA-71464541-3'

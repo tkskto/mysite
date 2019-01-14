@@ -3,12 +3,16 @@ const state = {
     screenSize: {width: 0, height: 0},
     canvasSize: {width: 0, height: 0},
     ratio: 1,
+    mouseState: false,
+    mousePosition: { x: 0, y: 0},
 };
 const getters = {
     sceneName: (_state) => _state.sceneName,
     screenSize: (_state) => _state.screenSize,
     canvasSize: (_state) => _state.canvasSize,
     ratio: (_state) => _state.ratio,
+    mouseState: (_state) => _state.mouseState,
+    mousePosition: (_state) => _state.mousePosition,
 };
 const mutations = {
     CHANGE_SCENE(_state, _scene) {
@@ -45,7 +49,13 @@ const mutations = {
     },
     SET_RATIO(_state, _ratio) {
         _state.ratio = _ratio;
-    }
+    },
+    SET_MOUSE_STATE(_state, _flg) {
+        _state.mouseState = _flg;
+    },
+    SET_MOUSE_POS(_state, _pos) {
+        _state.mousePosition = _pos;
+    },
 };
 const actions = {
     changeScene({commit}, _scene) {
@@ -62,7 +72,13 @@ const actions = {
     },
     setRatio({commit}, _ratio) {
         commit('SET_RATIO', _ratio);
-    }
+    },
+    setMouseState({commit}, _flg) {
+        commit('SET_MOUSE_STATE', _flg);
+    },
+    setMousePos({commit}, _pos) {
+        commit('SET_MOUSE_POS', _pos);
+    },
 };
 
 export default {

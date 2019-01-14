@@ -7,8 +7,6 @@ const state = {
     quote: '',
     vertexShaderString: '',
     fragmentShaderString: '',
-    mouseState: false,
-    mousePosition: { x: 0, y: 0},
 };
 const getters = {
     getScene: (_state) => _state.scene,
@@ -17,8 +15,6 @@ const getters = {
     quote: (_state) => _state.quote,
     vertexShaderString: (_state) => _state.vertexShaderString,
     fragmentShaderString: (_state) => _state.fragmentShaderString,
-    mouseState: (_state) => _state.mouseState,
-    mousePosition: (_state) => _state.mousePosition,
 };
 const mutations = {
     CHANGE_SCENE(_state, _scene) {
@@ -44,12 +40,6 @@ const mutations = {
     SET_FS_TEXT(_state, _text) {
         _state.fragmentShaderString = _text;
     },
-    SET_MOUSE_STATE(_state, _flg) {
-        _state.mouseState = _flg;
-    },
-    SET_MOUSE_POS(_state, _pos) {
-        _state.mousePosition = _pos;
-    },
 };
 const actions = {
     changeScene({commit}, _name) {
@@ -69,12 +59,6 @@ const actions = {
     },
     setFSText({commit}, _text) {
         commit('SET_FS_TEXT', _text);
-    },
-    setMouseState({commit}, _flg) {
-        commit('SET_MOUSE_STATE', _flg);
-    },
-    setMousePos({commit}, _pos) {
-        commit('SET_MOUSE_POS', _pos);
     },
 };
 

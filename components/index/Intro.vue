@@ -3,7 +3,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex';
+    import {mapGetters, mapActions} from 'vuex';
     import * as THREE from 'three';
     import {W} from '~/assets/ts/index/Text/W';
     import {H} from '~/assets/ts/index/Text/H';
@@ -19,7 +19,6 @@
         name: 'Intro',
         data: function () {
             return {
-                canvas: null,
                 _stage: null,
                 _renderer: null,
                 _mainCamera: null,
@@ -37,11 +36,12 @@
                 _posAmX: 0,
                 _scaleHatena: 0.1,
                 _timer: 0,
-                _unsubscribe: null
+                _unsubscribe: null,
+                _ratio: 1,
             };
         },
         computed: {
-            ...mapGetters(['screenSize', 'sceneName'])
+            ...mapGetters(['screenSize', 'sceneName', 'mousePosition'])
         },
         created: function () {
             this._stage = new THREE.Scene();
@@ -49,7 +49,7 @@
             this._mainCamera = new THREE.PerspectiveCamera( 60, this.screenSize.width / this.screenSize.height, 1, 1000 );
             this._mainCamera.position.set( 0, 0, 45 );
 
-            let ratio = window.devicePixelRatio;
+            this._ratio = window.devicePixelRatio;
 
             this._renderer = new THREE.WebGLRenderer({
                 antialias: true,
@@ -57,7 +57,7 @@
                 alpha: true
             });
 
-            this._renderer.setPixelRatio(ratio);
+            this._renderer.setPixelRatio(this._ratio);
 
             this._scaleWho = 0.1;
             this._posWho = 0;
@@ -148,8 +148,14 @@
             this._groupWHO.scale.set(this._scaleWho, this._scaleWho, this._scaleWho);
 
             this._unsubscribe = this.$store.subscribe(this.onStateChange);
+
+            this.setMousePos({
+                x: this.screenSize.width * 0.5,
+                y: this.screenSize.height * 0.5,
+            });
         },
         methods: {
+            ...mapActions(['changeScene', 'setMouseState', 'setMousePos']),
             onStateChange: function(_mutation) {
                 if (_mutation.type === 'CHANGE_SCENE') {
                     if (_mutation.payload === AppConfig.SCENE.FIRST) {
@@ -178,6 +184,12 @@
             },
             update: function () {
                 this._timer = requestAnimationFrame(this.update);
+
+                const mouseX = this.mousePosition.x - this._renderer.domElement.width * 0.5;
+                const mouseY = this.mousePosition.y - this._renderer.domElement.height * 0.5;
+
+                this._mainCamera.position.set(mouseX * 0.001, mouseY * 0.001, 45);
+                this._mainCamera.lookAt(0, 0, 0);
 
                 if (this.sceneName === AppConfig.SCENE.FIRST) {
                     this._groupWHO.scale.set(this._scaleWho, this._scaleWho, this._scaleWho);
@@ -246,8 +258,15 @@
                 }
             },
             sceneFinish: function () {
-                this.$store.dispatch('changeScene', AppConfig.SCENE.SECOND);
-            }
+                this.changeScene(AppConfig.SCENE.SECOND);
+                document.addEventListener('mousemove', this.mouseTracking);
+            },
+            mouseTracking: function (e) {
+                this.setMousePos({
+                    x: e.clientX * this._ratio,
+                    y: e.clientY * this._ratio
+                });
+            },
         },
         watch: {
             screenSize: function (_size) {
@@ -263,6 +282,8 @@
         },
         beforeDestroy: function () {
             this.dispose();
+
+            document.removeEventListener('mousemove', this.mouseTracking);
 
             if (this._unsubscribe) {
                 this._unsubscribe();

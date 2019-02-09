@@ -32,8 +32,15 @@ export class Item11 extends Sketch {
         this._default = new Program(this._gl, this._shader,
             ['position', 'color', 'normal', 'uv'],
             [3, 4, 3, 2],
-            ['mvpMatrix', 'resolution', 'time', 'tex1', 'tex2'],
-            [GLConfig.UNIFORM_TYPE_MATRIX4, GLConfig.UNIFORM_TYPE_VECTOR2, GLConfig.UNIFORM_TYPE_FLOAT, GLConfig.UNIFORM_TYPE_TEXTURE, GLConfig.UNIFORM_TYPE_TEXTURE]
+            ['mvpMatrix', 'resolution', 'time', 'tex1', 'tex2', 'mouse'],
+            [
+                GLConfig.UNIFORM_TYPE_MATRIX4,
+                GLConfig.UNIFORM_TYPE_VECTOR2,
+                GLConfig.UNIFORM_TYPE_FLOAT,
+                GLConfig.UNIFORM_TYPE_TEXTURE,
+                GLConfig.UNIFORM_TYPE_TEXTURE,
+                GLConfig.UNIFORM_TYPE_VECTOR2,
+            ]
         );
         this._renderer = new Renderer(this._store, this._ctx);
 
@@ -43,6 +50,7 @@ export class Item11 extends Sketch {
 
         this._store.commit('SET_VS_TEXT', this._shader.vertexString);
         this._store.commit('SET_FS_TEXT', this._shader.fragmentString);
+        this._store.commit('SET_MOUSE_STATE', true);
 
         GLUtils.createTexture(require('../../../../img/practice/11_1.png'), this._gl, this._gl.UNSIGNED_BYTE).then(tex => {
             this._mesh.addTexture(tex);
@@ -83,6 +91,7 @@ export class Item11 extends Sketch {
     public animate = () => {
         this.clear();
         const canvasSize = this._store.getters.canvasSize;
-        this._renderer.update([canvasSize.width, canvasSize.height], this._time, 0, 1);
+        const mousePosition = this._store.getters.mousePosition;
+        this._renderer.update([canvasSize.width, canvasSize.height], this._time, 0, 1, [mousePosition.x, mousePosition.y]);
     };
 }

@@ -13,8 +13,8 @@
             <li class="sketch--item" id="10"><a href="#10">#10</a></li>
             <li class="sketch--item" id="11"><a href="#11">#11</a></li>
             <li class="sketch--item" id="12"><a href="#12">#12</a></li>
-            <li class="sketch--item" id="13"><a href="#13">#13</a></li>
-            <li class="sketch--item" id="14"><a href="#14">#14</a></li>
+            <li class="sketch--item" id="13"><a href="#13">#13(with sound)</a></li>
+            <li class="sketch--item" id="14"><a href="#14">#14(with sound)</a></li>
             <li class="sketch--item" id="15"><a href="#15">#15</a></li>
         </ul>
 

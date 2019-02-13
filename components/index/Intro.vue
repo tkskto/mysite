@@ -153,6 +153,8 @@
                 x: this.screenSize.width * 0.5,
                 y: this.screenSize.height * 0.5,
             });
+
+            document.addEventListener('mousemove', this.mouseTracking);
         },
         methods: {
             ...mapActions(['changeScene', 'setMouseState', 'setMousePos']),
@@ -259,7 +261,6 @@
             },
             sceneFinish: function () {
                 this.changeScene(AppConfig.SCENE.SECOND);
-                document.addEventListener('mousemove', this.mouseTracking);
             },
             mouseTracking: function (e) {
                 this.setMousePos({

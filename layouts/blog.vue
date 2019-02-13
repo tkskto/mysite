@@ -83,6 +83,16 @@
             }
         }
 
+        .video {
+            max-width: 700px;
+            margin: 2.8em auto;
+
+            video {
+                max-width: 100%;
+                vertical-align: top;
+            }
+        }
+
         .cols {
             display: flex;
             justify-content: space-between;

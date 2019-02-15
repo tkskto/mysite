@@ -17,6 +17,7 @@
             <li class="sketch--item" id="14"><a href="#14">#14(with sound)</a></li>
             <li class="sketch--item" id="15"><a href="#15">#15</a></li>
             <li class="sketch--item" id="16"><a href="#16">#16</a></li>
+            <li class="sketch--item" id="17"><a href="#17">#17</a></li>
         </ul>
 
         <div class="container-canvas">
@@ -53,6 +54,7 @@
     import {Item14} from '~/assets/ts/practice/sketch/14/Item14';
     import {Item15} from '~/assets/ts/practice/sketch/15/Item15';
     import {Item16} from '~/assets/ts/practice/sketch/16/Item16';
+    import {Item17} from '~/assets/ts/practice/sketch/17/Item17';
 
     export default {
         name: 'practice',
@@ -189,6 +191,9 @@
                         break;
                     case '16':
                         new Item16(this.$store, _canvasGL, id);
+                        break;
+                    case '17':
+                        new Item17(this.$store, _canvasGL, id);
                         break;
                     default:
                         throw new Error('please set id and data attribute "sketch-type"');

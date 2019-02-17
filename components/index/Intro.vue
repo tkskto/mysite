@@ -38,6 +38,7 @@
                 _timer: 0,
                 _unsubscribe: null,
                 _ratio: 1,
+                _finished: false,
             };
         },
         computed: {
@@ -48,6 +49,7 @@
 
             this._mainCamera = new THREE.PerspectiveCamera( 60, this.screenSize.width / this.screenSize.height, 1, 1000 );
             this._mainCamera.position.set( 0, 0, 45 );
+            this._finished = false;
 
             this._ratio = window.devicePixelRatio;
 
@@ -161,7 +163,9 @@
             onStateChange: function(_mutation) {
                 if (_mutation.type === 'CHANGE_SCENE') {
                     if (_mutation.payload === AppConfig.SCENE.FIRST) {
+                        this._finished = false;
                         this.play();
+                        this._unsubscribe();
                     } else {
                         this.pause();
                     }
@@ -193,7 +197,7 @@
                 this._mainCamera.position.set(mouseX * 0.001, mouseY * 0.001, 45);
                 this._mainCamera.lookAt(0, 0, 0);
 
-                if (this.sceneName === AppConfig.SCENE.FIRST) {
+                if (!this._finished) {
                     this._groupWHO.scale.set(this._scaleWho, this._scaleWho, this._scaleWho);
                     this._groupWHO.position.set(0, this._posWho, 0);
 
@@ -260,7 +264,8 @@
                 }
             },
             sceneFinish: function () {
-                this.changeScene(AppConfig.SCENE.SECOND);
+                this._finished = true;
+                this.changeScene(AppConfig.SCENE.READY);
             },
             mouseTracking: function (e) {
                 this.setMousePos({
@@ -295,12 +300,14 @@
 
 <style scoped lang="scss">
     .container-canvas {
-        position: absolute;
+        position: fixed;
         top: 0;
+        bottom: 0;
         left: 0;
+        right: 0;
         z-index: -1;
-        width: 100%;
-        height: 100%;
+        width: 100vw;
+        height: 100vh;
 
         canvas {
             width: 100%;

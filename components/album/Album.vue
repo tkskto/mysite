@@ -18,7 +18,7 @@
     import {mapGetters} from 'vuex';
     import * as THREE from 'three';
     // import Stats from 'stats-js';
-    import gsap from 'gsap';
+    import TweenMax, {Elastic, Linear, Power3} from 'gsap';
     import {CustomPerspectiveCamera} from "~/assets/ts/album/Camera/CustomPerspectiveCamera";
     import {CustomPerspectiveSPCamera} from "~/assets/ts/album/Camera/CustomPerspectiveSPCamera";
 
@@ -238,12 +238,12 @@
 
                     for (let i = 0, len = this._container.children.length; i < len; i++ ) {
                         this._container.children[i].visible = true;
-                        this._currentTween = new gsap.TweenMax(this._container.children[i].scale, 1.0, {
+                        this._currentTween = TweenMax.to(this._container.children[i].scale, 1.0, {
                             x: 1.0,
                             y: 1.0,
                             z: 1.0,
                             delay: i * 0.2,
-                            ease: gsap.Elastic.easeOut,
+                            ease: Elastic.easeOut,
                             onComplete: () => {
                                 finished++;
                                 if (finished === this._albumNum) {
@@ -325,11 +325,11 @@
                     const type = mesh.userData.type;
                     const duration = 1.0;
 
-                    this._currentTween = new gsap.TweenMax(this._mainCamera.position, duration, {
+                    this._currentTween = TweenMax.to(this._mainCamera.position, duration, {
                         x: mesh.position.x,
                         y: mesh.position.y,
                         z: mesh.position.z,
-                        ease: gsap.Power3.easeOut,
+                        ease: Power3.easeOut,
                         onComplete: () => {
                             if (type === 'video') {
                                 this._videos[this._selectedVideoID].play();
@@ -374,11 +374,11 @@
                 }
 
                 this._mainCamera.reset();
-                this._currentTween = new gsap.TweenMax(this._mainCamera.position, 1.0, {
+                this._currentTween = TweenMax.to(this._mainCamera.position, 1.0, {
                     x: 0,
                     y: 0,
                     z: 100,
-                    ease: gsap.Power3.easeIn,
+                    ease: Power3.easeIn,
                     onComplete: () => {
                         this.$data._viewFlg = false;
                         this.removeCameraEvent();

@@ -26,7 +26,7 @@ export class AppConfig {
         LOAD: 'load',
         INTRO: 'intro',
         FIRST: 'first',
-        SECOND: 'second'
+        READY: 'ready',
     };
 
     public static CLASSNAME = {

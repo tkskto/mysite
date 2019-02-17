@@ -13,7 +13,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex';
+    import {mapGetters, mapActions} from 'vuex';
     import {AppConfig} from '~/assets/ts/common/Config';
 
     export default {
@@ -28,12 +28,13 @@
             }, 100);
         },
         methods: {
+            ...mapActions(['changeScene']),
             transitionEnd: function () {
                 if (this.sceneName === AppConfig.SCENE.LOAD) {
                     this.$el.classList.add('hide');
-                    this.$store.dispatch('changeScene', AppConfig.SCENE.INTRO);
+                    this.changeScene(AppConfig.SCENE.INTRO);
                 } else if (this.sceneName === AppConfig.SCENE.INTRO) {
-                    this.$store.dispatch('changeScene', AppConfig.SCENE.FIRST);
+                    this.changeScene(AppConfig.SCENE.FIRST);
                 }
             }
         }
@@ -43,8 +44,8 @@
 <style scoped lang="scss">
     #mv {
         position:absolute;
-        width: 100vw;
-        height: 100vh;
+        width: 100%;
+        height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;

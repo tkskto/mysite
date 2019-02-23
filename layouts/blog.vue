@@ -17,9 +17,9 @@
 
     .str-root--blog {
         width: 100%;
-        height: 100%;
+        min-height: 100%;
         word-break: break-all;
-        padding: 3em;
+        padding: 2rem;
 
         .blog--name {
             font-size: 3.2rem;
@@ -153,6 +153,16 @@
 
         .str-article {
             .article--content {
+                display: flex;
+
+                @media screen and (max-width: 768px) {
+                    flex-direction: column;
+                }
+            }
+        }
+
+        .str-category {
+            .category--content {
                 display: flex;
 
                 @media screen and (max-width: 768px) {

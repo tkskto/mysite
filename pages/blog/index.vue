@@ -3,7 +3,7 @@
         <h1 class="blog--name"><span>So What!?</span></h1>
         <div class="article--content">
             <the-sidebar/>
-            <the-article :level="2" v-if="title && text" :title="title" :text="text"/>
+            <the-article :level="2" v-if="title && text" :title="title" :text="text" :date="date"/>
         </div>
     </div>
 </template>
@@ -40,6 +40,7 @@
             return {
                 title: '',
                 text: '',
+                date: new Date(),
                 loader: null,
             }
         },
@@ -65,7 +66,11 @@
             init() {
                 // ブログトップに来た時は最新の記事を表示する
                 this.changeArticleID(this.allArticleData[0].id);
-                this.title = Methods.getItemByKey(this.allArticleData, 'id', this.currentArticleID).title;
+                const article = Methods.getItemByKey(this.allArticleData, 'id', this.currentArticleID);
+                const date = article.date;
+
+                this.title = article.title;
+                this.date = new Date(date.slice(0, 4), date.slice(4, 6), date.slice(6, 8));
 
                 // .md読み込み
                 this.loader.loadArticle(this.title).then(res => {

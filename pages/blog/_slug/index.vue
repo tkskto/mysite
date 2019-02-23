@@ -3,7 +3,7 @@
         <p class="blog--name"><span>So What!?</span></p>
         <div class="article--content">
             <the-sidebar/>
-            <the-article :level="1" v-if="title && text" :title="title" :text="text"/>
+            <the-article :level="1" v-if="title && text" :title="title" :text="text" :date="date"/>
         </div>
     </div>
 </template>
@@ -34,12 +34,13 @@
             TheSidebar,
         },
         computed: {
-            ...mapGetters(['allArticleData']),
+            ...mapGetters(['currentArticleID', 'allArticleData']),
         },
         data: function () {
             return {
                 loader: null,
-            }
+                date: new Date(),
+            };
         },
         asyncData: async function(context) {
             const title = context.params.slug ;
@@ -64,13 +65,25 @@
                     this.setArticles(res.sort((a, b) => {
                         return new Date(a.date) < new Date(b.date) ? 1 : -1;
                     }));
+
+                    this.init();
                 }).catch(err => {
                     this.onLoadError(err);
                 });
+            } else {
+                this.init();
             }
         },
         methods: {
             ...mapActions(['changeArticleID', 'setArticles']),
+            init() {
+                const article = Methods.getItemByKey(this.allArticleData, 'title', this.title);
+                this.changeArticleID(article.id);
+
+                const date = article.date;
+
+                this.date = new Date(date.slice(0, 4), Number(date.slice(4, 6)) - 1, date.slice(6, 8));
+            },
             onLoadError(err) {
                 Methods.showError(err);
             }

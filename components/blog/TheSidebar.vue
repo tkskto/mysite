@@ -1,7 +1,9 @@
 <template>
     <div class="str-side">
         <section class="str-article--section">
+            <h2>カテゴリ</h2>
             <category-list/>
+            <h2>記事</h2>
             <article-list :list="allArticleData"/>
         </section>
     </div>
@@ -30,6 +32,7 @@
     .str-side {
         width: 30%;
         order: 2;
+        padding: 80px 10px 0;
 
         @media screen and (max-width: 768px) {
             width: 100%;

@@ -1,7 +1,7 @@
 <template>
     <ul class="str-category">
         <li v-for="(item, index) in categoryList" :key="index">
-            <nuxt-link :to="`/blog/category/${item}`">{{item}}</nuxt-link>
+            <nuxt-link :to="`/blog/category/${item}/`">{{item}}</nuxt-link>
         </li>
     </ul>
 </template>
@@ -32,11 +32,9 @@
 </script>
 
 <style scoped lang="scss">
-    .str-article--item {
-        padding: 20px;
-
-        .str-article--section {
-            display: block;
+    .str-category {
+        > li a {
+            color: #333333;
         }
     }
 </style>

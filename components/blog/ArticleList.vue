@@ -22,12 +22,17 @@
 
 <style lang="scss" scoped>
     nav {
+        padding: 0 20px;
         ul {
             padding: 0;
             margin: 0;
 
-            li {
-                list-style: none;
+            > li {
+                line-height: 1.7;
+
+                a {
+                    color: #333333;
+                }
             }
         }
     }

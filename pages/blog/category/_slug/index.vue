@@ -1,8 +1,14 @@
 <template>
-    <div class="str-article">
+    <div class="str-category">
         <h1 class="blog--name"><span>So What!?</span></h1>
-        <div class="article--content">
-            <article-list :list="categoryData"/>
+        <div class="category--content">
+            <the-sidebar/>
+            <div class="str-category--item">
+                <section class="str-category--section">
+                    <h2 class="title">{{category}}の記事一覧</h2>
+                    <article-list :list="categoryData"/>
+                </section>
+            </div>
         </div>
     </div>
 </template>
@@ -22,7 +28,7 @@
         layout: 'blog',
         head() {
             return {
-                title: `${this.title} | blog | tkskto`,
+                title: `${this.category} | blog | tkskto`,
                 meta: [
                     { hid: 'description', name: 'description', content: 'These are logs of tkskto' }
                 ],
@@ -37,6 +43,7 @@
         },
         data: function () {
             return {
+                category: '',
                 categoryData: [],
                 loader: null,
             }
@@ -61,14 +68,14 @@
         methods: {
             ...mapActions(['changeArticleID', 'setArticles']),
             init() {
-                const category = this.$route.params.slug;
+                this.category = this.$route.params.slug;
                 const arr = [];
                 const len = this.allArticleData.length;
 
                 for (let i = 0; i < len; i++) {
                     const item = this.allArticleData[i];
 
-                    if (category === item.category) {
+                    if (this.category === item.category) {
                         arr.push(item);
                     }
                 }
@@ -80,3 +87,19 @@
         }
     };
 </script>
+<style lang="scss">
+    .str-category--item {
+        padding: 20px;
+        order: 1;
+        width: 70%;
+
+        .str-category--section {
+            display: block;
+        }
+
+        @media screen and (max-width: 768px) {
+            width: 100%;
+            padding: 0;
+        }
+    }
+</style>

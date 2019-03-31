@@ -42,10 +42,10 @@
 <style lang="scss" scoped>
     .container {
         padding: 20px;
+        min-height: 100%;
         display: flex;
         justify-content: space-between;
         flex-direction: column;
-        height: 100%;
         background: rgba(0, 0, 0, 0.6);
 
         p {
@@ -57,6 +57,7 @@
         ul {
             display: flex;
             justify-content: flex-start;
+            align-items: center;
 
             > li {
                 max-width: 50px;
@@ -76,21 +77,27 @@
 
                 img {
                     max-height: 100%;
-                    vertical-align: top;
+                    vertical-align: middle;
                 }
             }
         }
 
         .overlay {
-            position: absolute;
+            position: fixed;
             top: 0;
             bottom: 0;
             left: 0;
             right: 0;
             margin: auto;
-            background: url(~/assets/img/whois/takeshi.jpg) no-repeat 100%;
-            background-size: contain;
+            background: url(~/assets/img/whois/takeshi.jpg) no-repeat center 100%;
+            background-size: cover;
             z-index: -1;
+        }
+
+        @media screen and (max-width: 414px) {
+            p {
+                font-size: 2.4rem;
+            }
         }
     }
 </style>

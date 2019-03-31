@@ -7,14 +7,15 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex';
+    import {mapGetters, mapActions} from 'vuex';
+    import store from './../store/';
     import Logo from '~/components/index/Logo.vue';
     import Intro from '~/components/index/Intro.vue';
     import Navs from '~/components/common/nav/Navigation.vue';
     import {AppConfig} from '~/assets/ts/common/Config';
 
     export default {
-        layout: 'default',
+        layout: 'background',
         components: {
             Logo,
             Intro,
@@ -26,6 +27,11 @@
                 return this.sceneName === AppConfig.SCENE.READY;
             },
         },
+        data() {
+            return {
+                readyState: false,
+            };
+        },
         head() {
             return {
                 title: 'Takeshi Kato',
@@ -34,6 +40,16 @@
                 ],
             };
         },
+        methods: {
+            ...mapActions(['changeScene']),
+        },
+        beforeRouteEnter(to, from, next) {
+            if (from.name) {
+                console.log(store().dispatch('changeScene', AppConfig.SCENE.READY));
+            }
+
+            next();
+        }
     };
 </script>
 
@@ -41,13 +57,7 @@
     .container {
         position: relative;
         width: 100%;
-        height: 100%;
+        min-height: 100%;
         overflow: hidden;
-        transition: border-width 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-        border: 0 solid #44ccbb;
-
-        &.ready {
-            border-width: 10px;
-        }
     }
 </style>

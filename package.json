@@ -22,6 +22,7 @@
         "vuex": "^3.0.1"
     },
     "devDependencies": {
+        "@nuxtjs/sitemap": "^0.2.0",
         "@types/gsap": "^1.20.0",
         "@types/node": "^8.10.38",
         "@types/three": "^0.93.10",

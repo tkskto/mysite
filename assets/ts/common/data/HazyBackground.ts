@@ -1,22 +1,20 @@
-import { IData } from '../../../../common/datatype/IData';
+import {IData} from '../datatype/IData';
 
-export class Data implements IData {
+export class HazyBackgroundData implements IData {
     _vertex: number[] = [
-        -1.0, -1.0,  0.0,
-         1.0, -1.0, 0.0,
-        -1.0,  1.0, 0.0,
-         1.0,  1.0, 0.0,
+        -1.0, 1.0, 0.0,
+        1.0, 1.0, 0.0,
+        -1.0, -1.0, 0.0,
+        1.0, -1.0, 0.0
     ];
-    _color: number[] = [
-        1.0, 1.0, 1.0, 1.0,
-        1.0, 1.0, 1.0, 1.0,
-        1.0, 1.0, 1.0, 1.0,
-        1.0, 1.0, 1.0, 1.0,
-    ];
+
+    _color: number[] = [];
+
     _index: number[] = [
         0, 1, 2,
-        1, 2, 3
+        2, 1, 3
     ];
+
     _normal: number[] = [];
     _uv: number[] = [];
 

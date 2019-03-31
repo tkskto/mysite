@@ -1,5 +1,5 @@
 import { Sketch } from '../common/Sketch';
-import { Data } from '../common/plane/pData';
+import { Data } from '../../../common/gl/plane/pData';
 import { Renderer } from '../../../common/gl/Renderer';
 import { Geometry } from '../../../common/gl/Geometry';
 import { Mesh } from '../../../common/gl/Mesh';

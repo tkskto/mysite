@@ -3,6 +3,7 @@ export class FFT {
     private _analyser: AnalyserNode;
     private _buffer: AudioBuffer;
     private _source: AudioBufferSourceNode;
+    private _gain: GainNode;
     private _loop: boolean;
 
     constructor() {
@@ -23,9 +24,12 @@ export class FFT {
         return new Promise((resolve) => {
             this._buffer = buffer;
             this._source = this._audioContext.createBufferSource();
+            this._gain = this._audioContext.createGain();
             this._source.buffer = this._buffer;
             this._source.connect(this._audioContext.destination);
+            this._source.connect(this._gain);
             this._source.connect(this._analyser);
+            this._gain.connect(this._audioContext.destination);
             resolve();
         });
     };
@@ -45,9 +49,14 @@ export class FFT {
 
     public pause = () => {
         if (this._audioContext.state === 'running') {
-            this._audioContext.suspend().then(() => {
+            this._audioContext.suspend().then((res) => {
+                console.log(res);
             });
         }
+    };
+
+    public changeVolume = (value: number) => {
+        this._gain.gain.value = value;
     };
 
     set isLoop(flg: boolean) {

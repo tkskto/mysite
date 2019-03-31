@@ -24,10 +24,18 @@ export class Program {
 
         for (let i = 0; i < this._attName.length; i++) {
             this._attl[i] = this._gl.getAttribLocation(this._program, this._attName[i]);
+
+            if (this._attl[i] === null) {
+                throw new Error(`getAttribLocation error -  ${i} : ${this._attName[i]}`);
+            }
         }
 
         for (let i = 0; i < this._uniName.length; i++) {
             this._unil[i] = this._gl.getUniformLocation(this._program, this._uniName[i]) as WebGLUniformLocation;
+
+            if (this._unil[i] === null) {
+                throw new Error(`getUniformLocation error -  ${i} : ${this._uniName[i]}`);
+            }
         }
     };
 

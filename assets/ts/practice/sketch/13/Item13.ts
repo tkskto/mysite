@@ -1,6 +1,6 @@
 import { Sketch } from '../common/Sketch';
 import { WebGLContext } from '../../../common/gl/Context';
-import { Data } from '../common/plane/pData';
+import { Data } from '../../../common/gl/plane/pData';
 import { Renderer } from '../../../common/gl/Renderer';
 import { Geometry } from '../../../common/gl/Geometry';
 import { Mesh } from '../../../common/gl/Mesh';
@@ -48,6 +48,7 @@ export class Item13 extends Sketch {
         this._audioAnalyser = this._audioContext.analyser;
         this._frequency = new Uint8Array(this._audioAnalyser.frequencyBinCount);
         this._audioContext.ready('/assets/audio/bass.mp3').then(() => {
+            this._audioContext.changeVolume(0);
             this._audioContext.play(true);
             this.play();
         });

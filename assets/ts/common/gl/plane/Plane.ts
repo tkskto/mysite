@@ -1,12 +1,12 @@
-import { Sketch } from '../Sketch';
-import { WebGLContext } from '../../../../common/gl/Context';
+import { Sketch } from '../../../practice/sketch/common/Sketch';
+import { WebGLContext } from '../Context';
 import { Data } from './pData';
-import { Renderer } from '../../../../common/gl/Renderer';
-import { Geometry } from '../../../../common/gl/Geometry';
-import { Mesh } from '../../../../common/gl/Mesh';
-import { Program } from '../../../../common/gl/Program';
-import { GLConfig } from '../../../../common/Config';
-import {Shader} from '../../../../common/gl/Shader';
+import { Renderer } from '../Renderer';
+import { Geometry } from '../Geometry';
+import { Mesh } from '../Mesh';
+import { Program } from '../Program';
+import { GLConfig } from '../../Config';
+import {Shader} from '../Shader';
 
 export class Plane extends Sketch {
 

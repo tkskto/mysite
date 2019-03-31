@@ -183,6 +183,9 @@ export class GLUtils {
 
     public static setAttr(gl: WebGLRenderingContext, vbo: WebGLBuffer[], attl: number[], atts: number[]) {
         for (let i = 0; i < vbo.length; i++) {
+            if (attl[i] === undefined || atts[i] === undefined) {
+                throw new Error(`${vbo[i]} is invalid. check ${attl[i]},  ${atts[i]}`);
+            }
             gl.bindBuffer(gl.ARRAY_BUFFER, vbo[i]);
             gl.enableVertexAttribArray(attl[i]);
             gl.vertexAttribPointer(attl[i], atts[i], gl.FLOAT, false, 0, 0);

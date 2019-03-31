@@ -24,7 +24,7 @@
         bottom: 0;
         left: 0;
         right: 0;
-        z-index: 1;
+        z-index: 2;
         transition: transform 0.3s ease-out;
         transform: translateY(60px);
 

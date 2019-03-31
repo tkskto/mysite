@@ -20,7 +20,7 @@
     import {mapGetters, mapActions} from 'vuex';
 
     export default {
-        name: 'index',
+        name: 'microAnimations',
         layout: 'default',
         components: {TheHeader, Dialog, Category, Loading},
         head () {
@@ -45,46 +45,12 @@
 </script>
 
 <style>
-    html, body, div, span,
-    h1, h2, h3, h4, h5, h6,
-    p, pre, a, img, button,
-    ul, ol, li,
-    dl, dt, dd, table, th, td,
-    header, main, nav, footer {
-        margin: 0;
-        padding: 0;
-    }
-
-    *, *::before, *::after {
-        box-sizing: border-box;
-    }
-
-    html, body {
-        width: 100%;
-        height: 100%;
-    }
-
-    html {
-        font-family: YuGothic, "Hiragino Kaku Gothic StdN", Meiryo, sans-serif;
-        font-size: 62.5%;
-    }
-
     body {
         position: relative;
-        font-size: 1.4rem;
         line-height: 1.6;
         color: #333;
         background: #ffe;
         overflow-y: scroll;
-    }
-
-    img {
-        max-width: 100%;
-        vertical-align: top;
-    }
-
-    li {
-        list-style-type: none;
     }
 
     button {

@@ -45,7 +45,8 @@ module.exports = {
     mode: 'spa',
     modules: [
         '~modules/typescript.ts',
-        '@nuxtjs/google-analytics'
+        '@nuxtjs/google-analytics',
+        '@nuxtjs/sitemap',
     ],
     generate: {
         dir: 'public/',
@@ -53,5 +54,11 @@ module.exports = {
     },
     'google-analytics': {
         id: 'UA-71464541-3'
-    }
+    },
+    sitemap: {
+        path: '/sitemap.xml',
+        hostname: 'https://tkskto.me',
+        generate: true,
+        routes: generateDynamicRoutes,
+    },
 };

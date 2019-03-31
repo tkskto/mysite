@@ -8,7 +8,6 @@
                 <path class="svg-path" d="M11,2 A 1,1 0 1,1 13,2 A 1,1 0 1,1 11,2 z"></path>
             </svg>
         </div>
-        <div id="mv-canvas" class="mv-canvas-wrapper"></div>
     </div>
 </template>
 
@@ -22,10 +21,14 @@
             ...mapGetters(['sceneName'])
         },
         mounted: function () {
-            this.$refs.svg.addEventListener('transitionend', this.transitionEnd);
-            setTimeout(() => {
-                this.$el.classList.add('show');
-            }, 100);
+            if (this.sceneName === AppConfig.SCENE.LOAD) {
+                this.$refs.svg.addEventListener('transitionend', this.transitionEnd);
+                setTimeout(() => {
+                    this.$el.classList.add('show');
+                }, 100);
+            } else {
+                this.$el.classList.add('hide');
+            }
         },
         methods: {
             ...mapActions(['changeScene']),
@@ -49,7 +52,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        top: 0;
 
         .mv-svg-wrapper {
             width: 300px;
@@ -69,24 +71,12 @@
             }
         }
 
-        .mv-canvas-wrapper {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: -1;
-
-            canvas {
-                width: 100vw;
-                height: 100vh;
-            }
-        }
-
         &.show .mv-svg {
             stroke-dashoffset: 0;
         }
 
         &.show.hide .mv-svg {
-        transform: scale3d(0, 0, 0) translateY(-200px);
-    }
+            transform: scale3d(0, 0, 0) translateY(-200px);
+        }
     }
 </style>

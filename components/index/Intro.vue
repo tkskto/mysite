@@ -12,7 +12,7 @@
     import {A} from '~/assets/ts/index/Text/A';
     import {M} from '~/assets/ts/index/Text/M';
     import {Hatena} from "~/assets/ts/index/Text/Hatena";
-    import {AppConfig} from '../../assets/ts/common/Config';
+    import {AppConfig} from '~/assets/ts/common/Config';
     import TweenMax, {Elastic, Linear} from 'gsap';
 
     export default {
@@ -61,14 +61,27 @@
 
             this._renderer.setPixelRatio(this._ratio);
 
-            this._scaleWho = 0.1;
-            this._posWho = 0;
-            this._scaleI = 0.1;
-            this._posI = 0;
-            this._scaleAm = 0.1;
-            this._posAmY = -4.25;
-            this._posAmX = 0;
-            this._scaleHatena = 0.1;
+            if (this.sceneName === AppConfig.SCENE.LOAD) {
+                this._scaleWho = 0.1;
+                this._posWho = 0;
+                this._scaleI = 0.1;
+                this._posI = 0;
+                this._scaleAm = 0.1;
+                this._posAmY = -4.25;
+                this._posAmX = 0;
+                this._scaleHatena = 0.1;
+            } else if (this.sceneName === AppConfig.SCENE.READY) {
+                this._scaleWho = 1.2;
+                this._posWho = 6.5;
+                this._scaleI = 1.2;
+                this._posI = 3;
+                this._scaleAm = 1.2;
+                this._posAmY = -4.25;
+                this._posAmX = -2.0;
+                this._scaleHatena = 1.2;
+            }
+
+            document.addEventListener('mousemove', this.mouseTracking);
         },
         mounted: function () {
             this._renderer.setSize(
@@ -89,7 +102,7 @@
             this._stage.add(this._groupWHO);
 
             // 自然光
-            let ambientLight = new THREE.AmbientLight(0x44ccbb, 1.0);
+            let ambientLight = new THREE.AmbientLight(0x44ccbb, 0.7);
             this._stage.add(ambientLight);
 
             let light = new THREE.DirectionalLight(0xffffff, 0.7);
@@ -149,14 +162,16 @@
 
             this._groupWHO.scale.set(this._scaleWho, this._scaleWho, this._scaleWho);
 
-            this._unsubscribe = this.$store.subscribe(this.onStateChange);
+            if (this.sceneName === AppConfig.SCENE.LOAD) {
+                this._unsubscribe = this.$store.subscribe(this.onStateChange);
+            } else if (this.sceneName === AppConfig.SCENE.READY) {
+                this.justRender();
+            }
 
             this.setMousePos({
                 x: this.screenSize.width * 0.5,
                 y: this.screenSize.height * 0.5,
             });
-
-            document.addEventListener('mousemove', this.mouseTracking);
         },
         methods: {
             ...mapActions(['changeScene', 'setMouseState', 'setMousePos']),
@@ -171,16 +186,30 @@
                     }
                 }
             },
+            justRender: function () {
+                this._stage.add(this._groupI);
+                this._stage.add(this._groupAM);
+                this._stage.add(this._groupHatena);
+                this.play();
+                this.sceneFinish();
+            },
             play: function () {
                 this.update();
+
                 TweenMax.to(this, 1, {
                     _scaleWho: 1.2,
                     ease: Elastic.easeOut
                 });
 
-                setTimeout(() => { this.addI(); }, 200);
-                setTimeout(() => { this.addAM(); }, 300);
-                setTimeout(() => { this.addHatena(); }, 400);
+                setTimeout(() => {
+                    this.addI();
+                }, 200);
+                setTimeout(() => {
+                    this.addAM();
+                }, 300);
+                setTimeout(() => {
+                    this.addHatena();
+                }, 400);
             },
             pause: function () {
                 if (this._timer) {

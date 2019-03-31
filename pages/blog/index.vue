@@ -70,7 +70,7 @@
                 const date = article.date;
 
                 this.title = article.title;
-                this.date = new Date(date.slice(0, 4), date.slice(4, 6), date.slice(6, 8));
+                this.date = new Date(date.slice(0, 4), Number(date.slice(4, 6)) - 1, date.slice(6, 8));
 
                 // .md読み込み
                 this.loader.loadArticle(this.title).then(res => {

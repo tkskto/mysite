@@ -11,6 +11,20 @@
             <h2><nuxt-link to="/microAnimations/">Micro Animations</nuxt-link></h2>
             <p>This is gallery of micro animation. It's still only so much rubbish yet.</p>
         </section>
+        <section class="container">
+            <h2>Playground</h2>
+            <p>They are just idea. meaningless.</p>
+            <ul>
+                <li>
+                    <a href="https://tkskto.github.io/videoBumpMapping/"><img alt=""></a>
+                    Bump Mapping with video texture. [<a href="https://qiita.com/tkskto/items/8ec45cf4bfa9dae90944">Qiita</a>]
+                </li>
+                <li>
+                    <a href="https://tkskto.github.io/WebGLMoire/"><img alt=""></a>
+                    WebGL Moire [<a href="https://qiita.com/tkskto/items/729819f945fde7cdb89e">Qiita</a>]
+                </li>
+            </ul>
+        </section>
     </section>
 </template>
 
@@ -18,7 +32,7 @@
     import {AppConfig} from '~/assets/ts/common/Config';
 
     export default {
-        layout: 'default',
+        layout: 'background',
         name: 'works',
         head() {
             return {
@@ -34,8 +48,7 @@
 <style lang="scss" scoped>
     .container {
         padding: 20px;
-        height: 100%;
-        background: #000000;
+        color: #ffffff;
 
         h1 {
             font-size: 4.0rem;
@@ -64,6 +77,13 @@
 
             p {
                 font-size: 1.6rem;
+            }
+
+            ul {
+                display: flex;
+                > li {
+                    list-style-type: none;
+                }
             }
         }
     }

@@ -46,7 +46,7 @@
 
         h2 {
             font-size: 2.2rem;
-            margin: 24px 0 8px;
+            margin: 32px 0 12px;
 
             @media screen and (max-width: 768px) {
                 font-size: 1.8rem;
@@ -107,6 +107,10 @@
             margin: 0 0 12px 20px;
             font-size: 1.6rem;
             font-weight: normal;
+
+            > li p {
+                margin: 0;
+            }
 
             ul, ol {
                 margin-bottom: 0;

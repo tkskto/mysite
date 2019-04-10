@@ -32,7 +32,6 @@ export class Default extends Shader {
                 in vec2 vUv;
                 
                 uniform vec2 resolution;
-                uniform float time;
                 uniform sampler2D tex1;
                 uniform sampler2D tex2;
                 uniform vec2 mouse;

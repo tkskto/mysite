@@ -24,7 +24,6 @@ export class Default extends Shader {
                 in vec4 vColor;
                 
                 uniform vec2 resolution;
-                uniform float time;
                 uniform vec2 mouse;
                 
                 out vec4 outColor;

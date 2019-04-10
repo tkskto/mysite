@@ -17,7 +17,6 @@ export class Item11 extends Sketch {
     private _shader: Default;
     private _default: Program;
     private _renderer: Renderer;
-    private _time = 0;
     private _mesh: Mesh;
 
     constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {
@@ -32,11 +31,10 @@ export class Item11 extends Sketch {
         this._default = new Program(this._gl, this._shader,
             ['position', 'color', 'normal', 'uv'],
             [3, 4, 3, 2],
-            ['mvpMatrix', 'resolution', 'time', 'tex1', 'tex2', 'mouse'],
+            ['mvpMatrix', 'resolution', 'tex1', 'tex2', 'mouse'],
             [
                 GLConfig.UNIFORM_TYPE_MATRIX4,
                 GLConfig.UNIFORM_TYPE_VECTOR2,
-                GLConfig.UNIFORM_TYPE_FLOAT,
                 GLConfig.UNIFORM_TYPE_TEXTURE,
                 GLConfig.UNIFORM_TYPE_TEXTURE,
                 GLConfig.UNIFORM_TYPE_VECTOR2,
@@ -84,14 +82,12 @@ export class Item11 extends Sketch {
     public update = () => {
         this.animate();
         this._timer = requestAnimationFrame(this.update);
-
-        this._time += 0.01;
     };
 
     public animate = () => {
         this.clear();
         const canvasSize = this._store.getters.canvasSize;
         const mousePosition = this._store.getters.mousePosition;
-        this._renderer.update([canvasSize.width, canvasSize.height], this._time, 0, 1, [mousePosition.x, mousePosition.y]);
+        this._renderer.update([canvasSize.width, canvasSize.height], 0, 1, [mousePosition.x, mousePosition.y]);
     };
 }

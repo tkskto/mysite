@@ -11,7 +11,6 @@ export class Default extends Shader {
                 layout (location = 3) in vec2 uv;
                
                 uniform mat4 mvpMatrix;
-                uniform mat4 mMatrix;
                 
                 out vec3 vPos;
                 out vec3 vNormal;

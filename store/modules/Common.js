@@ -37,15 +37,27 @@ const mutations = {
         }
     },
     RESIZE(_state, _size) {
+        const screenSize = {
+            width: _state.screenSize.width,
+            height: _state.screenSize.height,
+        };
+        const canvasSize = {
+            width: _state.canvasSize.width,
+            height: _state.canvasSize.height,
+        };
+
         if (_size.width) {
-            _state.screenSize.width = _size.width;
-            _state.canvasSize.width = _size.width * _state.ratio;
+            screenSize.width = _size.width;
+            canvasSize.width = _size.width * _state.ratio;
         }
 
         if (_size.height) {
-            _state.screenSize.height = _size.height;
-            _state.canvasSize.height = _size.height * _state.ratio;
+            screenSize.height = _size.height;
+            canvasSize.height = _size.height * _state.ratio;
         }
+
+        _state.screenSize = screenSize;
+        _state.canvasSize = canvasSize;
     },
     SET_RATIO(_state, _ratio) {
         _state.ratio = _ratio;

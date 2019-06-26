@@ -1,0 +1,77 @@
+[秋のJavaScript祭り](https://javascript-fes.doorkeeper.jp/events/81307)というイベントでLT参加してきたので、考えたこととか、準備についてをまとめておきます。
+
+## 準備編
+
+とりあえずこれまで自分が書いてきた記事をまとめました。
+
+- [Vue.jsを使ったモダンなAdobe XDプラグイン開発](https://www.mitsue.co.jp/knowledge/blog/frontend/201811/08_1054.html)
+- [Storybookでモジュール一覧を作る](https://www.mitsue.co.jp/knowledge/blog/frontend/201806/08_1524.html)
+- [Oculus GoでWebVR APIを試してみる](https://www.mitsue.co.jp/knowledge/blog/frontend/201805/22_1316.html)
+- [CSS Paint APIの使いどころ](https://www.mitsue.co.jp/knowledge/blog/frontend/201804/12_1636.html)
+- [React NativeのVue.js版！？Weexでネイティブアプリを開発しよう！](https://www.mitsue.co.jp/knowledge/blog/frontend/201803/08_1958.html)
+- [WebのARを先取りしよう！](https://www.mitsue.co.jp/knowledge/blog/frontend/201712/27_1403.html)
+- [パフォーマンス向上の次の一手はWebAssembly](https://www.mitsue.co.jp/knowledge/blog/frontend/201711/21_1417.html)
+- [Google Homeアプリ開発をはじめよう！](https://www.mitsue.co.jp/knowledge/blog/frontend/201710/17_1117.html)
+- [ESLintのルールを自作しよう！](https://www.mitsue.co.jp/knowledge/blog/frontend/201709/11_1059.html)
+- [360度動画をブラウザ上で再生する方法](https://www.mitsue.co.jp/knowledge/blog/frontend/201708/07_1737.html)
+- [Alexa Skillをローカルで開発しよう](https://www.mitsue.co.jp/knowledge/blog/frontend/201707/11_1838.html)
+- [Bot FrameworkでラクラクBot開発！](https://www.mitsue.co.jp/knowledge/blog/frontend/201706/07_1100.html)
+- [Web Bluetooth APIことはじめ](https://www.mitsue.co.jp/knowledge/blog/frontend/201705/15_1702.html)
+- [Fusetoolsを紹介します](https://www.mitsue.co.jp/knowledge/blog/apps/201612/08_2036.html)
+- [Firebase Test Labを試してみました](https://www.mitsue.co.jp/knowledge/blog/apps/201610/25_1045.html)
+- [A-Frameを使ってVR空間を作る](https://www.mitsue.co.jp/knowledge/blog/apps/)
+
+自分が特に話せそうなことや、今話しても今更？と思われないことを話そうと思い、結局「Adobe XDプラグイン開発をしよう」というテーマにしました。
+
+ボツにしたけど、候補としてあがったのは下記のようなもの。
+
+- JS無効時の話
+    - 話してて楽しくなさそうだったからやめた。
+- スマートスピーカー
+    - デモがやりずらいのでやめた
+- [Physical Web](https://google.github.io/physical-web/)
+    - 本家のプロジェクト自体がうまくいっていないのでやめた（次はありかも）
+    
+スライドは[大体いい感じになる Keynote テンプレート](http://sanographix.github.io/azusa-keynote/)を使いました。
+最終的にいい感じになったかはわからないけど、自分で0から作るよりははるかにマシでした。
+
+## 実際どうだったか
+
+このイベントでのLTはビアバッシュ形式で、飲んだり話したりしている人がいる前で話すので、
+正直みんな聞いているかどうかわかりませんでした。事実、自分も周りの人と話していて聞いていないLTもありました。
+
+できるだけ大きい声で話すようにしましたが、緊張のせいもありスピードが速くなってしまったのは反省点。
+
+あと、会場の環境の関係で急遽デモができなくなってしまったので、直前に録画したものをスライドに載せたけど、
+動画の途中でスライドをめくってしまったりなど、うまくいきませんでした泣
+
+## 反省点
+
+- 大きい声でゆっくり話す。
+- どんなトラブルがあってもプレゼンできるようにしておく
+    - デモは動画をとっておく
+    - 自分のPCでプレゼンできるようあらかじめコミュニケーションをとっておく
+- PCの前にずっといるのはよくない
+    - 遠隔でスライドめくれたほうがいい
+
+## 参考にしたページなど
+
+- [何について書けばよいか](http://gihyo.jp/dev/clip/01/tech_information/vol74/0005)
+- [はじめてのLT（ライトニングトーク）で気をつけた21のこと](https://qiita.com/yokoyan/items/670a9eea7117c8fc3283)
+- [高橋メソッド](http://www.rubycolor.org/takahashi/)
+- [頭良さそうにTED風プレゼンをする方法](https://www.youtube.com/watch?v=ToJD5r2SmwI)
+- [登壇者アドベントカレンダー2017](https://adventar.org/calendars/2198)
+- [LTアドベントカレンダー2016](https://adventar.org/calendars/1426)
+- [DISTのYoutubeチャンネル](https://www.youtube.com/channel/UCNsgmodjXtYKAi1HxLK94kQ)
+- [html5jのYoutubeチャンネル](https://www.youtube.com/user/html5j/videos)
+
+## イベントについて
+
+JSゴリゴリの人が多いと思っていたけど、正直レベルはそんなに高くなかったし、JSよりもその周辺（バックエンド、IoT）の話が多かった。
+ITかあさんの「それは…いいこと？」という発言には笑いました。
+
+[発表スライド上にコメントが流せるサービス「comets」](https://comets.nabettu.com/)はすごいいいと思った。
+社内イベントで使用したいなと思います。
+
+あとグラディウスとメビウスをcanvasで実装し直している人がいました。技術的にはそこまで難しいことしてないけど、再現度が高すぎでした。
+著作権的なことがあるので、URLの公開は控えておきます。

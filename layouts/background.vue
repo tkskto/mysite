@@ -51,6 +51,9 @@
 
                 if (this.screenSize.width !== width || this.screenSize.height !== height) {
                     this.resize({width: width, height: height});
+
+                    const aspect = width > height ? height / width : height > width ? width / height : 1;
+                    this.setCameraPosition(new Vector(0.0, 0.0, aspect));
                 }
             }
         }

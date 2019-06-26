@@ -12,8 +12,9 @@ dist
 
 .idea
 
-static/assets/
+static/assets/album
+static/assets/blog/images
+static/assets/audio
+static/assets/microAnimations
 
 public/
-
-yarn-error.log

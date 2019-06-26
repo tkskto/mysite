@@ -24,10 +24,11 @@ export class HazyBackground extends Shader {
                         
             void main(void){
                 vec2 p = gl_FragCoord.xy * tex;
+                float offset = time * speed;
                 
                 for(float i = 1.0; i < 5.0; i++){
-                    p.x += yugami / i * sin(i * 5.0 * p.y + time * speed);
-                    p.y += yugami / i * cos(i * 5.0 * p.x + time * speed);
+                    p.x += yugami / i * sin(i * 5.0 * p.y + offset);
+                    p.y += yugami / i * cos(i * 5.0 * p.x + offset);
                 }
                 
                 float r = cos(p.x + p.y + 1.0) * 0.1;

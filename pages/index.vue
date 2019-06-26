@@ -1,7 +1,7 @@
 <template>
     <section class="container" :class="{ready: isReady}">
         <logo></logo>
-        <intro></intro>
+        <intro ref="intro"></intro>
         <navs></navs>
     </section>
 </template>
@@ -45,10 +45,15 @@
         },
         beforeRouteEnter(to, from, next) {
             if (from.name) {
-                console.log(store().dispatch('changeScene', AppConfig.SCENE.READY));
+                store().dispatch('changeScene', AppConfig.SCENE.READY);
             }
 
             next();
+        },
+        beforeRouteLeave(to, from, next) {
+            this.$refs.intro.beforeLeave().then(() => {
+                next();
+            });
         }
     };
 </script>

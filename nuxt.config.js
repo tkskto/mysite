@@ -1,5 +1,5 @@
 const articles = require('./static/assets/blog/articles.json');
-
+const isDev = (process.env.NODE_ENV !== 'production');
 const generateDynamicRoutes = callback => {
     const routes = articles.map(item => {
         return `/blog/${item.title}/`;
@@ -30,14 +30,13 @@ module.exports = {
     ** Build configuration
     */
     build: {
-        vendor: ['three', 'three-device-orientation', 'gsap'],
         extactCss: true,
         filenames: {
             css: 'css/common.[contenthash].css',
             manifest: 'js/manifest.[hash].js',
-            vendor: 'js/common.[chunkhash].js',
-            app: 'js/app.[chunkhash].js',
-            chunk: 'js/[name].[chunkhash].js'
+            vendor: `js/common${isDev ? '' : '.[chunkhash:8]'}.js`,
+            app: `js/app${isDev ? '' : '.[chunkhash:8]'}.js`,
+            chunk: `js/[name]${isDev ? '' : '.[chunkhash:8]'}.js`
         },
         publicPath: '/common/',
         ssr: false
@@ -46,7 +45,6 @@ module.exports = {
     modules: [
         '~modules/typescript.ts',
         '@nuxtjs/google-analytics',
-        '@nuxtjs/sitemap',
     ],
     generate: {
         dir: 'public/',

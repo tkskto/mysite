@@ -20,6 +20,7 @@
         min-height: 100%;
         word-break: break-all;
         padding: 2rem;
+        background: #ffffff;
 
         .blog--name {
             font-size: 3.2rem;
@@ -73,6 +74,10 @@
             margin-bottom: 2rem;
         }
 
+        hr {
+            margin-bottom: 16px;
+        }
+
         .img {
             max-width: 700px;
             margin: 2.8em auto;
@@ -80,6 +85,12 @@
             img {
                 max-width: 100%;
                 vertical-align: top;
+            }
+
+            .caption {
+                display: block;
+                text-align: center;
+                margin-top: 10px;
             }
         }
 
@@ -125,6 +136,7 @@
                 border-left: 4px solid #e0e0e0;
                 color: #555555;
                 padding: 16px;
+                margin-bottom: 0;
             }
         }
 

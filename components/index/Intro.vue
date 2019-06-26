@@ -13,7 +13,7 @@
     import {M} from '~/assets/ts/index/Text/M';
     import {Hatena} from "~/assets/ts/index/Text/Hatena";
     import {AppConfig} from '~/assets/ts/common/Config';
-    import TweenMax, {Elastic, Linear} from 'gsap';
+    import TweenMax, {Elastic, Back, Linear} from 'gsap';
 
     export default {
         name: 'Intro',
@@ -35,14 +35,17 @@
                 _posAmY: -4.25,
                 _posAmX: 0,
                 _scaleHatena: 0.1,
-                _timer: 0,
+                _timer: null,
                 _unsubscribe: null,
                 _ratio: 1,
                 _finished: false,
             };
         },
         computed: {
-            ...mapGetters(['screenSize', 'sceneName', 'mousePosition'])
+            ...mapGetters(['screenSize', 'sceneName', 'mousePosition']),
+            resizeSize() {
+                return this.screenSize;
+            },
         },
         created: function () {
             this._stage = new THREE.Scene();
@@ -56,7 +59,6 @@
             this._renderer = new THREE.WebGLRenderer({
                 antialias: true,
                 stencil: false,
-                alpha: true
             });
 
             this._renderer.setPixelRatio(this._ratio);
@@ -212,7 +214,7 @@
                 }, 400);
             },
             pause: function () {
-                if (this._timer) {
+                if (this._timer !== null) {
                     cancelAnimationFrame(this._timer);
                     this._timer = null;
                 }
@@ -302,9 +304,38 @@
                     y: e.clientY * this._ratio
                 });
             },
+            beforeLeave: function () {
+                return new Promise((resolve) => {
+                    this._finished = false;
+                    TweenMax.to(this, 0.3, {
+                        _scaleHatena: 0.0001,
+                        ease: Back.easeIn.config(2),
+                    });
+                    TweenMax.to(this, 0.3, {
+                        _scaleAm: 0.0001,
+                        delay: 0.1,
+                        ease: Back.easeIn.config(2),
+                    });
+                    TweenMax.to(this, 0.3, {
+                        _scaleI: 0.0001,
+                        delay: 0.2,
+                        ease: Back.easeIn.config(2),
+                    });
+                    TweenMax.to(this, 0.3, {
+                        _scaleWho: 0.0001,
+                        delay: 0.3,
+                        ease: Back.easeIn.config(2),
+                        onComplete: () => {
+                            setTimeout(() => {
+                                resolve();
+                            }, 500);
+                        }
+                    });
+                });
+            },
         },
         watch: {
-            screenSize: function (_size) {
+            resizeSize (_size) {
                 if (this._renderer) {
                     this._renderer.setSize(
                         this.screenSize.width, this.screenSize.height
@@ -313,7 +344,7 @@
                     this._mainCamera.aspect = this.screenSize.width / this.screenSize.height;
                     this._mainCamera.updateProjectionMatrix();
                 }
-            }
+            },
         },
         beforeDestroy: function () {
             this.dispose();

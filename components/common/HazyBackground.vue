@@ -1,5 +1,5 @@
 <template>
-    <div class="bg">
+    <div class="bg" :style="`{height: ${styleHeight}px}`">
         <canvas id="canvas"/>
     </div>
 </template>
@@ -22,6 +22,7 @@ export default {
             canvas: null,
             gl: null,
             time: 0,
+            timer: null,
         };
     },
     computed: {
@@ -79,7 +80,7 @@ export default {
             this.timer = requestAnimationFrame(this.update);
         },
         pause() {
-            if (this.timer) {
+            if (this.timer !== null) {
                 cancelAnimationFrame(this.timer);
                 this.timer = 0;
             }
@@ -94,12 +95,22 @@ export default {
             this.renderer.update(this.time);
         },
     },
+    watch: {
+        $route () {
+            if (this.$route.name === 'index' || this.$route.name === 'works') {
+                if (!this.timer) {
+                    this.play();
+                }
+            } else {
+                this.pause();
+            }
+        },
+    },
 };
 </script>
 <style>
     .bg {
         position: fixed;
-        height: 100vh;
         bottom: 0;
         left: 0;
         right: 0;

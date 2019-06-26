@@ -20,8 +20,17 @@
                 for (let i = 0; i < len; i++) {
                     const item = this.allArticleData[i];
 
-                    if (arr.indexOf(item.category) === -1) {
-                        arr.push(item.category);
+                    if (Array.isArray(item.category)) {
+                        for (let j = 0, len2 = item.category.length; j < len2; j++) {
+                            const category = item.category[j];
+                            if (arr.indexOf(category) === -1) {
+                                arr.push(category);
+                            }
+                        }
+                    } else {
+                        if (arr.indexOf(item.category) === -1) {
+                            arr.push(item.category);
+                        }
                     }
                 }
 

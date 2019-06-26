@@ -75,8 +75,14 @@
                 for (let i = 0; i < len; i++) {
                     const item = this.allArticleData[i];
 
-                    if (this.category === item.category) {
-                        arr.push(item);
+                    if (Array.isArray(item.category)) {
+                        if (item.category.indexOf(this.category) !== -1) {
+                            arr.push(item);
+                        }
+                    } else {
+                        if (this.category === item.category) {
+                            arr.push(item);
+                        }
                     }
                 }
                 this.categoryData = arr;

@@ -89,7 +89,7 @@
             left: 0;
             right: 0;
             margin: auto;
-            background: url(/assets/img/whois/takeshi.jpg) no-repeat center 100%;
+            background: url(~assets/img/whois/takeshi.jpg) no-repeat center 100%;
             background-size: cover;
             z-index: -1;
         }

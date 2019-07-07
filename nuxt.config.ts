@@ -1,5 +1,5 @@
+import NuxtConfiguration from '@nuxt/config';
 const articles = require('./static/assets/blog/articles.json');
-const isDev = (process.env.NODE_ENV !== 'production');
 const generateDynamicRoutes = callback => {
     const routes = articles.map(item => {
         return `/blog/${item.title}/`;
@@ -7,7 +7,7 @@ const generateDynamicRoutes = callback => {
     callback(null, routes);
 };
 
-module.exports = {
+const config: NuxtConfiguration = {
     env: {
         baseUrl: process.env.BASE_URL || 'http://localhost:3000'
     },
@@ -30,20 +30,17 @@ module.exports = {
     ** Build configuration
     */
     build: {
-        extactCss: true,
+        extractCSS: true,
         filenames: {
-            css: 'css/common.[contenthash].css',
-            manifest: 'js/manifest.[hash].js',
-            vendor: `js/common${isDev ? '' : '.[chunkhash:8]'}.js`,
-            app: `js/app${isDev ? '' : '.[chunkhash:8]'}.js`,
-            chunk: `js/[name]${isDev ? '' : '.[chunkhash:8]'}.js`
+            app: ({ isDev }) => isDev ? 'js/[name].js' : 'js/[name].[chunkhash:8].js',
+            chunk: ({ isDev }) => isDev ? 'js/[name].js' : 'js/[name].[chunkhash:8].js',
+            css: ({ isDev }) => isDev ? 'css/[name].css' : 'css/[name].[contenthash].css',
         },
         publicPath: '/common/',
         ssr: false
     },
     mode: 'spa',
     modules: [
-        '~modules/typescript.ts',
         '@nuxtjs/google-analytics',
     ],
     generate: {
@@ -60,3 +57,5 @@ module.exports = {
         routes: generateDynamicRoutes,
     },
 };
+
+export default config;

@@ -41,7 +41,9 @@
             }
         },
         computed: {
-            ...mapGetters(['screenSize']),
+            ...mapGetters({
+                screenSize: 'Common/screenSize',
+            }),
             width() {
                 return this.screenSize.width - 100;
             },
@@ -50,7 +52,10 @@
             }
         },
         methods: {
-            ...mapActions(['changeDialogState', 'changeScene']),
+            ...mapActions({
+                changeDialogState: 'MicroAnimations/changeDialogState',
+                changeScene:'Common/changeScene',
+            }),
             closeDialog() {
                 this.changeDialogState(false);
                 this.changeScene('top');

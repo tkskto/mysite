@@ -9,8 +9,6 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex';
-
     export default {
         name: "Navigation",
     }
@@ -25,7 +23,7 @@
         left: 0;
         right: 0;
         z-index: 2;
-        transition: transform 0.3s ease-out;
+        transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
         transform: translateY(60px);
 
         ul {

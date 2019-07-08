@@ -12,7 +12,9 @@
     export default {
         name: 'CategoryList',
         computed: {
-            ...mapGetters(['allArticleData']),
+            ...mapGetters({
+                allArticleData: 'Blog/allArticleData',
+            }),
             categoryList() {
                 const arr = [];
                 const len = this.allArticleData.length;

@@ -17,7 +17,9 @@
             };
         },
         computed: {
-            ...mapGetters(['screenSize'])
+            ...mapGetters({
+                screenSize: 'Common/screenSize',
+            })
         },
         created: function () {
             this.setRatio(window.devicePixelRatio);
@@ -27,7 +29,10 @@
             window.addEventListener('resize', this.onResize);
         },
         methods: {
-            ...mapActions(['resize', 'setRatio']),
+            ...mapActions({
+                resize: 'Common/resize',
+                setRatio: 'Common/setRatio',
+            }),
             onResize: function () {
                 const width = window.innerWidth;
                 const height = window.innerHeight;

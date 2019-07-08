@@ -34,7 +34,10 @@
             TheSidebar,
         },
         computed: {
-            ...mapGetters(['currentArticleID', 'allArticleData']),
+            ...mapGetters({
+                currentArticleID: 'Blog/currentArticleID',
+                allArticleData: 'Blog/allArticleData',
+            }),
         },
         data: function () {
             return {
@@ -75,7 +78,10 @@
             }
         },
         methods: {
-            ...mapActions(['changeArticleID', 'setArticles']),
+            ...mapActions({
+                changeArticleID: 'Blog/changeArticleID',
+                setArticles: 'Blog/setArticles',
+            }),
             init() {
                 const article = Methods.getItemByKey(this.allArticleData, 'title', this.title);
                 this.changeArticleID(article.id);

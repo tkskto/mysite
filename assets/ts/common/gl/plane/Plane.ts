@@ -35,8 +35,8 @@ export class Plane extends Sketch {
         const mesh: Mesh = new Mesh(this._gl, this._default, line, GLConfig.DRAW_TYPE_TRIANGLE);
         this._renderer.add(mesh);
 
-        this._store.commit('SET_VS_TEXT', this._shader.vertexString);
-        this._store.commit('SET_FS_TEXT', this._shader.fragmentString);
+        this._store.commit('Practice/SET_VS_TEXT', this._shader.vertexString);
+        this._store.commit('Practice/SET_FS_TEXT', this._shader.fragmentString);
 
         this.play();
     };
@@ -64,7 +64,7 @@ export class Plane extends Sketch {
 
     public animate = () => {
         this.clear();
-        const canvasSize = this._store.getters.canvasSize;
+        const canvasSize = this._store.getters['Common/canvasSize'];
         this._renderer.update([canvasSize.width, canvasSize.height], this._time);
     };
 }

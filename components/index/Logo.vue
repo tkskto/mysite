@@ -18,7 +18,9 @@
     export default {
         name: 'logo',
         computed: {
-            ...mapGetters(['sceneName'])
+            ...mapGetters({
+                sceneName: 'Common/sceneName',
+            })
         },
         mounted: function () {
             if (this.sceneName === AppConfig.SCENE.LOAD) {
@@ -31,7 +33,9 @@
             }
         },
         methods: {
-            ...mapActions(['changeScene']),
+            ...mapActions({
+                changeScene: 'Common/changeScene',
+            }),
             transitionEnd: function () {
                 if (this.sceneName === AppConfig.SCENE.LOAD) {
                     this.$el.classList.add('hide');

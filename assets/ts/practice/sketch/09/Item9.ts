@@ -44,8 +44,8 @@ export class Item9 extends Sketch {
 
         this._renderer.add(this._mesh);
 
-        this._store.commit('SET_VS_TEXT', this._shader.vertexString);
-        this._store.commit('SET_FS_TEXT', this._shader.fragmentString);
+        this._store.commit('Practice/SET_VS_TEXT', this._shader.vertexString);
+        this._store.commit('Practice/SET_FS_TEXT', this._shader.fragmentString);
 
         this.play();
     };
@@ -75,7 +75,7 @@ export class Item9 extends Sketch {
 
     public animate = () => {
         this.clear();
-        const canvasSize = this._store.getters.canvasSize;
+        const canvasSize = this._store.getters['Common/canvasSize'];
         this._renderer.update([canvasSize.width, canvasSize.height], this._time);
     };
 }

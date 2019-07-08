@@ -8,7 +8,7 @@
 
 <script>
     import {mapGetters, mapActions} from 'vuex';
-    import store from './../store/';
+    import store from './../store/Common';
     import Logo from '~/components/index/Logo.vue';
     import Intro from '~/components/index/Intro.vue';
     import Navs from '~/components/common/nav/Navigation.vue';
@@ -22,7 +22,9 @@
             Navs
         },
         computed: {
-            ...mapGetters(['sceneName']),
+            ...mapGetters({
+                sceneName: 'Common/sceneName',
+            }),
             isReady() {
                 return this.sceneName === AppConfig.SCENE.READY;
             },
@@ -41,11 +43,15 @@
             };
         },
         methods: {
-            ...mapActions(['changeScene']),
+            ...mapActions({
+                changeScene: 'Common/changeScene',
+            }),
         },
         beforeRouteEnter(to, from, next) {
             if (from.name) {
-                store().dispatch('changeScene', AppConfig.SCENE.READY);
+                next((vm) => {
+                    vm.changeScene(AppConfig.SCENE.READY);
+                });
             }
 
             next();
@@ -54,7 +60,7 @@
             this.$refs.intro.beforeLeave().then(() => {
                 next();
             });
-        }
+        },
     };
 </script>
 

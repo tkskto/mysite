@@ -27,7 +27,9 @@
             }
         },
         computed: {
-            ...mapGetters(['ratio'])
+            ...mapGetters({
+                ratio: 'Common/ratio',
+            })
         },
         created: function () {
             const dLoading = new LoadingData();
@@ -65,7 +67,10 @@
             });
         },
         methods: {
-            ...mapActions(['setAllItems', 'changeScene']),
+            ...mapActions({
+                setAllItems: 'MicroAnimations/setAllItems',
+                changeScene: 'Common/changeScene',
+            }),
             parseJson(data) {
                 const allSketch = {};
 

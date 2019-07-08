@@ -34,7 +34,10 @@
             TheSidebar,
         },
         computed: {
-            ...mapGetters(['currentArticleID', 'allArticleData']),
+            ...mapGetters({
+                currentArticleID: 'Blog/currentArticleID',
+                allArticleData: 'Blog/allArticleData',
+            }),
         },
         data: function () {
             return {
@@ -62,7 +65,10 @@
             }
         },
         methods: {
-            ...mapActions(['changeArticleID', 'setArticles']),
+            ...mapActions({
+                changeArticleID: 'Blog/changeArticleID',
+                setArticles: 'Blog/setArticles',
+            }),
             init() {
                 // ブログトップに来た時は最新の記事を表示する
                 this.changeArticleID(this.allArticleData[0].id);

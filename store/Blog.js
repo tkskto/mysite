@@ -1,8 +1,8 @@
-const state = {
+const state =() => ({
     articleID: null,
     currentCategory: 'all',
     articles: [],
-};
+});
 const getters = {
     allArticleData: (_state) => _state.articles,
     currentArticleID: (_state) => _state.articleID,

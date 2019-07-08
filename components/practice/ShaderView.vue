@@ -17,7 +17,10 @@
     export default {
         name: "ShaderView",
         computed: {
-            ...mapGetters(['vertexShaderString', 'fragmentShaderString']),
+            ...mapGetters({
+                vertexShaderString: 'Practice/vertexShaderString',
+                fragmentShaderString: 'Practice/fragmentShaderString',
+            }),
             /**
              * @return {string}
              */

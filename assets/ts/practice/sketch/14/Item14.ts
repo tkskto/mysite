@@ -42,8 +42,8 @@ export class Item14 extends Sketch {
         const mesh: Mesh = new Mesh(this._gl, this._default, line, GLConfig.DRAW_TYPE_TRIANGLE);
         this._renderer.add(mesh);
 
-        this._store.commit('SET_VS_TEXT', shader.vertexString);
-        this._store.commit('SET_FS_TEXT', shader.fragmentString);
+        this._store.commit('Practice/SET_VS_TEXT', shader.vertexString);
+        this._store.commit('Practice/SET_FS_TEXT', shader.fragmentString);
 
         this._audioContext = new FFT();
         this._audioAnalyser = this._audioContext.analyser;
@@ -81,7 +81,7 @@ export class Item14 extends Sketch {
 
     public animate = () => {
         this.clear();
-        const canvasSize = this._store.getters.canvasSize;
+        const canvasSize = this._store.getters['Common/canvasSize'];
         this._renderer.update([canvasSize.width, canvasSize.height], this._time, [0, this._frequency]);
     };
 }

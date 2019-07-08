@@ -14,27 +14,27 @@ export class Sketch implements ISketch {
     public _type: string;
 
     constructor(public _store: any, _id: string, _quote = '') {
-        // _store.watch(AppConfig.ON_STATE_CHANGED, this.onStateChanged);
         _store.watch(AppConfig.ON_SKETCH_CHANGED, this.onStateChanged);
-        // _store.watch(AppConfig.ON_CODE_STATE_CHANGED, this.onCodeStateChanged);
         this._id = _id;
         this._quote = _quote;
     }
 
     private onStateChanged = () => {
         const store = this._store.getters;
-        const scene = store.getScene;
+        const scene = store['Practice/getScene'];
+        const id = store['Practice/id'];
+
         if (scene === AppConfig.SCENE_SKETCH) {
-            if (store.id === this._id && !this._setuped && !this._isPlaying) {
-                this._store.commit('SET_MOUSE_STATE', false);
+            if (id === this._id && !this._setuped && !this._isPlaying) {
+                this._store.commit('Common/SET_MOUSE_STATE', false);
                 this.setup();
                 this._setuped = true;
                 if (this._quote) {
-                    this._store.commit('SET_QUOTE_TEXT', this._quote);
+                    this._store.commit('Practice/SET_QUOTE_TEXT', this._quote);
                 }
-            } else if (store.id === this._id && !this._isPlaying) {
+            } else if (id === this._id && !this._isPlaying) {
                 this.play();
-            } else if (store.id !== this._id && this._isPlaying) {
+            } else if (id !== this._id && this._isPlaying) {
                 this._setuped = false;
                 this.dispose();
             }

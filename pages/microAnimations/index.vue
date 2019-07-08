@@ -32,10 +32,17 @@
             };
         },
         computed: {
-            ...mapGetters(['getAllItemData', 'dialogState', 'sceneName'])
+            ...mapGetters({
+                getAllItemData: 'MicroAnimations/getAllItemData',
+                dialogState: 'MicroAnimations/dialogState',
+                sceneName: 'Common/sceneName',
+            })
         },
         methods: {
-            ...mapActions(['setCameraPosition', 'setCanvasSize'])
+            ...mapActions({
+                setCameraPosition: 'Practice/setCameraPosition',
+                setCanvasSize: 'Common/setCanvasSize',
+            })
         },
         created () {
             this.setCameraPosition(new Vector(0.0, 0.0, 1,0));
@@ -44,7 +51,7 @@
     };
 </script>
 
-<style>
+<style scoped>
     body {
         position: relative;
         line-height: 1.6;

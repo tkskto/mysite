@@ -7,7 +7,9 @@
     export default {
         name: "quote",
         computed: {
-            ...mapGetters(['quote'])
+            ...mapGetters({
+                quote: 'Practice/quote',
+            })
         },
     }
 </script>

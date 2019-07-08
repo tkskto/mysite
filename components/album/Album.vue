@@ -17,7 +17,6 @@
 <script>
     import {mapGetters} from 'vuex';
     import * as THREE from 'three';
-    // import Stats from 'stats-js';
     import TweenMax, {Elastic, Linear, Power3} from 'gsap';
     import {CustomPerspectiveCamera} from "~/assets/ts/album/Camera/CustomPerspectiveCamera";
     import {CustomPerspectiveSPCamera} from "~/assets/ts/album/Camera/CustomPerspectiveSPCamera";
@@ -25,7 +24,10 @@
     export default {
         name: 'album',
         computed: {
-            ...mapGetters(['screenSize', 'getCurrentAlbumData'])
+            ...mapGetters({
+                screenSize: 'Common/screenSize',
+                getCurrentAlbumData: 'Album/getCurrentAlbumData',
+            })
         },
         props: {
             _name: {

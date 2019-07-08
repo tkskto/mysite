@@ -1,6 +1,6 @@
 <template>
     <div class="bg" :style="`{height: ${styleHeight}px}`">
-        <canvas id="canvas"/>
+        <canvas id="canvas" :width="width" :height="height" :style="{width: `${styleWidth}px`, height: `${styleHeight}px`}"></canvas>
     </div>
 </template>
 
@@ -26,7 +26,10 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(['canvasSize', 'screenSize']),
+        ...mapGetters({
+            canvasSize: 'Common/canvasSize',
+            screenSize: 'Common/screenSize',
+        }),
         styleWidth() {
             return this.screenSize.width;
         },
@@ -45,10 +48,6 @@ export default {
     },
     mounted() {
         this.canvas = document.getElementById('canvas');
-        this.canvas.width = this.width;
-        this.canvas.height = this.height;
-        this.canvas.style.width = this.styleWidth + 'px';
-        this.canvas.style.height = this.styleHeight + 'px';
         const ctx = new WebGLContext(window.devicePixelRatio, this.canvas);
         this.gl = ctx.ctx;
 

@@ -73,7 +73,13 @@
             ShaderView,
         },
         computed: {
-            ...mapGetters(['screenSize', 'canvasSize', 'ratio', 'getScene', 'mouseState']),
+            ...mapGetters({
+                screenSize: 'Common/screenSize',
+                canvasSize: 'Common/canvasSize',
+                ratio: 'Common/ratio',
+                sceneName: 'Common/sceneName',
+                mouseState: 'Common/mouseState',
+            }),
             canvasDisplayWidth() {
                 if (this.canvasSize) {
                     return this.canvasSize.width;
@@ -100,7 +106,12 @@
             },
         },
         methods: {
-            ...mapActions(['changeScene', 'changeID', 'setCameraPosition', 'setMousePos']),
+            ...mapActions({
+                changeScene: 'Common/changeScene',
+                changeID: 'Practice/changeID',
+                setCameraPosition: 'Practice/setCameraPosition',
+                setMousePos: 'Common/setMousePos',
+            }),
             onHashChange() {
                 this.changeID(location.hash.split('#')[1] || '0');
             },
@@ -118,15 +129,15 @@
                 });
             },
             changeSketchState(e) {
-                if ('Escape' === e.key && this.getScene === AppConfig.SCENE_SKETCH) {
+                if ('Escape' === e.key && this.sceneName === AppConfig.SCENE_SKETCH) {
                     this.changeScene(AppConfig.SCENE_PAUSE);
-                } else if ('Escape' === e.key && this.getScene === AppConfig.SCENE_PAUSE) {
+                } else if ('Escape' === e.key && this.sceneName === AppConfig.SCENE_PAUSE) {
                     this.changeScene(AppConfig.SCENE_SKETCH);
                 }
             }
         },
         mounted() {
-            const sketch= document.querySelectorAll('.sketch--item');
+            const sketch = document.querySelectorAll('.sketch--item');
             const width = this.screenSize.width;
             const height = this.screenSize.height;
             const aspect = width > height ? height / width : height > width ? width / height : 1;

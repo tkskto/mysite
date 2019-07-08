@@ -1,11 +1,12 @@
-const state = {
+const state =() => ({
     Araz: {
         all: 10,
         images: 7,
         movies: 3
     },
     currentAlbumName: 'Araz'
-};
+});
+
 const getters = {
     getCurrentAlbumData: (_state) => _state[_state.currentAlbumName]
 };

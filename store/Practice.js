@@ -1,13 +1,13 @@
 import {AppConfig} from '~/assets/ts/practice/Config';
 
-const state = {
+const state =() => ({
     scene: '',
     id: '',
     cameraPosition: null,
     quote: '',
     vertexShaderString: '',
     fragmentShaderString: '',
-};
+});
 const getters = {
     getScene: (_state) => _state.scene,
     id: (_state) => _state.id,

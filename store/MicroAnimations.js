@@ -1,7 +1,7 @@
-const state = {
+const state =() => ({
     items: [],
     showDialog: false,
-};
+});
 
 const getters = {
     getAllItemData: (_state) => _state.items,

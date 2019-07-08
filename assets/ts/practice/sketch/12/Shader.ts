@@ -34,6 +34,7 @@ export class Default extends Shader {
                 in vec3 vNormal;
                 in vec4 vColor;
                 
+                uniform mat4 mMatrix;
                 uniform mat4 invMatrix;
                 uniform vec3 lightPosition;
                 uniform vec3 cameraPosition;
@@ -43,7 +44,7 @@ export class Default extends Shader {
               
                 void main(void){
                     vec3 lightVec = lightPosition - vPos;
-                    vec3 invLight = normalize(invMatrix * vec4(lightVec, 0.0)).xyz;
+                    vec3 invLight = normalize(mMatrix * invMatrix * vec4(lightVec, 0.0)).xyz;
                     vec3 invEye = normalize(invMatrix * vec4(cameraPosition, 0.0)).xyz;
                     vec3 halfLE = normalize(invLight + invEye);
                     float diffuse = clamp(dot(vNormal, invLight), 0.0, 1.0) + 0.2;

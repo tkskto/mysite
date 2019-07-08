@@ -28,7 +28,9 @@
             HazyBackground,
         },
         computed: {
-            ...mapGetters(['screenSize'])
+            ...mapGetters({
+                screenSize: 'Common/screenSize',
+            })
         },
         created: function () {
             this.setRatio(window.devicePixelRatio);
@@ -44,7 +46,11 @@
             window.addEventListener('resize', this.onResize);
         },
         methods: {
-            ...mapActions(['resize', 'setRatio', 'setCameraPosition']),
+            ...mapActions({
+                resize: 'Common/resize',
+                setRatio: 'Common/setRatio',
+                setCameraPosition: 'Practice/setCameraPosition',
+            }),
             onResize: function () {
                 const width = window.innerWidth;
                 const height = window.innerHeight;
@@ -62,6 +68,10 @@
 
 <style>
     @import '~/assets/css/common.css';
+
+    body {
+        overflow-y: auto;
+    }
 
     canvas {
         vertical-align: top;

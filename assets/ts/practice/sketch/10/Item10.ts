@@ -38,9 +38,9 @@ export class Item10 extends Sketch {
         const mesh: Mesh = new Mesh(this._gl, this._default, plane, GLConfig.DRAW_TYPE_TRIANGLE);
         this._renderer.add(mesh);
 
-        this._store.commit('SET_VS_TEXT', this._shader.vertexString);
-        this._store.commit('SET_FS_TEXT', this._shader.fragmentString);
-        this._store.commit('SET_MOUSE_STATE', true);
+        this._store.commit('Practice/SET_VS_TEXT', this._shader.vertexString);
+        this._store.commit('Practice/SET_FS_TEXT', this._shader.fragmentString);
+        this._store.commit('Common/SET_MOUSE_STATE', true);
 
         this.play();
     };
@@ -66,8 +66,8 @@ export class Item10 extends Sketch {
 
     public animate = () => {
         this.clear();
-        const canvasSize = this._store.getters.canvasSize;
-        const mousePosition = this._store.getters.mousePosition;
+        const canvasSize = this._store.getters['Common/canvasSize'];
+        const mousePosition = this._store.getters['Common/mousePosition'];
         this._renderer.update([canvasSize.width, canvasSize.height], [mousePosition.x, mousePosition.y]);
     };
 }

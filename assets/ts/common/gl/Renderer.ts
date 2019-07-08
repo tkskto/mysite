@@ -30,7 +30,7 @@ export class Renderer {
         this._gl.depthFunc(this._gl.LEQUAL);
 
         this.unWatchResizeEvent = _store.watch((state, getters) => {
-            return state.Common.screenSize.width;
+            return state.Common.screenSize;
         }, this.onResize);
         this.unWatchStateChangeEvent = _store.watch(AppConfig.ON_CAMERA_STATE_CHANGED, this.initializeMatrix);
         this.initializeMatrix();
@@ -95,8 +95,9 @@ export class Renderer {
         this.pMatrix = MatrixUtils.initialize(MatrixUtils.create());
         this.qMatrix = MatrixUtils.initialize(MatrixUtils.create());
         this.vpMatrix = MatrixUtils.initialize(MatrixUtils.create());
-        const canvasSize = this._store.getters.canvasSize;
-        const cameraPosition = this._store.getters.cameraPosition;
+
+        const canvasSize = this._store.getters['Common/canvasSize'];
+        const cameraPosition = this._store.getters['Practice/cameraPosition'];
         const aspectRatio = canvasSize.width > canvasSize.height ? canvasSize.width / canvasSize.height : canvasSize.height / canvasSize.width;
 
         // ビュー座標変換行列
@@ -106,7 +107,7 @@ export class Renderer {
     };
 
     private onResize = () => {
-        const canvasSize = this._store.getters.canvasSize;
+        const canvasSize = this._store.getters['Common/canvasSize'];
         this.initializeMatrix();
         this._cWidth = canvasSize.width;
         this._cHeight = canvasSize.height;

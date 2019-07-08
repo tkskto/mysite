@@ -23,7 +23,9 @@
             CategoryList,
         },
         computed: {
-            ...mapGetters(['allArticleData']),
+            ...mapGetters({
+                allArticleData: 'Blog/allArticleData',
+            }),
         }
     };
 </script>

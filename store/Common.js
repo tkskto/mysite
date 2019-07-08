@@ -1,11 +1,11 @@
-const state = {
+const state =() => ({
     sceneName: 'load',
     screenSize: {width: 0, height: 0},
     canvasSize: {width: 0, height: 0},
     ratio: 1,
     mouseState: false,
     mousePosition: { x: 0, y: 0},
-};
+});
 const getters = {
     sceneName: (_state) => _state.sceneName,
     screenSize: (_state) => _state.screenSize,

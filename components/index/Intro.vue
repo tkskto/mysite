@@ -42,7 +42,11 @@
             };
         },
         computed: {
-            ...mapGetters(['screenSize', 'sceneName', 'mousePosition']),
+            ...mapGetters({
+                screenSize: 'Common/screenSize',
+                sceneName: 'Common/sceneName',
+                mousePosition: 'Common/mousePosition',
+            }),
             resizeSize() {
                 return this.screenSize;
             },
@@ -176,9 +180,13 @@
             });
         },
         methods: {
-            ...mapActions(['changeScene', 'setMouseState', 'setMousePos']),
+            ...mapActions({
+                changeScene: 'Common/changeScene',
+                setMouseState: 'Common/setMouseState',
+                setMousePos: 'Common/setMousePos',
+            }),
             onStateChange: function(_mutation) {
-                if (_mutation.type === 'CHANGE_SCENE') {
+                if (_mutation.type === 'Common/CHANGE_SCENE') {
                     if (_mutation.payload === AppConfig.SCENE.FIRST) {
                         this._finished = false;
                         this.play();

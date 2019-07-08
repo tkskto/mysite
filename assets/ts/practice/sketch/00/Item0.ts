@@ -34,8 +34,8 @@ export class Item0 extends Sketch {
         const mesh: Mesh = new Mesh(this._gl, this._default, line, GLConfig.DRAW_TYPE_LINE);
         this._renderer.add(mesh);
 
-        this._store.commit('SET_VS_TEXT', this._shader.vertexString);
-        this._store.commit('SET_FS_TEXT', this._shader.fragmentString);
+        this._store.commit('Practice/SET_VS_TEXT', this._shader.vertexString);
+        this._store.commit('Practice/SET_FS_TEXT', this._shader.fragmentString);
 
         this.play();
     };

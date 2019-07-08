@@ -56,8 +56,8 @@ export class Item12 extends Sketch {
         this._renderer.add(this._mCube);
         this._renderer.add(this._mSphere);
 
-        this._store.commit('SET_VS_TEXT', shader.vertexString);
-        this._store.commit('SET_FS_TEXT', shader.fragmentString);
+        this._store.commit('Practice/SET_VS_TEXT', shader.vertexString);
+        this._store.commit('Practice/SET_FS_TEXT', shader.fragmentString);
 
         this.play();
     };
@@ -87,7 +87,7 @@ export class Item12 extends Sketch {
 
     public animate = () => {
         this.clear();
-        const cameraPosition = this._store.getters.cameraPosition;
+        const cameraPosition = this._store.getters['Practice/cameraPosition'];
         this._renderer.update(this._dirLight.arr(), cameraPosition.arr(), this._ambientLight, this._time);
     };
 }

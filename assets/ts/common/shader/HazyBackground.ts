@@ -34,10 +34,9 @@ export class HazyBackground extends Shader {
                 float r = cos(p.x + p.y + 1.0) * 0.1;
                 float g = sin(p.x + p.y + 1.0) * 0.1;
                 float b = (sin(p.x + p.y) + cos(p.x + p.y)) * 0.3;
-                float alpha = min(time * 0.1, 0.8);
                 
                 vec3 color = color + vec3(r,g,b);
-                outColor = vec4(color, alpha);
+                outColor = vec4(color, 0.1);
             }
         `.trim());
 

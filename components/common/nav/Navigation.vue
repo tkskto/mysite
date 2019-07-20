@@ -23,7 +23,7 @@
         left: 0;
         right: 0;
         z-index: 2;
-        transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        transition: transform 1.0s cubic-bezier(0.15, 0.84, 0.5, 1);
         transform: translateY(60px);
 
         ul {

@@ -12,6 +12,9 @@ const config: NuxtConfiguration = {
         baseUrl: process.env.BASE_URL || 'http://localhost:3000'
     },
     head: {
+        htmlAttrs: {
+            lang: 'en'
+        },
         title: 'Takeshi Kato',
         meta: [
             { charset: 'utf-8' },

@@ -1,10 +1,11 @@
 <template>
     <section class="container">
-        <div>
+        <div class="text">
             <p>I'm frontend engineer.</p>
             <p>I like sauna and beautiful graphics.</p>
             <p>I'm interested in something new.</p>
             <p>I'm happy if you're interested in my work.</p>
+            <p>Feel free to contact to me.</p>
             <p>Thank you!!</p>
         </div>
         <div>
@@ -36,6 +37,11 @@
                 ],
             };
         },
+        mounted() {
+            setTimeout(() => {
+                this.$el.classList.add('is-show');
+            }, 100);
+        }
     };
 </script>
 
@@ -48,10 +54,36 @@
         flex-direction: column;
         background: rgba(0, 0, 0, 0.6);
 
-        p {
+        .text p {
             color: #ffffff;
             font-size: 4.0rem;
             line-height: 2.0;
+            transition: transform 0.5s cubic-bezier(.17,.67,.4,.99);
+            transform: translateX(-60%);
+
+            &:nth-child(1) {
+                transition-delay: 0.12s;
+            }
+
+            &:nth-child(2) {
+                transition-delay: 0.24s;
+            }
+
+            &:nth-child(3) {
+                transition-delay: 0.36s;
+            }
+
+            &:nth-child(4) {
+                transition-delay: 0.48s;
+            }
+
+            &:nth-child(5) {
+                transition-delay: 0.60s;
+            }
+
+            &:nth-child(6) {
+                transition-delay: 0.72s;
+            }
         }
 
         ul {
@@ -86,7 +118,7 @@
             position: fixed;
             top: 0;
             bottom: 0;
-            left: 0;
+            left: 50%;
             right: 0;
             margin: auto;
             background: url(~assets/img/whois/takeshi.jpg) no-repeat center 100%;
@@ -97,6 +129,12 @@
         @media screen and (max-width: 414px) {
             p {
                 font-size: 2.4rem;
+            }
+        }
+
+        &.is-show {
+            .text p {
+                transform: translateX(0);
             }
         }
     }

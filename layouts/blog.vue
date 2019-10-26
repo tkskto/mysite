@@ -69,9 +69,10 @@
         }
 
         p {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: normal;
             margin-bottom: 2rem;
+            line-height: 1.7;
         }
 
         hr {

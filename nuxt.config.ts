@@ -45,6 +45,7 @@ const config: NuxtConfiguration = {
     mode: 'spa',
     modules: [
         '@nuxtjs/google-analytics',
+        '@nuxtjs/sitemap'
     ],
     generate: {
         dir: 'public/',
@@ -56,7 +57,6 @@ const config: NuxtConfiguration = {
     sitemap: {
         path: '/sitemap.xml',
         hostname: 'https://tkskto.me',
-        generate: true,
         routes: generateDynamicRoutes,
     },
 };

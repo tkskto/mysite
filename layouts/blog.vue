@@ -4,8 +4,6 @@
     </div>
 </template>
 <style lang="scss">
-    @import '~/assets/css/common.css';
-
     html {
         color: #222222;
         line-height: 1.44;

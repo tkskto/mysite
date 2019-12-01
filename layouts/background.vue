@@ -67,8 +67,6 @@
 </script>
 
 <style>
-    @import '~/assets/css/common.css';
-
     body {
         overflow-y: auto;
     }

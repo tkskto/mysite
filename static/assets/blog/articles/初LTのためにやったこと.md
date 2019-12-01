@@ -2,24 +2,7 @@
 
 ## 準備編
 
-とりあえずこれまで自分が書いてきた記事をまとめました。
-
-- [Vue.jsを使ったモダンなAdobe XDプラグイン開発](https://www.mitsue.co.jp/knowledge/blog/frontend/201811/08_1054.html)
-- [Storybookでモジュール一覧を作る](https://www.mitsue.co.jp/knowledge/blog/frontend/201806/08_1524.html)
-- [Oculus GoでWebVR APIを試してみる](https://www.mitsue.co.jp/knowledge/blog/frontend/201805/22_1316.html)
-- [CSS Paint APIの使いどころ](https://www.mitsue.co.jp/knowledge/blog/frontend/201804/12_1636.html)
-- [React NativeのVue.js版！？Weexでネイティブアプリを開発しよう！](https://www.mitsue.co.jp/knowledge/blog/frontend/201803/08_1958.html)
-- [WebのARを先取りしよう！](https://www.mitsue.co.jp/knowledge/blog/frontend/201712/27_1403.html)
-- [パフォーマンス向上の次の一手はWebAssembly](https://www.mitsue.co.jp/knowledge/blog/frontend/201711/21_1417.html)
-- [Google Homeアプリ開発をはじめよう！](https://www.mitsue.co.jp/knowledge/blog/frontend/201710/17_1117.html)
-- [ESLintのルールを自作しよう！](https://www.mitsue.co.jp/knowledge/blog/frontend/201709/11_1059.html)
-- [360度動画をブラウザ上で再生する方法](https://www.mitsue.co.jp/knowledge/blog/frontend/201708/07_1737.html)
-- [Alexa Skillをローカルで開発しよう](https://www.mitsue.co.jp/knowledge/blog/frontend/201707/11_1838.html)
-- [Bot FrameworkでラクラクBot開発！](https://www.mitsue.co.jp/knowledge/blog/frontend/201706/07_1100.html)
-- [Web Bluetooth APIことはじめ](https://www.mitsue.co.jp/knowledge/blog/frontend/201705/15_1702.html)
-- [Fusetoolsを紹介します](https://www.mitsue.co.jp/knowledge/blog/apps/201612/08_2036.html)
-- [Firebase Test Labを試してみました](https://www.mitsue.co.jp/knowledge/blog/apps/201610/25_1045.html)
-- [A-Frameを使ってVR空間を作る](https://www.mitsue.co.jp/knowledge/blog/apps/)
+とりあえずこれまで自分が書いてきた記事をまとめました。つまり知識の棚卸しともいう。
 
 自分が特に話せそうなことや、今話しても今更？と思われないことを話そうと思い、結局「Adobe XDプラグイン開発をしよう」というテーマにしました。
 

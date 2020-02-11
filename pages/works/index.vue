@@ -16,12 +16,12 @@
             <p>They are just idea. meaningless.</p>
             <ul>
                 <li>
-                    <a href="https://tkskto.github.io/videoBumpMapping/"><img alt=""></a>
-                    Bump Mapping with video texture. [<a href="https://qiita.com/tkskto/items/8ec45cf4bfa9dae90944">Qiita</a>]
+                    <a href="https://tkskto.github.io/videoBumpMapping/"><img src="~/assets/img/works/img_01.png" alt=""></a>
+                    Bump Mapping with video texture. [<a href="https://qiita.com/tkskto/items/8ec45cf4bfa9dae90944">Article</a>]
                 </li>
                 <li>
-                    <a href="https://tkskto.github.io/WebGLMoire/"><img alt=""></a>
-                    WebGL Moire [<a href="https://qiita.com/tkskto/items/729819f945fde7cdb89e">Qiita</a>]
+                    <a href="https://tkskto.github.io/WebGLMoire/"><img src="~/assets/img/works/img_02.png" alt=""></a>
+                    WebGL Moire [<a href="https://qiita.com/tkskto/items/729819f945fde7cdb89e">Article</a>]
                 </li>
             </ul>
         </section>
@@ -81,10 +81,24 @@
 
             ul {
                 display: flex;
+
                 > li {
                     list-style-type: none;
+                    flex: 1 0 0%;
+
+                    &:not(:last-child) {
+                        margin-right: 20px;
+                    }
+
+                    a {
+                        color: #ffffff;
+                    }
                 }
             }
+        }
+
+        a > img {
+            max-width: 100%;
         }
     }
 </style>

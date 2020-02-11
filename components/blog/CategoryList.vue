@@ -44,6 +44,14 @@
 
 <style scoped lang="scss">
     .str-category {
+        .category--content {
+            display: flex;
+
+            @media screen and (max-width: 768px) {
+                flex-direction: column;
+            }
+        }
+
         > li a {
             color: #333333;
         }

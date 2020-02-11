@@ -21,7 +21,7 @@
     };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .str-root--error {
         width: 100%;
         height: 100%;

@@ -3,17 +3,7 @@
         <nuxt/>
     </div>
 </template>
-<style lang="scss">
-    html, body {
-        width: 100%;
-        height: 100%;
-        font-size: 62.5%;
-
-        #__layout {
-            height: 100%;
-        }
-    }
-
+<style lang="scss" scoped>
     .str-root--other {
         position: relative;
         width: 100%;

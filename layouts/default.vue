@@ -47,7 +47,4 @@
 
 <style>
     @import '~/assets/css/common.css';
-    canvas {
-        vertical-align: top;
-    }
 </style>

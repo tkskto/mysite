@@ -58,7 +58,7 @@
 
     export default {
         name: 'practice',
-        layout: 'default',
+        layout: 'practice',
         head() {
             return {
                 title: 'Practice | Takeshi Kato',
@@ -228,6 +228,60 @@
         }
     };
 </script>
-<style>
-    @import '~/assets/css/practice/style.css';
+
+<style scoped>
+    html,body,div,canvas, ul, ol {
+        margin: 0;
+        padding: 0
+    }
+
+    body.canvas2D #canvas--GL {
+        display: none;
+    }
+
+    body.webGL #canvas--2d {
+        display: none;
+    }
+
+    .container-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        margin: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 0;
+    }
+
+    .container-canvas .text--quote {
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        text-align: center;
+    }
+
+    .list-sketch {
+        position: relative;
+        z-index: 1;
+        padding: 12px;
+        list-style: none;
+    }
+
+    .list-sketch .sketch--item {
+        margin-bottom: 4px;
+    }
+
+    .list-sketch .sketch--item a {
+        font-size: 1.2rem;
+        text-shadow: 1px 1px 2px rgb(220, 89, 90), 0 0 1em rgb(110, 120, 200), 0 0 1em rgb(110, 120, 200);
+        color: #fff;
+    }
+
+    canvas {
+        vertical-align: top;
+    }
 </style>

@@ -78,7 +78,7 @@
 
         h2 {
             font-size: 2.2rem;
-            margin: 32px 0 12px;
+            margin: 32px 0 16px;
 
             @media screen and (max-width: 768px) {
                 font-size: 1.8rem;
@@ -86,8 +86,8 @@
         }
 
         h3 {
-            font-size: 1.8rem;
-            margin-bottom: 8px;
+            font-size: 1.9rem;
+            margin-bottom: 14px;
 
             @media screen and (max-width: 768px) {
                 font-size: 1.6rem;

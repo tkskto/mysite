@@ -58,8 +58,10 @@
             color: #ffffff;
             font-size: 4.0rem;
             line-height: 2.0;
-            transition: transform 0.5s cubic-bezier(.17,.67,.4,.99);
-            transform: translateX(-60%);
+            transition: transform 0.5s cubic-bezier(.17,.67,.4,.99), opacity 0.7s;
+            transform: translateX(-100%);
+            text-shadow: 5px 5px 5px rgba(255, 255, 255, 0.2), 10px 10px 5px rgba(255, 255, 255, 0.1);
+            opacity: 0;
 
             &:nth-child(1) {
                 transition-delay: 0.12s;
@@ -126,15 +128,22 @@
             z-index: -1;
         }
 
+        @media screen and (max-width: 768px) {
+            .text p {
+                font-size: 3.2rem;
+            }
+        }
+
         @media screen and (max-width: 414px) {
-            p {
-                font-size: 2.4rem;
+            .text p {
+                font-size: 2.2rem;
             }
         }
 
         &.is-show {
             .text p {
                 transform: translateX(0);
+                opacity: 0.8;
             }
         }
     }

@@ -44,3 +44,9 @@
         }
     }
 </script>
+
+<style scoped>
+    .str-root {
+        background: #ffffff;
+    }
+</style>

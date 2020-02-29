@@ -2,7 +2,7 @@
     <section class="container" :class="sceneName">
         <div class="wrapper">
             <TheHeader />
-            <div id="all">
+            <div class="sketch" id="all">
                 <Category v-for="(value, key) in getAllItemData" :key="key" :categoryName="key" :items="value" />
             </div>
         </div>
@@ -21,7 +21,7 @@
 
     export default {
         name: 'microAnimations',
-        layout: 'default',
+        layout: 'microAnimations',
         components: {TheHeader, Dialog, Category, Loading},
         head () {
             return {
@@ -69,6 +69,7 @@
 
     .wrapper {
         transition: opacity 1.0s ease;
+        background: #ffffee;
     }
 
     .load .wrapper,

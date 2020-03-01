@@ -7,6 +7,8 @@ const state =() => ({
     quote: '',
     vertexShaderString: '',
     fragmentShaderString: '',
+    isMusicMode: false,
+    musicPlayState: false,
 });
 const getters = {
     getScene: (_state) => _state.scene,
@@ -15,6 +17,8 @@ const getters = {
     quote: (_state) => _state.quote,
     vertexShaderString: (_state) => _state.vertexShaderString,
     fragmentShaderString: (_state) => _state.fragmentShaderString,
+    isMusicMode: (_state) => _state.isMusicMode,
+    musicPlayState: (_state) => _state.musicPlayState,
 };
 const mutations = {
     CHANGE_SCENE(_state, _scene) {
@@ -40,6 +44,12 @@ const mutations = {
     SET_FS_TEXT(_state, _text) {
         _state.fragmentShaderString = _text;
     },
+    SET_MUSIC_MODE(_state, _mode) {
+        _state.isMusicMode = _mode;
+    },
+    SET_MUSIC_PLAY_STATE(_state, _flg) {
+        _state.musicPlayState = _flg;
+    },
 };
 const actions = {
     changeScene({commit}, _name) {
@@ -59,6 +69,12 @@ const actions = {
     },
     setFSText({commit}, _text) {
         commit('SET_FS_TEXT', _text);
+    },
+    setMusicMode({commit}, _mode) {
+        commit('SET_MUSIC_MODE', _mode);
+    },
+    setMusicPlayState({commit}, _flg) {
+        commit('SET_MUSIC_PLAY_STATE', _flg);
     },
 };
 

@@ -20,6 +20,9 @@ export class AppConfig {
     public static ON_MOUSE_STATE_CHANGED = (state, getters) => {
         return state.Practice.mouseState;
     };
+    public static ON_MUSIC_STATE_CHANGED = (state, getters) => {
+        return state.Practice.musicPlayState;
+    };
 
     public static SCENE_TOP = 'sceneTop';
     public static SCENE_SKETCH = 'sceneSketch';

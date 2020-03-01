@@ -1,8 +1,16 @@
 import { FFT } from '../../../common/audio/FFT';
 import { Sketch } from '../common/Sketch';
 import * as THREE from "three";
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass.js';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import {MeshLine, MeshLineMaterial} from 'three.meshline';
+import TweenMax, {Expo} from 'gsap';
+import {IcosaVS, IcosaFS} from './IcosaShader';
+import {pVS, pFS} from './PlaneShader';
+import {AppConfig} from '~/assets/ts/practice/Config';
 
 function rand(min, max) {
     return min + Math.random() * (max - min);
@@ -11,22 +19,23 @@ function rand(min, max) {
 export class Item19 extends Sketch {
 
     private _time = 0;
+    private _width = 0;
+    private _height = 0;
     private _renderer;
     private _camera;
     private _stage;
-    private _light;
+    private _text: THREE.Mesh;
     private _audioContext: FFT;
-    private _audioAnalyser: AnalyserNode;
-    private _frequency: Uint8Array;
-    private _outSide: THREE.Geometry;
-    private _center: THREE.Mesh;
-    private _sphere: THREE.Object3D;
-    private _mat: THREE.ShaderMaterial;
-    private _lines: THREE.Group;
-    private _lineMeshArr: MeshLine[] = [];
-    private _lineMaterials: MeshLineMaterial[] = [];
-    private _whiteMaterial: THREE.MeshBasicMaterial;
+    private _outSideMat: THREE.MeshBasicMaterial;
+    private _mediaElement: HTMLAudioElement;
+    private _analyser: THREE.AudioAnalyser;
+    private _material: THREE.ShaderMaterial;
+    private _audioUniforms: {tAudioData: {}};
+    private _planeUniforms: {time: {}, resolution: {}};
     private _controls;
+    private _icosas: THREE.Group;
+
+    private _composer: EffectComposer;
 
     constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {
         super(_store, _id);
@@ -35,6 +44,8 @@ export class Item19 extends Sketch {
     public setup = (): void => {
         const ratio = window.devicePixelRatio;
         const canvasSize = this._store.getters['Common/canvasSize'];
+        this._width = canvasSize.width;
+        this._height = canvasSize.height;
         this._store.commit('Practice/SET_VS_TEXT', 'This is threejs example and there is no own GLSL.');
         this._store.commit('Practice/SET_FS_TEXT', 'This is threejs example and there is no own GLSL.');
 
@@ -45,102 +56,181 @@ export class Item19 extends Sketch {
         });
         this._renderer.setSize(canvasSize.width / ratio, canvasSize.height / ratio);
         this._renderer.setPixelRatio(ratio);
-        this._renderer.setClearColor(0x333333);
+        this._renderer.setClearColor(0x000000);
 
         this._stage = new THREE.Scene();
-        this._stage.fog = new THREE.FogExp2(0x000000, 0.0008);
+        // this._stage.fog = new THREE.FogExp2(0x000000, 0.0008);
 
         this._camera = new THREE.PerspectiveCamera(45, canvasSize.width/canvasSize.height, 0.1, 2000);
-        this._camera.position.set(0, 0, 5.0);
+        this._camera.position.set(0, 0, 1000);
         this._camera.lookAt(new THREE.Vector3(0, 0, -1));
 
-        this._light = new THREE.DirectionalLight(0xffffff, 0.4);
-        this._stage.add(this._light);
+        const light = new THREE.DirectionalLight(0xffffff, 1.0);
+        this._stage.add(light);
 
-        this._outSide = new THREE.SphereGeometry(5, 32, 32);
-        const gMat = new THREE.MeshBasicMaterial({
-            wireframe: true
+        const outSide = new THREE.SphereGeometry(1000, 32, 32);
+        this._outSideMat = new THREE.MeshBasicMaterial({
+            color: 0x000000,
+            side: THREE.DoubleSide,
+            depthTest: false
         });
-        this._sphere = new THREE.Mesh(this._outSide, gMat);
-        this._stage.add(this._sphere);
+        const sphere = new THREE.Mesh(outSide, this._outSideMat);
+        sphere.renderOrder = -2;
+        this._stage.add(sphere);
 
-        this._lines = new THREE.Group();
-        this._lines.add(
-            this.makeLine(),
-            this.makeLine(),
-            this.makeLine(),
-            this.makeLine(),
-            this.makeLine(),
-            this.makeLine(),
-            this.makeLine(),
-            this.makeLine(),
-            this.makeLine(),
-            this.makeLine(),
-            this.makeLine(),
-        );
+        var loader = new THREE.FontLoader();
+        loader.load( '/assets/font/helvetiker_regular.typeface.json',  ( font ) => {
+            const geometry = new THREE.TextGeometry( 'T I M E', {
+                font: font,
+                size: 10,
+                height: 5,
+                bevelEnabled: false
+            });
 
-        this._stage.add(this._lines);
+            const materials = [
+                new THREE.MeshBasicMaterial( { color: 0xffffff} )
+            ];
 
-        this._whiteMaterial = new THREE.MeshBasicMaterial({
-            color: 0xffffff
+            this._text = new THREE.Mesh(geometry, materials);
+            this._text.position.set(-20, -5, 900);
+
+            this._stage.add(this._text);
         });
 
         this._controls = new OrbitControls( this._camera, this._renderer.domElement );
         this._controls.update();
 
-        this.play();
+        this._store.commit('Practice/SET_MUSIC_MODE', true);
+        this._store.watch(AppConfig.ON_MUSIC_STATE_CHANGED, this.onMusicStateChanged);
+
+        this._renderer.render(this._stage, this._camera);
     };
 
-    private makeLine = (): MeshLine => {
-        const nbrOfPoints = 10;
-        const points: number[] = [];
-        const origin = this._sphere.position.clone();
-        let index = Math.round(Math.random() * this._outSide.vertices.length - 1);
-        index -= index % 3;
-        const vertex = this._outSide.vertices[index];
-        const vertex2 = this._outSide.vertices[index + 1];
-        const vertex3 = this._outSide.vertices[index + 2];
+    private setComposer = ():void => {
+        this._composer = new EffectComposer(this._renderer);
+        let renderPass = new RenderPass(this._stage, this._camera);
+        let effectGlitch = new GlitchPass(0.01);
 
-        points.push(origin.x, origin.y, origin.z);
+        this._composer.addPass(renderPass);
+        this._composer.addPass(effectGlitch);
+    };
 
-        for (let i = 1; i < nbrOfPoints + 1; i++) {
-            const offset = i / nbrOfPoints;
-
-            points.push(vertex.x * offset, vertex.y * offset, vertex.z * offset);
+    private onMusicStateChanged = ():void => {
+        if (this._store.getters['Practice/musicPlayState']) {
+            this.readyToMusic();
+        } else {
+            this._mediaElement.pause();
+            this.pause();
         }
+    };
 
-        const line = new MeshLine();
-        line.setGeometry(points);
+    private randomCameraMove = (): void => {
+        // @ts-ignore
+        TweenMax.to(this._camera.position, 10, {
+            x: rand(-50, 50),
+            z: rand(-50, 50),
+            ease: Expo.easeInOut,
+            onComplete: this.randomCameraMove
+        });
+    };
 
-        const geometry = new THREE.BufferGeometry();
-        const vertices = new Float32Array([
-            vertex.x, vertex.y, vertex.z,
-            vertex2.x, vertex2.y, vertex2.z,
-            vertex3.x, vertex3.y, vertex3.z,
-        ]);
-
-        geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
-
-        this._stage.add(new THREE.Mesh( geometry, this._whiteMaterial ));
-
-        const lineMaterial = new MeshLineMaterial({
-            transparent: true,
-            lineWidth: 0.01,
-            color: 0x049ef4,
-            dashArray: rand(1, 5),
-            dashOffset: 0,
-            dashRatio: 0.75,
-            blending: THREE.AdditiveBlending
+    private generateIcosahedron = () => {
+        let geometry = new THREE.IcosahedronGeometry(10, 0);
+        this._material = new THREE.ShaderMaterial({
+            vertexShader: IcosaVS,
+            fragmentShader: IcosaFS,
+            morphTargets: true,
+            uniforms: this._audioUniforms,
         });
 
-        const mesh  = new THREE.Mesh(line.geometry, lineMaterial);
+        for ( let i = 0; i < 12; i ++ ) {
+            const vertices: THREE.Vector3[] = [];
+            for ( let v = 0; v < geometry.vertices.length; v ++ ) {
+                vertices.push( geometry.vertices[ v ].clone() );
+
+                if ( v === i ) {
+                    vertices[ vertices.length - 1 ].x *= 2;
+                    vertices[ vertices.length - 1 ].y *= 2;
+                    vertices[ vertices.length - 1 ].z *= 2;
+                }
+            }
+            geometry.morphTargets.push( { name: "target" + i, vertices: vertices } );
+        }
+
         // @ts-ignore
-        mesh.target = vertex;
+        geometry = new THREE.BufferGeometry().fromGeometry( geometry );
 
-        this._lineMeshArr.push(mesh);
-        this._lineMaterials.push(lineMaterial);
+        const mesh = new THREE.Mesh(geometry, this._material);
+        this._icosas.add(mesh);
+    };
 
-        return mesh;
+    private readyToMusic = (): void => {
+        const listener = new THREE.AudioListener();
+        const audio = new THREE.Audio( listener );
+        this._mediaElement = new Audio( '/assets/audio/music.mp3' );
+        this._mediaElement.loop = false;
+        this._mediaElement.play();
+        audio.setMediaElementSource( this._mediaElement );
+
+        this._analyser = new THREE.AudioAnalyser( audio, 128 );
+        this._audioUniforms = {
+            tAudioData: { value: new THREE.DataTexture( this._analyser.data, 128 / 2, 1, THREE.LuminanceFormat ) }
+        };
+
+        this._mediaElement.play();
+        this.play();
+
+        // @ts-ignore
+        TweenMax.to(this._camera.position, 25, {
+            z: 40,
+            ease: Expo.easeInOut,
+            // onComplete: this.randomCameraMove
+        });
+
+        setTimeout(() => {
+            this.setComposer();
+        }, 4000);
+
+        setTimeout(() => {
+            this._icosas = new THREE.Group();
+
+            this._stage.remove(this._text);
+            this.generateIcosahedron();
+
+            this._composer.reset();
+            // @ts-ignore
+            this._composer = null;
+
+            this._stage.add(this._icosas);
+            this._outSideMat.color = new THREE.Color(0xffffff);
+        }, 9500);
+
+        setTimeout(() => {
+            this.generatePlane();
+        }, 30000);
+    };
+
+    private generatePlane = () => {
+        this._planeUniforms = {
+            time: {
+                value: this._time,
+            },
+            resolution: {
+                value: new THREE.Vector2(this._width, this._height)
+            },
+        };
+        const plane = new THREE.PlaneGeometry(2, 2);
+        const material = new THREE.ShaderMaterial({
+            vertexShader: pVS,
+            fragmentShader: pFS,
+            uniforms: this._planeUniforms,
+            depthTest: false,
+        });
+        const mesh = new THREE.Mesh(plane, material);
+        mesh.renderOrder = -1;
+        mesh.position.z = -50;
+
+        this._stage.add(mesh);
     };
 
     public dispose = (): void => {
@@ -154,31 +244,44 @@ export class Item19 extends Sketch {
         }
     };
 
-    private checkCollision = () => {
-        this._lineMeshArr.forEach((line) => {
-            const material = line.material;
+    private moprh = (average: number) => {
+        if (this._icosas) {
+            this._icosas.children.forEach((mesh, index) => {
+                for (let i = 0; i < 12; i++) {
+                    // @ts-ignore
+                    mesh.morphTargetInfluences[i] = average * 0.002;
+                }
 
-            if (Math.abs(material.uniforms.dashArray.value % 2) === 0 ) {
-                console.log('lig');
-            }
-        });
+                mesh.rotation.x += rand(0.001, 0.01);
+                mesh.rotation.y += rand(0.001, 0.01);
+            });
+        }
     };
 
     public update = () => {
-        // this._audioAnalyser.getByteFrequencyData(this._frequency);
-        this.checkCollision();
         this.animate();
         this._controls.update();
 
         this._timer = requestAnimationFrame(this.update);
         this._time += 0.01;
+
+        if (this._planeUniforms) {
+            // @ts-ignore
+            this._planeUniforms.time.value = this._time;
+        }
     };
 
     public animate = () => {
-        this._lineMaterials.forEach((material) => {
-            material.uniforms.dashOffset.value -= 0.02;
-        });
+        this._analyser.getFrequencyData();
+        this.moprh(this._analyser.getAverageFrequency());
 
-        this._renderer.render(this._stage, this._camera);
+        // @ts-ignore
+        this._audioUniforms.tAudioData.value.needsUpdate = true;
+
+        if (this._composer) {
+            this._composer.render();
+        } else {
+            this._renderer.render(this._stage, this._camera);
+        }
     };
 }

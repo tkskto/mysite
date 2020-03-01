@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="practice-root">
         <ul class="list-sketch">
             <li class="sketch--item" id="01"><a href="#01">#1</a></li>
             <li class="sketch--item" id="02"><a href="#02">#2</a></li>
@@ -29,6 +29,7 @@
 
         <ViewChangeButton />
         <ShaderView />
+        <PlayPauseBtn />
     </div>
 </template>
 
@@ -59,7 +60,7 @@
     import {Item17} from '~/assets/ts/practice/sketch/17/Item17';
     import {Item18} from '~/assets/ts/practice/sketch/18/Item18';
     import {Item19} from '~/assets/ts/practice/sketch/19/Item19';
-
+    import PlayPauseBtn from '~/components/practice/PlayPauseBtn';
 
     export default {
         name: 'practice',
@@ -73,6 +74,7 @@
             };
         },
         components: {
+            PlayPauseBtn,
             Quote,
             ViewChangeButton,
             ShaderView,
@@ -252,6 +254,12 @@
 
     body.webGL #canvas--2d {
         display: none;
+    }
+
+    .practice-root {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
     }
 
     .container-canvas {

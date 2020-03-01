@@ -25,6 +25,7 @@ export class Sketch implements ISketch {
         const store = this._store.getters;
         const scene = store['Practice/getScene'];
         const id = store['Practice/id'];
+        this._store.commit('Practice/SET_MUSIC_MODE', false);
 
         if (scene === AppConfig.SCENE_SKETCH) {
             if (id === this._id && !this._setuped && !this._isPlaying) {

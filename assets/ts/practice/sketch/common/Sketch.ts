@@ -9,6 +9,7 @@ export class Sketch implements ISketch {
     private _setuped = false;
     private _isPlaying = false;
     private _quote: string;
+    public _ready = false;
     public _timer: number;
     public _id: string;
     public _type: string;
@@ -20,6 +21,7 @@ export class Sketch implements ISketch {
     }
 
     private onStateChanged = () => {
+        this._ready = false;
         const store = this._store.getters;
         const scene = store['Practice/getScene'];
         const id = store['Practice/id'];
@@ -29,9 +31,7 @@ export class Sketch implements ISketch {
                 this._store.commit('Common/SET_MOUSE_STATE', false);
                 this.setup();
                 this._setuped = true;
-                if (this._quote) {
-                    this._store.commit('Practice/SET_QUOTE_TEXT', this._quote);
-                }
+                this._store.commit('Practice/SET_QUOTE_TEXT', this._quote);
             } else if (id === this._id && !this._isPlaying) {
                 this.play();
             } else if (id !== this._id && this._isPlaying) {

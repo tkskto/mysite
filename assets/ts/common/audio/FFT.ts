@@ -9,7 +9,10 @@ export class FFT {
     constructor() {
         this._audioContext = new AudioContext();
         this._analyser = this._audioContext.createAnalyser();
-        this._analyser.fftSize = 2048;
+        this._analyser.fftSize = 32;
+        this._analyser.minDecibels = -90; //最小値
+        this._analyser.maxDecibels = 0; //最大値
+        this._analyser.smoothingTimeConstant = 0.65; //落ち着くまでの時間
     }
 
     private onLoadAudio = (value: Response): ArrayBuffer | PromiseLike<ArrayBuffer> => {

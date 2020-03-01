@@ -16,8 +16,8 @@ export class Plane extends Sketch {
     private _renderer: Renderer;
     private _time = 0;
 
-    constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string, private _shader: Shader, private _ctx: WebGLContext) {
-        super(_store, _id);
+    constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string, private _shader: Shader, private _ctx: WebGLContext, quote: string = '') {
+        super(_store, _id, quote);
     }
 
     public setup = (): void => {

@@ -12,7 +12,10 @@
     export default {
         name: "Header",
         methods: {
-            ...mapActions(['changeDialogState', 'changeScene']),
+            ...mapActions({
+                changeDialogState: 'MicroAnimations/changeDialogState',
+                changeScene: 'Common/changeScene'
+            }),
             showDialog() {
                 this.changeDialogState(true);
                 this.changeScene('dialog');

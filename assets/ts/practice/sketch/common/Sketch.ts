@@ -12,7 +12,6 @@ export class Sketch implements ISketch {
     public _ready = false;
     public _timer: number;
     public _id: string;
-    public _type: string;
 
     constructor(public _store: any, _id: string, _quote = '') {
         _store.watch(AppConfig.ON_SKETCH_CHANGED, this.onStateChanged);
@@ -57,7 +56,7 @@ export class Sketch implements ISketch {
 
     play(): void {
         document.body.setAttribute('class', '');
-        document.body.classList.add(this._type);
+        document.body.classList.add(`id-${this._id}`);
         this._timer = requestAnimationFrame(this.update);
         this._isPlaying = true;
     }
@@ -81,10 +80,6 @@ export class Sketch implements ISketch {
     public update = (): void => {
         throw new Error('please implement sub class');
     };
-
-    get type(): string {
-        return this._type;
-    }
 
     get timer(): number {
         return this._timer;

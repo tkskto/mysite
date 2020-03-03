@@ -16,9 +16,11 @@
         methods: {
             ...mapActions({
                 setMusicPlayState: 'Practice/setMusicPlayState',
+                setMusicMode: 'Practice/setMusicMode'
             }),
             onClick() {
                 this.setMusicPlayState(!this.musicPlayState);
+                this.setMusicMode(false);
             },
         },
     };
@@ -39,11 +41,12 @@
         opacity: 1;
     }
 
-    .button-enter-active {
+    .button-enter-active,
+    .button-leave-active {
         transition: transform 0.3s ease, opacity 0.2s;
     }
 
-    .button-enter {
+    .button-enter, .button-leave-to {
         transform: translateY(0);
         opacity: 0;
     }

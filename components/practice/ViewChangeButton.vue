@@ -34,6 +34,10 @@
 </script>
 
 <style scoped>
+    .id-19 .lyt-btn--viewChange {
+        display: none;
+    }
+
     .lyt-btn--viewChange {
         width: 44px;
         height: 44px;

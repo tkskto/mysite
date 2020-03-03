@@ -1,47 +1,47 @@
-import { FFT } from '../../../common/audio/FFT';
 import { Sketch } from '../common/Sketch';
 import * as THREE from "three";
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass.js';
-import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import TweenMax, {Expo} from 'gsap';
-import {IcosaVS, IcosaFS} from './IcosaShader';
-import {pVS, pFS} from './PlaneShader';
 import {AppConfig} from '~/assets/ts/practice/Config';
 
-function rand(min, max) {
-    return min + Math.random() * (max - min);
-}
+import Text from './Text';
+import IcosaHedron from './IcosaHedron';
+import Rain from './Rain';
+import Background from './Background';
+import Line from './Line';
+import Composer from './Composer';
+import Particle from './Particle';
+import Smoke from './Smoke';
 
 export class Item19 extends Sketch {
-
     private _time = 0;
     private _width = 0;
     private _height = 0;
-    private _renderer;
-    private _camera;
-    private _stage;
-    private _text: THREE.Mesh;
-    private _audioContext: FFT;
+    private _renderer: THREE.WebGLRenderer;
+    private _camera: THREE.PerspectiveCamera;
+    private _stage: THREE.Scene;
+    private _outside: THREE.Mesh;
     private _outSideMat: THREE.MeshBasicMaterial;
     private _mediaElement: HTMLAudioElement;
     private _analyser: THREE.AudioAnalyser;
-    private _material: THREE.ShaderMaterial;
-    private _audioUniforms: {tAudioData: {}};
-    private _planeUniforms: {time: {}, resolution: {}};
     private _controls;
-    private _icosas: THREE.Group;
 
-    private _composer: EffectComposer;
+    private _text: Text;
+    private _icosaHedron: IcosaHedron;
+    private _rain: Rain;
+    private _line: Line;
+    private _background: Background;
+    private _composer: Composer;
+    private _star: Particle;
+    private _smoke: Smoke;
+    private _scene: number = 0;
 
     constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {
         super(_store, _id);
     }
 
     public setup = (): void => {
+        document.body.classList.add(`id-${this._id}`);
         const ratio = window.devicePixelRatio;
         const canvasSize = this._store.getters['Common/canvasSize'];
         this._width = canvasSize.width;
@@ -49,7 +49,7 @@ export class Item19 extends Sketch {
         this._store.commit('Practice/SET_VS_TEXT', 'This is threejs example and there is no own GLSL.');
         this._store.commit('Practice/SET_FS_TEXT', 'This is threejs example and there is no own GLSL.');
 
-        const context: WebGL2RenderingContext = this._canvas.getContext( 'webgl2', { alpha: false } ) as WebGL2RenderingContext;
+        const context: WebGL2RenderingContext = this._canvas.getContext( 'webgl2', { antialias: true } ) as WebGL2RenderingContext;
         this._renderer = new THREE.WebGLRenderer({
             canvas: this._canvas,
             context: context
@@ -59,7 +59,6 @@ export class Item19 extends Sketch {
         this._renderer.setClearColor(0x000000);
 
         this._stage = new THREE.Scene();
-        // this._stage.fog = new THREE.FogExp2(0x000000, 0.0008);
 
         this._camera = new THREE.PerspectiveCamera(45, canvasSize.width/canvasSize.height, 0.1, 2000);
         this._camera.position.set(0, 0, 1000);
@@ -72,30 +71,14 @@ export class Item19 extends Sketch {
         this._outSideMat = new THREE.MeshBasicMaterial({
             color: 0x000000,
             side: THREE.DoubleSide,
-            depthTest: false
+            depthTest: true
         });
-        const sphere = new THREE.Mesh(outSide, this._outSideMat);
-        sphere.renderOrder = -2;
-        this._stage.add(sphere);
+        this._outside = new THREE.Mesh(outSide, this._outSideMat);
+        this._outside.renderOrder = -2;
+        this._stage.add(this._outside);
 
-        var loader = new THREE.FontLoader();
-        loader.load( '/assets/font/helvetiker_regular.typeface.json',  ( font ) => {
-            const geometry = new THREE.TextGeometry( 'T I M E', {
-                font: font,
-                size: 10,
-                height: 5,
-                bevelEnabled: false
-            });
-
-            const materials = [
-                new THREE.MeshBasicMaterial( { color: 0xffffff} )
-            ];
-
-            this._text = new THREE.Mesh(geometry, materials);
-            this._text.position.set(-20, -5, 900);
-
-            this._stage.add(this._text);
-        });
+        this._text = new Text(this._stage);
+        this._text.generate();
 
         this._controls = new OrbitControls( this._camera, this._renderer.domElement );
         this._controls.update();
@@ -104,15 +87,6 @@ export class Item19 extends Sketch {
         this._store.watch(AppConfig.ON_MUSIC_STATE_CHANGED, this.onMusicStateChanged);
 
         this._renderer.render(this._stage, this._camera);
-    };
-
-    private setComposer = ():void => {
-        this._composer = new EffectComposer(this._renderer);
-        let renderPass = new RenderPass(this._stage, this._camera);
-        let effectGlitch = new GlitchPass(0.01);
-
-        this._composer.addPass(renderPass);
-        this._composer.addPass(effectGlitch);
     };
 
     private onMusicStateChanged = ():void => {
@@ -124,46 +98,6 @@ export class Item19 extends Sketch {
         }
     };
 
-    private randomCameraMove = (): void => {
-        // @ts-ignore
-        TweenMax.to(this._camera.position, 10, {
-            x: rand(-50, 50),
-            z: rand(-50, 50),
-            ease: Expo.easeInOut,
-            onComplete: this.randomCameraMove
-        });
-    };
-
-    private generateIcosahedron = () => {
-        let geometry = new THREE.IcosahedronGeometry(10, 0);
-        this._material = new THREE.ShaderMaterial({
-            vertexShader: IcosaVS,
-            fragmentShader: IcosaFS,
-            morphTargets: true,
-            uniforms: this._audioUniforms,
-        });
-
-        for ( let i = 0; i < 12; i ++ ) {
-            const vertices: THREE.Vector3[] = [];
-            for ( let v = 0; v < geometry.vertices.length; v ++ ) {
-                vertices.push( geometry.vertices[ v ].clone() );
-
-                if ( v === i ) {
-                    vertices[ vertices.length - 1 ].x *= 2;
-                    vertices[ vertices.length - 1 ].y *= 2;
-                    vertices[ vertices.length - 1 ].z *= 2;
-                }
-            }
-            geometry.morphTargets.push( { name: "target" + i, vertices: vertices } );
-        }
-
-        // @ts-ignore
-        geometry = new THREE.BufferGeometry().fromGeometry( geometry );
-
-        const mesh = new THREE.Mesh(geometry, this._material);
-        this._icosas.add(mesh);
-    };
-
     private readyToMusic = (): void => {
         const listener = new THREE.AudioListener();
         const audio = new THREE.Audio( listener );
@@ -172,71 +106,88 @@ export class Item19 extends Sketch {
         this._mediaElement.play();
         audio.setMediaElementSource( this._mediaElement );
 
-        this._analyser = new THREE.AudioAnalyser( audio, 128 );
-        this._audioUniforms = {
-            tAudioData: { value: new THREE.DataTexture( this._analyser.data, 128 / 2, 1, THREE.LuminanceFormat ) }
-        };
-
-        this._mediaElement.play();
-        this.play();
+        this._analyser = new THREE.AudioAnalyser( audio, 1024 );
+        this._icosaHedron = new IcosaHedron(this._stage, this._analyser);
+        this._rain  = new Rain(this._stage);
+        this._line = new Line(this._stage, this._camera);
+        this._line.generate();
+        this._background = new Background(this._stage, this._width, this._height);
+        this._composer = new Composer(this._stage, this._renderer, this._camera);
+        this._star = new Particle(this._stage);
+        this._star.generate();
+        this._smoke = new Smoke(this._stage);
+        this._smoke.generate();
 
         // @ts-ignore
-        TweenMax.to(this._camera.position, 25, {
+        TweenMax.to(this._camera.position, 40, {
             z: 40,
             ease: Expo.easeInOut,
-            // onComplete: this.randomCameraMove
         });
 
+        this._smoke.start();
+
+        // シーン1 サウナ
         setTimeout(() => {
-            this.setComposer();
-        }, 4000);
-
-        setTimeout(() => {
-            this._icosas = new THREE.Group();
-
-            this._stage.remove(this._text);
-            this.generateIcosahedron();
-
+            this._text.remove();
             this._composer.reset();
+
+            // this._smoke.start();
+            this._background.generate();
+            this._icosaHedron.generate();
+
             // @ts-ignore
-            this._composer = null;
-
-            this._stage.add(this._icosas);
             this._outSideMat.color = new THREE.Color(0xffffff);
-        }, 9500);
 
+            setTimeout(() => {
+                this._scene++;
+                this._smoke.remove();
+                this._text.changeText(this._scene);
+                this._icosaHedron.move(this._scene);
+
+                setTimeout(() => {
+                    this._scene++;
+
+                    // @ts-ignore
+                    TweenMax.to(this._camera.position, 20, {
+                        z: 500,
+                        ease: Expo.easeInOut
+                    });
+                }, 6000);
+                // this._background.changeMaterial(this._scene);
+            }, 10000);
+        }, 17000);
+
+        // シーン2 水風呂
         setTimeout(() => {
-            this.generatePlane();
-        }, 30000);
-    };
+            this._line.start();
+            this._rain.generate();
+            this._icosaHedron.show();
 
-    private generatePlane = () => {
-        this._planeUniforms = {
-            time: {
-                value: this._time,
-            },
-            resolution: {
-                value: new THREE.Vector2(this._width, this._height)
-            },
-        };
-        const plane = new THREE.PlaneGeometry(2, 2);
-        const material = new THREE.ShaderMaterial({
-            vertexShader: pVS,
-            fragmentShader: pFS,
-            uniforms: this._planeUniforms,
-            depthTest: false,
-        });
-        const mesh = new THREE.Mesh(plane, material);
-        mesh.renderOrder = -1;
-        mesh.position.z = -50;
+            this._outSideMat.color = new THREE.Color(0x000000);
+        }, 40700);
 
-        this._stage.add(mesh);
+        // シーン3 外気よく
+        setTimeout(() => {
+            this._star.start();
+            this._line.remove();
+            this._rain.remove();
+        }, 80000);
+
+        // シーン4 ととのい
+        setTimeout(() => {
+            this._star.remove();
+            this._background.changeMaterial(1);
+            this._composer.setComposer();
+        }, 120000);
+
+        this.play();
     };
 
     public dispose = (): void => {
         this.pause();
 
-        this._audioContext.pause();
+        this._mediaElement.pause();
+        this._mediaElement.remove();
 
         if (this._renderer) {
             this._stage.dispose();
@@ -244,44 +195,41 @@ export class Item19 extends Sketch {
         }
     };
 
-    private moprh = (average: number) => {
-        if (this._icosas) {
-            this._icosas.children.forEach((mesh, index) => {
-                for (let i = 0; i < 12; i++) {
-                    // @ts-ignore
-                    mesh.morphTargetInfluences[i] = average * 0.002;
-                }
-
-                mesh.rotation.x += rand(0.001, 0.01);
-                mesh.rotation.y += rand(0.001, 0.01);
-            });
-        }
-    };
-
     public update = () => {
         this.animate();
         this._controls.update();
 
+        if (this._icosaHedron.ready) {
+            this._camera.lookAt(this._icosaHedron.mesh.position);
+        }
+
         this._timer = requestAnimationFrame(this.update);
         this._time += 0.01;
-
-        if (this._planeUniforms) {
-            // @ts-ignore
-            this._planeUniforms.time.value = this._time;
-        }
     };
 
     public animate = () => {
-        this._analyser.getFrequencyData();
-        this.moprh(this._analyser.getAverageFrequency());
+        const average: number = this._analyser.getAverageFrequency();
 
-        // @ts-ignore
-        this._audioUniforms.tAudioData.value.needsUpdate = true;
+        if (this._smoke.ready) {
+            this._smoke.update();
+        }
 
-        if (this._composer) {
+        if (this._star.ready) {
+            this._star.update();
+        }
+
+        if (this._icosaHedron.ready) {
+            this._icosaHedron.update(average);
+        }
+
+        if (this._rain.ready) {
+            this._rain.update();
+        }
+
+        if (this._composer.ready) {
             this._composer.render();
         } else {
             this._renderer.render(this._stage, this._camera);
         }
-    };
+    }
 }

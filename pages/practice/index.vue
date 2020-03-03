@@ -283,6 +283,10 @@
         text-align: center;
     }
 
+    .id-19 .list-sketch {
+        display: none;
+    }
+
     .list-sketch {
         position: relative;
         z-index: 1;

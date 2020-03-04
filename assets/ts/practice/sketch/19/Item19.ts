@@ -12,6 +12,7 @@ import Line from './Line';
 import Composer from './Composer';
 import Particle from './Particle';
 import Smoke from './Smoke';
+import {LensFlare} from './LensFlare';
 
 export class Item19 extends Sketch {
     private _time = 0;
@@ -35,6 +36,7 @@ export class Item19 extends Sketch {
     private _star: Particle;
     private _smoke: Smoke;
     private _scene: number = 0;
+    private _lensFrare: LensFlare;
 
     constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {
         super(_store, _id);
@@ -49,7 +51,7 @@ export class Item19 extends Sketch {
         this._store.commit('Practice/SET_VS_TEXT', 'This is threejs example and there is no own GLSL.');
         this._store.commit('Practice/SET_FS_TEXT', 'This is threejs example and there is no own GLSL.');
 
-        const context: WebGL2RenderingContext = this._canvas.getContext( 'webgl2', { antialias: true } ) as WebGL2RenderingContext;
+        const context: WebGL2RenderingContext = this._canvas.getContext( 'webgl2', { antialias: true, alpha: true } ) as WebGL2RenderingContext;
         this._renderer = new THREE.WebGLRenderer({
             canvas: this._canvas,
             context: context
@@ -80,6 +82,17 @@ export class Item19 extends Sketch {
         this._text = new Text(this._stage);
         this._text.generate();
 
+        this._line = new Line(this._stage, this._camera);
+        this._line.generate();
+
+        this._rain  = new Rain(this._stage);
+        this._rain.generate();
+
+        this._background = new Background(this._stage, this._width, this._height);
+        this._composer = new Composer(this._stage, this._renderer, this._camera);
+        this._star = new Particle(this._stage);
+        this._lensFrare = new LensFlare(this._stage);
+
         this._controls = new OrbitControls( this._camera, this._renderer.domElement );
         this._controls.update();
 
@@ -108,13 +121,6 @@ export class Item19 extends Sketch {
 
         this._analyser = new THREE.AudioAnalyser( audio, 1024 );
         this._icosaHedron = new IcosaHedron(this._stage, this._analyser);
-        this._rain  = new Rain(this._stage);
-        this._line = new Line(this._stage, this._camera);
-        this._line.generate();
-        this._background = new Background(this._stage, this._width, this._height);
-        this._composer = new Composer(this._stage, this._renderer, this._camera);
-        this._star = new Particle(this._stage);
-        this._star.generate();
         this._smoke = new Smoke(this._stage);
         this._smoke.generate();
 
@@ -131,9 +137,9 @@ export class Item19 extends Sketch {
             this._text.remove();
             this._composer.reset();
 
-            // this._smoke.start();
-            this._background.generate();
+            // this._lensFrare.setSunFlare();
             this._icosaHedron.generate();
+            this._background.generate();
 
             // @ts-ignore
             this._outSideMat.color = new THREE.Color(0xffffff);
@@ -141,6 +147,7 @@ export class Item19 extends Sketch {
             setTimeout(() => {
                 this._scene++;
                 this._smoke.remove();
+                this._star.generate();
                 this._text.changeText(this._scene);
                 this._icosaHedron.move(this._scene);
 
@@ -149,22 +156,23 @@ export class Item19 extends Sketch {
 
                     // @ts-ignore
                     TweenMax.to(this._camera.position, 20, {
-                        z: 500,
+                        z: 600,
                         ease: Expo.easeInOut
                     });
                 }, 6000);
-                // this._background.changeMaterial(this._scene);
             }, 10000);
         }, 17000);
 
         // シーン2 水風呂
         setTimeout(() => {
             this._line.start();
-            this._rain.generate();
-            this._icosaHedron.show();
-
+            this._icosaHedron.show(this._scene);
             this._outSideMat.color = new THREE.Color(0x000000);
-        }, 40700);
+
+            setTimeout(() => {
+                this._rain.start();
+            }, 8000);
+        }, 40850);
 
         // シーン3 外気よく
         setTimeout(() => {
@@ -179,6 +187,15 @@ export class Item19 extends Sketch {
             this._background.changeMaterial(1);
             this._composer.setComposer();
         }, 120000);
+
+        setTimeout(() => {
+            this._lensFrare.generate();
+            this._icosaHedron.last(this._camera);
+
+            setTimeout(() => {
+                this._lensFrare.setSunFlare();
+            }, 7000);
+        }, 132000);
 
         this.play();
     };
@@ -223,7 +240,7 @@ export class Item19 extends Sketch {
         }
 
         if (this._rain.ready) {
-            this._rain.update();
+            this._rain.update(average);
         }
 
         if (this._composer.ready) {

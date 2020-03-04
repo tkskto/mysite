@@ -6,57 +6,83 @@ function rand(min, max) {
 
 export default class Rain {
     private _rain: THREE.Group;
-    private _geometry: THREE.Geometry;
+    private _mesh: THREE.Mesh[] = [];
+    private _material: THREE.MeshBasicMaterial;
+    private _texture: THREE.Texture;
     private _ready: boolean = false;
+    private _interval: boolean = false;
+    private _slow: boolean = false;
 
-    constructor(private _stage: THREE.Scene) {}
+    constructor(private _stage: THREE.Scene) {
+        this._texture = new THREE.TextureLoader().load('/assets/img/line.png');
+    }
 
     public generate() {
         this._rain = new THREE.Group();
+        this._material = new THREE.MeshBasicMaterial({
+            color: new THREE.Color(0.3, 0.6, 0.7),
+            blending: THREE.NoBlending,
+            transparent: true,
+            map: this._texture
+        });
 
-        this._geometry = new THREE.Geometry();
+        for (let i = 0; i < 1000; i++) {
+            const geometry = new THREE.BoxGeometry(0.1, rand(10, 20), 0.1, 1, 1, 1);
+            const mesh = new THREE.Mesh(geometry, this._material);
 
-        for (let i = 0; i < 15000; i++) {
-            const vertex = new THREE.Vector3(
-                rand(-200, 200),
-                rand(-250, 250),
-                rand(-200, 200)
+            mesh.position.set(
+                rand(-240, 160),
+                rand(500, 1000),
+                rand(600, 800)
             );
 
             // @ts-ignore
-            vertex.velocity = 0;
-            this._geometry.vertices.push(vertex);
+            mesh.velocity = 0;
+            // @ts-ignore
+            mesh.accel = 0.02 * Math.random();
+
+            this._mesh.push(mesh);
+            this._rain.add(mesh);
         }
-
-        const material = new THREE.PointsMaterial({
-            color: 0x333333,
-            size: 0.1,
-            transparent: true,
-        });
-
-        const rain = new THREE.Points(this._geometry, material);
-        this._rain.add(rain);
 
         this._stage.add(this._rain);
-        this._ready = true;
+        this._rain.visible = false;
     }
 
-    public update = () => {
-        if (this._rain) {
-            this._geometry.vertices.forEach((p) => {
-                // @ts-ignore
-                p.velocity += 0.1 + Math.random() * 0.1;
-                // @ts-ignore
-                p.y += p.velocity;
+    public start = () => {
+        this._rain.visible = true;
+        this._ready = true;
+    };
 
-                if (p.y > 500) {
-                    p.y = -500;
-                    // @ts-ignore
-                    p.velocity = 0;
-                }
-            });
-            this._geometry.verticesNeedUpdate = true;
+    public update = (average: number) => {
+        if (average > 120 && !this._slow && !this._interval) {
+            this._slow = true;
+
+            setTimeout(() => {
+                this._slow = false;
+                this._interval = true;
+
+                setTimeout(() => {
+                    this._interval = false;
+                }, 3000);
+            }, 2000);
         }
+        this._mesh.forEach((mesh) => {
+            if (!this._slow) {
+                // @ts-ignore
+                mesh.velocity += mesh.accel;
+                // @ts-ignore
+                mesh.position.y -= mesh.velocity;
+            } else {
+                mesh.position.y -= 0.2;
+            }
+
+            if (mesh.position.y < -500) {
+                mesh.position.y = 500;
+                // @ts-ignore
+                mesh.velocity = 0;
+            }
+        });
     };
 
     public remove = () => {

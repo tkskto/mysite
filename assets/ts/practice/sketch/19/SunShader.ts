@@ -126,10 +126,10 @@ void main(void){
     float n = snoise(vec3(nx, ny, nz));
     n = (1.0 + n) * 0.02;
 
-    float lsun = 1.0 - length(vec2(psun.x + n, psun.y)) * 1.5;
+    float lsun = 1.0 - length(vec2(psun.x + n, psun.y)) * 2.5;
     vec3 sun = vec3(smoothstep(0.5, 0.7, lsun) * lsun);
     
-    vec3 color = skyColor;
+    vec3 color = sun + skyColor;
 
     gl_FragColor = vec4(color, 1.0);
 }

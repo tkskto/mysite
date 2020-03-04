@@ -9,6 +9,7 @@ export default class Line {
     private _cubes: THREE.Group;
     private _material: THREE.MeshBasicMaterial;
     private _texture: THREE.Texture;
+    private _ready: boolean = false;
 
     constructor(private _stage: THREE.Scene, private _camera: THREE.PerspectiveCamera) {
         this._texture = new THREE.TextureLoader().load('/assets/img/line.png');
@@ -23,7 +24,7 @@ export default class Line {
             map: this._texture
         });
 
-        for (let i = 0; i < 4000; i++) {
+        for (let i = 0; i < 2000; i++) {
             const geometry = new THREE.BoxGeometry(1, 1, rand(100, 200), 1, 1, 1);
             const mesh = new THREE.Mesh(geometry, this._material);
 
@@ -34,25 +35,26 @@ export default class Line {
 
         this._material.opacity = 0;
         this._stage.add(this._cubes);
+        this._ready = true;
     };
 
     public start = () => {
         this._material.opacity = 1;
         if (this._cubes) {
-            // this._cubes.children.forEach((mesh) => {
-            //     // @ts-ignore
-            //     TweenMax.to(mesh.position, rand(10, 15), {
-            //         z: 1000,
-            //     });
-            // });
-            this._cubes.position.z = 1000;
+            this._cubes.position.z = 600;
 
-            TweenMax.to(this._cubes.position, 8, {
+            // @ts-ignore
+            TweenMax.to(this._cubes.position, 12, {
                 z: -1000,
             });
 
-            TweenMax.to(this._material, 6, {
+            // @ts-ignore
+            TweenMax.to(this._material, 10, {
                 opacity: 0,
+                onComplete: () => {
+                    this._stage.remove(this._cubes);
+                    this._ready = false;
+                }
             });
         }
     };

@@ -24,11 +24,11 @@ export class Sketch implements ISketch {
         const store = this._store.getters;
         const scene = store['Practice/getScene'];
         const id = store['Practice/id'];
-        this._store.commit('Practice/SET_MUSIC_MODE', false);
 
         if (scene === AppConfig.SCENE_SKETCH) {
             if (id === this._id && !this._setuped && !this._isPlaying) {
                 this._store.commit('Common/SET_MOUSE_STATE', false);
+                this._store.commit('Practice/SET_MUSIC_MODE', false);
                 this.setup();
                 this._setuped = true;
                 this._store.commit('Practice/SET_QUOTE_TEXT', this._quote);

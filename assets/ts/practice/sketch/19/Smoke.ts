@@ -29,8 +29,8 @@ export default class Smoke {
 
             smoke.position.set(
                 Math.random() * 2000 - 500,
-                Math.random() * -500 - 750,
-                Math.random() * 600 + 50,
+                Math.random() * -500 - 600,
+                Math.random() * 100 + 300,
             );
 
             smoke.rotation.z = Math.random() * 360;
@@ -51,7 +51,7 @@ export default class Smoke {
     public start = () => {
         // @ts-ignore
         TweenMax.to(this._material, 1.0, {
-            opacity: 0.7
+            opacity: 0.6
         });
 
         this._ready = true;

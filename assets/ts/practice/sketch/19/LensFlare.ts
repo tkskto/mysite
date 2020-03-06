@@ -30,6 +30,7 @@ export class LensFlare {
         this._material = new THREE.MeshBasicMaterial({
             color: new THREE.Color(0.3, 0.6, 0.7),
             blending: THREE.CustomBlending,
+            transparent: true,
             depthTest: false,
             map: this._texture4
         });
@@ -47,7 +48,7 @@ export class LensFlare {
         const geo = new THREE.PlaneGeometry(200, 200);
         const material = new THREE.MeshBasicMaterial({
             color: 0xffffff,
-            blending: THREE.CustomBlending,
+            blending: THREE.AdditiveBlending,
             transparent: true,
             depthTest: false,
             map: this._texture5
@@ -66,11 +67,10 @@ export class LensFlare {
         const light = new THREE.PointLight( 0xffffff, 10, 2000 );
         const lensflare = new Lensflare();
 
-        light.position.set(0, 0, 0);
-
-        lensflare.addElement( new LensflareElement( this._texture1, 512, 20 ) );
-        lensflare.addElement( new LensflareElement( this._texture2, 512, 60 ) );
-        lensflare.addElement( new LensflareElement( this._texture3, 60, 120 ) );
+        light.position.set(3, 0, 0);
+        lensflare.addElement( new LensflareElement( this._texture1, 512, 0 ) );
+        lensflare.addElement( new LensflareElement( this._texture2, 512, 0 ) );
+        lensflare.addElement( new LensflareElement( this._texture3, 60, 0.6 ) );
         light.add( lensflare );
         this._stage.add(light);
 
@@ -102,6 +102,11 @@ export class LensFlare {
             onComplete: () => {
                 this._stage.remove(light);
             }
+        });
+
+        // @ts-ignore
+        TweenMax.to(light.position, 1, {
+            x: 0,
         });
     }
 }

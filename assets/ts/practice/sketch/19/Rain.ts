@@ -12,6 +12,7 @@ export default class Rain {
     private _ready: boolean = false;
     private _interval: boolean = false;
     private _slow: boolean = false;
+    private _remove: boolean = false;
 
     constructor(private _stage: THREE.Scene) {
         this._texture = new THREE.TextureLoader().load('/assets/img/line.png');
@@ -33,7 +34,7 @@ export default class Rain {
             mesh.position.set(
                 rand(-240, 160),
                 rand(500, 1000),
-                rand(600, 800)
+                rand(-100, 100)
             );
 
             // @ts-ignore
@@ -52,6 +53,10 @@ export default class Rain {
     public start = () => {
         this._rain.visible = true;
         this._ready = true;
+
+        setTimeout(() => {
+            this._remove = true;
+        }, 15000);
     };
 
     public update = (average: number) => {
@@ -69,15 +74,17 @@ export default class Rain {
         }
         this._mesh.forEach((mesh) => {
             if (!this._slow) {
+                mesh.scale.y = 1.0;
                 // @ts-ignore
                 mesh.velocity += mesh.accel;
                 // @ts-ignore
                 mesh.position.y -= mesh.velocity;
             } else {
                 mesh.position.y -= 0.2;
+                mesh.scale.y = 0.1;
             }
 
-            if (mesh.position.y < -500) {
+            if (mesh.position.y < -500 && !this._remove) {
                 mesh.position.y = 500;
                 // @ts-ignore
                 mesh.velocity = 0;

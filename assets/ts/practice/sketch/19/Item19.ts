@@ -1,6 +1,6 @@
 import { Sketch } from '../common/Sketch';
 import * as THREE from "three";
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import TweenMax, {Expo} from 'gsap';
 import {AppConfig} from '~/assets/ts/practice/Config';
 
@@ -21,11 +21,9 @@ export class Item19 extends Sketch {
     private _renderer: THREE.WebGLRenderer;
     private _camera: THREE.PerspectiveCamera;
     private _stage: THREE.Scene;
-    private _outside: THREE.Mesh;
-    private _outSideMat: THREE.MeshBasicMaterial;
     private _mediaElement: HTMLAudioElement;
     private _analyser: THREE.AudioAnalyser;
-    private _controls;
+    // private _controls;
 
     private _text: Text;
     private _icosaHedron: IcosaHedron;
@@ -69,18 +67,9 @@ export class Item19 extends Sketch {
         const light = new THREE.DirectionalLight(0xffffff, 1.0);
         this._stage.add(light);
 
-        const outSide = new THREE.SphereGeometry(1000, 32, 32);
-        this._outSideMat = new THREE.MeshBasicMaterial({
-            color: 0x000000,
-            side: THREE.DoubleSide,
-            depthTest: true
-        });
-        this._outside = new THREE.Mesh(outSide, this._outSideMat);
-        this._outside.renderOrder = -2;
-        this._stage.add(this._outside);
-
         this._text = new Text(this._stage);
         this._text.generate();
+        this._smoke = new Smoke(this._stage);
 
         this._line = new Line(this._stage, this._camera);
         this._line.generate();
@@ -93,8 +82,8 @@ export class Item19 extends Sketch {
         this._star = new Particle(this._stage);
         this._lensFrare = new LensFlare(this._stage);
 
-        this._controls = new OrbitControls( this._camera, this._renderer.domElement );
-        this._controls.update();
+        // this._controls = new OrbitControls( this._camera, this._renderer.domElement );
+        // this._controls.update();
 
         this._store.commit('Practice/SET_MUSIC_MODE', true);
         this._store.watch(AppConfig.ON_MUSIC_STATE_CHANGED, this.onMusicStateChanged);
@@ -121,12 +110,11 @@ export class Item19 extends Sketch {
 
         this._analyser = new THREE.AudioAnalyser( audio, 1024 );
         this._icosaHedron = new IcosaHedron(this._stage, this._analyser);
-        this._smoke = new Smoke(this._stage);
         this._smoke.generate();
 
         // @ts-ignore
         TweenMax.to(this._camera.position, 40, {
-            z: 40,
+            z: 600,
             ease: Expo.easeInOut,
         });
 
@@ -135,14 +123,10 @@ export class Item19 extends Sketch {
         // シーン1 サウナ
         setTimeout(() => {
             this._text.remove();
-            this._composer.reset();
 
             // this._lensFrare.setSunFlare();
             this._icosaHedron.generate();
             this._background.generate();
-
-            // @ts-ignore
-            this._outSideMat.color = new THREE.Color(0xffffff);
 
             setTimeout(() => {
                 this._scene++;
@@ -150,24 +134,12 @@ export class Item19 extends Sketch {
                 this._star.generate();
                 this._text.changeText(this._scene);
                 this._icosaHedron.move(this._scene);
-
-                setTimeout(() => {
-                    this._scene++;
-
-                    // @ts-ignore
-                    TweenMax.to(this._camera.position, 20, {
-                        z: 600,
-                        ease: Expo.easeInOut
-                    });
-                }, 6000);
             }, 10000);
-        }, 17000);
+        }, 16000);
 
         // シーン2 水風呂
         setTimeout(() => {
             this._line.start();
-            this._icosaHedron.show(this._scene);
-            this._outSideMat.color = new THREE.Color(0x000000);
 
             setTimeout(() => {
                 this._rain.start();
@@ -185,7 +157,7 @@ export class Item19 extends Sketch {
         setTimeout(() => {
             this._star.remove();
             this._background.changeMaterial(1);
-            this._composer.setComposer();
+            // this._composer.setComposer();
         }, 120000);
 
         setTimeout(() => {
@@ -214,12 +186,11 @@ export class Item19 extends Sketch {
 
     public update = () => {
         this.animate();
-        this._controls.update();
+        // this._controls.update();
 
         if (this._icosaHedron.ready) {
             this._camera.lookAt(this._icosaHedron.mesh.position);
         }
-
         this._timer = requestAnimationFrame(this.update);
         this._time += 0.01;
     };
@@ -241,6 +212,14 @@ export class Item19 extends Sketch {
 
         if (this._rain.ready) {
             this._rain.update(average);
+        }
+
+        if (this._text.ready) {
+            this._text.update();
+        }
+
+        if (this._background.ready) {
+            this._background.update(this._time);
         }
 
         if (this._composer.ready) {

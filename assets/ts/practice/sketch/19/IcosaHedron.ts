@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 // import {IcosaFS, IcosaVS} from './IcosaShader';
-import TweenMax, {Back} from 'gsap';
+import TweenMax, {Back, Expo} from 'gsap';
 
 function rand(min, max) {
     return min + Math.random() * (max - min);
@@ -26,6 +26,7 @@ export default class IcosaHedron {
         });
 
         this._mesh = new THREE.Mesh(geometry, this._material);
+        this._mesh.position.set(0, 0, 700);
 
         this._stage.add(this._mesh);
         this._ready = true;
@@ -42,20 +43,31 @@ export default class IcosaHedron {
     public move(index: number) {
         if (index === 1) {
             // @ts-ignore
-            TweenMax.to(this._mesh.position, 12, {
-                x: -40,
-                y: 10,
-                z: 1000,
-                ease: Back.easeInOut,
-                onComplete: () => {
-                    this._mesh.visible = false;
-                }
+            TweenMax.to(this._material.color, 10, {
+                r: 0.4,
+                g: 0.5,
+                b: 0.6,
+            });
+            // @ts-ignore
+            TweenMax.to(this._material.specular, 10, {
+                r: 0.4,
+                g: 0.5,
+                b: 0.6,
             });
         }
     }
 
-    public show = () => {
-        this._mesh.visible = true;
+    public last = () => {
+        // @ts-ignore
+        TweenMax.to(this._mesh.position, 7, {
+            x: 0,
+            y: 0,
+            z: 0,
+            ease: Expo.easeInOut,
+            onComplete: () => {
+                this._stage.remove(this._mesh);
+            }
+        });
     };
 
     get mesh(): THREE.Mesh {

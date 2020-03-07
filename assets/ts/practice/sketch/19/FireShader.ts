@@ -1,7 +1,5 @@
 export const FireVS = `
-varying vec2 vUv;
 void main() {
-    vUv = uv;
     gl_Position = vec4(position, 1.0);;
 }
 `.trim();
@@ -9,7 +7,11 @@ void main() {
 export const FireFS = `
 uniform vec2 resolution;
 uniform float time;
+uniform sampler2D audio;
 #define PI 3.141592
+
+float audio_freq( in sampler2D channel, in float f) { return texture( channel, vec2(f, 0.25) ).x; }
+float audio_ampl( in sampler2D channel, in float t) { return texture( channel, vec2(t, 0.75) ).x; }
 
 vec3 mod289(vec3 x) {
   return x - floor(x * (1.0 / 289.0)) * 289.0;
@@ -103,7 +105,8 @@ float snoise(vec3 v)
                                 dot(p2,x2), dot(p3,x3) ) );
 }
 
-void main(){    
+void main(){
+    vec2 uv = gl_FragCoord.xy / resolution.xy;
     vec2 p = 10.0 * (gl_FragCoord.xy*2.0 - resolution.xy) / min(resolution.x,resolution.y);   
     vec3 cDir=normalize(vec3(0.0,0.0,1.0));
     vec3 cUp=normalize(vec3(0.0,1.0,0.0));
@@ -113,10 +116,29 @@ void main(){
     vec3 c=vec3(0.0,0.0,time);
     vec3 color=vec3(0.9,0.2,0.4);
     
-    for(float i=0.0;i<4.0;i++){
+    for(float i=0.0;i<2.0;i++){
         color += snoise(c);
         c+=ray;
-    }    
+    }
+    
+    color *= 0.5;
+    
+    vec2 centered = 2.0 * uv - 1.0;
+    centered.x *= resolution.x / resolution.y;
+
+    float dist2 = dot(centered, centered);
+    float clamped_dist = smoothstep(0.0, 1.0, dist2);
+    float arclength = abs(atan(centered.y, centered.x) / radians(360.0))+0.01;
+    
+    float sample1 = audio_freq(audio, abs((uv.x - .5) / 1.0) + 0.01);
+    float sample2 = audio_ampl(audio, clamped_dist);
+    float sample3 = audio_ampl(audio, arclength);
+    
+    float v = abs(uv.y - 0.5);
+    color += smoothstep(v, v * 8.0, sample1);
+    color += smoothstep(0.5, 1.0, sample2) * (1.0 - clamped_dist);
+    color += smoothstep(0.5, 1.0, sample3) * clamped_dist;
+    
     gl_FragColor = vec4(color,1.0);
 }
 `.trim();

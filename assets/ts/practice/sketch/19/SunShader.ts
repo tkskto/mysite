@@ -7,8 +7,8 @@ void main() {
 export const SunFS = `
 uniform vec2 resolution;
 uniform float time;
-
-#define TWO_PI 6.28318530718
+uniform sampler2D audio;
+uniform float decay;
 
 vec3 mod289(vec3 x) {
   return x - floor(x * (1.0 / 289.0)) * 289.0;
@@ -102,35 +102,40 @@ float snoise(vec3 v)
                                 dot(p2,x2), dot(p3,x3) ) );
 }
 
+float audio_ampl( in sampler2D channel, in float t) { return texture( channel, vec2(t, 0.75) ).x; }
+
 void main(void){
     vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
     vec2 st = gl_FragCoord.xy / resolution;
-    
-    // blue
-    // vec3 top = vec3(0.0, 0.05, 0.16);
-    // vec3 bottom = vec3(0.5, 0.98, 0.99);
+
     // red
     vec3 top = vec3(0.52, 0.53, 0.57);
     vec3 bottom = vec3(0.80, 0.39, 0.25);
     vec3 grad = mix(top, bottom, smoothstep(1.1, 0.4, st.y));
-    vec3 skyColor = vec3(step(0.0, st.y) * grad) + mix(grad, vec3(0.0), p.y);
+    vec3 color = vec3(step(0.0, st.y) * grad) + mix(grad, vec3(0.0), p.y);
 
-    vec2 psun = p;
-    psun.x -= 1.0 * resolution.x / max(resolution.x, resolution.y);
-    psun.y -= 0.3;
+    vec2 uv = gl_FragCoord.xy / resolution.xy;
+    p *= 10.0;   
+    vec3 cDir = vec3(0.0,0.0,1.0);
+    vec3 cUp = vec3(0.0,1.0,0.0);
+    float dipth = 1.0;
+    vec3 cSide = normalize(cross(cDir,cUp));
+    vec3 ray = normalize(cSide * p.x + cUp * p.y + cDir * dipth); 
+    vec3 c = vec3(0.0,0.0,time);
     
-    vec2 np = gl_FragCoord.xy;
-    float nx = np.x * 0.002;
-    float ny = np.y * 0.002;
-    float nz = time * 0.5;
-    float n = snoise(vec3(nx, ny, nz));
-    n = (1.0 + n) * 0.02;
-
-    float lsun = 1.0 - length(vec2(psun.x + n, psun.y)) * 2.5;
-    vec3 sun = vec3(smoothstep(0.5, 0.7, lsun) * lsun);
+    color += snoise(c) * 0.2;
+    c += ray;
+    color += snoise(c) * 0.2;
     
-    vec3 color = sun + skyColor;
-
+    vec2 center = 2.0 * uv - 1.0;
+    center.x *= resolution.x / resolution.y;
+    float dist2 = dot(center, center);
+    float clamped_dist = smoothstep(0.0, 1.0, dist2);
+    float sample2 = audio_ampl(audio, clamped_dist) * 0.7;
+    color += smoothstep(0.5, 1.0, sample2);
+    
+    color *= decay;
+    
     gl_FragColor = vec4(color, 1.0);
 }
 `.trim();

@@ -2,8 +2,8 @@ import * as THREE from 'three';
 import {pFS, pVS} from './PlaneShader';
 import {SunFS, SunVS} from './SunShader';
 import {MistVS, MistFS} from './MistShader';
-import {FireVS, FireFS} from './FireShader';
-import {WaterVS, WaterFS} from './WaterShader';
+import {ParticleVS, ParticleFS} from './ParticleShader';
+import {CircleVS, CircleFS} from './CircleShader';
 // import {HallFS, HallVS} from './SunShader';
 
 export default class Background {
@@ -12,7 +12,7 @@ export default class Background {
     private _mesh: THREE.Mesh;
     private _ready: boolean = false;
 
-    constructor(private _stage: THREE.Scene, width: number, height: number) {
+    constructor(private _stage: THREE.Scene, _analyser: THREE.AudioAnalyser, width: number, height: number) {
         const texture = new THREE.TextureLoader().load('/assets/img/kabukicho.jpg');
         this._planeUniforms = {
             time: {
@@ -21,8 +21,14 @@ export default class Background {
             resolution: {
                 value: new THREE.Vector2(width, height)
             },
+            audio: {
+                value: new THREE.DataTexture( _analyser.data, 1024 / 2, 1, THREE.LuminanceFormat )
+            },
             tex: {
                 value: texture
+            },
+            decay: {
+                value: 1.0
             }
         };
     }
@@ -30,20 +36,7 @@ export default class Background {
     public generate = () => {
         const plane = new THREE.PlaneGeometry(2, 2);
         this._materials.push(
-            // new THREE.ShaderMaterial({
-            //     vertexShader: WaterVS,
-            //     fragmentShader: WaterFS,
-            //     uniforms: this._planeUniforms,
-            //     depthTest: false,
-            //     side: THREE.DoubleSide
-            // }),
-            // new THREE.ShaderMaterial({
-            //     vertexShader: FireVS,
-            //     fragmentShader: FireFS,
-            //     uniforms: this._planeUniforms,
-            //     depthTest: false,
-            //     side: THREE.DoubleSide
-            // }),
+            //
             new THREE.ShaderMaterial({
                 vertexShader: SunVS,
                 fragmentShader: SunFS,
@@ -52,15 +45,40 @@ export default class Background {
                 side: THREE.DoubleSide
             }),
             // new THREE.ShaderMaterial({
-            //     vertexShader: MistVS,
-            //     fragmentShader: MistFS,
+            //     vertexShader: FireVS,
+            //     fragmentShader: FireFS,
             //     uniforms: this._planeUniforms,
             //     depthTest: false,
             //     side: THREE.DoubleSide
             // }),
+            // 水風呂
             new THREE.ShaderMaterial({
-                vertexShader: pVS,
-                fragmentShader: pFS,
+                vertexShader: MistVS,
+                fragmentShader: MistFS,
+                uniforms: this._planeUniforms,
+                depthTest: false,
+                side: THREE.DoubleSide
+            }),
+            // 重い
+            // new THREE.ShaderMaterial({
+            //     vertexShader: WaterVS,
+            //     fragmentShader: WaterFS,
+            //     uniforms: this._planeUniforms,
+            //     depthTest: false,
+            //     side: THREE.DoubleSide
+            // }),
+            // パーティクル
+            new THREE.ShaderMaterial({
+                vertexShader: ParticleVS,
+                fragmentShader: ParticleFS,
+                uniforms: this._planeUniforms,
+                depthTest: false,
+                side: THREE.DoubleSide
+            }),
+            // 円
+            new THREE.ShaderMaterial({
+                vertexShader: CircleVS,
+                fragmentShader: CircleFS,
                 uniforms: this._planeUniforms,
                 depthTest: false,
                 side: THREE.DoubleSide
@@ -72,16 +90,27 @@ export default class Background {
         this._mesh.position.z = 1000;
 
         this._stage.add(this._mesh);
-        this._ready = true;
+        this._mesh.visible = false;
     };
 
+    public show() {
+        this._mesh.visible = true;
+        this._ready = true;
+    }
+
     public changeMaterial(index) {
-        this._mesh.material = this._materials[1];
+        this._mesh.material = this._materials[index];
+
+        if (index === 4) {
+            this._mesh.position.z = -1000;
+        }
     }
 
     public update (time) {
         // @ts-ignore
         this._planeUniforms.time.value = time;
+        // @ts-ignore
+        this._planeUniforms.audio.value.needsUpdate = true;
     }
 
     get ready(): boolean {

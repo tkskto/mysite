@@ -11,25 +11,26 @@ export default class IcosaHedron {
     // private _audioUniforms: {};
     private _mesh: THREE.Mesh;
     private _ready: boolean = false;
-    constructor(private _stage: THREE.Scene, private _analyser: THREE.AudioAnalyser) {
-        // this._audioUniforms = {
-        //     tAudioData: { value: new THREE.DataTexture( _analyser.data, 128 / 2, 1, THREE.LuminanceFormat ) }
-        // };
-    }
+    constructor(private _stage: THREE.Scene) {}
 
     public generate = () => {
-        let geometry = new THREE.IcosahedronGeometry(8, 0);
+        let geometry = new THREE.TetrahedronGeometry(10, 0);
         this._material = new THREE.MeshPhongMaterial({
-            color: new THREE.Color(0.80, 0.39, 0.25),
-            specular: new THREE.Color(0.80, 0.39, 0.25),
+            color: new THREE.Color(1, 1, 1),
+            specular: new THREE.Color(1, 1, 1),
             shininess: 100,
         });
 
         this._mesh = new THREE.Mesh(geometry, this._material);
-        this._mesh.position.set(0, 0, 700);
+        this._mesh.position.set(0, 0, 400);
 
         this._stage.add(this._mesh);
         this._ready = true;
+
+        // @ts-ignore
+        TweenMax.to(this._mesh.position, 2, {
+            z: 700
+        });
     };
 
     public update(average: number) {
@@ -41,7 +42,20 @@ export default class IcosaHedron {
     }
 
     public move(index: number) {
-        if (index === 1) {
+        if (index === 0) {
+            // @ts-ignore
+            TweenMax.to(this._material.color, 10, {
+                r: 0.8,
+                g: 0.39,
+                b: 0.25,
+            });
+            // @ts-ignore
+            TweenMax.to(this._material.specular, 10, {
+                r: 0.8,
+                g: 0.39,
+                b: 0.25,
+            });
+        } else if (index === 1) {
             // @ts-ignore
             TweenMax.to(this._material.color, 10, {
                 r: 0.4,
@@ -56,6 +70,14 @@ export default class IcosaHedron {
             });
         }
     }
+
+    public hide = () => {
+        this._mesh.visible = false;
+    };
+
+    public show = () => {
+        this._mesh.visible = true;
+    };
 
     public last = () => {
         // @ts-ignore

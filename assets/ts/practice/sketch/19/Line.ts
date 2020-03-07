@@ -33,13 +33,14 @@ export default class Line {
             this._cubes.add(mesh);
         }
 
-        this._material.opacity = 0;
         this._stage.add(this._cubes);
         this._ready = true;
+
+        this._cubes.visible = false;
     };
 
     public start = () => {
-        this._material.opacity = 1;
+        this._cubes.visible = true;
         if (this._cubes) {
             this._cubes.position.z = 600;
 

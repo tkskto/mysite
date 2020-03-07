@@ -1,8 +1,17 @@
 export const IcosaVS = `
-uniform vec3 customColor;
-uniform sampler2D tAudioData;
+uniform sampler2D audio;
 varying vec3 vNormal;
 varying mat4 vMatrix;
+
+const float FREQ_RANGE = 412.0;
+
+float map(float value, float min1, float max1, float min2, float max2) {
+  return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
+}
+
+float getfrequency(float x) {
+    return texture(audio, vec2(floor(x * FREQ_RANGE + 1.0) / FREQ_RANGE, 0.0)).x + 0.06;
+}
 
 #include <morphtarget_pars_vertex>
 
@@ -12,7 +21,9 @@ void main() {
     #include <begin_vertex>
     #include <morphtarget_vertex>
     
-    vMatrix = modelViewMatrix;
+    // float freq = getfrequency(abs(position.x * FREQ_RANGE));
+    transformed += normal * texture(audio, uv.xy / FREQ_RANGE * float(gl_VertexID)).xyz * 6.0;
+    
     vec4 pos = projectionMatrix * modelViewMatrix * vec4( transformed, 1.0 );
     
     gl_Position = pos;

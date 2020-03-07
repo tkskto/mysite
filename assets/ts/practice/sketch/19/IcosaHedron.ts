@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-// import {IcosaFS, IcosaVS} from './IcosaShader';
+import {IcosaFS, IcosaVS} from './IcosaShader';
 import TweenMax, {Back, Expo} from 'gsap';
 
 function rand(min, max) {
@@ -7,37 +7,79 @@ function rand(min, max) {
 }
 
 export default class IcosaHedron {
+    // private _geometry: THREE.IcosahedronGeometry;
+    private _geometry: THREE.SphereBufferGeometry;
     private _material: THREE.MeshPhongMaterial;
-    // private _audioUniforms: {};
+    // private _material: THREE.ShaderMaterial;
+    private _audioUniforms: {};
     private _mesh: THREE.Mesh;
     private _ready: boolean = false;
-    constructor(private _stage: THREE.Scene) {}
+    private _vertexCount: number;
+    private _isZoom: boolean[] = [];
 
-    public generate = () => {
-        let geometry = new THREE.TetrahedronGeometry(10, 0);
+    constructor(private _stage: THREE.Scene, _analyser, width, height) {
+        this._audioUniforms = {
+            time: {
+                value: 0,
+            },
+            resolution: {
+                value: new THREE.Vector2(width, height)
+            },
+            audio: {
+                value: new THREE.DataTexture( _analyser.data, 1024 / 2, 1, THREE.LuminanceFormat )
+            }
+        };
+    }
+
+    public generate = (posZ) => {
+        // this._geometry = new THREE.IcosahedronGeometry(6, 0);
+        this._geometry = new THREE.SphereBufferGeometry(5, 31, 31);
         this._material = new THREE.MeshPhongMaterial({
             color: new THREE.Color(1, 1, 1),
             specular: new THREE.Color(1, 1, 1),
-            shininess: 100,
+            shininess: 15,
         });
+        // this._material = new THREE.ShaderMaterial({
+        //     vertexShader: IcosaVS,
+        //     fragmentShader: IcosaFS,
+        //     uniforms: this._audioUniforms,
+        //     side: THREE.DoubleSide
+        // });
 
-        this._mesh = new THREE.Mesh(geometry, this._material);
-        this._mesh.position.set(0, 0, 400);
+        this._mesh = new THREE.Mesh(this._geometry, this._material);
+        this._mesh.position.set(0, 0, posZ);
 
         this._stage.add(this._mesh);
-        this._ready = true;
 
         // @ts-ignore
         TweenMax.to(this._mesh.position, 2, {
-            z: 700
+            z: 300,
+            onComplete: () => {
+                this._ready = true;
+            }
         });
+
+        this._mesh.scale.set(2, 2, 2);
+
+        // @ts-ignore
+        TweenMax.to(this._mesh.scale, 2, {
+            x: 1,
+            y: 1,
+            z: 1
+        });
+
+        // this._vertexCount = this._geometry.attributes.position.count;
+        //
+        // for (let i = 0; i < this._vertexCount; i++) {
+        //     this._isZoom.push(true);
+        // }
     };
 
     public update(average: number) {
         this._mesh.rotation.x += rand(0.001, 0.01);
         this._mesh.rotation.y += rand(0.001, 0.01);
 
-        const scale = 0.4 + average * 0.001;
+        const scale = 0.4 + average * 0.01;
         this._mesh.scale.set(scale, scale, scale);
     }
 

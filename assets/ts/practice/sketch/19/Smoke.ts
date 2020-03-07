@@ -4,7 +4,7 @@ import TweenMax from 'gsap';
 export default class Smoke {
     private _texture: THREE.Texture;
     private _geometry: THREE.PlaneBufferGeometry;
-    private _material: THREE.MeshLambertMaterial;
+    private _material: THREE.MeshBasicMaterial;
     private _smokes: THREE.Group;
     private _ready: boolean = false;
 
@@ -15,11 +15,11 @@ export default class Smoke {
     public generate = () => {
         this._smokes = new THREE.Group();
         this._geometry = new THREE.PlaneBufferGeometry(1000, 1000);
-        this._material = new THREE.MeshLambertMaterial({
+        this._material = new THREE.MeshBasicMaterial({
             color: 0xffffff,
             map: this._texture,
             transparent: true,
-            blending: THREE.CustomBlending,
+            blending: THREE.NormalBlending,
             depthTest: false,
             opacity: 0
         });
@@ -30,7 +30,7 @@ export default class Smoke {
             smoke.position.set(
                 Math.random() * 2000 - 500,
                 Math.random() * -500 - 600,
-                Math.random() * 100 + 300,
+                Math.random() * 100 - 100,
             );
 
             smoke.rotation.z = Math.random() * 360;

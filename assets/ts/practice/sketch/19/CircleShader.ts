@@ -8,10 +8,11 @@ export const CircleFS = `
 uniform float time;
 uniform vec2 resolution;
 uniform sampler2D audio;
+uniform float scene;
 
 #define BEATMOVE 1
 
-const float FREQ_RANGE = 512.0;
+const float FREQ_RANGE = 1024.0;
 const float PI = 3.1415;
 const float RADIUS = 0.6;
 const float BRIGHTNESS = 0.2;
@@ -76,7 +77,13 @@ vec3 doLine(vec2 fragment, float radius, float x) {
 
 void main() {
     vec2 fragPos = gl_FragCoord.xy / resolution.xy;
-    fragPos = (fragPos - 0.5) * 2.0;
+    
+    if (scene == 0.0) {
+        fragPos = (fragPos - 0.5) * 2.0 * sin(time);
+    } else if (scene == 1.0) {
+        fragPos = (fragPos - 0.5) * 2.0;
+    }
+    
     fragPos.x *= resolution.x / resolution.y;
     
     vec3 color = vec3(0.0134, 0.052, 0.1);

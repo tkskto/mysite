@@ -33,8 +33,8 @@ export default class Rain {
 
             mesh.position.set(
                 rand(-240, 160),
-                rand(500, 1000),
-                rand(-100, 100)
+                rand(350, 450),
+                rand(350, 450)
             );
 
             // @ts-ignore
@@ -53,10 +53,15 @@ export default class Rain {
     public start = () => {
         this._rain.visible = true;
         this._ready = true;
+        this._interval = true;
 
         setTimeout(() => {
             this._remove = true;
-        }, 15000);
+        }, 10000);
+
+        setTimeout(() => {
+            this._interval = false;
+        }, 6000);
     };
 
     public update = (average: number) => {
@@ -84,12 +89,21 @@ export default class Rain {
                 mesh.scale.y = 0.1;
             }
 
-            if (mesh.position.y < -500 && !this._remove) {
-                mesh.position.y = 500;
-                // @ts-ignore
-                mesh.velocity = 0;
+            if (mesh.position.y < -300) {
+                if (this._remove) {
+                    mesh.visible = false;
+                } else {
+                    mesh.position.y = 300;
+                    // @ts-ignore
+                    mesh.velocity = 0;
+                }
             }
         });
+    };
+
+    public stop = () => {
+        this._slow = false;
+        this._interval = true;
     };
 
     public remove = () => {
@@ -98,5 +112,9 @@ export default class Rain {
 
     get ready(): boolean {
         return this._ready;
+    }
+
+    get slow(): boolean {
+        return this._slow;
     }
 }

@@ -9,6 +9,7 @@ uniform vec2 resolution;
 uniform float time;
 uniform sampler2D audio;
 uniform float decay;
+uniform float variable;
 
 vec3 mod289(vec3 x) {
   return x - floor(x * (1.0 / 289.0)) * 289.0;
@@ -135,6 +136,7 @@ void main(void){
     color += smoothstep(0.5, 1.0, sample2);
     
     color *= decay;
+    color *= variable;
     
     gl_FragColor = vec4(color, 1.0);
 }

@@ -7,6 +7,11 @@ void main() {
 export const MistFS = `
 uniform vec2 resolution;
 uniform float time;
+uniform float decay;
+uniform float scene;
+uniform float variable;
+
+#define PI 3.1415
 
 float hash( float n )
 {
@@ -45,10 +50,19 @@ void main()
     vec2 p = 2.*q-1.0;
     float r = length(p);
     p.x *= resolution.x/resolution.y;
-    float f = fbm(p+time);
+    float f;
+    if (scene == 0.0) {
+        f = fbm(p + time) * sin(time);
+    } else if (scene == 1.0) {
+        f = fbm(p + time * decay) * cos(2.0 * PI);
+    } else if (scene == 2.0) {
+        f = fbm(p * time);
+    }
     f *= r*3.-0.5;
     f = (1.-f);
     vec3 col = vec3(0.2,0.3,0.5)/f;
+    
+    col *= variable;
 
     gl_FragColor = vec4(sqrt(abs(col))*0.5,1.0);
 }

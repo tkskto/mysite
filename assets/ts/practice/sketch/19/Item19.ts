@@ -13,6 +13,7 @@ import Composer from './Composer';
 import Particle from './Particle';
 import Smoke from './Smoke';
 import {LensFlare} from './LensFlare';
+import Sphere from './Spehre';
 
 export class Item19 extends Sketch {
     private _time = 0;
@@ -20,6 +21,7 @@ export class Item19 extends Sketch {
     private _height = 0;
     private _renderer: THREE.WebGLRenderer;
     private _camera: THREE.PerspectiveCamera;
+    private _light: THREE.DirectionalLight;
     private _stage: THREE.Scene;
     private _mediaElement: HTMLAudioElement;
     private _analyser: THREE.AudioAnalyser;
@@ -33,8 +35,10 @@ export class Item19 extends Sketch {
     private _composer: Composer;
     private _star: Particle;
     private _smoke: Smoke;
+    private _sphere: Sphere;
     private _scene: number = 0;
     private _lensFrare: LensFlare;
+    private _count: number = 0;
 
     constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {
         super(_store, _id);
@@ -60,17 +64,18 @@ export class Item19 extends Sketch {
 
         this._stage = new THREE.Scene();
 
-        this._camera = new THREE.PerspectiveCamera(45, canvasSize.width/canvasSize.height, 0.1, 2000);
-        this._camera.position.set(0, 0, 1000);
-        this._camera.lookAt(new THREE.Vector3(0, 0, -1));
+        this._camera = new THREE.PerspectiveCamera(45, canvasSize.width/canvasSize.height, 0.1, 1000);
+        this._camera.position.set(0, 0, 500);
+        this._camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-        const light = new THREE.DirectionalLight(0xffffff, 0.8);
-        const amb = new THREE.AmbientLight(0xffffff, 0.2);
-        this._stage.add(light, amb);
+        this._light = new THREE.DirectionalLight(0xffffff, 0.6);
+        const amb = new THREE.AmbientLight(0xffffff, 0.4);
+        this._stage.add(this._light, amb);
 
         this._text = new Text(this._stage);
         this._text.generate();
-        this._icosaHedron = new IcosaHedron(this._stage);
+        this._sphere = new Sphere(this._stage);
+        this._sphere.generate();
         this._smoke = new Smoke(this._stage);
 
         this._line = new Line(this._stage, this._camera);
@@ -110,69 +115,79 @@ export class Item19 extends Sketch {
         audio.setMediaElementSource( this._mediaElement );
 
         this._analyser = new THREE.AudioAnalyser( audio, 1024 );
+        this._icosaHedron = new IcosaHedron(this._stage, this._analyser, this._width, this._height);
         this._background = new Background(this._stage, this._analyser, this._width, this._height);
         this._background.generate();
         this._smoke.generate();
-
-        // @ts-ignore
-        TweenMax.to(this._camera.position, 40, {
-            z: 600,
-            ease: Expo.easeInOut,
-        });
 
         this._smoke.start();
 
         // シーン1 サウナ
         setTimeout(() => {
             this._text.remove();
-            this._icosaHedron.generate();
+            this._smoke.remove();
+            this._sphere.remove();
+            this._icosaHedron.generate(this._camera.position.z);
+            this._icosaHedron.move(this._scene);
+            this._scene++;
 
-            setTimeout(() => {
-                this._icosaHedron.move(this._scene);
-                this._scene++;
-                this._background.show();
-                this._smoke.remove();
-                // this._star.generate();
-            }, 2000);
-        }, 20000);
+            this._background.show();
+        }, 11500);
+
+        setTimeout(() => {
+            this._line.start();
+        }, 35000);
 
         // シーン2 水風呂
         setTimeout(() => {
-            // this._text.changeText(this._scene);
             this._background.changeMaterial(this._scene);
-            this._line.start();
 
             setTimeout(() => {
                 this._icosaHedron.move(this._scene);
                 this._rain.start();
+
                 this._scene++;
+
+                // this._text.changeText(this._scene);
             }, 8000);
         }, 40850);
 
+        setTimeout(() => {
+            this._rain.remove();
+        }, 75000);
+
         // シーン3 外気よく
         setTimeout(() => {
-            // this._star.start();
             this._background.changeMaterial(this._scene);
+            this._rain.stop();
             this._line.remove();
-            this._rain.remove();
         }, 80000);
 
         // シーン4 ととのい
         setTimeout(() => {
             // this._star.remove();
-            this._background.changeMaterial(this._scene);
+            // this._background.changeMaterial(this._scene);
             this._scene++;
             // this._composer.setComposer();
         }, 120000);
 
         // ラスト
         setTimeout(() => {
-            this._background.changeMaterial(this._scene);
+            // this._background.changeMaterial(this._scene);
             this._lensFrare.generate();
             this._icosaHedron.last();
+            this._composer.setComposer();
+
+            setTimeout(() => {
+                this._composer.reset();
+            }, 6000);
 
             setTimeout(() => {
                 this._lensFrare.setSunFlare();
+
+                setTimeout(() => {
+                    this.pause();
+                }, 3000);
             }, 7500);
         }, 132000);
 
@@ -201,6 +216,11 @@ export class Item19 extends Sketch {
 
         this._timer = requestAnimationFrame(this.update);
         this._time += 0.01;
+        this._count++;
+
+        this._light.position.x = 500 * Math.cos(this._time);
+        this._light.position.y = 500 * Math.sin(this._time);
+        this._light.position.z = 500 * Math.sin(this._time);
     };
 
     public animate = () => {
@@ -219,12 +239,9 @@ export class Item19 extends Sketch {
             this._rain.update(average);
         }
 
-        if (this._text.ready) {
-            this._text.update();
-        }
-
         if (this._background.ready) {
-            this._background.update(this._time);
+            const decay = this._rain.slow ? 0.1 : 1;
+            this._background.update(this._time, decay);
         }
 
         if (this._icosaHedron.ready) {

@@ -99,9 +99,6 @@ export class LensFlare {
         // @ts-ignore
         TweenMax.to(this._material, 3, {
             opacity: 0,
-            onComplete: () => {
-                this._stage.remove(light);
-            }
         });
 
         // @ts-ignore

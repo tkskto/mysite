@@ -13,6 +13,7 @@ export default class Rain {
     private _interval: boolean = false;
     private _slow: boolean = false;
     private _remove: boolean = false;
+    private _timer: number | null = 0;
 
     constructor(private _stage: THREE.Scene) {
         this._texture = new THREE.TextureLoader().load('/assets/img/line.png');
@@ -57,7 +58,7 @@ export default class Rain {
 
         setTimeout(() => {
             this._remove = true;
-        }, 10000);
+        }, 18000);
 
         setTimeout(() => {
             this._interval = false;
@@ -65,15 +66,17 @@ export default class Rain {
     };
 
     public update = (average: number) => {
-        if (average > 120 && !this._slow && !this._interval) {
+        if (average > 120 && !this._slow && !this._interval && this._timer !== null) {
             this._slow = true;
 
-            setTimeout(() => {
+            // @ts-ignore
+            this._timer = setTimeout(() => {
                 this._slow = false;
                 this._interval = true;
-
-                setTimeout(() => {
+                // @ts-ignore
+                this._timer = setTimeout(() => {
                     this._interval = false;
+                    this._timer = null;
                 }, 3000);
             }, 2000);
         }
@@ -104,6 +107,11 @@ export default class Rain {
     public stop = () => {
         this._slow = false;
         this._interval = true;
+
+        if (this._timer !== null) {
+            clearTimeout(this._timer);
+            this._timer = null;
+        }
     };
 
     public remove = () => {

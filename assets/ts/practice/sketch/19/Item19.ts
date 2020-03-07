@@ -1,7 +1,5 @@
 import { Sketch } from '../common/Sketch';
 import * as THREE from "three";
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import TweenMax, {Expo} from 'gsap';
 import {AppConfig} from '~/assets/ts/practice/Config';
 
 import Text from './Text';
@@ -14,6 +12,7 @@ import Particle from './Particle';
 import Smoke from './Smoke';
 import {LensFlare} from './LensFlare';
 import Sphere from './Spehre';
+import Reflect from './Reflect';
 
 export class Item19 extends Sketch {
     private _time = 0;
@@ -39,6 +38,7 @@ export class Item19 extends Sketch {
     private _scene: number = 0;
     private _lensFrare: LensFlare;
     private _count: number = 0;
+    private _reflect: Reflect;
 
     constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {
         super(_store, _id);
@@ -71,6 +71,8 @@ export class Item19 extends Sketch {
         this._light = new THREE.DirectionalLight(0xffffff, 0.6);
         const amb = new THREE.AmbientLight(0xffffff, 0.4);
         this._stage.add(this._light, amb);
+
+        // this._reflect = new Reflect(this._stage, this._renderer, this._width, this._height);
 
         this._text = new Text(this._stage);
         this._text.generate();
@@ -132,11 +134,12 @@ export class Item19 extends Sketch {
             this._scene++;
 
             this._background.show();
+            this._reflect.generate(this._camera.position.z);
         }, 11500);
 
         setTimeout(() => {
             this._line.start();
-        }, 35000);
+        }, 38000);
 
         // シーン2 水風呂
         setTimeout(() => {

@@ -14,8 +14,6 @@ export default class IcosaHedron {
     private _audioUniforms: {};
     private _mesh: THREE.Mesh;
     private _ready: boolean = false;
-    private _vertexCount: number;
-    private _isZoom: boolean[] = [];
 
     constructor(private _stage: THREE.Scene, _analyser, width, height) {
         this._audioUniforms = {

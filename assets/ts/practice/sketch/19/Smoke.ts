@@ -21,16 +21,17 @@ export default class Smoke {
             transparent: true,
             blending: THREE.NormalBlending,
             depthTest: false,
-            opacity: 0
+            opacity: 0,
+            side: THREE.DoubleSide
         });
 
         for (let i = 0; i < 100; i++) {
             const smoke = new THREE.Mesh(this._geometry, this._material);
 
             smoke.position.set(
-                Math.random() * 2000 - 500,
+                Math.random() * 1000 - 500,
                 Math.random() * -500 - 600,
-                Math.random() * 100 - 100,
+                Math.random() * 100 + 1000,
             );
 
             smoke.rotation.z = Math.random() * 360;

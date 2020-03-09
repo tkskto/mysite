@@ -50,7 +50,7 @@ export default class Line {
             });
 
             // @ts-ignore
-            TweenMax.to(this._material, 10, {
+            TweenMax.to(this._material, 6, {
                 opacity: 0,
                 onComplete: () => {
                     this._stage.remove(this._cubes);

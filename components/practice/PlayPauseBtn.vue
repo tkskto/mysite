@@ -30,15 +30,19 @@
     button {
         position: absolute;
         z-index: 1;
-        left: 0;
+        left: 2rem;
         right: 0;
         margin: auto;
         bottom: 0;
-        border: 1px solid #333333;
-        border-radius: 3px;
+        border: none;
         padding: 12px;
         transform: translateY(-30px);
         opacity: 1;
+        background: transparent;
+        color: #ffffff;
+        font-size: 2.0rem;
+        letter-spacing: 2rem;
+        outline: none;
     }
 
     .button-enter-active,

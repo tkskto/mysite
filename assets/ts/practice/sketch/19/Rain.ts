@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import TweenMax from 'gsap';
 
 function rand(min, max) {
     return min + Math.random() * (max - min);
@@ -13,7 +14,8 @@ export default class Rain {
     private _interval: boolean = false;
     private _slow: boolean = false;
     private _remove: boolean = false;
-    private _timer: number | null = 0;
+    private _timer: number | null = null;
+    private _count = 0;
 
     constructor(private _stage: THREE.Scene) {
         this._texture = new THREE.TextureLoader().load('/assets/img/line.png');
@@ -23,19 +25,19 @@ export default class Rain {
         this._rain = new THREE.Group();
         this._material = new THREE.MeshBasicMaterial({
             color: new THREE.Color(0.3, 0.6, 0.7),
-            blending: THREE.NoBlending,
+            blending: THREE.NormalBlending,
             transparent: true,
             map: this._texture
         });
 
         for (let i = 0; i < 1000; i++) {
-            const geometry = new THREE.BoxGeometry(0.1, rand(10, 20), 0.1, 1, 1, 1);
+            const geometry = new THREE.BoxGeometry(1, rand(20, 40), 1, 1, 1, 1);
             const mesh = new THREE.Mesh(geometry, this._material);
 
             mesh.position.set(
                 rand(-240, 160),
                 rand(350, 450),
-                rand(350, 450)
+                rand(200, 400)
             );
 
             // @ts-ignore
@@ -49,6 +51,11 @@ export default class Rain {
 
         this._stage.add(this._rain);
         this._rain.visible = false;
+
+        // @ts-ignore
+        TweenMax.to(this._material, 20, {
+            opacity: 0,
+        });
     }
 
     public start = () => {
@@ -58,27 +65,34 @@ export default class Rain {
 
         setTimeout(() => {
             this._remove = true;
-        }, 18000);
+        }, 10000);
 
         setTimeout(() => {
             this._interval = false;
         }, 6000);
+
     };
 
     public update = (average: number) => {
-        if (average > 120 && !this._slow && !this._interval && this._timer !== null) {
+        if (average > 120 && !this._slow && !this._interval && this._timer === null && this._count < 3) {
             this._slow = true;
+            this._count++;
+            this._interval = true;
 
             // @ts-ignore
             this._timer = setTimeout(() => {
-                this._slow = false;
-                this._interval = true;
-                // @ts-ignore
-                this._timer = setTimeout(() => {
-                    this._interval = false;
-                    this._timer = null;
-                }, 3000);
-            }, 2000);
+                this._interval = false;
+                this._timer = null;
+            }, 1500);
+        } else if (average > 115 && this._slow && !this._interval) {
+            this._slow = false;
+            this._interval = true;
+
+            // @ts-ignore
+            this._timer = setTimeout(() => {
+                this._interval = false;
+                this._timer = null;
+            }, 1500);
         }
         this._mesh.forEach((mesh) => {
             if (!this._slow) {
@@ -96,7 +110,7 @@ export default class Rain {
                 if (this._remove) {
                     mesh.visible = false;
                 } else {
-                    mesh.position.y = 300;
+                    mesh.position.y = 200;
                     // @ts-ignore
                     mesh.velocity = 0;
                 }

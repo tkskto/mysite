@@ -33,17 +33,7 @@ float getfrequency(float x) {
     return texture(audio, vec2(floor(x * FREQ_RANGE + 1.0) / FREQ_RANGE, 0.0)).x + 0.06;
 }
 
-float getfrequency_smooth(float x) {
-    float index = floor(x * FREQ_RANGE) / FREQ_RANGE;
-    float next = floor(x * FREQ_RANGE + 1.0) / FREQ_RANGE;
-    return mix(getfrequency(index), getfrequency(next), smoothstep(0.0, 1.0, fract(x * FREQ_RANGE)));
-}
-
-float getfrequency_blend(float x) {
-    return mix(getfrequency(x), getfrequency_smooth(x), 0.5);
-}
-
-vec3 doHalo(vec2 fragment, float radius) {
+vec3 halo(vec2 fragment, float radius) {
     float dist = length(fragment);
     float ring = 1.0 / (abs(dist - radius) + 0.005);
     
@@ -63,37 +53,48 @@ vec3 doHalo(vec2 fragment, float radius) {
     return col;
 }
 
-vec3 doLine(vec2 fragment, float radius, float x) {
-    vec3 col = hsv2rgb(vec3(x * 0.23 + time * 0.12, 1.0, 1.0));
-    
-    float freq = abs(fragment.x * 0.5);
-    
-    col *= (1.0 / abs(fragment.y)) * BRIGHTNESS * getfrequency(freq);
-    col = col * smoothstep(radius, radius * 1.8, abs(fragment.x));
-    
-    return col;
-}
-
-
 void main() {
     vec2 fragPos = gl_FragCoord.xy / resolution.xy;
+    vec2 uv = gl_FragCoord.xy / resolution.yy-vec2(.9,.5);
+    vec3 colorize = vec3(.2);
     
     if (scene == 0.0) {
         fragPos = (fragPos - 0.5) * 2.0 * sin(time);
     } else if (scene == 1.0) {
         fragPos = (fragPos - 0.5) * 2.0;
     }
-    
-    fragPos.x *= resolution.x / resolution.y;
-    
-    vec3 color = vec3(0.0134, 0.052, 0.1);
-    color += doHalo(fragPos, RADIUS);
 
-    float c = cos(time * SPEED);
-    float s = sin(time * SPEED);
-    vec2 rot = mat2(c,s,-s,c) * fragPos;
-    
+    fragPos.x *= resolution.x / resolution.y;
+
+    vec3 color = vec3(0.0134, 0.052, 0.1);
+    color += halo(fragPos, RADIUS);
+
+    float co = cos(time * SPEED);
+    float si = sin(time * SPEED);
+    vec2 rot = mat2(co,si,-si,co) * fragPos;
+
     color += max(luma(color) - 1.0, 0.0);
+    
+    // dot
+    // vec3 color = vec3(0.0134, 0.052, 0.1);
+    // for (float i = .0; i< 1.0; i+=.05) {
+    //     colorize[int(i * 5.0)] += texture(audio, vec2(i,0.0)).y * pow(i+.5,.9);
+    // }
+    //
+    // colorize = normalize(colorize);
+    // float boost = texture(audio,vec2(.0)).x;
+    // float power = pow(boost,2.0);
+    //
+    // vec2 buv = uv*(1.0+power*power*power);
+    // buv += vec2(pow(power,12.0)*.1,time*.05);
+    //
+    // vec2 blocks = mod(buv, vec2(.1))-vec2(.05);
+    // vec2 blocksid = sin((buv - mod(buv,vec2(.1)))*412.07);
+    //
+    // float blockint = texture(audio, blocksid,-48.0).y;
+    // float oint = blockint = - texture(audio,vec2(blockint-.02,.0)).x+2.0*texture(audio,vec2(blockint,.0)).x - texture(audio,vec2(blockint+.02,.0)).x;
+    // blockint = 1.0;
+    // color += 2.0 * blockint * max(.0, min(1.0, (oint * 0.05 - max(abs(blocks.x),abs(blocks.y))) * 100.0)) * colorize;
     
     gl_FragColor = vec4(color, 1.0);
 }`.trim();

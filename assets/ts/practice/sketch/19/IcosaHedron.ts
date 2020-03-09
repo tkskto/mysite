@@ -45,16 +45,14 @@ export default class IcosaHedron {
         // });
 
         this._mesh = new THREE.Mesh(this._geometry, this._material);
-        this._mesh.position.set(0, 0, posZ);
+        this._mesh.position.set(20, 0, posZ + 10);
 
         this._stage.add(this._mesh);
 
         // @ts-ignore
         TweenMax.to(this._mesh.position, 2, {
-            z: 300,
-            onComplete: () => {
-                this._ready = true;
-            }
+            x: 0,
+            z: 400
         });
 
         this._mesh.scale.set(2, 2, 2);
@@ -66,6 +64,7 @@ export default class IcosaHedron {
             z: 1
         });
 
+        this._ready = true;
         // this._vertexCount = this._geometry.attributes.position.count;
         //
         // for (let i = 0; i < this._vertexCount; i++) {
@@ -84,29 +83,42 @@ export default class IcosaHedron {
     public move(index: number) {
         if (index === 0) {
             // @ts-ignore
-            TweenMax.to(this._material.color, 10, {
+            TweenMax.to(this._material.color, 15, {
                 r: 0.8,
                 g: 0.39,
                 b: 0.25,
             });
             // @ts-ignore
-            TweenMax.to(this._material.specular, 10, {
+            TweenMax.to(this._material.specular, 15, {
                 r: 0.8,
                 g: 0.39,
                 b: 0.25,
             });
         } else if (index === 1) {
             // @ts-ignore
-            TweenMax.to(this._material.color, 10, {
+            TweenMax.to(this._material.color, 15, {
                 r: 0.4,
                 g: 0.5,
                 b: 0.6,
             });
             // @ts-ignore
-            TweenMax.to(this._material.specular, 10, {
+            TweenMax.to(this._material.specular, 15, {
                 r: 0.4,
                 g: 0.5,
                 b: 0.6,
+            });
+        } else if (index === 1) {
+            // @ts-ignore
+            TweenMax.to(this._material.color, 15, {
+                r: 1.0,
+                g: 1.0,
+                b: 1.0,
+            });
+            // @ts-ignore
+            TweenMax.to(this._material.specular, 15, {
+                r: 1.0,
+                g: 1.0,
+                b: 1.0,
             });
         }
     }

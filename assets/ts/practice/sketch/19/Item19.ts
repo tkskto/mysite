@@ -1,6 +1,7 @@
 import { Sketch } from '../common/Sketch';
 import * as THREE from "three";
 import {AppConfig} from '~/assets/ts/practice/Config';
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 
 import Text from './Text';
 import IcosaHedron from './IcosaHedron';
@@ -13,6 +14,7 @@ import Smoke from './Smoke';
 import {LensFlare} from './LensFlare';
 import Sphere from './Spehre';
 import Reflect from './Reflect';
+import Cube from './Cube';
 
 export class Item19 extends Sketch {
     private _time = 0;
@@ -24,7 +26,7 @@ export class Item19 extends Sketch {
     private _stage: THREE.Scene;
     private _mediaElement: HTMLAudioElement;
     private _analyser: THREE.AudioAnalyser;
-    // private _controls;
+    private _controls: OrbitControls;
 
     private _text: Text;
     private _icosaHedron: IcosaHedron;
@@ -35,6 +37,7 @@ export class Item19 extends Sketch {
     private _star: Particle;
     private _smoke: Smoke;
     private _sphere: Sphere;
+    private _cube: Cube;
     private _scene: number = 0;
     private _lensFrare: LensFlare;
     private _count: number = 0;
@@ -64,15 +67,16 @@ export class Item19 extends Sketch {
 
         this._stage = new THREE.Scene();
 
-        this._camera = new THREE.PerspectiveCamera(45, canvasSize.width/canvasSize.height, 0.1, 1000);
-        this._camera.position.set(0, 0, 500);
-        this._camera.lookAt(new THREE.Vector3(0, 0, 0));
+        this._camera = new THREE.PerspectiveCamera(45, canvasSize.width/canvasSize.height, 0.1, 2000);
+        this._camera.position.set(0, 0, 800);
 
         this._light = new THREE.DirectionalLight(0xffffff, 0.6);
         const amb = new THREE.AmbientLight(0xffffff, 0.4);
         this._stage.add(this._light, amb);
 
         // this._reflect = new Reflect(this._stage, this._renderer, this._width, this._height);
+
+        this._cube = new Cube(this._stage, this._width, this._height);
 
         this._text = new Text(this._stage);
         this._text.generate();
@@ -90,8 +94,8 @@ export class Item19 extends Sketch {
         this._star = new Particle(this._stage);
         this._lensFrare = new LensFlare(this._stage);
 
-        // this._controls = new OrbitControls( this._camera, this._renderer.domElement );
-        // this._controls.update();
+        this._controls = new OrbitControls( this._camera, this._renderer.domElement );
+        this._controls.update();
 
         this._store.commit('Practice/SET_MUSIC_MODE', true);
         this._store.watch(AppConfig.ON_MUSIC_STATE_CHANGED, this.onMusicStateChanged);
@@ -116,16 +120,21 @@ export class Item19 extends Sketch {
         this._mediaElement.play();
         audio.setMediaElementSource( this._mediaElement );
 
+        this._camera.lookAt(this._sphere.sphere.position);
+
         this._analyser = new THREE.AudioAnalyser( audio, 1024 );
         this._icosaHedron = new IcosaHedron(this._stage, this._analyser, this._width, this._height);
-        this._background = new Background(this._stage, this._analyser, this._width, this._height);
+        this._background = new Background(this._renderer, this._analyser, this._width, this._height);
         this._background.generate();
         this._smoke.generate();
 
         this._smoke.start();
+        this._text.start();
+        this._sphere.start();
 
         // シーン1 サウナ
         setTimeout(() => {
+            this._cube.generate(this._background.renderTarget);
             this._text.remove();
             this._smoke.remove();
             this._sphere.remove();
@@ -134,8 +143,8 @@ export class Item19 extends Sketch {
             this._scene++;
 
             this._background.show();
-            this._reflect.generate(this._camera.position.z);
-        }, 11500);
+            // this._reflect.generate(this._camera.position.z);
+        }, 12400);
 
         setTimeout(() => {
             this._line.start();
@@ -153,7 +162,7 @@ export class Item19 extends Sketch {
 
                 // this._text.changeText(this._scene);
             }, 8000);
-        }, 40850);
+        }, 40700);
 
         setTimeout(() => {
             this._rain.remove();
@@ -177,9 +186,9 @@ export class Item19 extends Sketch {
         // ラスト
         setTimeout(() => {
             // this._background.changeMaterial(this._scene);
+            this._composer.setComposer();
             this._lensFrare.generate();
             this._icosaHedron.last();
-            this._composer.setComposer();
 
             setTimeout(() => {
                 this._composer.reset();
@@ -191,7 +200,7 @@ export class Item19 extends Sketch {
                 setTimeout(() => {
                     this.pause();
                 }, 3000);
-            }, 7500);
+            }, 7800);
         }, 132000);
 
         this.play();

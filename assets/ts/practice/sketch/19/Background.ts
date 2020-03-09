@@ -8,6 +8,9 @@ import TweenMax from 'gsap';
 // import {HallFS, HallVS} from './SunShader';
 
 export default class Background {
+    private _scene: THREE.Scene;
+    private _camera: THREE.PerspectiveCamera;
+    private _renderTarget: THREE.WebGLRenderTarget;
     private _planeUniforms: {};
     private _materials: THREE.ShaderMaterial[] = [];
     private _mesh: THREE.Mesh;
@@ -16,8 +19,10 @@ export default class Background {
     private _index: number = 0;
     private _var: number = 1;
 
-    constructor(private _stage: THREE.Scene, _analyser: THREE.AudioAnalyser, width: number, height: number) {
-        const texture = new THREE.TextureLoader().load('/assets/img/kabukicho.jpg');
+    constructor(private _renderer: THREE.WebGLRenderer, _analyser: THREE.AudioAnalyser, width: number, height: number) {
+        this._scene = new THREE.Scene();
+        this._camera = new THREE.PerspectiveCamera(45, width/height, 0.1, 1000);
+        this._camera.position.set(0, 0, 500);
         this._planeUniforms = {
             time: {
                 value: 0,
@@ -27,9 +32,6 @@ export default class Background {
             },
             audio: {
                 value: new THREE.DataTexture( _analyser.data, 1024 / 2, 1, THREE.LuminanceFormat )
-            },
-            tex: {
-                value: texture
             },
             decay: {
                 value: 1.0
@@ -41,6 +43,13 @@ export default class Background {
                 value: 1.0
             }
         };
+
+        this._renderTarget = new THREE.WebGLRenderTarget(width, height, {
+            magFilter: THREE.NearestFilter,
+            minFilter: THREE.NearestFilter,
+            wrapS: THREE.ClampToEdgeWrapping,
+            wrapT: THREE.ClampToEdgeWrapping
+        });
     }
 
     public generate = () => {
@@ -98,8 +107,13 @@ export default class Background {
         this._mesh = new THREE.Mesh(plane, this._materials[0]);
         this._mesh.renderOrder = -1;
         this._mesh.position.z = 300;
+        this._camera.lookAt(this._mesh.position);
 
-        this._stage.add(this._mesh);
+        this._scene.add(this._camera);
+        this._scene.add(this._mesh);
+
+        this._renderer.render(this._scene, this._camera);
+
         this._mesh.visible = false;
     };
 
@@ -161,9 +175,17 @@ export default class Background {
         if (this._index === 1 || this._index === 2) {
             this._time += 0.01;
         }
+
+        this._renderer.setRenderTarget(this._renderTarget);
+        this._renderer.render(this._scene, this._camera);
+        this._renderer.setRenderTarget(null);
     }
 
     get ready(): boolean {
         return this._ready;
+    }
+
+    get renderTarget(): THREE.WebGLRenderTarget {
+        return this._renderTarget;
     }
 }

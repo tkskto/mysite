@@ -31,7 +31,7 @@ export default class Smoke {
             smoke.position.set(
                 Math.random() * 1000 - 500,
                 Math.random() * -500 - 600,
-                Math.random() * 100 + 1000,
+                Math.random() * 100 + 1100,
             );
 
             smoke.rotation.z = Math.random() * 360;

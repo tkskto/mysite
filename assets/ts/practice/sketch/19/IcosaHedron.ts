@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {IcosaFS, IcosaVS} from './IcosaShader';
-import TweenMax, {Back, Expo} from 'gsap';
+import TweenMax, {Expo} from 'gsap';
 
 function rand(min, max) {
     return min + Math.random() * (max - min);
@@ -14,6 +14,7 @@ export default class IcosaHedron {
     private _audioUniforms: {};
     private _mesh: THREE.Mesh;
     private _ready: boolean = false;
+    private _move: boolean = false;
 
     constructor(private _stage: THREE.Scene, _analyser, width, height) {
         this._audioUniforms = {
@@ -49,28 +50,36 @@ export default class IcosaHedron {
 
         this._stage.add(this._mesh);
 
-        // @ts-ignore
-        TweenMax.to(this._mesh.position, 2, {
-            x: 0,
-            z: 400
-        });
+        this._mesh.scale.set(5, 5, 5);
+        this._mesh.visible = false;
 
-        this._mesh.scale.set(2, 2, 2);
-
-        // @ts-ignore
-        TweenMax.to(this._mesh.scale, 2, {
-            x: 1,
-            y: 1,
-            z: 1
-        });
-
-        this._ready = true;
         // this._vertexCount = this._geometry.attributes.position.count;
         //
         // for (let i = 0; i < this._vertexCount; i++) {
         //     this._isZoom.push(true);
         // }
     };
+
+    public start () {
+        this._ready = true;
+        this._mesh.visible = true;
+
+        // @ts-ignore
+        TweenMax.to(this._mesh.position, 2, {
+            x: 0,
+            z: 400,
+        });
+
+        // @ts-ignore
+        TweenMax.to(this._mesh.scale, 2, {
+            x: 1,
+            y: 1,
+            z: 1,
+            onComplete: () => {
+                this._move = true;
+            }
+        });
+    }
 
     public update(average: number) {
         this._mesh.rotation.x += rand(0.001, 0.01);
@@ -80,7 +89,7 @@ export default class IcosaHedron {
         this._mesh.scale.set(scale, scale, scale);
     }
 
-    public move(index: number) {
+    public changeColor(index: number) {
         if (index === 0) {
             // @ts-ignore
             TweenMax.to(this._material.color, 15, {
@@ -133,10 +142,10 @@ export default class IcosaHedron {
 
     public last = () => {
         // @ts-ignore
-        TweenMax.to(this._mesh.position, 7, {
+        TweenMax.to(this._mesh.position, 10.3, {
             x: 0,
             y: 0,
-            z: 0,
+            z: -10000,
             ease: Expo.easeInOut,
             onComplete: () => {
                 this._stage.remove(this._mesh);
@@ -150,5 +159,9 @@ export default class IcosaHedron {
 
     get ready(): boolean {
         return this._ready;
+    }
+
+    get move(): boolean {
+        return this._move;
     }
 }

@@ -54,20 +54,27 @@ export class LensFlare {
             map: this._texture5
         });
         this._circle = new THREE.Mesh(geo, material);
+        this._circle.position.set(0, 0, -10000);
+
+        this._lines.position.set(0, 0, -10000);
 
         this._stage.add(this._lines);
         this._stage.add(this._circle);
 
         this._lines.scale.set(0.01, 0.01, 0.01);
         this._circle.scale.set(0.01, 0.01, 0.01);
+        this._lines.visible = false;
+        this._circle.visible = false;
     };
 
     public setSunFlare = () => {
+        this._lines.visible = true;
+        this._circle.visible = true;
         this._stage.fog = new THREE.Fog(0x000000, 50, 2000);
         const light = new THREE.PointLight( 0xffffff, 10, 2000 );
         const lensflare = new Lensflare();
 
-        light.position.set(3, 0, 0);
+        light.position.set(3, 0, -10000);
         lensflare.addElement( new LensflareElement( this._texture1, 512, 0 ) );
         lensflare.addElement( new LensflareElement( this._texture2, 512, 0 ) );
         lensflare.addElement( new LensflareElement( this._texture3, 60, 0.6 ) );
@@ -83,7 +90,7 @@ export class LensFlare {
         });
 
         // @ts-ignore
-        TweenMax.to(this._circle.scale, 0.5, {
+        TweenMax.to(this._circle.scale, 1.5, {
             x: 1,
             y: 1,
             z: 1,

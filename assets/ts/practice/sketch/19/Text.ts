@@ -49,33 +49,6 @@ export default class Text {
         return new THREE.Mesh(geometry, materials)
     };
 
-    // public changeText = (_index: number) => {
-    //     if (_index === 1) {
-    //         this._stage.remove(this._text);
-    //         this._text = this.makeText('W A T E R', new THREE.Color(0xffffff));
-    //         this._text.rotation.y += Math.PI;
-    //         this._text.position.set(0 ,0, 500);
-    //         this._stage.add(this._text);
-    //
-    //         // @ts-ignore
-    //         TweenMax.to(this._text.position, 10, {
-    //             z: 1000
-    //         });
-    //     } else if (_index === 2) {
-    //         this._stage.remove(this._text);
-    //         this._text = this.makeText('T I M E', new THREE.Color(0xffffff));
-    //         this._text.position.set(-100,0, 1000);
-    //         this._text.rotation.y += Math.PI;
-    //         this._stage.add(this._text);
-    //
-    //         // @ts-ignore
-    //         TweenMax.to(this._text.position, 10, {
-    //             z: 100
-    //         });
-    //     }
-    // };
-    //
-
     public show = (_position: THREE.Vector3) => {
         this._text.position.set(_position.x, _position.y, _position.z);
         this._text.visible = true;
@@ -83,6 +56,7 @@ export default class Text {
 
     public remove = () => {
         this._text.visible = false;
+        this._stage.remove(this._text);
     };
 
     get ready(): boolean {

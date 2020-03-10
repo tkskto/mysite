@@ -41,6 +41,9 @@ export default class Background {
             },
             variable: {
                 value: 1.0
+            },
+            mouse: {
+                value: new THREE.Vector2(0.0, 0.0)
             }
         };
 
@@ -151,16 +154,21 @@ export default class Background {
     }
 
     public changeMaterial(index) {
-        // @ts-ignore
-        TweenMax.to(this, 3, {
-            _var: 0,
-            onComplete: () => {
-                this.change(index);
-            }
-        });
+        if (index === 3) {
+            // @ts-ignore
+            this._planeUniforms.scene.value = 3;
+        } else {
+            // @ts-ignore
+            TweenMax.to(this, 3, {
+                _var: 0,
+                onComplete: () => {
+                    this.change(index);
+                }
+            });
+        }
     }
 
-    public update (_time, decay) {
+    public update (_time, decay, mouse: THREE.Vector2) {
         const time = this._index === 1 || this._index === 2 ? this._time : _time;
 
         // @ts-ignore
@@ -171,6 +179,8 @@ export default class Background {
         this._planeUniforms.decay.value = decay;
         // @ts-ignore
         this._planeUniforms.variable.value = this._var;
+        // @ts-ignore
+        this._planeUniforms.mouse.value = mouse;
 
         if (this._index === 1 || this._index === 2) {
             this._time += 0.01;
@@ -180,6 +190,10 @@ export default class Background {
         this._renderer.render(this._scene, this._camera);
         this._renderer.setRenderTarget(null);
     }
+
+    public remove = () => {
+        this._ready = false;
+    };
 
     get ready(): boolean {
         return this._ready;

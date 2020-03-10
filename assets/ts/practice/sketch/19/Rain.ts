@@ -25,25 +25,25 @@ export default class Rain {
         this._rain = new THREE.Group();
         this._material = new THREE.MeshBasicMaterial({
             color: new THREE.Color(0.3, 0.6, 0.7),
-            blending: THREE.NormalBlending,
+            blending: THREE.CustomBlending,
             transparent: true,
             map: this._texture
         });
 
-        for (let i = 0; i < 1000; i++) {
-            const geometry = new THREE.BoxGeometry(1, rand(20, 40), 1, 1, 1, 1);
+        for (let i = 0; i < 500; i++) {
+            const geometry = new THREE.BoxGeometry(0.1, rand(20, 40), 1, 1, 1, 1);
             const mesh = new THREE.Mesh(geometry, this._material);
 
             mesh.position.set(
                 rand(-240, 160),
                 rand(350, 450),
-                rand(200, 400)
+                rand(400, 700)
             );
 
             // @ts-ignore
             mesh.velocity = 0;
             // @ts-ignore
-            mesh.accel = 0.02 * Math.random();
+            mesh.accel = 0.05 * Math.random();
 
             this._mesh.push(mesh);
             this._rain.add(mesh);
@@ -51,11 +51,6 @@ export default class Rain {
 
         this._stage.add(this._rain);
         this._rain.visible = false;
-
-        // @ts-ignore
-        TweenMax.to(this._material, 20, {
-            opacity: 0,
-        });
     }
 
     public start = () => {
@@ -71,6 +66,10 @@ export default class Rain {
             this._interval = false;
         }, 6000);
 
+        // @ts-ignore
+        TweenMax.to(this._material, 25, {
+            opacity: 0,
+        });
     };
 
     public update = (average: number) => {

@@ -10,6 +10,7 @@ uniform float time;
 uniform float decay;
 uniform float scene;
 uniform float variable;
+uniform vec2 mouse;
 
 #define PI 3.1415
 
@@ -17,7 +18,7 @@ float hash( float n )
 {
     return fract(sin(n)*43758.5453);
 }
-//mat2 m = mat2( 1.,  0., 0.,  1. );
+// mat2 m = mat2( 1.,  0., 0.,  1. );
 mat2 m = mat2( 0.8,  0.6, -0.6,  0.8 );
 
 float noise( in vec2 x )
@@ -39,7 +40,7 @@ float fbm(vec2 p){
     f +=0.50000*abs(noise(p)-1.)*2.;p*=m*2.02;
     f +=0.25000*abs(noise(p)-1.)*2.;p*=m*2.03;
     f +=0.12500*abs(noise(p)-1.)*2.;p*=m*2.01;
-    f +=0.06250*abs(noise(p)-1.)*2.;p*=m*2.04;
+    f +=0.06250*abs(noise(p)-1.)*2.;p*=m*2.0;
     f +=0.03125*abs(noise(p)-1.)*2.;
     return f/0.96875;
 }

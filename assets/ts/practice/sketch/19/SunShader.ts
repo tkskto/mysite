@@ -10,6 +10,7 @@ uniform float time;
 uniform sampler2D audio;
 uniform float decay;
 uniform float variable;
+uniform vec2 mouse;
 
 vec3 mod289(vec3 x) {
   return x - floor(x * (1.0 / 289.0)) * 289.0;
@@ -28,8 +29,7 @@ vec4 taylorInvSqrt(vec4 r)
   return 1.79284291400159 - 0.85373472095314 * r;
 }
 
-float snoise(vec3 v)
-  { 
+float snoise(vec3 v) { 
   const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
   const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
 
@@ -99,40 +99,48 @@ float snoise(vec3 v)
     // Mix final noise value
   vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
   m = m * m;
-  return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
+  return 13.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
                                 dot(p2,x2), dot(p3,x3) ) );
 }
 
-float audio_ampl( in sampler2D channel, in float t) { return texture( channel, vec2(t, 0.75) ).x; }
+float audio_ampl( in sampler2D channel, in float t) {
+return texture( channel, vec2(t, 0.75) ).x;
+}
+
+float circle(in vec2 center) {
+    float dist2 = dot(center, center);
+    float clamped_dist = smoothstep(0.0, 1.0, dist2);
+    return audio_ampl(audio, clamped_dist) * 0.7;
+}
 
 void main(void){
     vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
     vec2 st = gl_FragCoord.xy / resolution;
 
     // red
-    vec3 top = vec3(0.52, 0.53, 0.57);
+    vec3 top = vec3(0.52, 0.53, 0.63);
     vec3 bottom = vec3(0.80, 0.39, 0.25);
-    vec3 grad = mix(top, bottom, smoothstep(1.1, 0.4, st.y));
+    vec3 grad = mix(top, bottom, smoothstep(1.0, 0.4, st.y));
     vec3 color = vec3(step(0.0, st.y) * grad) + mix(grad, vec3(0.0), p.y);
-
-    vec2 uv = gl_FragCoord.xy / resolution.xy;
-    p *= 10.0;   
+    
+    p *= 100.0;
+    
     vec3 cDir = vec3(0.0,0.0,1.0);
     vec3 cUp = vec3(0.0,1.0,0.0);
-    float dipth = 1.0;
+    
     vec3 cSide = normalize(cross(cDir,cUp));
-    vec3 ray = normalize(cSide * p.x + cUp * p.y + cDir * dipth); 
+    vec3 ray = normalize(cSide * p.x + cUp * p.y + cDir * 1.0); 
     vec3 c = vec3(0.0,0.0,time);
     
     color += snoise(c) * 0.2;
     c += ray;
     color += snoise(c) * 0.2;
+    c += ray;
+    color += snoise(c) * 0.2;
     
-    vec2 center = 2.0 * uv - 1.0;
+    vec2 center = 2.0 * st - 1.0;
     center.x *= resolution.x / resolution.y;
-    float dist2 = dot(center, center);
-    float clamped_dist = smoothstep(0.0, 1.0, dist2);
-    float sample2 = audio_ampl(audio, clamped_dist) * 0.7;
+    float sample2 = circle(center);
     color += smoothstep(0.5, 1.0, sample2);
     
     color *= decay;

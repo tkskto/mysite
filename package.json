@@ -29,7 +29,7 @@
         "marked": "0.8.0",
         "node-sass": "4.13.1",
         "sass-loader": "8.0.2",
-        "stats-js": "1.0.0-alpha1",
+        "stats-js": "1.0.1",
         "ts-loader": "6.2.1",
         "ts-node": "8.6.2",
         "tslint": "5.17.0",

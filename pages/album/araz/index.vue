@@ -1,5 +1,5 @@
 <template>
-    <album _name="araz"></album>
+    <album name="araz"></album>
 </template>
 
 <script>

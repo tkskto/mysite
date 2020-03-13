@@ -1,10 +1,10 @@
 <template>
-    <div class="str-container" :class="{'is-overed': $data._isOvered}">
+    <div class="str-container" :class="{'is-overed': isOvered}">
         <div id="canvasWrap" class="container-canvas">
-            <div class="cover" :style="`background: url('/assets/album/${_name}/poster.webp') no-repeat center; background-size: cover;`"></div>
+            <div class="cover" :style="`background: url('/assets/album/${name}/poster.webp') no-repeat center; background-size: cover;`"></div>
             <canvas id="myCanvas"></canvas>
         </div>
-        <button class="btn-dot" :class="{'is-show': $data._viewFlg}" @click="backToAlbum">
+        <button class="btn-dot" :class="{'is-show': viewFlg}" @click="backToAlbum">
             <svg class="svg-icon--dot" viewBox="0 0 20 9" xmlns="http://www.w3.org/2000/svg" title="一覧に戻る">
                 <circle r="1.5" fill="#fff" cx="5" cy="5"></circle>
                 <circle r="1.5" fill="#fff" cx="10" cy="5"></circle>
@@ -22,7 +22,7 @@
     import {CustomPerspectiveSPCamera} from "~/assets/ts/album/Camera/CustomPerspectiveSPCamera";
 
     export default {
-        name: 'album',
+        // name: 'album',
         computed: {
             ...mapGetters({
                 screenSize: 'Common/screenSize',
@@ -30,7 +30,7 @@
             })
         },
         props: {
-            _name: {
+            name: {
                 type: String,
                 required: true
             }
@@ -49,8 +49,8 @@
                 _mouseX: 0,
                 _mouseY: 0,
                 _touchY: 0,
-                _isOvered: false,
-                _viewFlg: false,
+                isOvered: false,
+                viewFlg: false,
                 _textureLoader: null,
                 _selectedVideoID: 0,
                 _timer: 0,
@@ -118,7 +118,7 @@
                 const _name = i < 10 ? `0${i + 1}` : `${i + 1}`;
                 // 一覧時は解像度低いやつをつかう
                 this._textureLoader.load(
-                    `/assets/album/${this._name}/${_name}_min.jpg`,
+                    `/assets/album/${this.name}/${_name}_min.jpg`,
                     (_tex) => {
                         this._minTextures[_name] = _tex;
                         this.addPicture(_tex, _name);
@@ -126,7 +126,7 @@
                 );
                 // 詳細時に使う解像度高い画像のテクスチャも用意しておく
                 this._textureLoader.load(
-                    `/assets/album/${this._name}/${_name}.jpg`,
+                    `/assets/album/${this.name}/${_name}.jpg`,
                     (_tex) => {
                         this._textures[_name] = _tex;
                     }
@@ -206,7 +206,7 @@
                 video.setAttribute('webkit-playsinline', '');
                 video.loop = true;
                 video.autoplay = false;
-                video.src = `/assets/album/${this._name}/${_src}.mp4`;
+                video.src = `/assets/album/${this.name}/${_src}.mp4`;
                 video.addEventListener('loadeddata', () => {
                     video.pause();
                     this.onLoadComplete();
@@ -311,7 +311,7 @@
                 this._intersects = this._rayCaster.intersectObjects(this._container.children);
 
                 if (this._intersects) {
-                    this.$data._isOvered = this._intersects.length > 0;
+                    this.isOvered = this._intersects.length > 0;
                 }
             },
             /**
@@ -321,7 +321,7 @@
                 if (this._intersects && this._intersects.length > 0) {
                     this.removeDetectEvent();
 
-                    this.$data._viewFlg = true;
+                    this.viewFlg = true;
                     const mesh = this._intersects[0].object;
                     const id = mesh.userData.id;
                     const type = mesh.userData.type;
@@ -382,7 +382,7 @@
                     z: 100,
                     ease: Power3.easeIn,
                     onComplete: () => {
-                        this.$data._viewFlg = false;
+                        this.viewFlg = false;
                         this.removeCameraEvent();
                         this.setDetectEvent();
                     }

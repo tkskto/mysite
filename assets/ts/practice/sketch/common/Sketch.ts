@@ -26,14 +26,17 @@ export class Sketch implements ISketch {
         const id = store['Practice/id'];
 
         if (scene === AppConfig.SCENE_SKETCH) {
+            // 初期化
             if (id === this._id && !this._setuped && !this._isPlaying) {
                 this._store.commit('Common/SET_MOUSE_STATE', false);
                 this._store.commit('Practice/SET_MUSIC_MODE', false);
                 this.setup();
                 this._setuped = true;
                 this._store.commit('Practice/SET_QUOTE_TEXT', this._quote);
+            // 再生
             } else if (id === this._id && !this._isPlaying) {
                 this.play();
+            // 破棄
             } else if (id !== this._id && this._isPlaying) {
                 this._setuped = false;
                 this.dispose();

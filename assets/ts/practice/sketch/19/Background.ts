@@ -2,10 +2,8 @@ import * as THREE from 'three';
 import {pFS, pVS} from './PlaneShader';
 import {SunFS, SunVS} from './SunShader';
 import {MistVS, MistFS} from './MistShader';
-import {ParticleVS, ParticleFS} from './ParticleShader';
 import {CircleVS, CircleFS} from './CircleShader';
 import TweenMax from 'gsap';
-// import {HallFS, HallVS} from './SunShader';
 
 export default class Background {
     private _scene: THREE.Scene;

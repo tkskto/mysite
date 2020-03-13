@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import {IcosaFS, IcosaVS} from './IcosaShader';
 import TweenMax, {Expo} from 'gsap';
 
 function rand(min, max) {
@@ -7,10 +6,8 @@ function rand(min, max) {
 }
 
 export default class IcosaHedron {
-    // private _geometry: THREE.IcosahedronGeometry;
     private _geometry: THREE.SphereBufferGeometry;
     private _material: THREE.MeshPhongMaterial;
-    // private _material: THREE.ShaderMaterial;
     private _audioUniforms: {};
     private _mesh: THREE.Mesh;
     private _ready: boolean = false;
@@ -31,19 +28,12 @@ export default class IcosaHedron {
     }
 
     public generate = (posZ) => {
-        // this._geometry = new THREE.IcosahedronGeometry(6, 0);
         this._geometry = new THREE.SphereBufferGeometry(5, 31, 31);
         this._material = new THREE.MeshPhongMaterial({
             color: new THREE.Color(1, 1, 1),
             specular: new THREE.Color(1, 1, 1),
             shininess: 15,
         });
-        // this._material = new THREE.ShaderMaterial({
-        //     vertexShader: IcosaVS,
-        //     fragmentShader: IcosaFS,
-        //     uniforms: this._audioUniforms,
-        //     side: THREE.DoubleSide
-        // });
 
         this._mesh = new THREE.Mesh(this._geometry, this._material);
         this._mesh.position.set(20, 0, posZ + 10);
@@ -52,12 +42,6 @@ export default class IcosaHedron {
 
         this._mesh.scale.set(5, 5, 5);
         this._mesh.visible = false;
-
-        // this._vertexCount = this._geometry.attributes.position.count;
-        //
-        // for (let i = 0; i < this._vertexCount; i++) {
-        //     this._isZoom.push(true);
-        // }
     };
 
     public start () {

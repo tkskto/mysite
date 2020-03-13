@@ -23,8 +23,8 @@
     "devDependencies": {
         "@nuxt/typescript": "2.8.1",
         "@nuxtjs/sitemap": "2.0.1",
+        "@types/node": "12.12.30",
         "@types/gsap": "1.20.2",
-        "@types/node": "12.11.7",
         "@types/three": "0.93.10",
         "marked": "0.8.0",
         "node-sass": "4.13.1",

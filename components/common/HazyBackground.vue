@@ -6,14 +6,14 @@
 
 <script>
 import {mapGetters} from 'vuex';
-import {GLConfig} from '../../assets/ts/common/Config'
-import {HazyBackground} from '../../assets/ts/common/shader/HazyBackground';
-import {Program} from '../../assets/ts/common/gl/Program';
-import {HazyBackgroundData} from '../../assets/ts/common/data/HazyBackground';
-import {Geometry} from '../../assets/ts/common/gl/Geometry';
-import {Mesh} from '../../assets/ts/common/gl/Mesh';
-import {Renderer} from '../../assets/ts/common/gl/Renderer';
-import {WebGLContext} from '../../assets/ts/common/gl/Context';
+import {GLConfig} from '~/assets/ts/common/Config.ts'
+import HazyBackground from '~/assets/ts/common/shader/HazyBackground.ts';
+import Program from '~/assets/ts/common/gl/Program.ts';
+import HazyBackgroundData from '~/assets/ts/common/data/HazyBackground.ts';
+import Geometry from '~/assets/ts/common/gl/Geometry.ts';
+import Mesh from '~/assets/ts/common/gl/Mesh.ts';
+import Renderer from '~/assets/ts/common/gl/Renderer.ts';
+import WebGLContext from '~/assets/ts/common/gl/Context.ts';
 
 export default {
     name: 'HazyBackground',

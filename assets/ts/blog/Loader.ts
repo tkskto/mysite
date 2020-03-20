@@ -1,4 +1,4 @@
-export class Loader {
+export default class Loader {
     public loadJson = (): Promise<JSON> => {
         return fetch(`/assets/blog/articles.json`).then((response: Response) => {
             if (response.ok) {

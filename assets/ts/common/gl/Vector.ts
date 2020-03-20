@@ -1,5 +1,4 @@
-export class Vector {
-
+export default class Vector {
     private _x: number;
     private _y: number;
     private _z: number;
@@ -58,7 +57,7 @@ export class Vector {
 
     /**
      * ベクトルを正規化します
-     * @returns {data.Vector}
+     * @returns {Vector}
      */
     public normalize = (): Vector => {
         let len = this.length;
@@ -75,8 +74,8 @@ export class Vector {
 
     /**
      * ベクトル同士の足し算をします
-     * @param {data.Vector} _vec
-     * @returns {data.Vector}
+     * @param {Vector} _vec
+     * @returns {Vector}
      */
     public add = (_vec: Vector): Vector => {
         const dist: Vector = new Vector();
@@ -88,8 +87,8 @@ export class Vector {
 
     /**
      * ベクトル同士の引き算をします
-     * @param {data.Vector} _vec
-     * @returns {data.Vector}
+     * @param {Vector} _vec
+     * @returns {Vector}
      */
     public subtract = (_vec: Vector): Vector => {
         const dist: Vector = new Vector();
@@ -101,7 +100,7 @@ export class Vector {
 
     /**
      * 内積をとります。
-     * @param {data.Vector} _vec
+     * @param {Vector} _vec
      * @returns {number}
      */
     public dot = (_vec: Vector): number => {
@@ -110,8 +109,8 @@ export class Vector {
 
     /**
      * 外積をとります。
-     * @param {data.Vector} _vec
-     * @returns {data.Vector}
+     * @param {Vector} _vec
+     * @returns {Vector}
      */
     public cross = (_vec: Vector): Vector => {
         const dist: Vector = new Vector();

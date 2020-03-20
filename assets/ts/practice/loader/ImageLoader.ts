@@ -1,6 +1,6 @@
 import { Event, EventDispatcher } from '~/assets/ts/common/events/EventDispatcher';
 
-export class ImageLoader extends EventDispatcher {
+export default class ImageLoader extends EventDispatcher {
 
     public static IMAGE_LOADED = 'imageLoaded';
     public static LOAD_COMPLETE = 'loadComplete';

@@ -1,15 +1,14 @@
-import { Sketch } from '../common/Sketch';
-import { WebGLContext } from '../../../common/gl/Context';
-import { Data } from '../../../common/gl/plane/pData';
-import { Renderer } from '../../../common/gl/Renderer';
-import { Geometry } from '../../../common/gl/Geometry';
-import { Mesh } from '../../../common/gl/Mesh';
-import { Program } from '../../../common/gl/Program';
+import Sketch from '../common/Sketch';
+import WebGLContext from '../../../common/gl/Context';
+import Data from '../../../common/gl/plane/pData';
+import Renderer from '../../../common/gl/Renderer';
+import Geometry from '../../../common/gl/Geometry';
+import Mesh from '../../../common/gl/Mesh';
+import Program from '../../../common/gl/Program';
 import { GLConfig } from '../../../common/Config';
-import {Vector} from '../../../common/gl/Vector';
-import {Default} from './Shader';
+import Default from './Shader';
 
-export class Item15 extends Sketch {
+export default class Item15 extends Sketch {
 
     private _ctx: WebGLContext;
     private _data: Data = new Data();
@@ -18,8 +17,6 @@ export class Item15 extends Sketch {
     private _default: Program;
     private _renderer: Renderer;
     private _time = 0;
-    private _dirLight: Vector = new Vector(0.0, 0.0, 0.0);
-    private _ambientLight = [0.1, 0.1, 0.1, 1.0];
 
     constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {
         super(_store, _id);

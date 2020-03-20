@@ -5,14 +5,14 @@
 <script>
     import {mapGetters, mapActions} from 'vuex';
     import * as THREE from 'three';
-    import {W} from '~/assets/ts/index/Text/W';
-    import {H} from '~/assets/ts/index/Text/H';
-    import {O} from '~/assets/ts/index/Text/O';
-    import {I} from '~/assets/ts/index/Text/I';
-    import {A} from '~/assets/ts/index/Text/A';
-    import {M} from '~/assets/ts/index/Text/M';
-    import {Hatena} from "~/assets/ts/index/Text/Hatena";
-    import {AppConfig} from '~/assets/ts/common/Config';
+    import W from '~/assets/ts/index/Text/W.ts';
+    import H from '~/assets/ts/index/Text/H.ts';
+    import O from '~/assets/ts/index/Text/O.ts';
+    import I from '~/assets/ts/index/Text/I.ts';
+    import A from '~/assets/ts/index/Text/A.ts';
+    import M from '~/assets/ts/index/Text/M.ts';
+    import Hatena from "~/assets/ts/index/Text/Hatena.ts";
+    import {AppConfig} from '~/assets/ts/common/Config.ts';
     import TweenMax, {Elastic, Back, Linear} from 'gsap';
 
     export default {
@@ -125,7 +125,7 @@
 
             const EXTRUDE_OPTION = {
                 curveSegments: 24,
-                amount: depth,
+                depth,
                 steps: 50,
                 material: 1,
                 extrudeMaterial: 0,

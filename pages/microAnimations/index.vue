@@ -16,7 +16,7 @@
     import TheHeader from '../../components/microAnimations/Header';
     import Category from '../../components/microAnimations/Category';
     import Dialog from '../../components/microAnimations/Dialog';
-    import {Vector} from '../../assets/ts/common/gl/Vector';
+    import Vector from '~/assets/ts/common/gl/Vector.ts';
     import {mapGetters, mapActions} from 'vuex';
 
     export default {

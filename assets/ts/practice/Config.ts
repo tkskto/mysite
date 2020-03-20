@@ -1,4 +1,4 @@
-export class AppConfig {
+export default class AppConfig {
     public static ON_RESIZE_EVENT = (state, getters) => {
         return state.Common.screenSize.width;
     };

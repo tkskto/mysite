@@ -1,7 +1,7 @@
 import { GLUtils } from '../Utils';
-import { IData } from '../datatype/IData';
+import IData from '../datatype/IData';
 
-export class Geometry {
+export default class Geometry {
     private _vbo: WebGLBuffer[] = [];
     private _ibo: WebGLBuffer;
 

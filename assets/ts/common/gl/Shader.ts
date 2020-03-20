@@ -1,6 +1,6 @@
 import { GLUtils } from '../Utils';
 
-export class Shader {
+export default class Shader {
     private readonly _vertexString: string;
     private readonly _fragmentString: string;
     private _VS: WebGLShader;

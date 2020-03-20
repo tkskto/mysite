@@ -1,6 +1,6 @@
 import { Methods } from '../Utils';
 
-export class WebGLContext {
+export default class WebGLContext {
     private _canvas: HTMLCanvasElement;
     private _ctx: WebGLRenderingContext;
 

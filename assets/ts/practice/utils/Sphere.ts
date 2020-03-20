@@ -1,7 +1,7 @@
 import {Methods} from '../../common/Utils';
-import {IData} from '../../common/datatype/IData';
+import IData from '../../common/datatype/IData';
 
-export class Sphere implements IData {
+export default class Sphere implements IData {
 
     _vertex: number[] = [];
     _normal: number[] = [];

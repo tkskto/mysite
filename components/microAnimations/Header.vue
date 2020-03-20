@@ -10,7 +10,7 @@
 <script>
     import {mapActions} from 'vuex';
     export default {
-        name: "Header",
+        name: 'Header',
         methods: {
             ...mapActions({
                 changeDialogState: 'MicroAnimations/changeDialogState',

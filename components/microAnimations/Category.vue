@@ -10,7 +10,7 @@
 <script>
     import Item from './Item';
     export default {
-        name: "category",
+        name: 'category',
         components: {
             Item,
         },

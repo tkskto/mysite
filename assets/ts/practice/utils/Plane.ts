@@ -1,6 +1,6 @@
-import {IData} from '../../common/datatype/IData';
+import IData from '../../common/datatype/IData';
 
-export class Plane implements IData {
+export default class Plane implements IData {
 
     _vertex: number[] = [];
     _normal: number[] = [];

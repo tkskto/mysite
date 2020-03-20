@@ -1,4 +1,4 @@
-export class Point {
+export default class Point {
     private _x: number;
     private _y: number;
     constructor(_x: number, _y: number) {

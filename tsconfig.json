@@ -1,29 +1,36 @@
 {
-  "compilerOptions": {
-    "sourceMap": true,
-    "target": "es5",
-    "lib": [
-      "dom",
-      "esnext"
-    ],
-    "module": "esnext",
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "noImplicitAny": false,
-    "noImplicitThis": false,
-    "strictNullChecks": true,
-    "removeComments": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "allowSyntheticDefaultImports": true,
-    "allowJs": true,
-    "baseUrl": ".",
-    "paths": {
-      "~/*" : ["./*"],
-      "~assets/*": ["./assets/*"],
-      "~components/*": ["./components/*"],
-      "~pages/*": ["./pages/*"],
-      "~static/*": ["./static/*"],
-      "~store": ["./.nuxt/store"]
-    }
-  }
+    "compilerOptions": {
+        "sourceMap": true,
+        "target": "es2018",
+        "module": "esnext",
+        "lib": [
+            "esnext",
+            "dom"
+        ],
+        "moduleResolution": "node",
+        "experimentalDecorators": true,
+        "noImplicitAny": false,
+        "noImplicitThis": false,
+        "strictNullChecks": true,
+        "removeComments": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "allowSyntheticDefaultImports": true,
+        "allowJs": true,
+        "baseUrl": ".",
+        "paths": {
+            "~/*": [
+                "./*"
+            ],
+            "@/*": [
+                "./*"
+            ]
+        },
+        "typeRoots": [
+            "./node_modules/@types",
+            "./node_modules/@nuxt/vue-app/types"
+        ]
+    },
+    "exclude": [
+        "node_modules"
+    ]
 }

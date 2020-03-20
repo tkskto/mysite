@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-export class W {
+export default class W {
 
     private _shape: THREE.Shape;
     private _geometry: THREE.ExtrudeGeometry;

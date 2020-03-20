@@ -22,10 +22,7 @@
     </section>
 </template>
 
-<script>
-    import {mapGetters, mapActions} from 'vuex';
-    import {AppConfig} from '~/assets/ts/common/Config';
-
+<script>;
     export default {
         layout: 'default',
         computed: {},

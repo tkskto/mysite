@@ -1,15 +1,15 @@
-import { Sketch } from '../common/Sketch';
-import { Default } from './Shader';
-import { WebGLContext } from '../../../common/gl/Context';
-import { Renderer } from '../../../common/gl/Renderer';
-import { Geometry } from '../../../common/gl/Geometry';
-import { Mesh } from '../../../common/gl/Mesh';
-import { Program } from '../../../common/gl/Program';
+import Sketch from '../common/Sketch';
+import Default from './Shader';
+import WebGLContext from '../../../common/gl/Context';
+import Renderer from '../../../common/gl/Renderer';
+import Geometry from '../../../common/gl/Geometry';
+import Mesh from '../../../common/gl/Mesh';
+import Program from '../../../common/gl/Program';
 import { GLConfig } from '../../../common/Config';
 import { GLUtils } from '../../../common/Utils';
-import {Plane} from '../../utils/Plane';
+import Plane from '../../utils/Plane';
 
-export class Item8 extends Sketch {
+export default class Item8 extends Sketch {
 
     private _data: Plane = new Plane();
     private _ctx: WebGLContext;

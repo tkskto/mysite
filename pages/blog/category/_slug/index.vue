@@ -14,12 +14,10 @@
 </template>
 
 <script>
-    import {AppConfig} from '~/assets/ts/common/Config';
-    import {Loader} from '~/assets/ts/blog/Loader';
+    import Loader from '~/assets/ts/blog/Loader.ts';
     import ArticleList from '~/components/blog/ArticleList';
     import TheSidebar from '~/components/blog/TheSidebar';
-    import {Methods} from '~/assets/ts/common/Utils';
-    import marked from 'marked';
+    import {Methods} from '~/assets/ts/common/Utils.ts';
     import {mapGetters, mapActions} from 'vuex';
 
     // category

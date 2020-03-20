@@ -1,16 +1,16 @@
-import { Sketch } from '../common/Sketch';
-import { Default } from './Shader';
-import { WebGLContext } from '../../../common/gl/Context';
-import { Renderer } from '../../../common/gl/Renderer';
-import { Geometry } from '../../../common/gl/Geometry';
-import { Mesh } from '../../../common/gl/Mesh';
-import { Program } from '../../../common/gl/Program';
+import Sketch from '../common/Sketch';
+import Default from './Shader';
+import WebGLContext from '../../../common/gl/Context';
+import Renderer from '../../../common/gl/Renderer';
+import Geometry from '../../../common/gl/Geometry';
+import Mesh from '../../../common/gl/Mesh';
+import Program from '../../../common/gl/Program';
 import { GLConfig } from '../../../common/Config';
-import {Vector} from '../../../common/gl/Vector';
-import {Cube} from '../../utils/Cube';
-import {Sphere} from '../../utils/Sphere';
+import Vector from '../../../common/gl/Vector';
+import Cube from '../../utils/Cube';
+import Sphere from '../../utils/Sphere';
 
-export class Item12 extends Sketch {
+export default class Item12 extends Sketch {
 
     private _ctx: WebGLContext;
     private _gl: WebGLRenderingContext;

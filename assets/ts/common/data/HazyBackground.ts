@@ -1,6 +1,6 @@
-import {IData} from '../datatype/IData';
+import IData from '../datatype/IData';
 
-export class HazyBackgroundData implements IData {
+export default class HazyBackgroundData implements IData {
     _vertex: number[] = [
         -1.0, 1.0, 0.0,
         1.0, 1.0, 0.0,

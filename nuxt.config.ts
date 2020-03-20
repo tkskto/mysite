@@ -1,4 +1,4 @@
-import NuxtConfiguration from '@nuxt/config';
+import { Configuration } from '@nuxt/types';
 const articles = require('./static/assets/blog/articles.json');
 const generateDynamicRoutes = callback => {
     const routes = articles.map(item => {
@@ -7,7 +7,8 @@ const generateDynamicRoutes = callback => {
     callback(null, routes);
 };
 
-const config: NuxtConfiguration = {
+const config: Configuration = {
+    buildModules: ['@nuxt/typescript-build'],
     env: {
         baseUrl: process.env.BASE_URL || 'http://localhost:3000'
     },

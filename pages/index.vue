@@ -8,11 +8,10 @@
 
 <script>
     import {mapGetters, mapActions} from 'vuex';
-    import store from './../store/Common';
     import Logo from '~/components/index/Logo.vue';
     import Intro from '~/components/index/Intro.vue';
     import Navs from '~/components/common/nav/Navigation.vue';
-    import {AppConfig} from '~/assets/ts/common/Config';
+    import {AppConfig} from '~/assets/ts/common/Config.ts';
 
     export default {
         layout: 'background',

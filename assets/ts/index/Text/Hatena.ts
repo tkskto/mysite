@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 
-export class Hatena {
-
+export default class Hatena {
     private _upperGeometry: THREE.ExtrudeGeometry;
     private _lowerGeometry: THREE.ExtrudeGeometry;
     private _upperMesh: THREE.Mesh;

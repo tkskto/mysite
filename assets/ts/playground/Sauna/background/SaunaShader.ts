@@ -15,7 +15,7 @@ void main() {
     vec3 grad = mix(top, bottom, smoothstep(1.1, 0.4, st.y));
     vec3 skyColor = vec3(step(0.0, st.y) * grad) + mix(grad, vec3(0.0), p.y);
     
-    float l = length(st);
+    float l = length(p);
     
     gl_FragColor = vec4(skyColor - vec3(l), 1.0);
 }

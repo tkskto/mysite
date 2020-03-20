@@ -1,10 +1,10 @@
 import { MatrixUtils, Methods } from '../Utils';
-import { Vector } from './Vector';
+import Vector from './Vector';
 
 /**
  * ( This class has been influenced by https://wgld.org )
  */
-export class Quaternion {
+export default class Quaternion {
     private _vector: Vector;
     private _radian: number;
 
@@ -69,8 +69,8 @@ export class Quaternion {
 
     /**
      * クォータニオン同士の掛け算
-     * @param {data.Quaternion} _q
-     * @returns {data.Quaternion}
+     * @param {Quaternion} _q
+     * @returns {Quaternion}
      */
     public multiply = (_q: Quaternion): Quaternion => {
         const dest: Quaternion = new Quaternion();
@@ -88,7 +88,7 @@ export class Quaternion {
      * クォータニオンに回転を与える
      * @param angle 回転角度
      * @param axis 回転軸
-     * @returns {data.Quaternion}
+     * @returns {Quaternion}
      */
     public rotate = (angle: number, axis: Vector|number[]): Quaternion | null => {
         let sq: number = axis.length;
@@ -137,10 +137,10 @@ export class Quaternion {
 
     /**
      * 回転軸と（回転が適用された）クォータニオンから新しい座標を求める
-     * @param {data.Vector} _axis
-     * @param {data.Quaternion} _qt
-     * @param {data.Vector} _dest
-     * @returns {data.Vector}
+     * @param {Vector} _axis
+     * @param {Quaternion} _qt
+     * @param {Vector} _dest
+     * @returns {Vector}
      */
     public toVector = (_axis: Vector, _qt: Quaternion, _dest: Vector = new Vector()): Vector => {
         const qp = new Quaternion();

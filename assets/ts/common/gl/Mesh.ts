@@ -3,12 +3,12 @@
  */
 
 import { GLUtils, MatrixUtils, Methods } from '../Utils';
-import { Vector } from './Vector';
-import { Geometry } from './Geometry';
-import { Program } from './Program';
+import Vector from './Vector';
+import Geometry from './Geometry';
+import Program from './Program';
 import { GLConfig } from '../Config';
 
-export class Mesh {
+export default class Mesh {
 
     private _id: number;
     private _mMatrix: Float32Array;

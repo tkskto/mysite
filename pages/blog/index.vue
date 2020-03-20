@@ -9,11 +9,10 @@
 </template>
 
 <script>
-    import {AppConfig} from '~/assets/ts/common/Config';
-    import {Loader} from '~/assets/ts/blog/Loader';
+    import Loader from '~/assets/ts/blog/Loader.ts';
     import TheArticle from '~/components/blog/TheArticle';
     import TheSidebar from '~/components/blog/TheSidebar';
-    import {Methods} from '~/assets/ts/common/Utils';
+    import {Methods} from '~/assets/ts/common/Utils.ts';
     import marked from 'marked';
     import {mapGetters, mapActions} from 'vuex';
 

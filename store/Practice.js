@@ -1,4 +1,4 @@
-import {AppConfig} from '~/assets/ts/practice/Config';
+import AppConfig from '~/assets/ts/practice/Config.ts';
 
 const state =() => ({
     scene: '',

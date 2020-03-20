@@ -27,8 +27,6 @@
 </template>
 
 <script>
-    import {AppConfig} from '~/assets/ts/common/Config';
-
     export default {
         layout: 'background',
         name: 'works',

@@ -1,6 +1,6 @@
-import { IData } from '../../../common/datatype/IData';
+import IData from '../../../common/datatype/IData';
 
-export class Data implements IData {
+export default class Data implements IData {
     _vertex: number[] = [
         // P
         -0.89, -0.2, 0.0,

@@ -1,6 +1,6 @@
-import { Shader } from '../../../common/gl/Shader';
+import Shader from '../../../common/gl/Shader';
 
-export class Default extends Shader {
+export default class Default extends Shader {
     constructor(_gl: WebGLRenderingContext) {
         super(_gl,
             `

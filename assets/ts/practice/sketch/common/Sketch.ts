@@ -1,10 +1,10 @@
-import { ISketch } from './ISketch';
-import {AppConfig} from '../../Config';
+import ISketch from './ISketch';
+import AppConfig from '../../Config';
 
 /**
  * 各スケッチが継承する基底クラス
  */
-export class Sketch implements ISketch {
+export default class Sketch implements ISketch {
 
     private _setuped = false;
     private _isPlaying = false;

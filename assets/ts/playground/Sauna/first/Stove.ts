@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import * as Cannon from 'cannon';
 
 const VS = `
 void main() {
@@ -11,7 +10,7 @@ const FS = `
 uniform vec2 resolution;
 #define PI 3.14159265359
 #define ZOOM 30.0
-#define WEIGHT 6.0
+#define WEIGHT 2.0
 
 float border(in vec2 st) {
     vec2 lb = smoothstep(vec2(0.01), vec2(0.011), st);
@@ -38,9 +37,8 @@ export default class Stove {
     private _scene: THREE.Scene;
     private _camera: THREE.PerspectiveCamera;
     private _renderTarget: THREE.WebGLRenderTarget;
-    private _body: Cannon.Body;
 
-    constructor(private _stage: THREE.Scene, private _renderer: THREE.WebGLRenderer, private _world: Cannon.World, width, height) {
+    constructor(private _stage: THREE.Scene, private _renderer: THREE.WebGLRenderer, width, height) {
         this._uniform = {
             resolution: {
                 value: new THREE.Vector2(width, height)
@@ -77,26 +75,21 @@ export default class Stove {
 
         // stove
         const geometry = new THREE.CylinderGeometry(6, 6, 20, 32, 1, true);
-        const material = new THREE.MeshBasicMaterial({
+        const material = new THREE.MeshLambertMaterial({
             color: 0xffffff,
+            emissive: 0x111111,
             transparent: true,
             map: this._renderTarget.texture,
             side: THREE.DoubleSide,
-            depthTest: false,
+            depthTest: true,
         });
         this._mesh = new THREE.Mesh(geometry, material);
+        this._mesh.castShadow = true;
         // this._mesh.rotation.y -= Math.PI * 0.5;
-
-        this._body = new Cannon.Body({
-            mass: 0,
-            position: new Cannon.Vec3(0, 10, 0),
-            shape: new Cannon.Cylinder(1,1, 1, 32)
-        });
-        // this._body.quaternion.setFromAxisAngle(new Cannon.Vec3(1, 0, 0), -Math.PI / 2);
 
         // bottom
         const cgeometry = new THREE.CircleGeometry(6, 32);
-        const cmaterial = new THREE.MeshBasicMaterial({
+        const cmaterial = new THREE.MeshLambertMaterial({
             color: 0x999999,
             side: THREE.DoubleSide,
         });
@@ -104,19 +97,10 @@ export default class Stove {
         bottom.rotation.x = Math.PI * 0.5;
         bottom.position.y = -10;
 
-        const bottomBody = new Cannon.Body({
-            mass: 0,
-            position: new Cannon.Vec3(0, 0.5, 0),
-            shape: new Cannon.Plane(0.1,0.1)
-        });
-        bottomBody.quaternion.setFromAxisAngle(new Cannon.Vec3(1, 0, 0), -Math.PI / 2);
-
         this._group.position.y = 10;
         this._group.add(bottom);
         this._group.add(this._mesh);
 
-        this._world.addBody(this._body);
-        this._world.addBody(bottomBody);
         this._stage.add(this._group);
     };
 
@@ -124,8 +108,5 @@ export default class Stove {
         this._renderer.setRenderTarget(this._renderTarget);
         this._renderer.render(this._scene, this._camera);
         this._renderer.setRenderTarget(null);
-
-        this._mesh.position.copy(this._body.position);
-        // this._mesh.quaternion.copy(this._body.quaternion);
     }
 }

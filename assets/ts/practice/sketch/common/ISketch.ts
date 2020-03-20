@@ -1,4 +1,4 @@
-export interface ISketch {
+export default interface ISketch {
     _id: string;
     _timer: number;
     play(): void;

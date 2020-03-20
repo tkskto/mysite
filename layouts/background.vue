@@ -8,7 +8,7 @@
 <script>
     import {mapGetters, mapActions} from 'vuex';
     import HazyBackground from '~/components/common/HazyBackground';
-    import {Vector} from '../assets/ts/common/gl/Vector';
+    import Vector from '~/assets/ts/common/gl/Vector.ts';
 
     export default {
         components: {HazyBackground},

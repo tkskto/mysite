@@ -1,6 +1,6 @@
-import { Shader } from '../gl/Shader';
+import Shader from '../gl/Shader';
 
-export class HazyBackground extends Shader {
+export default class HazyBackground extends Shader {
     constructor(_gl: WebGLRenderingContext) {
         super(_gl,
             `

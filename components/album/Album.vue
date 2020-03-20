@@ -5,7 +5,7 @@
             <canvas id="myCanvas"></canvas>
         </div>
         <button class="btn-dot" :class="{'is-show': viewFlg}" @click="backToAlbum">
-            <svg class="svg-icon--dot" viewBox="0 0 20 9" xmlns="http://www.w3.org/2000/svg" title="一覧に戻る">
+            <svg class="svg-icon--dot" viewBox="0 0 20 9" xmlns="http://www.w3.org/2000/svg">
                 <circle r="1.5" fill="#fff" cx="5" cy="5"></circle>
                 <circle r="1.5" fill="#fff" cx="10" cy="5"></circle>
                 <circle r="1.5" fill="#fff" cx="15" cy="5"></circle>
@@ -17,12 +17,12 @@
 <script>
     import {mapGetters} from 'vuex';
     import * as THREE from 'three';
-    import TweenMax, {Elastic, Linear, Power3} from 'gsap';
-    import {CustomPerspectiveCamera} from "~/assets/ts/album/Camera/CustomPerspectiveCamera";
-    import {CustomPerspectiveSPCamera} from "~/assets/ts/album/Camera/CustomPerspectiveSPCamera";
+    import TweenMax, {Elastic, Power3} from 'gsap';
+    import CustomPerspectiveCamera from '~/assets/ts/album/Camera/CustomPerspectiveCamera.ts';
+    import CustomPerspectiveSPCamera from '~/assets/ts/album/Camera/CustomPerspectiveSPCamera.ts';
 
     export default {
-        // name: 'album',
+        name: 'album',
         computed: {
             ...mapGetters({
                 screenSize: 'Common/screenSize',

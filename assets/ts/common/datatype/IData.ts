@@ -1,4 +1,4 @@
-export interface IData {
+export default interface IData {
     _vertex: number[];
     _color: number[];
     _index: number[];

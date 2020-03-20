@@ -1,9 +1,9 @@
 import {GLUtils, MatrixUtils} from '../Utils';
-import { WebGLContext } from './Context';
-import {Mesh} from './Mesh';
-import {AppConfig} from 'assets/ts/practice/Config';
+import WebGLContext from './Context';
+import Mesh from './Mesh';
+import AppConfig from 'assets/ts/practice/Config';
 
-export class OffScreenImageRenderer {
+export default class OffScreenImageRenderer {
 
     public static ON_READY_EVENT = 'onReadyEvent';
 

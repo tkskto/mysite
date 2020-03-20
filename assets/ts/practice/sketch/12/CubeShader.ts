@@ -1,6 +1,6 @@
-import { Shader } from '../../../common/gl/Shader';
+import Shader from '../../../common/gl/Shader';
 
-export class CubeShader extends Shader {
+export default class CubeShader extends Shader {
     constructor(_gl: WebGLRenderingContext) {
         super(_gl,
             `

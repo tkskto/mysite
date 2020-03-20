@@ -1,14 +1,14 @@
-import { Sketch } from '../common/Sketch';
-import { Default } from './Shader';
-import { WebGLContext } from '../../../common/gl/Context';
-import { Renderer } from '../../../common/gl/Renderer';
-import { Geometry } from '../../../common/gl/Geometry';
-import { Mesh } from '../../../common/gl/Mesh';
-import { Program } from '../../../common/gl/Program';
+import Sketch from '../common/Sketch';
+import Default from './Shader';
+import WebGLContext from '../../../common/gl/Context';
+import Renderer from '../../../common/gl/Renderer';
+import Geometry from '../../../common/gl/Geometry';
+import Mesh from '../../../common/gl/Mesh';
+import Program from '../../../common/gl/Program';
 import { GLConfig } from '../../../common/Config';
-import { Data } from './Data';
+import Data from './Data';
 
-export class Item10 extends Sketch {
+export default class Item10 extends Sketch {
 
     private _data: Data = new Data();
     private _ctx: WebGLContext;

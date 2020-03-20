@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import {Point} from '../../common/datatype/Point';
+import Point from '../../common/datatype/Point';
 
-export class CustomCamera extends THREE.Object3D {
+export default class CustomCamera extends THREE.Object3D {
 
     public _camera: THREE.PerspectiveCamera;
     public RAD: number = Math.PI / 180;

@@ -1,4 +1,4 @@
-export class Animation {
+export default class Animation {
     private _author: string;
     private _category: string;
     private _id: number;

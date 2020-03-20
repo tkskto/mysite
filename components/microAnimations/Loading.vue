@@ -4,21 +4,21 @@
 
 <script>
     import {mapActions, mapGetters} from 'vuex';
-    import {Program} from "../../assets/ts/common/gl/Program";
-    import {Renderer} from "../../assets/ts/common/gl/Renderer";
-    import {Animation} from "../../assets/ts/common/datatype/Animation";
-    import {Methods, GLUtils} from '../../assets/ts/common/Utils';
-    import {AppConfig, GLConfig} from '../../assets/ts/common/Config';
-    import {Loading} from '../../assets/ts/common/shader/Loading';
-    import {LoadingData} from '../../assets/ts/common/data/Loading';
-    import {WebGLContext} from '../../assets/ts/common/gl/Context';
-    import {Geometry} from '../../assets/ts/common/gl/Geometry';
-    import {Mesh} from '../../assets/ts/common/gl/Mesh';
+    import Program from '~/assets/ts/common/gl/Program.ts';
+    import Renderer from '~/assets/ts/common/gl/Renderer.ts';
+    import Animation from '~/assets/ts/common/datatype/Animation.ts';
+    import {Methods} from '~/assets/ts/common/Utils.ts';
+    import {AppConfig, GLConfig} from '~/assets/ts/common/Config.ts';
+    import Loading from '~/assets/ts/common/shader/Loading.ts';
+    import LoadingData from '~/assets/ts/common/data/Loading.ts';
+    import WebGLContext from '~/assets/ts/common/gl/Context.ts';
+    import Geometry from '~/assets/ts/common/gl/Geometry.ts';
+    import Mesh from '~/assets/ts/common/gl/Mesh.ts';
 
     const TIME_MIN = 3000;
 
     export default {
-        name: "Loading",
+        name: 'Loading',
         data() {
             return {
                 _renderer: null,
@@ -35,7 +35,7 @@
             const dLoading = new LoadingData();
             this._time = 0;
             this._elapsed = 0;
-            this.canvas = document.createElement("canvas");
+            this.canvas = document.createElement('canvas');
             this.canvas.width = this.canvas.height = 60;
             const gl = new WebGLContext(this.ratio, this.canvas);
             const data = new Loading(gl.ctx);

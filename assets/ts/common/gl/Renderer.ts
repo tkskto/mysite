@@ -1,10 +1,10 @@
 import { MatrixUtils } from '../Utils';
-import { WebGLContext } from './Context';
-import { Vector } from './Vector';
-import { Mesh } from './Mesh';
-import { AppConfig } from '../../practice/Config';
+import WebGLContext from './Context';
+import Vector from './Vector';
+import Mesh from './Mesh';
+import AppConfig from '../../practice/Config';
 
-export class Renderer {
+export default class Renderer {
 
     private _gl: WebGLRenderingContext;
     private _target: Mesh[] = [];

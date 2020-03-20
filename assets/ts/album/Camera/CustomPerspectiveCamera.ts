@@ -1,6 +1,6 @@
-import {CustomCamera} from './CustomCamera';
+import CustomCamera from './CustomCamera';
 
-export class CustomPerspectiveCamera extends CustomCamera {
+export default class CustomPerspectiveCamera extends CustomCamera {
     constructor(public _canvas: HTMLCanvasElement, public fov?: number, public aspect?: number, public near?: number, public far?: number) {
         super(_canvas, fov, aspect, near, far);
     }

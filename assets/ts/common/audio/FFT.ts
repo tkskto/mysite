@@ -1,4 +1,4 @@
-export class FFT {
+export default class FFT {
     private _audioContext: AudioContext;
     private _analyser: AnalyserNode;
     private _buffer: AudioBuffer;

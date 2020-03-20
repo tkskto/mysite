@@ -1,15 +1,15 @@
-import { Sketch } from '../common/Sketch';
-import { Default } from './Shader';
-import { WebGLContext } from '../../../common/gl/Context';
-import { Renderer } from '../../../common/gl/Renderer';
-import { Geometry } from '../../../common/gl/Geometry';
-import { Mesh } from '../../../common/gl/Mesh';
-import { Program } from '../../../common/gl/Program';
+import Sketch from '../common/Sketch';
+import Default from './Shader';
+import WebGLContext from '../../../common/gl/Context';
+import Renderer from '../../../common/gl/Renderer';
+import Geometry from '../../../common/gl/Geometry';
+import Mesh from '../../../common/gl/Mesh';
+import Program from '../../../common/gl/Program';
 import { GLConfig } from '../../../common/Config';
-import {Torus} from '../../utils/Torus';
-import {Vector} from '../../../common/gl/Vector';
+import Torus from '../../utils/Torus';
+import Vector from '../../../common/gl/Vector';
 
-export class Item9 extends Sketch {
+export default class Item9 extends Sketch {
 
     private _ctx: WebGLContext;
     private _gl: WebGLRenderingContext;

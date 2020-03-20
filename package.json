@@ -14,7 +14,6 @@
     },
     "dependencies": {
         "@nuxtjs/google-analytics": "2.2.3",
-        "cannon": "^0.6.2",
         "gsap": "3.2.4",
         "nuxt": "2.8.1",
         "three": "0.114.0",
@@ -26,16 +25,17 @@
         "@nuxtjs/sitemap": "2.0.1",
         "@types/node": "12.12.30",
         "@types/three": "0.93.31",
-        "marked": "0.8.0",
+        "acorn": "6.4.1",
+        "marked": "0.8.1",
         "node-sass": "4.13.1",
         "sass-loader": "8.0.2",
         "stats-js": "1.0.1",
         "ts-loader": "6.2.1",
-        "ts-node": "8.6.2",
+        "ts-node": "8.7.0",
         "tslint": "6.1.0",
         "tslint-loader": "3.5.4",
         "typescript": "3.8.3",
         "vue-class-component": "7.2.3",
-        "vue-property-decorator": "8.4.0"
+        "vue-property-decorator": "8.4.1"
     }
 }

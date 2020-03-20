@@ -49,7 +49,7 @@
             const title = context.params.slug ;
             const loader = new Loader();
             const text = await loader.loadArticle(title).then(res => {
-                 return marked(res);
+                return marked(res);
             }).catch(err => {
                 this.onLoadError(err);
             });
@@ -96,3 +96,27 @@
         }
     };
 </script>
+
+<style lang="scss" scoped>
+    .blog--name {
+        font-size: 3.2rem;
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 60px;
+
+        > span {
+            padding: 10px 40px;
+            border-bottom: 1px solid #999;
+        }
+    }
+
+    .str-article {
+        .article--content {
+            display: flex;
+
+            @media screen and (max-width: 768px) {
+                flex-direction: column;
+            }
+        }
+    }
+</style>

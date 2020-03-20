@@ -99,7 +99,29 @@
         }
     };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+    .blog--name {
+        font-size: 3.2rem;
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 60px;
+
+        > span {
+            padding: 10px 40px;
+            border-bottom: 1px solid #999;
+        }
+    }
+
+    .str-category {
+        .category--content {
+            display: flex;
+
+            @media screen and (max-width: 768px) {
+                flex-direction: column;
+            }
+        }
+    }
+
     .str-category--item {
         padding: 20px;
         order: 1;

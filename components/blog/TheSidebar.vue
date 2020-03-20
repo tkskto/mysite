@@ -39,5 +39,13 @@
         @media screen and (max-width: 768px) {
             width: 100%;
         }
+
+        .str-article--section h2 {
+            margin-bottom: 8px;
+
+            &:not(:first-child) {
+                margin-top: 16px;
+            }
+        }
     }
 </style>

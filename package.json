@@ -27,7 +27,7 @@
         "@types/node": "12.12.30",
         "@types/three": "0.93.31",
         "acorn": "6.4.1",
-        "marked": "0.8.0",
+        "marked": "0.8.1",
         "node-sass": "4.13.1",
         "sass-loader": "8.0.2",
         "stats-js": "1.0.1",

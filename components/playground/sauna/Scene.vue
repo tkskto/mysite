@@ -5,7 +5,6 @@
 </template>
 
 <script>
-    import * as THREE from 'three';
     import {mapGetters} from 'vuex';
     import Sauna from '~/assets/ts/playground/Sauna/Index';
 

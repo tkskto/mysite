@@ -23,7 +23,7 @@ export default class First {
         this._stove = new Stove(this._stage, this._renderer, _width, _height);
         this._stove.generate();
 
-        this._stone = new Stone(this._stage, _width, _height);
+        this._stone = new Stone(this._stage);
         this._stone.generate();
 
         this._floor = new Floor(this._stage);

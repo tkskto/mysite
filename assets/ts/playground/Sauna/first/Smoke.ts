@@ -12,7 +12,7 @@ export default class Smoke {
     private _ready: boolean = false;
 
     constructor(private _stage: THREE.Scene) {
-        this._texture = new THREE.TextureLoader().load('/assets/img/smoke.png');
+        this._texture = new THREE.TextureLoader().load(require('/assets/img/playgroud/sauna/smoke.png'));
     }
 
     public generate = () => {

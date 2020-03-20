@@ -7,7 +7,7 @@ export default class Pool {
     private _water: THREE.Mesh;
 
     constructor(private _stage: THREE.Scene, light: THREE.Light) {
-        const texture = new THREE.TextureLoader().load('/assets/img/waternormals.jpg');
+        const texture = new THREE.TextureLoader().load(require('/assets/img/plyground/sauna/waternormals.jpg'));
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         this._waterOption = {
             textureWidth: 512,

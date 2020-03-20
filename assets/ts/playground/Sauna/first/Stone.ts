@@ -8,8 +8,8 @@ function rand (min, max) {
 export default class Stone {
     private _texture: THREE.Texture;
 
-    constructor(private _stage: THREE.Scene, width, height) {
-        this._texture = new THREE.TextureLoader().load('/assets/img/stone.jpg');
+    constructor(private _stage: THREE.Scene) {
+        this._texture = new THREE.TextureLoader().load(require('~/assets/img/playground/sauna/stone.jpg'));
     }
 
     public generate = () => {

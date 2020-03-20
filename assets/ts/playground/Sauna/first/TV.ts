@@ -4,10 +4,9 @@ import {OBJLoader} from 'three/examples/jsm/loaders/OBJLoader'
 export default class TV {
     private _obj;
     constructor(private _stage: THREE.Scene) {
-        const texture = new THREE.TextureLoader().load('/assets/img/floor.jpg');
         const loader = new OBJLoader();
 
-        loader.load('/assets/obj/tv.obj', (obj) => {
+        loader.load(require('/assets/obj/tv.obj'), (obj) => {
             obj.traverse(function (child: THREE.Mesh) {
                 if (child.isMesh) {
                     const material = new THREE.MeshLambertMaterial({

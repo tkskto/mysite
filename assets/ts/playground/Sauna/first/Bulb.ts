@@ -7,7 +7,7 @@ export default class Bulb {
 
     constructor(private _stage: THREE.Scene) {
         const textureLoader = new THREE.TextureLoader();
-        this._flare = textureLoader.load( "/assets/img/lensflare0.png" );
+        this._flare = textureLoader.load( require('~/assets/img/playground/sauna/lensflare0.png'));
     }
 
     public generate = () => {

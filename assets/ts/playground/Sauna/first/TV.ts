@@ -6,7 +6,7 @@ export default class TV {
     constructor(private _stage: THREE.Scene) {
         const loader = new OBJLoader();
 
-        loader.load(require('/assets/obj/tv.obj'), (obj) => {
+        loader.load('/assets/obj/tv.obj', (obj) => {
             obj.traverse(function (child: THREE.Mesh) {
                 if (child.isMesh) {
                     const material = new THREE.MeshLambertMaterial({

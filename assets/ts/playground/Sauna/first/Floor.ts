@@ -4,7 +4,7 @@ export default class Floor {
     private _texture: THREE.Texture;
 
     constructor(private _stage: THREE.Scene) {
-        this._texture = new THREE.TextureLoader().load(require('/assets/img/playground/sauna/floor.jpg'));
+        this._texture = new THREE.TextureLoader().load(require('~/assets/img/playground/sauna/floor.jpg'));
         this._texture.magFilter = THREE.NearestFilter;
         this._texture.minFilter = THREE.NearestFilter;
         this._texture.wrapS = THREE.MirroredRepeatWrapping;

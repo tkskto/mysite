@@ -1,6 +1,6 @@
 <template>
     <div class="str-article">
-        <h1 class="blog--name"><span>So What!?</span></h1>
+        <blog-name tag="h1" />
         <div class="article--content">
             <the-sidebar/>
             <the-article :level="2" v-if="title && text" :title="title" :text="text" :date="date"/>
@@ -12,6 +12,7 @@
     import Loader from '~/assets/ts/blog/Loader.ts';
     import TheArticle from '~/components/blog/TheArticle';
     import TheSidebar from '~/components/blog/TheSidebar';
+    import BlogName from '~/components/blog/BlogName';
     import {Methods} from '~/assets/ts/common/Utils.ts';
     import marked from 'marked';
     import {mapGetters, mapActions} from 'vuex';
@@ -31,6 +32,7 @@
         components: {
             TheArticle,
             TheSidebar,
+            BlogName,
         },
         computed: {
             ...mapGetters({
@@ -91,19 +93,7 @@
     };
 </script>
 
-<style lang="scss" scoped>
-    .blog--name {
-        font-size: 3.2rem;
-        text-align: center;
-        font-weight: bold;
-        margin-bottom: 60px;
-
-        > span {
-            padding: 10px 40px;
-            border-bottom: 1px solid #999;
-        }
-    }
-
+<style lang="scss">
     .str-article {
         .article--content {
             display: flex;

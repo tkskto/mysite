@@ -6,9 +6,8 @@
     "private": true,
     "scripts": {
         "dev": "nuxt-ts",
-        "build": "nuxt build",
-        "start": "nuxt start",
-        "generate": "nuxt generate",
+        "build": "nuxt-ts build",
+        "generate": "nuxt-ts generate",
         "test": "tslint 'assets/ts/**/*.ts'",
         "lint": "tslint -c tsconfig.json -p ./ --fix"
     },

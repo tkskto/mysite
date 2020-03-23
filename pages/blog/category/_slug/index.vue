@@ -1,6 +1,6 @@
 <template>
     <div class="str-category">
-        <h1 class="blog--name"><span>So What!?</span></h1>
+        <blog-name tag="h1" />
         <div class="category--content">
             <the-sidebar/>
             <div class="str-category--item">
@@ -17,6 +17,7 @@
     import Loader from '~/assets/ts/blog/Loader.ts';
     import ArticleList from '~/components/blog/ArticleList';
     import TheSidebar from '~/components/blog/TheSidebar';
+    import BlogName from '~/components/blog/BlogName';
     import {Methods} from '~/assets/ts/common/Utils.ts';
     import {mapGetters, mapActions} from 'vuex';
 
@@ -35,6 +36,7 @@
         components: {
             ArticleList,
             TheSidebar,
+            BlogName,
         },
         computed: {
             ...mapGetters({
@@ -98,18 +100,6 @@
     };
 </script>
 <style lang="scss" scoped>
-    .blog--name {
-        font-size: 3.2rem;
-        text-align: center;
-        font-weight: bold;
-        margin-bottom: 60px;
-
-        > span {
-            padding: 10px 40px;
-            border-bottom: 1px solid #999;
-        }
-    }
-
     .str-category {
         .category--content {
             display: flex;
@@ -124,6 +114,17 @@
         padding: 20px;
         order: 1;
         width: 70%;
+
+        .title {
+            font-size: 4rem;
+            border-bottom: 1px solid #444444;
+            margin-top: 0;
+            margin-bottom: 24px;
+
+            @media screen and (max-width: 768px) {
+                font-size: 2.0rem;
+            }
+        }
 
         .str-category--section {
             display: block;

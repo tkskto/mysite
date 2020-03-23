@@ -29,6 +29,7 @@
 
             > li {
                 line-height: 1.7;
+                font-size: 1.6rem;
 
                 a {
                     color: #333333;

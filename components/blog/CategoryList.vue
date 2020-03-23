@@ -56,6 +56,10 @@
             }
         }
 
+        > li {
+            font-size: 1.6rem;
+        }
+
         > li a {
             color: #333333;
         }

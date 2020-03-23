@@ -19,7 +19,7 @@
             <li class="sketch--item" id="16"><a href="#16">#16</a></li>
             <li class="sketch--item" id="17"><a href="#17">#17</a></li>
             <li class="sketch--item" id="18"><a href="#18">#18</a></li>
-            <li class="sketch--item" id="19"><a href="#19">#19(with sound)</a></li>
+            <li class="sketch--item" id="19"><a href="#19">#19</a></li>
         </ul>
 
         <div class="container-canvas">
@@ -281,10 +281,6 @@
         left: 0;
         right: 0;
         text-align: center;
-    }
-
-    .id-19 .list-sketch {
-        display: none;
     }
 
     .list-sketch {

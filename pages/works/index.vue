@@ -11,6 +11,10 @@
             <h2><nuxt-link to="/microAnimations/">Micro Animations</nuxt-link></h2>
             <p>This is gallery of micro animation. It's still only so much rubbish yet.</p>
         </section>
+        <section class="container talks">
+            <h2>Talks</h2>
+            <p>2019.11.30<a href="https://jsconf.jp/2019/talk/takeshi-kato">Understanding Streams API</a></p>
+        </section>
         <section class="container">
             <h2>Playground</h2>
             <p>They are just idea. meaningless.</p>
@@ -107,6 +111,13 @@
         @media screen and (max-width: 768px) {
             .container {
                 padding: 20px;
+            }
+        }
+
+        &.talks {
+            a {
+                padding: 0 10px;
+                color: #ffffff;
             }
         }
     }

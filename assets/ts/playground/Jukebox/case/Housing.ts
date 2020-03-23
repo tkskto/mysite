@@ -38,15 +38,13 @@ export default class Housing {
     public generate = async () => {
         this._object.position.set(0, -34, 7.6);
         this._object.scale.set(10, 10, 10);
+        this._object.castShadow = true;
 
         this._background = new Background(this._stage);
         this._background.generate();
 
         this._bulb = new Bulb(this._stage);
         this._bulb.generate();
-
-        const amb = new THREE.AmbientLight(0xffffff, 0.5);
-        this._stage.add(amb);
 
         this._object.traverse((child) => {
             if (child instanceof THREE.Mesh) {

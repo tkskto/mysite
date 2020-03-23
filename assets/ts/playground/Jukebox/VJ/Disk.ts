@@ -11,7 +11,7 @@ export default class Disk {
         this._group = new THREE.Group();
         const loader = new THREE.TextureLoader();
         const texture = loader.load(_data.img);
-        // const normal = loader.load('/assets/img/normal.jpg');
+        const normal = loader.load('/assets/img/normal.jpg');
 
         const geometry = new THREE.RingGeometry(0.1, 2.5, 64);
         const material = new THREE.MeshBasicMaterial({
@@ -27,12 +27,12 @@ export default class Disk {
         const omaterial = new THREE.MeshStandardMaterial({
             color: 0x111111,
             side: THREE.DoubleSide,
-            // normalMap: normal
+            normalMap: normal
         });
         const out = new THREE.Mesh(outside, omaterial);
         this._group.add(out);
 
-        this._group.position.z = _index * -0.05;
+        this._group.position.z = _index * -0.08;
         this._group.scale.set(1, 1, 1);
 
         this._initPos = this._group.position.clone();
@@ -53,10 +53,12 @@ export default class Disk {
                 z: 1,
                 ease: Power1.easeInOut,
                 onComplete: () => {
+                    this._group.scale.set(0.9, 0.9, 1.0);
                     // @ts-ignore
                     TweenMax.to(this._group.rotation, 0.25, {
                         x: Math.PI * 0.5,
                         onComplete: () => {
+                            window.dispatchEvent(new CustomEvent('showSongInfo'));
                             resolve();
                         }
                     });
@@ -71,15 +73,14 @@ export default class Disk {
             TweenMax.to(this._group.rotation, 0.25, {
                 x: 0,
                 onComplete: () => {
+                    this._group.scale.set(1.0, 1.0, 1.0);
                     // @ts-ignore
                     TweenMax.to(this._group.position, 0.25, {
                         y: this._initPos.y,
                         z: this._initPos.z,
                         ease: Power1.easeInOut,
-                        onComplete: () => {
-                            resolve();
-                        }
                     });
+                    resolve();
                 }
             });
         });
@@ -126,10 +127,8 @@ export default class Disk {
                     TweenMax.to(this._group.position, 1, {
                         x: this._initPos.x,
                         ease: Power1.easeInOut,
-                        onComplete: () => {
-                            resolve();
-                        }
                     });
+                    resolve();
                 }
             });
         });

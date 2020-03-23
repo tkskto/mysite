@@ -49,18 +49,23 @@ export default class Controller {
         }
 
         if (this._currentViewMusicNum < 0) {
-            this._currentViewMusicNum = 19;
+            this._currentViewMusicNum = this._selectedMusicNum === 19 ? 18 : 19;
         } else if (this._currentViewMusicNum === 20) {
-            this._currentViewMusicNum = 0;
+            this._currentViewMusicNum = this._selectedMusicNum === 0 ? 1 : 0;
         }
 
         if (this._changeMode) {
             if (!this._disk[prev].isPlaying) {
                 await this._disk[prev].unView();
             }
+
+            // @ts-ignore
+            window.viewedData = this._data[this._currentViewMusicNum];
             this._disk[this._currentViewMusicNum].view();
         } else {
             this._changeMode = true;
+            // @ts-ignore
+            window.viewedData = this._data[this._currentViewMusicNum];
             this._disk[this._currentViewMusicNum].view();
         }
     };
@@ -87,7 +92,9 @@ export default class Controller {
             this.resume();
             return;
         }
-
+        // @ts-ignore
+        window.viewedData = null;
+        window.dispatchEvent(new CustomEvent('showSongInfo'));
         const current = this._selectedMusicNum;
         this._selectedMusicNum = this._currentViewMusicNum;
         const data = this._data[this._currentViewMusicNum];

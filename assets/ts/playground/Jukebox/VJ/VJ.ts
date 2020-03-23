@@ -3,6 +3,8 @@ import {pFS, pVS} from './shader/PlaneShader';
 import {SunFS, SunVS} from './shader/SunShader';
 import {MistVS, MistFS} from './shader/MistShader';
 import {CircleVS, CircleFS} from './shader/CircleShader';
+import {CosmicVS, CosmicFS} from './shader/CosmicShader';
+import {EllipseVS, EllipseFS} from './shader/EllipseShader';
 import TweenMax from 'gsap';
 
 export default class VJ {
@@ -13,14 +15,13 @@ export default class VJ {
     private _materials: THREE.ShaderMaterial[] = [];
     private _mesh: THREE.Mesh;
     private _ready = false;
-    private _index = 0;
     private _decay = 1;
+    private _index = 0;
 
     constructor(private _renderer: THREE.WebGLRenderer, width: number, height: number) {
         this._scene = new THREE.Scene();
-        this._camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+        this._camera = new THREE.PerspectiveCamera(45, width/height, 0.1, 100);
         this._camera.position.set(0, 0, 200);
-        const audio = new Uint8Array(512);
         this._planeUniforms = {
             time: {
                 value: 0,
@@ -29,7 +30,7 @@ export default class VJ {
                 value: new THREE.Vector2(width, height)
             },
             audio: {
-                value: new THREE.DataTexture(audio, 1024 / 2, 1, THREE.LuminanceFormat),
+                value: new THREE.DataTexture( new Int8Array(512), 1024 / 2, 1, THREE.LuminanceFormat )
             },
             decay: {
                 value: 1.0
@@ -69,6 +70,20 @@ export default class VJ {
                 depthTest: false,
                 side: THREE.DoubleSide
             }),
+            new THREE.ShaderMaterial({
+                vertexShader: CosmicVS,
+                fragmentShader: CosmicFS,
+                uniforms: this._planeUniforms,
+                depthTest: false,
+                side: THREE.DoubleSide
+            }),
+            new THREE.ShaderMaterial({
+                vertexShader: EllipseVS,
+                fragmentShader: EllipseFS,
+                uniforms: this._planeUniforms,
+                depthTest: false,
+                side: THREE.DoubleSide
+            }),
         );
 
         this._mesh = new THREE.Mesh(plane, this._materials[0]);
@@ -82,35 +97,33 @@ export default class VJ {
         this._mesh.visible = false;
     };
 
-    public setAnalyzer = (analyzer: THREE.AudioAnalyser) => {
-        // @ts-ignore
-        this._planeUniforms.audio.value = new THREE.DataTexture(analyzer.data, 1024 / 2, 1, THREE.LuminanceFormat);
-    };
-
     public show() {
         this._mesh.visible = true;
         this._ready = true;
     }
 
-    public changeMaterial(_index) {
-        let index = this._index += _index;
+    public setAnalyzer(analyzer: THREE.AudioAnalyser) {
+        // @ts-ignore
+        this._planeUniforms.audio.value = new THREE.DataTexture(analyzer.data, 1024 / 2, 1, THREE.LuminanceFormat);
+    }
 
-        if (index === -1) {
-            index = this._materials.length - 1;
-        } else if (index === this._materials.length) {
-            index = 0;
+    public changeMaterial(index) {
+        this._index += index;
+
+        if (this._index >= this._materials.length) {
+            this._index = 0;
+        } else if (this._index < 0) {
+            this._index = this._materials.length - 1;
         }
-
-        this._index = index;
 
         // @ts-ignore
         TweenMax.to(this, 1, {
             _decay: 0,
             onComplete: () => {
-                this._mesh.material = this._materials[index];
+                this._mesh.material = this._materials[this._index];
                 // @ts-ignore
                 TweenMax.to(this, 1, {
-                    _decay: 1,
+                    _decay: 1
                 });
             }
         });

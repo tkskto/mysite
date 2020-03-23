@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-// import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 
 import Base from './Base';
 import Controller from './VJ/Controller';
@@ -15,7 +15,7 @@ export default class JukeBox {
 
     private _base: Base;
     private _controller: Controller;
-    // private _controls: OrbitControls;
+    private _controls: OrbitControls;
     private _housing: Housing;
     private _ui: UI;
 
@@ -30,8 +30,14 @@ export default class JukeBox {
         this._canvas.addEventListener('click', this.onClick);
 
         return new Promise(resolve => {
-            // this._controls = new OrbitControls(this._base.camera, this._base.renderer.domElement);
-            // this._controls.update();
+            this._controls = new OrbitControls(this._base.camera, this._base.renderer.domElement);
+            this._controls.minDistance = 25;
+            this._controls.maxDistance = 50;
+            this._controls.minPolarAngle = Math.PI * 0.4;
+            this._controls.maxPolarAngle = Math.PI * 0.6;
+            this._controls.minAzimuthAngle = Math.PI * -0.1;
+            this._controls.maxAzimuthAngle = Math.PI * 0.1;
+            this._controls.update();
 
             this._controller = new Controller(this._base.stage, this._base.renderer, this._base.width, this._base.height);
 
@@ -96,20 +102,6 @@ export default class JukeBox {
         }
     };
 
-    // private onMouseMove = (e) => {
-    //     const x = (e.clientX / this._width) * 2 - 1;
-    //     const y = (e.clientY / this._height) * 2 - 1;
-    //
-    //     const diffX = (this._mouse.x - x) * 3;
-    //     const diffY = (this._mouse.y - y) * 5;
-    //
-    //     this._mouse.x = x;
-    //     this._mouse.y = -y;
-    //
-    //     // this._base.camera.position.x += diffX;
-    //     // this._base.camera.position.y += diffY;
-    // };
-
     public setMusicData = (data) => {
         return new Promise((resolve) => {
             this._controller.setMusicData(data);
@@ -123,7 +115,6 @@ export default class JukeBox {
         await this._base.start();
 
         window.addEventListener('playMusic', this.onPlayMusic);
-        // this._canvas.addEventListener('mousemove', this.onMouseMove);
     };
 
     private update = () => {
@@ -136,7 +127,7 @@ export default class JukeBox {
     };
 
     private animate = () => {
-        // this._controls.update();
+        this._controls.update();
 
         this._base.renderer.autoClear = true;
 

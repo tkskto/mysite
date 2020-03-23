@@ -10,12 +10,14 @@ export default class Base {
 
     constructor(_canvas: HTMLCanvasElement, _width: number, _height: number) {
         const ratio = window.devicePixelRatio;
+        const context = _canvas.getContext( 'webgl2', { alpha: false } ) as WebGL2RenderingContext;
         this._width = _width * ratio;
         this._height = _height * ratio;
 
         this._renderer = new THREE.WebGLRenderer({
             canvas: _canvas,
-            antialias: true
+            antialias: true,
+            context
         });
         this._renderer.shadowMap.enabled = true;
         this._renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
@@ -27,7 +29,7 @@ export default class Base {
         this._stage = new THREE.Scene();
 
         this._camera = new THREE.PerspectiveCamera(60, _width / _height, 0.1, 200);
-        this._camera.position.set(0, 20, 100);
+        this._camera.position.set(0, -40, 26);
         this._camera.lookAt(new THREE.Vector3(0, 0, 0));
     }
 

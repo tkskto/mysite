@@ -36,7 +36,6 @@ export default class Foundation {
             metalness: 0.4,
             map: this._texture
         });
-        material.map = this._texture;
 
         const mesh = new THREE.Mesh(geometry, material);
         mesh.position.set(0, -4, 14);
@@ -63,7 +62,7 @@ export default class Foundation {
         });
 
         const selectVisual = new THREE.Mesh(text1, textMaterial);
-        selectVisual.position.set(1.6, -2.8, 15);
+        selectVisual.position.set(1.8, -3.0, 14.5);
         selectVisual.rotateX(Math.PI * -0.25);
 
         this._button3 = new Button(this._stage);
@@ -83,7 +82,7 @@ export default class Foundation {
         });
 
         const selectMusic = new THREE.Mesh(text2, textMaterial);
-        selectMusic.position.set(-5.9, -2.8, 15);
+        selectMusic.position.set(-6.1, -3.0, 14.5);
         selectMusic.rotateX(Math.PI * -0.25);
 
         this._playButton = new PlayStopButton(this._stage);
@@ -99,7 +98,7 @@ export default class Foundation {
         });
 
         const play = new THREE.Mesh(text3, textMaterial);
-        play.position.set(5.3, -2.8, 15);
+        play.position.set(5.575, -3.0, 14.5);
         play.rotateX(Math.PI * -0.25);
 
         this._group.add(mesh, this._button1.group, this._button2.group, selectVisual, this._button3.group, this._button4.group, selectMusic, this._playButton.group, play);

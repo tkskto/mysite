@@ -13,7 +13,7 @@ export default class UI {
 
     public generate = () => {
         this._foundation = new Foundation(this._stage, this._camera);
-        this._display = new Display(this._renderer, this._camera, this._width, this._height);
+        this._display = new Display(this._stage, this._renderer, this._width, this._height);
         // this._info = new Info(this._stage);
 
         const pointLight = new THREE.PointLight(0xfe8400, 1, 150, 2);
@@ -25,8 +25,6 @@ export default class UI {
     };
 
     public update = () => {
-        this._renderer.render(this._stage, this._camera);
-
         if (this._display.ready) {
             this._display.update();
         }

@@ -13,6 +13,7 @@
 <script>
     import {mapGetters} from 'vuex';
     import JukeBox from '~/assets/ts/playground/Jukebox/Index';
+    const SpotifyWebApi = require('spotify-web-api-node');
 
     export default {
         data() {
@@ -35,6 +36,29 @@
             );
 
             await this.canvas.setup();
+
+            // const response = await fetch('https://us-central1-mysite-217311.cloudfunctions.net/Spotify2').then(res => res.json());
+            // const response = await fetch('https://us-central1-mysite-217311.cloudfunctions.net/Spotify').then(res => res.json());
+
+            // this.spotify = new SpotifyWebApi();
+            // this.spotify.setAccessToken(response.access_token);
+
+            // const album = await this.spotify.getArtistAlbums('4jXfFzeP66Zy67HM2mvIIF');
+            // const items = album.body.items;
+            // const tracks = [];
+            //
+            // for (let i = 0, len = items.length; i < len; i++) {
+            //     const item = items[i];
+            //     await this.spotify.getAlbumTracks(item.id).then(res => {
+            //         tracks.push({
+            //             img: item.images[0].url,
+            //             tracks: res.body.items
+            //         });
+            //     })
+            // }
+            //
+            // console.log(tracks);
+
 
             const data = [
                 {

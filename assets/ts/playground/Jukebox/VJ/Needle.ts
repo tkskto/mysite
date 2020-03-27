@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {MTLLoader} from 'three/examples/jsm/loaders/MTLLoader';
 import {OBJLoader} from 'three/examples/jsm/loaders/OBJLoader';
-import TweenMax, {Power2} from 'gsap';
+import TweenMax, {Power3} from 'gsap';
 
 export default class Needle {
     private _object: THREE.Group;
@@ -39,7 +39,7 @@ export default class Needle {
             // @ts-ignore
             TweenMax.to(this._object.rotation, 1, {
                 y: Math.PI * -0.1,
-                ease: Power2.easeInOut,
+                ease: Power3.easeInOut,
                 onComplete: () => {
                     resolve();
                 }
@@ -52,7 +52,7 @@ export default class Needle {
             // @ts-ignore
             TweenMax.to(this._object.rotation, 1, {
                 y: 0,
-                ease: Power2.easeInOut,
+                ease: Power3.easeInOut,
                 onComplete: () => {
                     resolve();
                 }

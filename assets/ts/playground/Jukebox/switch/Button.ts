@@ -4,6 +4,7 @@ import TweenMax from 'gsap';
 export default class Button {
     private _group: THREE.Group;
     private _texture: THREE.Texture;
+    private _material: THREE.MeshToonMaterial;
 
     constructor(private _stage: THREE.Scene) {
         const loader = new THREE.TextureLoader();
@@ -17,14 +18,14 @@ export default class Button {
         this._group = new THREE.Group();
 
         const baseGeometry = new THREE.CylinderGeometry(0.65, 0.65, 0.2, 3);
-        const material = new THREE.MeshToonMaterial({
+        this._material = new THREE.MeshToonMaterial({
             map: this._texture,
             color: new THREE.Color(0.7, 0.25, 0.25),
             specular: new THREE.Color(0.1, 0.1, 0.1),
-            shininess: Math.pow(2, 4),
+            shininess: 50,
         });
 
-        const baseCylinder = new THREE.Mesh(baseGeometry, material);
+        const baseCylinder = new THREE.Mesh(baseGeometry, this._material);
         baseCylinder.position.y = 0;
 
         this._group.rotateX(Math.PI * 0.25);
@@ -43,6 +44,34 @@ export default class Button {
                 TweenMax.to(this._group.position, 0.25, {
                     y: pos.y,
                     z: pos.z,
+                });
+            }
+        });
+
+        TweenMax.to(this._material.color, 0.1, {
+            r: 0.8,
+            g: 0.6,
+            b: 0.6,
+            delay: 0.15,
+            onComplete: () => {
+                TweenMax.to(this._material.specular, 0.25, {
+                    r: 0.7,
+                    g: 0.25,
+                    b: 0.25,
+                });
+            }
+        });
+
+        TweenMax.to(this._material.specular, 0.1, {
+            r: 0.8,
+            g: 0.8,
+            b: 0.8,
+            delay: 0.15,
+            onComplete: () => {
+                TweenMax.to(this._material.specular, 0.25, {
+                    r: 0.1,
+                    g: 0.1,
+                    b: 0.1,
                 });
             }
         });

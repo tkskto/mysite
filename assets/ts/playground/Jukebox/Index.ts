@@ -129,7 +129,12 @@ export default class JukeBox {
     private animate = () => {
         this._controls.update();
 
-        this._base.renderer.autoClear = true;
+        if (this._ui.ready) {
+            this._ui.update();
+        }
+
+        this._base.renderer.clearDepth();
+        this._base.renderer.clearColor();
 
         if (this._controller.ready) {
             this._controller.update(this._time);
@@ -139,10 +144,6 @@ export default class JukeBox {
 
         if (this._housing.ready) {
             this._housing.update();
-        }
-
-        if (this._ui.ready) {
-            this._ui.update();
         }
 
         this._base.renderer.render(this._base.stage, this._base.camera);

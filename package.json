@@ -15,7 +15,7 @@
         "@nuxt/typescript-runtime": "0.4.0",
         "@nuxtjs/google-analytics": "2.2.3",
         "gsap": "3.2.6",
-        "nuxt": "2.12.0",
+        "nuxt": "2.12.2",
         "simplex-noise": "2.4.0",
         "three": "0.115.0",
         "three-device-orientation": "1.0.3",

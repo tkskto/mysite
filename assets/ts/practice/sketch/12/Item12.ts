@@ -62,7 +62,7 @@ export default class Item12 extends Sketch {
         this.play();
     };
 
-    private clear = () => {
+    public clear = (): void => {
         this._gl.clearColor(1.0, 1.0, 1.0, 1.0);
         this._gl.clearDepth(1.0);
         this._gl.clear(this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT);
@@ -76,7 +76,7 @@ export default class Item12 extends Sketch {
         }
     };
 
-    public update = () => {
+    public update = (): void => {
         this.animate();
         this._timer = requestAnimationFrame(this.update);
 
@@ -85,7 +85,7 @@ export default class Item12 extends Sketch {
         this._time += 0.01;
     };
 
-    public animate = () => {
+    public animate = (): void => {
         this.clear();
         const cameraPosition = this._store.getters['Practice/cameraPosition'];
         this._renderer.update(this._dirLight.arr(), cameraPosition.arr(), this._ambientLight, this._time);

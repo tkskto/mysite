@@ -9,7 +9,7 @@ export default class Loader {
         });
     };
 
-    public loadArticle = (_title): Promise<String> => {
+    public loadArticle = (_title): Promise<string> => {
         return fetch(`/assets/blog/articles/${encodeURI(_title)}.md`).then((response: Response) => {
             if (response.ok) {
                 return response.text();

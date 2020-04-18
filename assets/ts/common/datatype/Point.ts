@@ -20,7 +20,7 @@ export default class Point {
     public subtract = (_x: number, _y: number): Point => {
         return new Point((_x - this._x) | 0, (_y - this._y) | 0);
     };
-    public reset = () => {
+    public reset = (): void => {
         this._x = 0;
         this._y = 0;
     }

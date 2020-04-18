@@ -53,7 +53,7 @@ export default class Item15 extends Sketch {
         this.play();
     };
 
-    private clear = () => {
+    private clear = (): void => {
         this._gl.clearColor(1.0, 1.0, 1.0, 1.0);
         this._gl.clearDepth(1.0);
         this._gl.clear(this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT);
@@ -67,14 +67,14 @@ export default class Item15 extends Sketch {
         }
     };
 
-    public update = () => {
+    public update = (): void => {
         this.animate();
         this._timer = requestAnimationFrame(this.update);
 
         this._time += 0.01;
     };
 
-    public animate = () => {
+    public animate = (): void => {
         this.clear();
         const canvasSize = this._store.getters['Common/canvasSize'];
         this._renderer.update(

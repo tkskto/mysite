@@ -5,12 +5,10 @@ export default class Bulb {
     private _flare: THREE.Texture;
     private _group: THREE.Group;
 
-    constructor(private _stage: THREE.Scene) {
-        const textureLoader = new THREE.TextureLoader();
-        this._flare = textureLoader.load( require('~/assets/img/playground/sauna/lensflare0.png'));
-    }
+    constructor(private _stage: THREE.Scene) {}
 
-    public generate = () => {
+    public generate = async (): Promise<void> => {
+        this._flare = new THREE.TextureLoader().load(await require('~/assets/img/playground/sauna/lensflare0.png'));
         const lensflare = new Lensflare();
         const pointLight = new THREE.PointLight(0xfe8400, 1, 150, 2);
         pointLight.castShadow = true;
@@ -20,7 +18,6 @@ export default class Bulb {
 
         this._group = new THREE.Group();
         this._group.add(pointLight);
-
         this._group.position.set(20, 50, 0);
 
         this._stage.add(this._group);

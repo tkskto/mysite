@@ -19,7 +19,7 @@ export default class Program {
         this.init();
     }
 
-    private init = () => {
+    private init = (): void => {
         this._program = GLUtils.createProgram(this._gl, this._shader.VS, this._shader.FS) as WebGLProgram;
 
         for (let i = 0; i < this._attName.length; i++) {

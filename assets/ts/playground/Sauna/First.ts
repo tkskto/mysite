@@ -14,7 +14,7 @@ export default class First {
     private _smoke: Smoke;
     private _bulb: Bulb;
     private _tv: TV;
-    private _ready: boolean = false;
+    private _ready = false;
 
     constructor(private _camera: THREE.PerspectiveCamera, private _renderer: THREE.WebGLRenderer, _width, _height) {
         this._stage = new THREE.Scene();
@@ -40,7 +40,7 @@ export default class First {
         this._ready = true;
     }
 
-    public update() {
+    public update(): void {
         this._stove.update();
         // this._water.update();
         this._smoke.update();

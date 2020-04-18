@@ -5,7 +5,7 @@ export default class CustomPerspectiveCamera extends CustomCamera {
         super(_canvas, fov, aspect, near, far);
     }
 
-    private onMouseDown = (e: MouseEvent) => {
+    private onMouseDown = (e: MouseEvent): void => {
         e.preventDefault();
         this.mouseStart.x = e.screenX;
         this.mouseStart.y = e.screenY;
@@ -13,12 +13,12 @@ export default class CustomPerspectiveCamera extends CustomCamera {
         document.addEventListener('mouseup', this.onMouseUp);
     };
 
-    private onMouseMove = (e: MouseEvent) => {
+    private onMouseMove = (e: MouseEvent): void => {
         this.moveFlg = true;
         this.subtract = this.mouseStart.subtract(e.screenX, e.screenY);
     };
 
-    private onMouseUp = (e: MouseEvent) => {
+    private onMouseUp = (e: MouseEvent): void => {
         e.preventDefault();
         document.removeEventListener('mousemove', this.onMouseMove);
         document.removeEventListener('mouseup', this.onMouseUp);
@@ -26,17 +26,17 @@ export default class CustomPerspectiveCamera extends CustomCamera {
         this.subtract.y = 0;
     };
 
-    public setEvent = () => {
+    public setEvent = (): void => {
         document.addEventListener('mousedown', this.onMouseDown);
     };
 
-    public removeEvent = () => {
+    public removeEvent = (): void => {
         document.removeEventListener('mousedown', this.onMouseDown);
         document.removeEventListener('mousemove', this.onMouseMove);
         document.removeEventListener('mouseup', this.onMouseUp);
     };
 
-    public update = () => {
+    public update = (): void => {
         this.angle.x += this.subtract.x * 0.0001;
         this.angle.y -= this.subtract.y * 0.0001;
         if (this.angle.y > this.maxY) {
@@ -48,7 +48,7 @@ export default class CustomPerspectiveCamera extends CustomCamera {
         this.camera.rotation.set(this.angle.y, 0, 0);
     };
 
-    public dispose = () => {
+    public dispose = (): void => {
         this.removeEvent();
     }
 }

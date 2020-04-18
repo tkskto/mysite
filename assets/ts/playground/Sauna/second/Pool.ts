@@ -2,12 +2,14 @@ import * as THREE from 'three';
 import {Water, WaterOptions} from 'three/examples/jsm/objects/Water';
 
 export default class Pool {
-    private _group = new THREE.Group;
+    private _group: THREE.Group;
     private _waterOption: WaterOptions;
     private _water: THREE.Mesh;
 
-    constructor(private _stage: THREE.Scene, light: THREE.Light) {
-        const texture = new THREE.TextureLoader().load(require('/assets/img/plyground/sauna/waternormals.jpg'));
+    constructor(private _stage: THREE.Scene) {}
+
+    public generate = async (size, depth, light: THREE.Light): Promise<void> => {
+        const texture = new THREE.TextureLoader().load(await require('/assets/img/plyground/sauna/waternormals.jpg'));
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         this._waterOption = {
             textureWidth: 512,
@@ -19,9 +21,7 @@ export default class Pool {
             distortionScale: 3.7,
             waterNormals: texture
         };
-    }
 
-    public generate = (size, depth) => {
         this._group = new THREE.Group();
         const frame = new THREE.Shape();
         frame.moveTo(-(size + 1), -size);
@@ -76,8 +76,9 @@ export default class Pool {
         this._stage.add(this._group);
     };
 
-    public update = (time: number) => {
-        // @ts-ignore
-        this._water.material.uniforms.time.value = time;
+    public update = (time: number): void => {
+        const material: THREE.ShaderMaterial = this._water.material as THREE.ShaderMaterial;
+
+        material.uniforms.time.value = time;
     }
 }

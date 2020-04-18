@@ -12,7 +12,7 @@ export default class Mesh {
 
     private _id: number;
     private _mMatrix: Float32Array;
-    private _position: { x: number, y: number, z: number } = {x: 0, y: 0, z: 0};
+    private _position: { x: number; y: number; z: number } = {x: 0, y: 0, z: 0};
     private _drawType: number;
     private _drawMethod: Function;
     private _textureArr: WebGLTexture[] = [];
@@ -26,16 +26,16 @@ export default class Mesh {
         this.setDrawMethod();
     }
 
-    public reset = () => {
+    public reset = (): void => {
         MatrixUtils.initialize(this._mMatrix);
         this._position = {x: 0, y: 0, z: 0};
     };
 
-    public useProgram = () => {
+    public useProgram = (): void => {
         this._gl.useProgram(this._prg.program);
     };
 
-    public ready = (_values: any[]) => {
+    public ready = (_values: any[]): void => {
         GLUtils.setAttr(this._gl, this._geometry.vbo, this._prg.attl, this._prg.atts);
 
         if (this._geometry.ibo) {
@@ -59,7 +59,7 @@ export default class Mesh {
         }
     };
 
-    setTexture = (_index: number) => {
+    setTexture = (_index: number): void => {
         const texture = this._textureArr[_index];
 
         switch (_index) {
@@ -80,13 +80,13 @@ export default class Mesh {
         this._gl.bindTexture(this._gl.TEXTURE_2D, texture);
     };
 
-    updateFFTData = (_data: Uint8Array) => {
+    updateFFTData = (_data: Uint8Array): void => {
         // TODO: 複数テクスチャに対応
         this._gl.bindTexture(this._gl.TEXTURE_2D, this._textureArr[0]);
         this._gl.texImage2D(this._gl.TEXTURE_2D, 0, this._gl.LUMINANCE, _data.length * 0.5, 2, 0, this._gl.LUMINANCE, this._gl.UNSIGNED_BYTE, _data);
     };
 
-    private setDrawType = (_type: string) => {
+    private setDrawType = (_type: string): void => {
         switch (_type) {
             case GLConfig.DRAW_TYPE_POINT:
                 this._drawType = this._gl.POINTS;
@@ -115,7 +115,7 @@ export default class Mesh {
         }
     };
 
-    private setDrawMethod = () => {
+    private setDrawMethod = (): void => {
         if (this._geometry.INDEX.length === 0) {
             this._drawMethod = this.drawArrays;
         } else {
@@ -123,15 +123,15 @@ export default class Mesh {
         }
     };
 
-    public draw = () => {
+    public draw = (): void => {
         this._drawMethod();
     };
 
-    private drawElements = () => {
+    private drawElements = (): void => {
         this._gl.drawElements(this._drawType, this._geometry.INDEX.length, this._gl.UNSIGNED_SHORT, 0);
     };
 
-    private drawArrays = () => {
+    private drawArrays = (): void => {
         this._gl.drawArrays(this._drawType, 0, this._geometry.VERTEX.length / 3);
     };
 
@@ -177,7 +177,7 @@ export default class Mesh {
 
     /**
      * 拡大する
-     * @param {Vector} _vec
+     * @param {Vector | number[]} _vec
      */
     public scale = (_vec: Vector | number[]): void => {
         const mat: Float32Array = this._mMatrix.copyWithin(0, 0);
@@ -326,7 +326,7 @@ export default class Mesh {
         return this._id;
     }
 
-    get position(): { x: number, y: number, z: number } {
+    get position(): { x: number; y: number; z: number } {
         return this._position;
     }
 

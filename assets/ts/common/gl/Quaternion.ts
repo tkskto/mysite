@@ -36,7 +36,7 @@ export default class Quaternion {
         return Math.sqrt(x * x + y * y + z * z + this._radian * this._radian);
     }
 
-    public initialize = (_q: Quaternion): Quaternion => {
+    public initialize = (): Quaternion => {
         this._vector.initialize();
         this._radian = 1;
         return this;

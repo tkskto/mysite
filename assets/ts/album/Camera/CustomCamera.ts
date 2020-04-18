@@ -17,7 +17,7 @@ export default class CustomCamera extends THREE.Object3D {
         super();
         this.init();
     }
-    private init = () => {
+    private init = (): void => {
         this._camera = new THREE.PerspectiveCamera(this.fov, this.aspect, this.near, this.far);
         this.add(this._camera);
         this._camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -27,19 +27,19 @@ export default class CustomCamera extends THREE.Object3D {
     /**
      * 正面に戻す
      */
-    public reset = () => {
+    public reset = (): void => {
         if (!this.moveFlg) {
-            return false;
+            return;
         }
         this.angle.x = this.frontPoint.x;
         this.angle.y = 0;
         this.moveFlg = false;
     };
-    public update = () => {}; // tslint:disable-line no-empty
-    public setPosition = (_x: number, _y: number, _z: number) => {
+    public update = (): void => {}; // eslint-disable-line
+    public setPosition = (_x: number, _y: number, _z: number): void => {
         this._camera.position.set(_x, _y, _z);
     };
-    public setRatio = (_ratio: number) => {
+    public setRatio = (_ratio: number): void => {
         this._camera.aspect = _ratio;
         this._camera.updateProjectionMatrix();
     };

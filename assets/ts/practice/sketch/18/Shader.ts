@@ -1,5 +1,4 @@
 import Shader from '../../../common/gl/Shader';
-import ShaderLib from '../common/ShaderLibs';
 
 export default class Default extends Shader {
     constructor(_gl: WebGLRenderingContext) {

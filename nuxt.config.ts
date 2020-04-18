@@ -1,6 +1,6 @@
 import { Configuration } from '@nuxt/types';
 const articles = require('./static/assets/blog/articles.json');
-const generateDynamicRoutes = callback => {
+const generateDynamicRoutes = (callback): void => {
     const routes = articles.map(item => {
         return `/blog/${item.title}/`;
     });
@@ -36,9 +36,9 @@ const config: Configuration = {
     build: {
         extractCSS: true,
         filenames: {
-            app: ({ isDev }) => isDev ? 'js/[name].js' : 'js/[name].[chunkhash:8].js',
-            chunk: ({ isDev }) => isDev ? 'js/[name].js' : 'js/[name].[chunkhash:8].js',
-            css: ({ isDev }) => isDev ? 'css/[name].css' : 'css/[name].[contenthash].css',
+            app: ({ isDev }): string => isDev ? 'js/[name].js' : 'js/[name].[chunkhash:8].js',
+            chunk: ({ isDev }): string => isDev ? 'js/[name].js' : 'js/[name].[chunkhash:8].js',
+            css: ({ isDev }): string => isDev ? 'css/[name].css' : 'css/[name].[contenthash].css',
         },
         publicPath: '/common/',
         ssr: false

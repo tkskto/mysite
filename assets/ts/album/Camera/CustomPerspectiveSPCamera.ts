@@ -5,7 +5,7 @@ export default class CustomPerspectiveSPCamera extends CustomCamera {
         super(_canvas, fov, aspect, near, far);
     }
 
-    private onTouchStart = (e: TouchEvent) => {
+    private onTouchStart = (e: TouchEvent): void => {
         e.preventDefault();
         const touchObj: Touch = e.changedTouches[0];
         this.mouseStart.x = touchObj.pageX;
@@ -15,14 +15,14 @@ export default class CustomPerspectiveSPCamera extends CustomCamera {
         this._canvas.addEventListener('touchcancel', this.onTouchUp);
     };
 
-    private onTouchMove = (e: TouchEvent) => {
+    private onTouchMove = (e: TouchEvent): void => {
         e.preventDefault();
         const touchObj: Touch = e.changedTouches[0];
         this.moveFlg = true;
         this.subtract = this.mouseStart.subtract(touchObj.pageX, touchObj.pageY);
     };
 
-    private onTouchUp = (e: TouchEvent) => {
+    private onTouchUp = (e: TouchEvent): void => {
         e.preventDefault();
         this._canvas.removeEventListener('touchmove', this.onTouchMove);
         this._canvas.removeEventListener('touchend', this.onTouchUp);
@@ -32,12 +32,12 @@ export default class CustomPerspectiveSPCamera extends CustomCamera {
         this.subtract.reset();
     };
 
-    public setEvent = () => {
+    public setEvent = (): void => {
         this._canvas.addEventListener('touchstart', this.onTouchStart);
         document.addEventListener('touchstart', this.preventScroll, false);
     };
 
-    private preventScroll = (e: TouchEvent) => {
+    private preventScroll = (e: TouchEvent): void => {
         const target: HTMLElement = e.target as HTMLElement;
         if (target.nodeName === 'CANVAS' || target.nodeName === 'BUTTON') {
             e.stopPropagation();
@@ -46,7 +46,7 @@ export default class CustomPerspectiveSPCamera extends CustomCamera {
         }
     };
 
-    public removeEvent = () => {
+    public removeEvent = (): void => {
         this._canvas.removeEventListener('touchstart', this.onTouchStart);
         this._canvas.removeEventListener('touchmove', this.onTouchMove);
         this._canvas.removeEventListener('touchend', this.onTouchUp);
@@ -54,7 +54,7 @@ export default class CustomPerspectiveSPCamera extends CustomCamera {
         document.removeEventListener('touchstart', this.preventScroll, false);
     };
 
-    public update = () => {
+    public update = (): void => {
         this.angle.x += this.subtract.x * 0.0001;
         this.angle.y -= this.subtract.y * 0.0001;
 
@@ -67,7 +67,7 @@ export default class CustomPerspectiveSPCamera extends CustomCamera {
         this.rotation.set(0, -this.angle.x, 0);
         this.camera.rotation.set(this.angle.y, 0, 0);
     };
-    public dispose = () => {
+    public dispose = (): void => {
         this.removeEvent();
     }
 }

@@ -19,11 +19,11 @@ export default class FFT {
         return value.arrayBuffer();
     };
 
-    private getAudioData = (buffer: ArrayBuffer) => {
+    private getAudioData = (buffer: ArrayBuffer): Promise<AudioBuffer> => {
         return this._audioContext.decodeAudioData(buffer);
     };
 
-    private onComplete = (buffer: AudioBuffer) => {
+    private onComplete = (buffer: AudioBuffer): Promise<void> => {
         return new Promise((resolve) => {
             this._buffer = buffer;
             this._source = this._audioContext.createBufferSource();
@@ -37,20 +37,20 @@ export default class FFT {
         });
     };
 
-    private onError = (err) => {
+    private onError = (err): void => {
         console.log(err);
     };
 
-    public ready = (_url: string) => {
+    public ready = (_url: string): Promise<void> => {
         return fetch(_url).then(this.onLoadAudio).then(this.getAudioData).then(this.onComplete).catch(this.onError);
     };
 
-    public play = (isLoop: boolean) => {
+    public play = (isLoop: boolean): void => {
         this._source.loop = isLoop;
         this._source.start(0);
     };
 
-    public pause = () => {
+    public pause = (): void => {
         if (this._audioContext.state === 'running') {
             this._audioContext.suspend().then((res) => {
                 console.log(res);
@@ -58,7 +58,7 @@ export default class FFT {
         }
     };
 
-    public changeVolume = (value: number) => {
+    public changeVolume = (value: number): void => {
         this._gain.gain.value = value;
     };
 

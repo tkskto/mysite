@@ -2,7 +2,7 @@ import { GLConfig } from './Config';
 import Vector from './gl/Vector';
 
 export class Methods {
-    public static showError(err: string | null = '') {
+    public static showError(err: string | null = ''): void {
         console.error(err || 'error');
     }
 
@@ -60,7 +60,7 @@ export class Methods {
         return color;
     }
 
-    public static getItemByKey(_arr: any[], _key: string, _value: any) {
+    public static getItemByKey(_arr: any[], _key: string, _value: any): any {
         let i;
         const len = _arr.length;
 
@@ -181,7 +181,7 @@ export class GLUtils {
         return ibo;
     }
 
-    public static setAttr(gl: WebGLRenderingContext, vbo: WebGLBuffer[], attl: number[], atts: number[]) {
+    public static setAttr(gl: WebGLRenderingContext, vbo: WebGLBuffer[], attl: number[], atts: number[]): void {
         for (let i = 0; i < vbo.length; i++) {
             if (attl[i] === undefined || atts[i] === undefined) {
                 throw new Error(`${vbo[i]} is invalid. check ${attl[i]},  ${atts[i]}`);
@@ -267,12 +267,9 @@ export class GLUtils {
      * @param {WebGLRenderingContext} gl
      * @param {number} _width
      * @param {number} _height
-     * @param {number} _format
      * @returns {frameBuffer, depthBuffer, texture}
      */
-    public static createFrameBuffer(gl: WebGLRenderingContext, _width: number, _height: number, _format: number | null): {frameBuffer: WebGLFramebuffer, depthBuffer: WebGLRenderbuffer, texture: WebGLTexture} {
-        const textureFormat: number = _format || gl.UNSIGNED_BYTE;
-
+    public static createFrameBuffer(gl: WebGLRenderingContext, _width: number, _height: number): {frameBuffer: WebGLFramebuffer; depthBuffer: WebGLRenderbuffer; texture: WebGLTexture} {
         // フレームバッファを生成してバインド
         const frameBuffer: WebGLFramebuffer = gl.createFramebuffer() as WebGLFramebuffer;
         gl.bindFramebuffer(gl.FRAMEBUFFER, frameBuffer);
@@ -380,7 +377,7 @@ export class MatrixUtils {
      * @param {Float32Array} _mat2
      * @param {Float32Array} _dist
      */
-    public static multiply(_mat1: Float32Array, _mat2: Float32Array, _dist: Float32Array = MatrixUtils.initialize(new Float32Array(16))) {
+    public static multiply(_mat1: Float32Array, _mat2: Float32Array, _dist: Float32Array = MatrixUtils.initialize(new Float32Array(16))): Float32Array {
         const a = _mat1[0],  b = _mat1[1],  c = _mat1[2],  d = _mat1[3],
             e = _mat1[4],  f = _mat1[5],  g = _mat1[6],  h = _mat1[7],
             i = _mat1[8],  j = _mat1[9],  k = _mat1[10], l = _mat1[11],
@@ -507,7 +504,6 @@ export class MatrixUtils {
 
 export class VectorUtils {
     public static getFaceNormalArr(_vertexArr: number[], _indexArr: number[]): number[] {
-
         let i;
         const len = _vertexArr.length / 3;
         const distArr: number[] = [];

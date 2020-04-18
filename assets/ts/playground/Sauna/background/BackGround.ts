@@ -13,7 +13,7 @@ export default class Background {
         };
     }
 
-    public generate() {
+    public generate(): void {
         const plane = new THREE.PlaneBufferGeometry(2, 2, 1, 1);
         const material = new THREE.ShaderMaterial({
             vertexShader: SaunaVS,

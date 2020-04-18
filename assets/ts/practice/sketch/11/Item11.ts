@@ -23,7 +23,7 @@ export default class Item11 extends Sketch {
         super(_store, _id);
     }
 
-    public setup = (): void => {
+    public setup = async (): Promise<any> => {
         this._ctx = new WebGLContext(1, this._canvas);
         this._gl = this._ctx.ctx;
         this.clear();
@@ -50,9 +50,9 @@ export default class Item11 extends Sketch {
         this._store.commit('Practice/SET_FS_TEXT', this._shader.fragmentString);
         this._store.commit('Common/SET_MOUSE_STATE', true);
 
-        GLUtils.createTexture(require('../../../../img/practice/11_1.png'), this._gl, this._gl.UNSIGNED_BYTE).then(tex => {
+        GLUtils.createTexture(await require('../../../../img/practice/11_1.png'), this._gl, this._gl.UNSIGNED_BYTE).then(async tex => {
             this._mesh.addTexture(tex);
-            return GLUtils.createTexture(require('../../../../img/practice/11_2.png'), this._gl, this._gl.UNSIGNED_BYTE);
+            return GLUtils.createTexture(await require('../../../../img/practice/11_2.png'), this._gl, this._gl.UNSIGNED_BYTE);
         }).then(tex => {
             this._mesh.addTexture(tex);
             this.play();
@@ -61,7 +61,7 @@ export default class Item11 extends Sketch {
         });
     };
 
-    private clear = () => {
+    public clear = (): void => {
         this._gl.clearColor(1.0, 1.0, 1.0, 1.0);
         this._gl.clearDepth(1.0);
         this._gl.clear(this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT);
@@ -79,12 +79,12 @@ export default class Item11 extends Sketch {
         }
     };
 
-    public update = () => {
+    public update = (): void => {
         this.animate();
         this._timer = requestAnimationFrame(this.update);
     };
 
-    public animate = () => {
+    public animate = (): void => {
         this.clear();
         const canvasSize = this._store.getters['Common/canvasSize'];
         const mousePosition = this._store.getters['Common/mousePosition'];

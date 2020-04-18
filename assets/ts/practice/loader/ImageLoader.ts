@@ -16,7 +16,7 @@ export default class ImageLoader extends EventDispatcher {
         this._count = _src.length;
     }
 
-    public load() {
+    public load(): void {
         this._loadedCount = 0;
 
         for (let i = 0; i < this._count; i++) {
@@ -26,7 +26,7 @@ export default class ImageLoader extends EventDispatcher {
         }
     }
 
-    private onFileLoaded = (e) => {
+    private onFileLoaded = (e): void => {
         const event = new Event(ImageLoader.IMAGE_LOADED);
         event.currentTarget = this;
         this.dispatchEvent(event);
@@ -40,7 +40,7 @@ export default class ImageLoader extends EventDispatcher {
         }
     };
 
-    private onLoadComplete = () => {
+    private onLoadComplete = (): void => {
         this.dispatchEvent(ImageLoader.LOAD_COMPLETE);
     };
 

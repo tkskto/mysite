@@ -57,7 +57,7 @@ export default class Stove {
         });
     }
 
-    public generate = () => {
+    public generate = (): void => {
         this._group = new THREE.Group();
 
         // texture
@@ -104,7 +104,7 @@ export default class Stove {
         this._stage.add(this._group);
     };
 
-    public update = () => {
+    public update = (): void => {
         this._renderer.setRenderTarget(this._renderTarget);
         this._renderer.render(this._scene, this._camera);
         this._renderer.setRenderTarget(null);

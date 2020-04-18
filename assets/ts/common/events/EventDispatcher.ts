@@ -1,4 +1,40 @@
 ﻿/**
+ * イベント発光時に引数として渡されるEventクラス
+ */
+export class Event {
+    currentTarget: any;
+    static COMPLETE = "complete";
+    static CHANGE_PROPERTY = "changeProperty";
+    constructor(public type: string, public value: any = null) {}
+}
+
+/**
+ * イベントリスナークラス
+ */
+class EventListener {
+
+    /**
+     *
+     * @param type
+     * @param handler
+     * @param priority
+     */
+    constructor(public type: string, public handler: Function, public priority: number = 0) {
+    }
+
+    /**
+     * タイプとコールバックからリスナーを比較する
+     * @param type
+     * @param handler
+     * @returns {boolean}
+     */
+    equalCurrentListener(type: string, handler: Function): boolean {
+        return this.type === type && this.handler === handler;
+
+    }
+}
+
+/**
  * dispatcherとなるクラスでextendして使う
  */
 export class EventDispatcher {
@@ -25,11 +61,11 @@ export class EventDispatcher {
         }
 
         if (this.listeners[type] != null) {
-            let len: number = this.listeners[type].length;
+            const len: number = this.listeners[type].length;
             e.currentTarget = this;
 
-            for (let i: number = 0; i < len; i++) {
-                let listener: EventListener = this.listeners[type][i];
+            for (let i = 0; i < len; i++) {
+                const listener: EventListener = this.listeners[type][i];
                 try {
                     listener.handler(e);
                 } catch (error) {
@@ -50,7 +86,7 @@ export class EventDispatcher {
      * @param callback
      * @param priority
      */
-    addEventListener(type: string, callback: Function, priority: number = 0): void {
+    addEventListener(type: string, callback: Function, priority = 0): void {
         if (this.listeners[type] == null) {
             this.listeners[type] = [];
         }
@@ -68,8 +104,8 @@ export class EventDispatcher {
      */
     removeEventListener(type: string, callback: Function): void {
         if (this.hasEventListener(type, callback)) {
-            for (let i: number = 0; i < this.listeners[type].length; i++) {
-                let listener: EventListener = this.listeners[type][i];
+            for (let i = 0; i < this.listeners[type].length; i++) {
+                const listener: EventListener = this.listeners[type][i];
                 if (listener.equalCurrentListener(type, callback)) {
                     this.listeners[type].splice(i, 1);
                     return;
@@ -103,49 +139,12 @@ export class EventDispatcher {
      */
     hasEventListener(type: string, callback: Function): boolean {
         if (this.listeners[type] == null) return false;
-        for (let i: number = 0; i < this.listeners[type].length; i++) {
-            let listener: EventListener = this.listeners[type][i];
+        for (let i = 0; i < this.listeners[type].length; i++) {
+            const listener: EventListener = this.listeners[type][i];
             if (listener.equalCurrentListener(type, callback)) {
                 return true;
             }
         }
         return false;
     }
-}
-
-/**
- * イベントリスナークラス
- */
-class EventListener {
-
-    /**
-     *
-     * @param type
-     * @param handler
-     * @param priority
-     */
-    constructor(public type: string, public handler: Function, public priority: number = 0) {
-    }
-
-    /**
-     * タイプとコールバックからリスナーを比較する
-     * @param type
-     * @param handler
-     * @returns {boolean}
-     */
-    equalCurrentListener(type: string, handler: Function): boolean {
-        return this.type === type && this.handler === handler;
-
-    }
-}
-
-/**
- * イベント発光時に引数として渡されるEventクラス
- */
-export class Event {
-
-    currentTarget: any;
-    static COMPLETE: string = "complete";
-    static CHANGE_PROPERTY: string = "changeProperty";
-    constructor(public type: string, public value: any = null) {}
 }

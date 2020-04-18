@@ -13,7 +13,7 @@ export default class Sauna {
     private _second: Second;
     private _third: Third;
     private _background: BackGround;
-    private _time: number = 0;
+    private _time = 0;
     private _controls: OrbitControls;
     private _scrollY = 0;
 
@@ -58,12 +58,12 @@ export default class Sauna {
         this.update();
     }
 
-    private onScroll(e) {
+    private onScroll(e): void {
         e.preventDefault();
         this._camera.position.y -= (e.deltaY * 0.01);
     }
 
-    private update = () => {
+    private update = (): void => {
         requestAnimationFrame(this.update);
 
         // this._camera.lookAt(new Vector3(0, 0, 0));
@@ -73,7 +73,7 @@ export default class Sauna {
         this._time += 0.01;
     };
 
-    private animate = () => {
+    private animate = (): void => {
         this._renderer.autoClear = true;
 
         this._renderer.render(this._stage, this._camera);

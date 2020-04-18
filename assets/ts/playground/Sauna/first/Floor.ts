@@ -3,16 +3,16 @@ import * as THREE from 'three';
 export default class Floor {
     private _texture: THREE.Texture;
 
-    constructor(private _stage: THREE.Scene) {
-        this._texture = new THREE.TextureLoader().load(require('~/assets/img/playground/sauna/floor.jpg'));
+    constructor(private _stage: THREE.Scene) {}
+
+    public generate = async (): Promise<void> => {
+        this._texture = new THREE.TextureLoader().load(await require('~/assets/img/playground/sauna/floor.jpg'));
         this._texture.magFilter = THREE.NearestFilter;
         this._texture.minFilter = THREE.NearestFilter;
         this._texture.wrapS = THREE.MirroredRepeatWrapping;
         this._texture.wrapT = THREE.MirroredRepeatWrapping;
         this._texture.repeat.set(3, 3);
-    }
 
-    public generate = () => {
         const geometry = new THREE.PlaneGeometry(200, 200);
         const material = new THREE.MeshPhongMaterial({
             color: 0xffffff,

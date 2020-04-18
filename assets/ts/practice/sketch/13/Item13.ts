@@ -54,7 +54,7 @@ export default class Item13 extends Sketch {
         });
     };
 
-    private clear = () => {
+    public clear = (): void => {
         this._gl.clearColor(1.0, 1.0, 1.0, 1.0);
         this._gl.clearDepth(1.0);
         this._gl.clear(this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT);
@@ -70,7 +70,7 @@ export default class Item13 extends Sketch {
         }
     };
 
-    public update = () => {
+    public update = (): void => {
         this._audioAnalyser.getByteFrequencyData(this._frequency);
         this.animate();
         this._timer = requestAnimationFrame(this.update);
@@ -78,7 +78,7 @@ export default class Item13 extends Sketch {
         this._time += 0.01;
     };
 
-    public animate = () => {
+    public animate = (): void => {
         this.clear();
         const canvasSize = this._store.getters['Common/canvasSize'];
         this._renderer.update([canvasSize.width, canvasSize.height], this._time, this._frequency[0]);

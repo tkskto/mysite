@@ -76,7 +76,14 @@ void main() {
 
 export default class Tree {
     private _mesh: THREE.Mesh;
-    private _uniform: {};
+    private _uniform: {
+        resolution: {
+            value: THREE.Vector2;
+        };
+        time: {
+            value: number;
+        };
+    };
 
     constructor(private _stage: THREE.Scene, width, height) {
         this._uniform = {
@@ -89,7 +96,7 @@ export default class Tree {
         };
     }
 
-    public generate = () => {
+    public generate = (): void => {
         const geometry = new THREE.PlaneGeometry(2, 2);
         const material = new THREE.ShaderMaterial({
             vertexShader: VS,
@@ -101,8 +108,7 @@ export default class Tree {
         this._stage.add(this._mesh);
     };
 
-    public update = (time) => {
-        // @ts-ignore
+    public update = (time): void => {
         this._uniform.time.value = time;
     }
 }

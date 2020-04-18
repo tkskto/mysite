@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-function rand (min, max) {
+function rand (min, max): number {
     return min + Math.random() * (max - min);
 }
 
@@ -9,13 +9,12 @@ export default class Smoke {
     private _geometry: THREE.PlaneBufferGeometry;
     private _material: THREE.MeshBasicMaterial;
     private _smokes: THREE.Group;
-    private _ready: boolean = false;
+    private _ready = false;
 
-    constructor(private _stage: THREE.Scene) {
-        this._texture = new THREE.TextureLoader().load(require('~/assets/img/playground/sauna/smoke.png'));
-    }
+    constructor(private _stage: THREE.Scene) {}
 
-    public generate = () => {
+    public generate = async (): Promise<void> => {
+        this._texture = new THREE.TextureLoader().load(await require('~/assets/img/playground/sauna/smoke.png'));
         this._smokes = new THREE.Group();
         this._geometry = new THREE.PlaneBufferGeometry(10, 10);
         this._material = new THREE.MeshBasicMaterial({
@@ -37,9 +36,7 @@ export default class Smoke {
                 rand(-0.5, 0.5),
             );
 
-            // @ts-ignore
             smoke.velocity = 0;
-            // @ts-ignore
             smoke.accel = 0.001 * Math.random();
 
             smoke.rotation.z = Math.random() * Math.PI;
@@ -51,18 +48,15 @@ export default class Smoke {
         this._ready = true;
     };
 
-    public update = () => {
+    public update = (): void => {
         this._smokes.children.forEach((mesh) => {
-            // @ts-ignore
             if (mesh.velocity < 1) {
-                // @ts-ignore
                 mesh.velocity += mesh.accel;
             }
-            // @ts-ignore
+
             mesh.position.y += mesh.velocity;
 
             if (mesh.position.y > 40) {
-                // @ts-ignore
                 mesh.velocity = 0;
                 mesh.position.y = 20;
             }

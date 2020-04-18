@@ -3,7 +3,7 @@ import Tree from '~/assets/ts/playground/Sauna/third/Tree';
 
 export default class First {
     private _stage: THREE.Scene;
-    private _ready: boolean = false;
+    private _ready = false;
     private _tree: Tree;
 
     constructor(private _camera: THREE.PerspectiveCamera, private _renderer: THREE.WebGLRenderer, _width, _height) {
@@ -17,7 +17,7 @@ export default class First {
         this._ready = true;
     }
 
-    public update(time: number) {
+    public update(time: number): void {
         this._tree.update(time);
         this._renderer.render(this._stage, this._camera);
     }

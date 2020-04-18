@@ -16,7 +16,7 @@ export default class Plane extends Sketch {
     private _renderer: Renderer;
     private _time = 0;
 
-    constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string, private _shader: Shader, private _ctx: WebGLContext, quote: string = '') {
+    constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string, private _shader: Shader, private _ctx: WebGLContext, quote = '') {
         super(_store, _id, quote);
     }
 
@@ -41,7 +41,7 @@ export default class Plane extends Sketch {
         this.play();
     };
 
-    private clear = () => {
+    public clear = (): void => {
         this._gl.clearColor(1.0, 1.0, 1.0, 1.0);
         this._gl.clearDepth(1.0);
         this._gl.clear(this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT);
@@ -55,14 +55,14 @@ export default class Plane extends Sketch {
         }
     };
 
-    public update = () => {
+    public update = (): void => {
         this.animate();
         this._timer = requestAnimationFrame(this.update);
 
         this._time += 0.01;
     };
 
-    public animate = () => {
+    public animate = (): void => {
         this.clear();
         const canvasSize = this._store.getters['Common/canvasSize'];
         this._renderer.update([canvasSize.width, canvasSize.height], this._time);

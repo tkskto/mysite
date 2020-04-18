@@ -19,7 +19,7 @@ export default class Sketch implements ISketch {
         this._quote = _quote;
     }
 
-    private onStateChanged = () => {
+    private onStateChanged = (): void => {
         this._ready = false;
         const store = this._store.getters;
         const scene = store['Practice/getScene'];

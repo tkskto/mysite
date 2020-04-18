@@ -29,7 +29,7 @@ export default class Renderer {
         this._gl.enable(this._gl.DEPTH_TEST);
         this._gl.depthFunc(this._gl.LEQUAL);
 
-        this.unWatchResizeEvent = _store.watch((state, getters) => {
+        this.unWatchResizeEvent = _store.watch((state) => {
             return state.Common.screenSize;
         }, this.onResize);
         this.unWatchStateChangeEvent = _store.watch(AppConfig.ON_CAMERA_STATE_CHANGED, this.initializeMatrix);
@@ -40,7 +40,7 @@ export default class Renderer {
      * 描画対象を追加する
      * @param {Mesh} _model
      */
-    public add = (_model: Mesh) => {
+    public add = (_model: Mesh): void => {
         this._target.push(_model);
     };
 
@@ -48,7 +48,7 @@ export default class Renderer {
      * 描画対象を削除する
      * @param {Mesh} _mesh 削除したいメッシュ
      */
-    public remove = (_mesh: Mesh) => {
+    public remove = (_mesh: Mesh): void => {
         for (let i = 0; i < this._target.length; i++) {
             if (this._target[i].id === _mesh.id) {
                 this._target.slice(i, 1);
@@ -59,7 +59,7 @@ export default class Renderer {
     /**
      * すべてのリソースを削除する
      */
-    public dispose = () => {
+    public dispose = (): void => {
         this._target.length = 0;
 
         if (this.unWatchResizeEvent) {
@@ -71,11 +71,11 @@ export default class Renderer {
         }
     };
 
-    public update = (...values: any[]) => {
+    public update = (...values: any[]): void => {
         this.render(values);
     };
 
-    private render = (...values: any[]) => {
+    private render = (...values: any[]): void => {
         this.mvpMatrix = MatrixUtils.initialize(MatrixUtils.create());
         for (const target of this._target) {
             MatrixUtils.multiply(this.vpMatrix, target.mMatrix, this.mvpMatrix);
@@ -90,7 +90,7 @@ export default class Renderer {
         this._gl.flush();
     };
 
-    private initializeMatrix = () => {
+    private initializeMatrix = (): void => {
         this.vMatrix = MatrixUtils.initialize(MatrixUtils.create());
         this.pMatrix = MatrixUtils.initialize(MatrixUtils.create());
         this.qMatrix = MatrixUtils.initialize(MatrixUtils.create());
@@ -106,7 +106,7 @@ export default class Renderer {
         MatrixUtils.multiply(this.pMatrix, this.vMatrix, this.vpMatrix);
     };
 
-    private onResize = () => {
+    private onResize = (): void => {
         const canvasSize = this._store.getters['Common/canvasSize'];
         this.initializeMatrix();
         this._cWidth = canvasSize.width;

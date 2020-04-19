@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import Pool from '~/assets/ts/playground/Sauna/second/Pool';
 
-export default class First {
+export default class Second {
     private _stage: THREE.Scene;
     private _pool: Pool;
     private _ready = false;

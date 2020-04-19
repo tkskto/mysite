@@ -1,5 +1,7 @@
 import { Configuration } from '@nuxt/types';
-const articles = require('./static/assets/blog/articles.json');
+import { readFileSync } from 'fs';
+import * as path from 'path';
+const articles = JSON.parse(readFileSync(path.join(__dirname, './static/assets/blog/articles.json'), 'utf-8'));
 const generateDynamicRoutes = (callback): void => {
     const routes = articles.map(item => {
         return `/blog/${item.title}/`;

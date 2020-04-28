@@ -1,5 +1,5 @@
 <template>
-    <section class="container">
+    <section class="container" :class="{'is-show': isShow}">
         <div class="text">
             <p>I'm frontend engineer.</p>
             <p>I like sauna and beautiful graphics.</p>
@@ -18,14 +18,23 @@
                 <li><a href="https://www.linkedin.com/in/takeshi-kato-06a941111/"><img src="~/assets/img/whois/linkedin.png" alt="私のLinkedinアカウント"></a></li>
             </ul>
         </div>
-        <div class="overlay"></div>
+        <profile class="profile-img" :class="{'is-show': isShow}"/>
     </section>
 </template>
 
-<script>;
+<script>
+    import Profile from '~/components/whois/profile';
+
     export default {
         layout: 'default',
-        computed: {},
+        data() {
+            return {
+                isShow: false,
+            };
+        },
+        components: {
+            Profile
+        },
         head() {
             return {
                 title: 'Takeshi Kato',
@@ -36,7 +45,7 @@
         },
         mounted() {
             setTimeout(() => {
-                this.$el.classList.add('is-show');
+                this.isShow = true;
             }, 100);
         }
     };
@@ -49,14 +58,15 @@
         display: flex;
         justify-content: space-between;
         flex-direction: column;
-        background: rgba(0, 0, 0, 0.6);
+        background: rgba(0, 0, 0, 0.4);
+        overflow: hidden;
 
         .text p {
             color: #ffffff;
             font-size: 4.0rem;
             line-height: 2.0;
             transition: transform 0.5s cubic-bezier(.17,.67,.4,.99), opacity 0.7s;
-            transform: translateX(-100%);
+            transform: translateX(25%);
             text-shadow: 5px 5px 5px rgba(255, 255, 255, 0.2), 10px 10px 5px rgba(255, 255, 255, 0.1);
             opacity: 0;
 
@@ -113,15 +123,12 @@
             }
         }
 
-        .overlay {
+        .profile-img {
             position: fixed;
             top: 0;
-            bottom: 0;
             left: 50%;
-            right: 0;
-            margin: auto;
-            background: url(~assets/img/whois/takeshi.jpg) no-repeat center 100%;
-            background-size: cover;
+            width: 50%;
+            height: 100%;
             z-index: -1;
         }
 
@@ -140,7 +147,7 @@
         &.is-show {
             .text p {
                 transform: translateX(0);
-                opacity: 0.8;
+                opacity: 1;
             }
         }
     }

@@ -27,6 +27,7 @@
         layout: 'blog',
         head() {
             return {
+                htmlAttrs: {lang: 'ja'} ,
                 title: `${this.category} | blog | tkskto`,
                 meta: [
                     { hid: 'description', name: 'description', content: 'These are logs of tkskto' }

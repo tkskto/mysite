@@ -22,7 +22,7 @@
         "vuex": "3.2.0"
     },
     "devDependencies": {
-        "@babel/compat-data": "7.9.0",
+        "@babel/compat-data": "7.9.6",
         "@nuxt/typescript": "2.8.1",
         "@nuxt/typescript-build": "0.6.5",
         "@nuxtjs/sitemap": "2.2.0",

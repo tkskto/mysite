@@ -11,12 +11,5 @@ npm-debug.log
 dist
 
 .idea
-
-static/assets/album
-static/assets/blog/images
 static/assets/audio
-static/assets/microAnimations
-
 public/
-自分まとめ.md
-static/assets/font/

@@ -1,0 +1,99 @@
+<!DOCTYPE html><html lang="ja"><head>
+<meta charset="UTF-8">
+<title>Micro Animations</title>
+<style>html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loader {
+    width: 60px;
+    height: 60px;
+}
+
+#myCanvas {
+    width: 100%;
+    height: 100%;
+}</style></head>
+<body>
+    <div class="loader">
+        <canvas id="myCanvas" width="60" height="60"></canvas>
+    </div>
+<script>(function(win) {
+    'use strict';
+    
+    win.onload = function() {
+        
+        var parent = document.querySelector('.loader');
+        var myCanvas = document.getElementById('myCanvas');
+        var ctx = myCanvas.getContext('2d');
+        var radius = 60;
+        var counter = 0;
+        var start = 0;
+        var end = 45;
+        var plusStart = 2;
+        var plusEnd = 3;
+        var timer;
+        
+        myCanvas.width = myCanvas.height = 60;
+        
+        function update() {
+            timer = requestAnimationFrame(update);
+            
+            draw();
+        }
+        
+        function draw() {
+            if(counter > 360) {
+                counter = 0;
+            }
+            
+            ctx.clearRect(0,0,radius,radius);
+            
+            ctx.beginPath();
+            ctx.arc(radius * 0.5, radius * 0.5, radius * 0.4, start * Math.PI / 180, end * Math.PI / 180, false);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = 'green';
+            ctx.stroke();
+            
+            end += plusEnd;
+            start += plusStart;
+            
+            if(counter > 180) {
+                plusEnd = 2;
+                plusStart = 3;
+            } else {
+                plusEnd = 3;
+                plusStart = 2;
+            }
+            
+            counter++;
+        }
+        
+        parent.addEventListener('mouseenter', function() {
+           timer = requestAnimationFrame(update); 
+        });
+        
+        parent.addEventListener('mouseleave', function() {
+            if(timer) {
+                cancelAnimationFrame(timer);
+                timer = null;
+            }
+        });
+        
+        ctx.beginPath();
+        ctx.arc(radius * 0.5, radius * 0.5, radius * 0.4, start * Math.PI / 180, end * Math.PI / 180, false);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'green';
+        ctx.stroke();
+    };
+    
+})(window);</script></body></html>

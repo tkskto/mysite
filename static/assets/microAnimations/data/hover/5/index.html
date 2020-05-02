@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="ja"><head>
+<meta charset="UTF-8">
+<title>Micro Animations</title>
+<style>html,body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hover button {
+    background: none;
+    box-shadow: none;
+    border: none;
+    font-size: 20px;
+    position: relative;
+    height: 14px;
+    padding: 0;
+}
+    
+.hover button span {
+    display: block;
+    line-height: 1;
+    transition: transform 0.3s ease;
+    transform: skewX(-30deg);
+    vertical-align: bottom;
+    cursor: pointer;
+    transform-origin: 0 100%;
+}
+
+.hover:hover button span {
+    transform: skewX(0deg);
+}
+
+.hover button::after {
+    line-height: 1;
+    position: absolute;
+    display: block;
+    content:"hover";
+    top: 0;
+    transform: skewX(-30deg);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    color: #bbb;
+    z-index: -1;
+    transform-origin: 0 100%;
+}</style></head>
+<body>
+    <div class="hover">
+        <button type="button">
+            <span>hover</span>
+        </button>
+    </div>
+</body></html>

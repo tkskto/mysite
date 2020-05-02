@@ -94,7 +94,7 @@
     };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .str-article {
         .article--content {
             display: flex;

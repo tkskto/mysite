@@ -26,7 +26,9 @@
                 htmlAttrs: {lang: 'ja'} ,
                 title: `${this.title} | blog | tkskto`,
                 meta: [
-                    { hid: 'description', name: 'description', content: 'These are logs of tkskto' }
+                    { hid: 'description', name: 'description', content: 'These are logs of tkskto' },
+                    { hid: 'og:url', property: 'og:url', content: `https://tkskto.me/blog/${this.title}` },
+                    { hid: 'og:title', property: 'og:title', content: this.title },
                 ],
             };
         },

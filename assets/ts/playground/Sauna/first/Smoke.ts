@@ -1,36 +1,46 @@
-import * as THREE from 'three';
 import AnimateMesh from '~/assets/ts/common/gl/AnimateMesh';
+import {
+    DoubleSide,
+    Group,
+    Mesh,
+    MeshBasicMaterial,
+    NormalBlending,
+    PlaneBufferGeometry,
+    Scene,
+    Texture,
+    TextureLoader
+} from 'three'
 
 function rand (min, max): number {
     return min + Math.random() * (max - min);
 }
 
 export default class Smoke {
-    private _texture: THREE.Texture;
-    private _geometry: THREE.PlaneBufferGeometry;
-    private _material: THREE.MeshBasicMaterial;
+    private _texture: Texture;
+    private _geometry: PlaneBufferGeometry;
+    private _material: MeshBasicMaterial;
     private _meshArr: AnimateMesh[] = [];
-    private _smokes: THREE.Group;
+    private _smokes: Group;
     private _ready = false;
 
-    constructor(private _stage: THREE.Scene) {}
+    constructor(private _stage: Scene) {}
 
     public generate = async (): Promise<void> => {
-        this._texture = new THREE.TextureLoader().load(await require('~/assets/img/playground/sauna/smoke.png'));
-        this._smokes = new THREE.Group();
-        this._geometry = new THREE.PlaneBufferGeometry(10, 10);
-        this._material = new THREE.MeshBasicMaterial({
+        this._texture = new TextureLoader().load(await require('~/assets/img/playground/sauna/smoke.png'));
+        this._smokes = new Group();
+        this._geometry = new PlaneBufferGeometry(10, 10);
+        this._material = new MeshBasicMaterial({
             color: 0xffffff,
             map: this._texture,
             transparent: true,
-            blending: THREE.NormalBlending,
+            blending: NormalBlending,
             depthTest: false,
             opacity: 0.1,
-            side: THREE.DoubleSide
+            side: DoubleSide
         });
 
         for (let i = 0; i < 50; i++) {
-            const smoke = new AnimateMesh(new THREE.Mesh(this._geometry, this._material), 0, 0.001 * Math.random());
+            const smoke = new AnimateMesh(new Mesh(this._geometry, this._material), 0, 0.001 * Math.random());
 
             smoke.mesh.position.set(
                 rand(-3, 3),

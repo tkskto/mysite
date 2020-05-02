@@ -1,13 +1,13 @@
-import * as THREE from 'three';
+import {Shape, Mesh, Material, ExtrudeGeometry} from 'three'
 
 export default class H {
-    private _shape: THREE.Shape;
-    private _geometry: THREE.ExtrudeGeometry;
-    private _mesh: THREE.Mesh;
+    private _shape: Shape;
+    private _geometry: ExtrudeGeometry;
+    private _mesh: Mesh;
 
-    constructor(_material: THREE.Material, _exo: {}) {
+    constructor(_material: Material, _exo: {}) {
 
-        this._shape = new THREE.Shape();
+        this._shape = new Shape();
 
         const vertex = [
             0.0,  0.0,
@@ -29,12 +29,12 @@ export default class H {
         for (let i = 2; i < vertex.length; i += 2) {
             this._shape.lineTo(vertex[i], vertex[i + 1]);
         }
-        this._geometry = new THREE.ExtrudeGeometry(this._shape, _exo);
+        this._geometry = new ExtrudeGeometry(this._shape, _exo);
 
-        this._mesh = new THREE.Mesh(this._geometry, _material);
+        this._mesh = new Mesh(this._geometry, _material);
     }
 
-    get mesh(): THREE.Mesh {
+    get mesh(): Mesh {
         return this._mesh;
     }
 }

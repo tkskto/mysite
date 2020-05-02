@@ -1,18 +1,24 @@
-import * as THREE from 'three';
+import {
+    WebGLRenderer,
+    Scene,
+    DirectionalLight,
+    AmbientLight,
+    PerspectiveCamera,
+} from 'three'
 import Pool from '~/assets/ts/playground/Sauna/second/Pool';
 
 export default class Second {
-    private _stage: THREE.Scene;
+    private _stage: Scene;
     private _pool: Pool;
     private _ready = false;
 
-    constructor(private _camera: THREE.PerspectiveCamera, private _renderer: THREE.WebGLRenderer) {
-        this._stage = new THREE.Scene();
+    constructor(private _camera: PerspectiveCamera, private _renderer: WebGLRenderer) {
+        this._stage = new Scene();
 
-        const light = new THREE.DirectionalLight(0xffffff, 1.0);
+        const light = new DirectionalLight(0xffffff, 1.0);
         this._stage.add(light);
 
-        const amb = new THREE.AmbientLight(0xdddddd, 0.5);
+        const amb = new AmbientLight(0xdddddd, 0.5);
         this._stage.add(amb);
 
         this._pool = new Pool(this._stage);

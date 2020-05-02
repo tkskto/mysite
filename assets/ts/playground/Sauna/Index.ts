@@ -1,4 +1,10 @@
-import * as THREE from 'three';
+import {
+    WebGLRenderer,
+    Scene,
+    Vector3,
+    PerspectiveCamera,
+    PCFSoftShadowMap
+} from 'three'
 import First from '~/assets/ts/playground/Sauna/First';
 import Second from '~/assets/ts/playground/Sauna/Second';
 import Third from '~/assets/ts/playground/Sauna/Third';
@@ -6,9 +12,9 @@ import BackGround from '~/assets/ts/playground/Sauna/background/BackGround';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 
 export default class Sauna {
-    private _renderer: THREE.WebGLRenderer;
-    private _stage: THREE.Scene;
-    private _camera: THREE.PerspectiveCamera;
+    private _renderer: WebGLRenderer;
+    private _stage: Scene;
+    private _camera: PerspectiveCamera;
     private _first: First;
     private _second: Second;
     private _third: Third;
@@ -22,22 +28,22 @@ export default class Sauna {
         const width = _width * ratio;
         const height = _height * ratio;
 
-        this._renderer = new THREE.WebGLRenderer({
+        this._renderer = new WebGLRenderer({
             canvas: _canvas,
             antialias: true
         });
         this._renderer.shadowMap.enabled = true;
-        this._renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+        this._renderer.shadowMap.type = PCFSoftShadowMap; // default PCFShadowMap
 
         this._renderer.setSize(_width, _height);
         this._renderer.setPixelRatio(ratio);
         this._renderer.setClearColor(0x000000);
 
-        this._stage = new THREE.Scene();
+        this._stage = new Scene();
 
-        this._camera = new THREE.PerspectiveCamera(60, _width/_height, 0.1, 200);
+        this._camera = new PerspectiveCamera(60, _width/_height, 0.1, 200);
         this._camera.position.set(15, 15, 55);
-        this._camera.lookAt(new THREE.Vector3(15, 15, 0));
+        this._camera.lookAt(new Vector3(15, 15, 0));
 
         this._background = new BackGround(this._stage, width, height);
         // this._background.generate();
@@ -50,7 +56,7 @@ export default class Sauna {
         this._controls.update();
 
         // helper
-        // const axisHelper = new THREE.AxesHelper(1000);
+        // const axisHelper = new AxesHelper(1000);
         // this._stage.add(axisHelper);
 
         this._canvas.addEventListener('mousewheel', this.onScroll.bind(this));

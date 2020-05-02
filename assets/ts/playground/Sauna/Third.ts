@@ -1,13 +1,17 @@
-import * as THREE from 'three';
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+} from 'three'
 import Tree from '~/assets/ts/playground/Sauna/third/Tree';
 
 export default class First {
-    private _stage: THREE.Scene;
+    private _stage: Scene;
     private _ready = false;
     private _tree: Tree;
 
-    constructor(private _camera: THREE.PerspectiveCamera, private _renderer: THREE.WebGLRenderer, _width, _height) {
-        this._stage = new THREE.Scene();
+    constructor(private _camera: PerspectiveCamera, private _renderer: WebGLRenderer, _width, _height) {
+        this._stage = new Scene();
 
         this._tree = new Tree(this._stage, _width, _height);
         this._tree.generate();

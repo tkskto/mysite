@@ -1,4 +1,8 @@
-import * as THREE from 'three';
+import {
+    Scene,
+    PerspectiveCamera,
+    WebGLRenderer,
+} from 'three'
 import Stove from '~/assets/ts/playground/Sauna/first/Stove';
 import Stone from '~/assets/ts/playground/Sauna/first/Stone';
 import Floor from '~/assets/ts/playground/Sauna/first/Floor';
@@ -7,7 +11,7 @@ import Bulb from '~/assets/ts/playground/Sauna/first/Bulb';
 import TV from '~/assets/ts/playground/Sauna/first/TV';
 
 export default class First {
-    private _stage: THREE.Scene;
+    private _stage: Scene;
     private _stove: Stove;
     private _stone: Stone;
     private _floor: Floor;
@@ -16,8 +20,8 @@ export default class First {
     private _tv: TV;
     private _ready = false;
 
-    constructor(private _camera: THREE.PerspectiveCamera, private _renderer: THREE.WebGLRenderer, _width, _height) {
-        this._stage = new THREE.Scene();
+    constructor(private _camera: PerspectiveCamera, private _renderer: WebGLRenderer, _width, _height) {
+        this._stage = new Scene();
         this._stage.frustumCulled = false;
 
         this._stove = new Stove(this._stage, this._renderer, _width, _height);

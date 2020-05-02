@@ -1,21 +1,21 @@
-import * as THREE from 'three';
 import * as SimplexNoise from 'simplex-noise';
+import {Mesh, MeshStandardMaterial, Scene, SphereGeometry, Texture, TextureLoader} from 'three'
 
 function rand (min, max): number {
     return min + Math.random() * (max - min);
 }
 
 export default class Stone {
-    private _texture: THREE.Texture;
+    private _texture: Texture;
 
-    constructor(private _stage: THREE.Scene) {}
+    constructor(private _stage: Scene) {}
 
     public generate = async (): Promise<void> => {
-        this._texture = new THREE.TextureLoader().load(await require('~/assets/img/playground/sauna/stone.jpg'));
+        this._texture = new TextureLoader().load(await require('~/assets/img/playground/sauna/stone.jpg'));
 
         const simplex = new SimplexNoise();
-        const geometry = new THREE.SphereGeometry(1, 32, 32);
-        const material = new THREE.MeshStandardMaterial({
+        const geometry = new SphereGeometry(1, 32, 32);
+        const material = new MeshStandardMaterial({
             color: 0xffffff,
             map: this._texture,
         });
@@ -27,7 +27,7 @@ export default class Stone {
         });
 
         for (let i = 0; i < 300; i++) {
-            const mesh = new THREE.Mesh(geometry, material);
+            const mesh = new Mesh(geometry, material);
 
             mesh.position.set(
                 rand(-3.5, 3.5),

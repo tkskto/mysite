@@ -100,6 +100,7 @@
         }
     };
 </script>
+
 <style lang="scss" scoped>
     .str-category {
         .category--content {

@@ -37,7 +37,11 @@
             return {
                 title: 'Takeshi Kato',
                 meta: [
-                    { hid: 'description', name: 'description', content: 'This is takeshi kato\'s Web site. I\'m a frontend developer.' }
+                    {
+                        hid: 'description',
+                        name: 'description',
+                        content: 'This is takeshi kato\'s Web site. I\'m a frontend developer.'
+                    }
                 ],
             };
         },

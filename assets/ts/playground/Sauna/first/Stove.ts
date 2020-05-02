@@ -1,4 +1,20 @@
-import * as THREE from 'three';
+import {
+    CircleGeometry,
+    ClampToEdgeWrapping,
+    CylinderGeometry,
+    DoubleSide,
+    Group,
+    Mesh,
+    MeshLambertMaterial,
+    NearestFilter,
+    PerspectiveCamera,
+    PlaneGeometry,
+    Scene,
+    ShaderMaterial,
+    Vector2,
+    WebGLRenderer,
+    WebGLRenderTarget
+} from 'three'
 
 const VS = `
 void main() {
@@ -32,68 +48,68 @@ void main() {
 
 export default class Stove {
     private _uniform: {};
-    private _group: THREE.Group;
-    private _mesh: THREE.Mesh;
-    private _scene: THREE.Scene;
-    private _camera: THREE.PerspectiveCamera;
-    private _renderTarget: THREE.WebGLRenderTarget;
+    private _group: Group;
+    private _mesh: Mesh;
+    private _scene: Scene;
+    private _camera: PerspectiveCamera;
+    private _renderTarget: WebGLRenderTarget;
 
-    constructor(private _stage: THREE.Scene, private _renderer: THREE.WebGLRenderer, width, height) {
+    constructor(private _stage: Scene, private _renderer: WebGLRenderer, width, height) {
         this._uniform = {
             resolution: {
-                value: new THREE.Vector2(width, height)
+                value: new Vector2(width, height)
             },
         };
 
-        this._scene = new THREE.Scene();
-        this._camera = new THREE.PerspectiveCamera(45, width/height, 0.1, 15);
+        this._scene = new Scene();
+        this._camera = new PerspectiveCamera(45, width/height, 0.1, 15);
         this._camera.position.set(0, 0, 10);
 
-        this._renderTarget = new THREE.WebGLRenderTarget(width, height, {
-            magFilter: THREE.NearestFilter,
-            minFilter: THREE.NearestFilter,
-            wrapS: THREE.ClampToEdgeWrapping,
-            wrapT: THREE.ClampToEdgeWrapping
+        this._renderTarget = new WebGLRenderTarget(width, height, {
+            magFilter: NearestFilter,
+            minFilter: NearestFilter,
+            wrapS: ClampToEdgeWrapping,
+            wrapT: ClampToEdgeWrapping
         });
     }
 
     public generate = (): void => {
-        this._group = new THREE.Group();
+        this._group = new Group();
 
         // texture
-        const plane = new THREE.PlaneGeometry(2, 2, 1, 1);
-        const pmaterial = new THREE.ShaderMaterial({
+        const plane = new PlaneGeometry(2, 2, 1, 1);
+        const pmaterial = new ShaderMaterial({
             vertexShader: VS,
             fragmentShader: FS,
             uniforms: this._uniform
         });
 
-        const mesh = new THREE.Mesh(plane, pmaterial);
+        const mesh = new Mesh(plane, pmaterial);
         mesh.renderOrder = -1;
         this._camera.lookAt(mesh.position);
         this._scene.add(mesh);
 
         // stove
-        const geometry = new THREE.CylinderGeometry(6, 6, 20, 32, 1, true);
-        const material = new THREE.MeshLambertMaterial({
+        const geometry = new CylinderGeometry(6, 6, 20, 32, 1, true);
+        const material = new MeshLambertMaterial({
             color: 0xffffff,
             emissive: 0x111111,
             transparent: true,
             map: this._renderTarget.texture,
-            side: THREE.DoubleSide,
+            side: DoubleSide,
             depthTest: true,
         });
-        this._mesh = new THREE.Mesh(geometry, material);
+        this._mesh = new Mesh(geometry, material);
         this._mesh.castShadow = true;
         // this._mesh.rotation.y -= Math.PI * 0.5;
 
         // bottom
-        const cgeometry = new THREE.CircleGeometry(6, 32);
-        const cmaterial = new THREE.MeshLambertMaterial({
+        const cgeometry = new CircleGeometry(6, 32);
+        const cmaterial = new MeshLambertMaterial({
             color: 0x999999,
-            side: THREE.DoubleSide,
+            side: DoubleSide,
         });
-        const bottom = new THREE.Mesh(cgeometry, cmaterial);
+        const bottom = new Mesh(cgeometry, cmaterial);
         bottom.rotation.x = Math.PI * 0.5;
         bottom.position.y = -10;
 

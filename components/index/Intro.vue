@@ -4,7 +4,6 @@
 
 <script>
     import {mapGetters, mapActions} from 'vuex';
-    import * as THREE from 'three';
     import W from '~/assets/ts/index/Text/W.ts';
     import H from '~/assets/ts/index/Text/H.ts';
     import O from '~/assets/ts/index/Text/O.ts';
@@ -13,7 +12,16 @@
     import M from '~/assets/ts/index/Text/M.ts';
     import Hatena from "~/assets/ts/index/Text/Hatena.ts";
     import {AppConfig} from '~/assets/ts/common/Config.ts';
-    import TweenMax, {Elastic, Back, Linear} from 'gsap';
+    import {Elastic, Back, Linear, TweenMax} from 'gsap';
+    import {
+        AmbientLight,
+        DirectionalLight,
+        Group,
+        MeshPhongMaterial,
+        PerspectiveCamera,
+        Scene,
+        WebGLRenderer
+    } from 'three'
 
     export default {
         name: 'Intro',
@@ -52,15 +60,15 @@
             },
         },
         created: function () {
-            this._stage = new THREE.Scene();
+            this._stage = new Scene();
 
-            this._mainCamera = new THREE.PerspectiveCamera( 60, this.screenSize.width / this.screenSize.height, 1, 1000 );
+            this._mainCamera = new PerspectiveCamera( 60, this.screenSize.width / this.screenSize.height, 1, 1000 );
             this._mainCamera.position.set( 0, 0, 45 );
             this._finished = false;
 
             this._ratio = window.devicePixelRatio;
 
-            this._renderer = new THREE.WebGLRenderer({
+            this._renderer = new WebGLRenderer({
                 antialias: true,
                 stencil: false,
             });
@@ -101,21 +109,21 @@
 
             this.$refs.canvasWrap.appendChild(this._renderer.domElement);
 
-            this._groupWHO = new THREE.Group();
-            this._groupI = new THREE.Group();
-            this._groupAM = new THREE.Group();
-            this._groupHatena = new THREE.Group();
+            this._groupWHO = new Group();
+            this._groupI = new Group();
+            this._groupAM = new Group();
+            this._groupHatena = new Group();
             this._stage.add(this._groupWHO);
 
             // 自然光
-            let ambientLight = new THREE.AmbientLight(0x44ccbb, 0.7);
+            let ambientLight = new AmbientLight(0x44ccbb, 0.7);
             this._stage.add(ambientLight);
 
-            let light = new THREE.DirectionalLight(0xffffff, 0.7);
+            let light = new DirectionalLight(0xffffff, 0.7);
             light.position.set(0.0, 10, 300);
             this._stage.add(light);
 
-            this._material = new THREE.MeshPhongMaterial({
+            this._material = new MeshPhongMaterial({
                 color:0xcccccc,
                 specular: 0xffff99,
                 shininess: 10

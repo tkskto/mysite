@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import {Mesh, PlaneGeometry, Scene, ShaderMaterial, Vector2} from 'three'
 
 const VS = `
 void main() {
@@ -75,20 +75,20 @@ void main() {
 `.trim();
 
 export default class Tree {
-    private _mesh: THREE.Mesh;
+    private _mesh: Mesh;
     private _uniform: {
         resolution: {
-            value: THREE.Vector2;
+            value: Vector2;
         };
         time: {
             value: number;
         };
     };
 
-    constructor(private _stage: THREE.Scene, width, height) {
+    constructor(private _stage: Scene, width, height) {
         this._uniform = {
             resolution: {
-                value: new THREE.Vector2(width, height)
+                value: new Vector2(width, height)
             },
             time: {
                 value: 0,
@@ -97,13 +97,13 @@ export default class Tree {
     }
 
     public generate = (): void => {
-        const geometry = new THREE.PlaneGeometry(2, 2);
-        const material = new THREE.ShaderMaterial({
+        const geometry = new PlaneGeometry(2, 2);
+        const material = new ShaderMaterial({
             vertexShader: VS,
             fragmentShader: FS,
             uniforms: this._uniform
         });
-        this._mesh = new THREE.Mesh(geometry, material);
+        this._mesh = new Mesh(geometry, material);
 
         this._stage.add(this._mesh);
     };

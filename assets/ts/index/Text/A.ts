@@ -1,18 +1,18 @@
-import * as THREE from 'three';
+import {Shape, Mesh, Material, ExtrudeGeometry} from 'three'
 
 export default class A {
 
-    private _outerGeometry: THREE.ExtrudeGeometry;
-    private _innerGeometry: THREE.ExtrudeGeometry;
-    private _outerMesh: THREE.Mesh;
-    private _innerMesh: THREE.Mesh;
+    private _outerGeometry: ExtrudeGeometry;
+    private _innerGeometry: ExtrudeGeometry;
+    private _outerMesh: Mesh;
+    private _innerMesh: Mesh;
 
-    private _outer: THREE.Shape;
-    private _inner: THREE.Shape;
+    private _outer: Shape;
+    private _inner: Shape;
 
-    constructor(_material: THREE.Material, _exo: {}) {
+    constructor(_material: Material, _exo: {}) {
 
-        this._outer = new THREE.Shape();
+        this._outer = new Shape();
 
         const vertex1 = [
             0.0, -4.0,
@@ -31,7 +31,7 @@ export default class A {
             this._outer.lineTo(vertex1[i], vertex1[i + 1]);
         }
 
-        this._inner = new THREE.Shape();
+        this._inner = new Shape();
 
         const vertex2 = [
             1.25, -3.0,
@@ -46,18 +46,18 @@ export default class A {
             this._inner.lineTo(vertex2[i], vertex2[i + 1]);
         }
 
-        this._innerGeometry = new THREE.ExtrudeGeometry(this._inner, _exo);
-        this._outerGeometry = new THREE.ExtrudeGeometry(this._outer, _exo);
+        this._innerGeometry = new ExtrudeGeometry(this._inner, _exo);
+        this._outerGeometry = new ExtrudeGeometry(this._outer, _exo);
 
-        this._innerMesh = new THREE.Mesh(this._innerGeometry, _material);
-        this._outerMesh = new THREE.Mesh(this._outerGeometry, _material);
+        this._innerMesh = new Mesh(this._innerGeometry, _material);
+        this._outerMesh = new Mesh(this._outerGeometry, _material);
     }
 
-    get inner(): THREE.Mesh {
+    get inner(): Mesh {
         return this._innerMesh;
     }
 
-    get outer(): THREE.Mesh {
+    get outer(): Mesh {
         return this._outerMesh;
     }
 }

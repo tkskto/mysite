@@ -1,15 +1,15 @@
-import * as THREE from 'three';
+import {Mesh, MeshLambertMaterial, Scene} from 'three'
 import {OBJLoader} from 'three/examples/jsm/loaders/OBJLoader'
 
 export default class TV {
     private _obj;
-    constructor(private _stage: THREE.Scene) {
+    constructor(private _stage: Scene) {
         const loader = new OBJLoader();
 
         loader.load('/assets/obj/tv.obj', (obj) => {
-            obj.traverse(function (child: THREE.Mesh): void {
+            obj.traverse(function (child: Mesh): void {
                 if (child.isMesh) {
-                    child.material = new THREE.MeshLambertMaterial({
+                    child.material = new MeshLambertMaterial({
                         color: 0xffffff,
                         emissive: 0x111111,
                         depthTest: true,

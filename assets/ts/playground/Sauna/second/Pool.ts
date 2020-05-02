@@ -1,16 +1,28 @@
-import * as THREE from 'three';
 import {Water, WaterOptions} from 'three/examples/jsm/objects/Water';
+import {
+    DoubleSide,
+    ExtrudeGeometry,
+    Group,
+    Light,
+    Mesh,
+    MeshStandardMaterial,
+    Path, PlaneGeometry,
+    RepeatWrapping,
+    Scene, ShaderMaterial,
+    Shape,
+    TextureLoader
+} from 'three'
 
 export default class Pool {
-    private _group: THREE.Group;
+    private _group: Group;
     private _waterOption: WaterOptions;
-    private _water: THREE.Mesh;
+    private _water: Mesh;
 
-    constructor(private _stage: THREE.Scene) {}
+    constructor(private _stage: Scene) {}
 
-    public generate = async (size, depth, light: THREE.Light): Promise<void> => {
-        const texture = new THREE.TextureLoader().load(await require('/assets/img/plyground/sauna/waternormals.jpg'));
-        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    public generate = async (size, depth, light: Light): Promise<void> => {
+        const texture = new TextureLoader().load(await require('/assets/img/plyground/sauna/waternormals.jpg'));
+        texture.wrapS = texture.wrapT = RepeatWrapping;
         this._waterOption = {
             textureWidth: 512,
             textureHeight: 512,
@@ -22,15 +34,15 @@ export default class Pool {
             waterNormals: texture
         };
 
-        this._group = new THREE.Group();
-        const frame = new THREE.Shape();
+        this._group = new Group();
+        const frame = new Shape();
         frame.moveTo(-(size + 1), -size);
         frame.lineTo( (size + 1), -size);
         frame.lineTo( (size + 1),  size);
         frame.lineTo(-(size + 1),  size);
 
         //..with a hole:
-        const hole = new THREE.Path();
+        const hole = new Path();
         hole.moveTo(-size, -(size - 1));
         hole.lineTo( size, -(size - 1));
         hole.lineTo( size,  (size - 1));
@@ -47,25 +59,25 @@ export default class Pool {
         };
 
         // 箱
-        const geom = new THREE.ExtrudeGeometry(frame, extrudeSettings);
-        const material = new THREE.MeshStandardMaterial({
+        const geom = new ExtrudeGeometry(frame, extrudeSettings);
+        const material = new MeshStandardMaterial({
             color: 0x999999,
             emissive: 0x0,
             metalness: 1,
             roughness: 0.5,
-            side: THREE.DoubleSide
+            side: DoubleSide
         });
-        const mesh = new THREE.Mesh(geom, material);
+        const mesh = new Mesh(geom, material);
 
         // 水面
-        const wgeometry = new THREE.PlaneGeometry(size * 2, size * 2);
+        const wgeometry = new PlaneGeometry(size * 2, size * 2);
         this._water = new Water(wgeometry, this._waterOption);
         this._water.position.z = 1;
         this._water.rotation.x = Math.PI;
 
         // 底面
-        const bgeometry = new THREE.PlaneGeometry(size * 2, size * 2);
-        const bottom = new THREE.Mesh(bgeometry, material);
+        const bgeometry = new PlaneGeometry(size * 2, size * 2);
+        const bottom = new Mesh(bgeometry, material);
         bottom.position.z = depth;
 
         this._group.rotation.x = Math.PI * 0.5;
@@ -77,7 +89,7 @@ export default class Pool {
     };
 
     public update = (time: number): void => {
-        const material: THREE.ShaderMaterial = this._water.material as THREE.ShaderMaterial;
+        const material: ShaderMaterial = this._water.material as ShaderMaterial;
 
         material.uniforms.time.value = time;
     }

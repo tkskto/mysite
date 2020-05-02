@@ -1,18 +1,18 @@
-import * as THREE from 'three';
+import {Shape, Mesh, Material, ExtrudeGeometry} from 'three'
 
 export default class Hatena {
-    private _upperGeometry: THREE.ExtrudeGeometry;
-    private _lowerGeometry: THREE.ExtrudeGeometry;
-    private _upperMesh: THREE.Mesh;
-    private _lowerMesh: THREE.Mesh;
+    private _upperGeometry: ExtrudeGeometry;
+    private _lowerGeometry: ExtrudeGeometry;
+    private _upperMesh: Mesh;
+    private _lowerMesh: Mesh;
 
-    private _upper: THREE.Shape;
-    private _lower: THREE.Shape;
+    private _upper: Shape;
+    private _lower: Shape;
 
-    constructor(_material: THREE.Material, _exo: {}) {
+    constructor(_material: Material, _exo: {}) {
 
-        this._upper = new THREE.Shape();
-        this._lower = new THREE.Shape();
+        this._upper = new Shape();
+        this._lower = new Shape();
 
         this._upper.moveTo(0, -1.0);
 
@@ -31,18 +31,18 @@ export default class Hatena {
         this._lower.lineTo(1, -3.75);
         this._lower.closePath();
 
-        this._upperGeometry = new THREE.ExtrudeGeometry(this._upper, _exo);
-        this._lowerGeometry = new THREE.ExtrudeGeometry(this._lower, _exo);
+        this._upperGeometry = new ExtrudeGeometry(this._upper, _exo);
+        this._lowerGeometry = new ExtrudeGeometry(this._lower, _exo);
 
-        this._upperMesh = new THREE.Mesh(this._upperGeometry, _material);
-        this._lowerMesh = new THREE.Mesh(this._lowerGeometry, _material);
+        this._upperMesh = new Mesh(this._upperGeometry, _material);
+        this._lowerMesh = new Mesh(this._lowerGeometry, _material);
     }
 
-    get upper(): THREE.Mesh {
+    get upper(): Mesh {
         return this._upperMesh;
     }
 
-    get lower(): THREE.Mesh {
+    get lower(): Mesh {
         return this._lowerMesh;
     }
 }

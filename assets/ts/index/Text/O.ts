@@ -1,13 +1,13 @@
-import * as THREE from 'three';
+import {Shape, Mesh, Vector3, CatmullRomCurve3, ExtrudeGeometry} from 'three'
 
 export default class O {
-    private _shape: THREE.Shape;
-    private _geometry: THREE.ExtrudeGeometry;
-    private _mesh: THREE.Mesh;
+    private _shape: Shape;
+    private _geometry: ExtrudeGeometry;
+    private _mesh: Mesh;
 
     constructor(rad, row, depth, _material, _exo) {
 
-        this._shape = new THREE.Shape();
+        this._shape = new Shape();
 
         const PI2 = Math.PI * 2;
 
@@ -16,17 +16,17 @@ export default class O {
         this._shape.lineTo(depth, rad - rad * 0.5);
         this._shape.lineTo(0, rad - rad * 0.5);
 
-        const points: THREE.Vector3[] = [];
+        const points: Vector3[] = [];
 
         // 外側の頂点
         for (let i = 0; i < row * 2; i++) {
             const r = PI2 / row * i;
             const rx = Math.cos(r) * rad;
             const ry = Math.sin(r) * rad;
-            points.push(new THREE.Vector3(0.0, rx, ry));
+            points.push(new Vector3(0.0, rx, ry));
         }
 
-        const path: THREE.CatmullRomCurve3 = new THREE.CatmullRomCurve3(points);
+        const path: CatmullRomCurve3 = new CatmullRomCurve3(points);
         path['type'] = 'catmullrom';
         path['closed'] = true;
 
@@ -34,12 +34,12 @@ export default class O {
         extrudeOptionWithPath['extrudePath'] = path;
         extrudeOptionWithPath['steps'] = 100;
 
-        this._geometry = new THREE.ExtrudeGeometry(this._shape, extrudeOptionWithPath);
+        this._geometry = new ExtrudeGeometry(this._shape, extrudeOptionWithPath);
 
-        this._mesh = new THREE.Mesh(this._geometry, _material);
+        this._mesh = new Mesh(this._geometry, _material);
     }
 
-    get mesh(): THREE.Mesh {
+    get mesh(): Mesh {
         return this._mesh;
     }
 }

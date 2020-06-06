@@ -2,6 +2,7 @@
     <section class="container" :class="{ready: isReady}">
         <logo></logo>
         <intro ref="intro"></intro>
+        <p class="black-lives-matter"><strong>Black Lives Matter.</strong></p>
         <navs></navs>
     </section>
 </template>
@@ -73,5 +74,15 @@
         width: 100%;
         min-height: 100%;
         overflow: hidden;
+
+        .black-lives-matter {
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin: auto;
+            font-size: 3.0rem;
+            bottom: 11%;
+            text-align: center;
+        }
     }
 </style>

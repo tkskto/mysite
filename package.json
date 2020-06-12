@@ -23,7 +23,7 @@
     "devDependencies": {
         "@babel/compat-data": "7.9.6",
         "@nuxt/typescript": "2.8.1",
-        "@nuxt/typescript-build": "0.6.5",
+        "@nuxt/typescript-build": "1.0.3",
         "@nuxtjs/sitemap": "2.2.1",
         "@types/node": "12.12.36",
         "@types/three": "0.93.31",

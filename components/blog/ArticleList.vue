@@ -1,5 +1,5 @@
 <template>
-    <nav class="str-article--list">
+    <nav class="str-name-list">
         <ul>
             <li v-for="item in list" :key="item.id">
                 <nuxt-link :to="`/blog/${item.title}/`">{{item.title}}</nuxt-link>
@@ -21,7 +21,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .str-article--list {
+    .str-article-list {
         padding: 0 20px;
 
         ul {

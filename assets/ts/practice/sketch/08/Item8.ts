@@ -12,13 +12,13 @@ import Plane from '../../utils/Plane';
 export default class Item8 extends Sketch {
 
     private _data: Plane = new Plane();
-    private _ctx: WebGLContext;
-    private _gl: WebGLRenderingContext;
-    private _shader: Default;
-    private _default: Program;
-    private _renderer: Renderer;
+    private _ctx!: WebGLContext;
+    private _gl!: WebGLRenderingContext;
+    private _shader!: Default;
+    private _default!: Program;
+    private _renderer!: Renderer;
     private _time = 0;
-    private _mesh: Mesh;
+    private _mesh!: Mesh;
 
     constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {
         super(_store, _id);

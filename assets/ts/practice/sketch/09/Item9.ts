@@ -11,14 +11,13 @@ import Vector from '../../../common/gl/Vector';
 
 export default class Item9 extends Sketch {
 
-    private _ctx: WebGLContext;
-    private _gl: WebGLRenderingContext;
-    private _shader: Default;
-    private _default: Program;
-    private _renderer: Renderer;
+    private _ctx!: WebGLContext;
+    private _gl!: WebGLRenderingContext;
+    private _shader!: Default;
+    private _default!: Program;
+    private _renderer!: Renderer;
     private _time = 0;
-
-    private _mesh: Mesh;
+    private _mesh!: Mesh;
 
     constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {
         super(_store, _id);
@@ -37,7 +36,6 @@ export default class Item9 extends Sketch {
         );
         this._renderer = new Renderer(this._store, this._ctx);
 
-        // const line: Geometry = new Geometry(this._gl, this._data).init();
         const data: Torus = new Torus(64, 64, 0.1, 0.3);
         const sphere: Geometry = new Geometry(this._gl, data).init();
         this._mesh = new Mesh(this._gl, this._default, sphere, GLConfig.DRAW_TYPE_TRIANGLE);

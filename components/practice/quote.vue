@@ -1,5 +1,5 @@
 <template>
-    <cite v-if="quote !== ''" class="text--quote"><a id="text-quote" :href="quote" target="_blank">{{quote}}</a></cite>
+    <cite v-if="quote !== ''" class="text-quote"><a id="text-quote" :href="quote" target="_blank">{{quote}}</a></cite>
 </template>
 
 <script>

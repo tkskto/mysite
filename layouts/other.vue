@@ -1,10 +1,10 @@
 <template>
-    <div class="str-root--other">
+    <div class="str-root-other">
         <nuxt/>
     </div>
 </template>
 <style lang="scss" scoped>
-    .str-root--other {
+    .str-root-other {
         position: relative;
         width: 100%;
         height: 100%;

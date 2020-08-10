@@ -10,7 +10,7 @@ export default class Sketch implements ISketch {
     private _isPlaying = false;
     private _quote: string;
     public _ready = false;
-    public _timer: number;
+    public _timer!: number;
     public _id: string;
 
     constructor(public _store: any, _id: string, _quote = '') {

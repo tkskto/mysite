@@ -1,10 +1,9 @@
 export default class FFT {
     private _audioContext: AudioContext;
     private _analyser: AnalyserNode;
-    private _buffer: AudioBuffer;
-    private _source: AudioBufferSourceNode;
-    private _gain: GainNode;
-    private _loop: boolean;
+    private _buffer!: AudioBuffer;
+    private _source!: AudioBufferSourceNode;
+    private _gain!: GainNode;
 
     constructor() {
         this._audioContext = new AudioContext();

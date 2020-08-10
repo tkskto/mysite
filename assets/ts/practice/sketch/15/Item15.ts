@@ -10,12 +10,12 @@ import Default from './Shader';
 
 export default class Item15 extends Sketch {
 
-    private _ctx: WebGLContext;
+    private _ctx!: WebGLContext;
     private _data: Data = new Data();
-    private _shader: Default;
-    private _gl: WebGLRenderingContext;
-    private _default: Program;
-    private _renderer: Renderer;
+    private _shader!: Default;
+    private _gl!: WebGLRenderingContext;
+    private _default!: Program;
+    private _renderer!: Renderer;
     private _time = 0;
 
     constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {

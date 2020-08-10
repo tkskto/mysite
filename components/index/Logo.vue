@@ -27,7 +27,7 @@
                 this.$refs.svg.addEventListener('transitionend', this.transitionEnd);
                 setTimeout(() => {
                     this.$el.classList.add('show');
-                }, 100);
+                }, 10);
             } else {
                 this.$el.classList.add('hide');
             }
@@ -68,7 +68,7 @@
             }
 
             .mv-svg {
-                stroke-dasharray: 32.5 32.5;
+                stroke-dasharray: 32.5, 32.5;
                 stroke-dashoffset: 32.5;
                 transition: stroke-dashoffset 3s ease, transform 0.5s cubic-bezier(.5,-0.3,.83,.67);
                 vertical-align: top;

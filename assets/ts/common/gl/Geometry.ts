@@ -3,7 +3,7 @@ import IData from '../datatype/IData';
 
 export default class Geometry {
     private _vbo: WebGLBuffer[] = [];
-    private _ibo: WebGLBuffer;
+    private _ibo!: WebGLBuffer;
 
     private _VERTEX: number[];
     private _INDEX: number[];

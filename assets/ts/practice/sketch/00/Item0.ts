@@ -9,13 +9,12 @@ import Program from '../../../common/gl/Program';
 import { GLConfig } from '../../../common/Config';
 
 export default class Item0 extends Sketch {
-
     private _data: Data = new Data();
-    private _ctx: WebGLContext;
-    private _gl: WebGLRenderingContext;
-    private _shader: Default;
-    private _default: Program;
-    private _renderer: Renderer;
+    private _ctx!: WebGLContext;
+    private _gl!: WebGLRenderingContext;
+    private _shader!: Default;
+    private _default!: Program;
+    private _renderer!: Renderer;
 
     constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {
         super(_store, _id);
@@ -56,11 +55,9 @@ export default class Item0 extends Sketch {
 
     public update = (): void => {
         this.animate();
-        // this._timer = requestAnimationFrame(this.update);
     };
 
     public animate = (): void => {
-        // this.clear();
         this._renderer.update();
     };
 }

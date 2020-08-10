@@ -2,7 +2,7 @@ import { GLUtils } from '../Utils';
 import Shader from './Shader';
 
 export default class Program {
-    private _program: WebGLProgram;
+    private _program!: WebGLProgram;
     private _attl: number[] = [];
     private _unil: WebGLUniformLocation[] = [];
 

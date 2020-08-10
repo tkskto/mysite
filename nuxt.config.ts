@@ -1,7 +1,7 @@
-import { Configuration } from '@nuxt/types';
+import { NuxtConfig } from '@nuxt/types';
 import { readFileSync } from 'fs';
 import * as path from 'path';
-import * as TerserPlugin from 'terser-webpack-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
 const articles = JSON.parse(readFileSync(path.join(__dirname, './static/assets/blog/articles.json'), 'utf-8'));
 const generateDynamicRoutes = (callback): void => {
     const routes = articles.map(item => {
@@ -10,7 +10,7 @@ const generateDynamicRoutes = (callback): void => {
     callback(null, routes);
 };
 
-const config: Configuration = {
+const config: NuxtConfig = {
     buildModules: ['@nuxt/typescript-build'],
     env: {
         baseUrl: process.env.BASE_URL || 'http://localhost:3000'

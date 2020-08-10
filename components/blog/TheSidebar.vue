@@ -1,6 +1,6 @@
 <template>
     <div class="str-side">
-        <section class="str-article--section">
+        <section class="str-article-section">
             <h2>カテゴリ</h2>
             <category-list/>
             <h2>記事</h2>
@@ -40,7 +40,7 @@
             width: 100%;
         }
 
-        .str-article--section h2 {
+        .str-article-section h2 {
             margin-bottom: 8px;
 
             &:not(:first-child) {

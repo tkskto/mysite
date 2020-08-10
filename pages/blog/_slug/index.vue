@@ -1,7 +1,7 @@
 <template>
     <div class="str-article">
         <blog-name tag="p" />
-        <div class="article--content">
+        <div class="article-content">
             <the-sidebar/>
             <the-article :level="1" v-if="title && text" :title="title" :text="text" :date="date"/>
         </div>
@@ -103,7 +103,7 @@
 
 <style lang="scss" scoped>
     .str-article {
-        .article--content {
+        .article-content {
             display: flex;
 
             @media screen and (max-width: 768px) {

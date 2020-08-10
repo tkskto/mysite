@@ -3,8 +3,8 @@ import { GLUtils } from '../Utils';
 export default class Shader {
     private readonly _vertexString: string;
     private readonly _fragmentString: string;
-    private _VS: WebGLShader;
-    private _FS: WebGLShader;
+    private _VS!: WebGLShader;
+    private _FS!: WebGLShader;
     private _compiled = false;
 
     /**

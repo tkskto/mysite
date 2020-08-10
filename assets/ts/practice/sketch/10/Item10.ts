@@ -11,11 +11,11 @@ import Data from './Data';
 export default class Item10 extends Sketch {
 
     private _data: Data = new Data();
-    private _ctx: WebGLContext;
-    private _gl: WebGLRenderingContext;
-    private _shader: Default;
-    private _default: Program;
-    private _renderer: Renderer;
+    private _ctx!: WebGLContext;
+    private _gl!: WebGLRenderingContext;
+    private _shader!: Default;
+    private _default!: Program;
+    private _renderer!: Renderer;
 
     constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {
         super(_store, _id);

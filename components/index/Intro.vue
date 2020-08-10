@@ -341,12 +341,11 @@
                         _scaleWho: 0.0001,
                         delay: 0.3,
                         ease: Back.easeIn.config(2),
-                        onComplete: () => {
-                            setTimeout(() => {
-                                resolve();
-                            }, 500);
-                        }
                     });
+
+                    setTimeout(() => {
+                        resolve();
+                    }, 700);
                 });
             },
         },

@@ -15,7 +15,6 @@
     import {AppConfig} from '~/assets/ts/common/Config.ts';
 
     export default {
-        layout: 'background',
         components: {
             Logo,
             Intro,
@@ -61,6 +60,7 @@
             next();
         },
         beforeRouteLeave(to, from, next) {
+            console.log(to, from);
             this.$refs.intro.beforeLeave().then(() => {
                 next();
             });

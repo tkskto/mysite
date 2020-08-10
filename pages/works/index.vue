@@ -32,7 +32,6 @@
 
 <script>
     export default {
-        layout: 'background',
         name: 'works',
         head() {
             return {

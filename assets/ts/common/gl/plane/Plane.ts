@@ -11,9 +11,9 @@ import Shader from '../Shader';
 export default class Plane extends Sketch {
 
     private _data: Data = new Data();
-    private _gl: WebGLRenderingContext;
-    private _default: Program;
-    private _renderer: Renderer;
+    private _gl!: WebGLRenderingContext;
+    private _default!: Program;
+    private _renderer!: Renderer;
     private _time = 0;
 
     constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string, private _shader: Shader, private _ctx: WebGLContext, quote = '') {

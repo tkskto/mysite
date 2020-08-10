@@ -1,5 +1,5 @@
 <template>
-    <component class="blog--name" :is="tag"><span>So What!?</span></component>
+    <component class="blog-name" :is="tag"><span>So What!?</span></component>
 </template>
 <script>
     export default {
@@ -12,7 +12,7 @@
     }
 </script>
 <style lang="scss">
-    .blog--name {
+    .blog-name {
         font-size: 3.2rem;
         text-align: center;
         font-weight: bold;

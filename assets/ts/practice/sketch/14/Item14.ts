@@ -13,13 +13,13 @@ import WebGLContext from '../../../common/gl/Context';
 export default class Item14 extends Sketch {
 
     private _data: Data = new Data();
-    private _gl: WebGLRenderingContext;
-    private _default: Program;
-    private _renderer: Renderer;
+    private _gl!: WebGLRenderingContext;
+    private _default!: Program;
+    private _renderer!: Renderer;
     private _time = 0;
-    private _audioContext: FFT;
-    private _audioAnalyser: AnalyserNode;
-    private _frequency: Uint8Array;
+    private _audioContext!: FFT;
+    private _audioAnalyser!: AnalyserNode;
+    private _frequency!: Uint8Array;
 
     constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {
         super(_store, _id);

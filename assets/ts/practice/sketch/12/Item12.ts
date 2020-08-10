@@ -12,13 +12,13 @@ import Sphere from '../../utils/Sphere';
 
 export default class Item12 extends Sketch {
 
-    private _ctx: WebGLContext;
-    private _gl: WebGLRenderingContext;
-    private _default: Program;
-    private _renderer: Renderer;
+    private _ctx!: WebGLContext;
+    private _gl!: WebGLRenderingContext;
+    private _default!: Program;
+    private _renderer!: Renderer;
     private _time = 0;
-    private _mCube: Mesh;
-    private _mSphere: Mesh;
+    private _mCube!: Mesh;
+    private _mSphere!: Mesh;
     private _dirLight: Vector = new Vector(0.0, 0.0, 0.0);
     private _ambientLight = [0.1, 0.1, 0.1, 1.0];
 

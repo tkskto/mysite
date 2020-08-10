@@ -1,6 +1,6 @@
 <template>
-    <article class="str-article--item">
-        <section class="str-article--section">
+    <article class="str-article-item">
+        <section class="str-article-section">
             <component class="title" :is="tag">{{title}}</component>
             <p class="date">{{dateText}}</p>
             <div v-html="text"></div>
@@ -41,7 +41,7 @@
 </script>
 
 <style lang="scss">
-    .str-article--item {
+    .str-article-item {
         padding: 20px;
         order: 1;
         width: 70%;
@@ -61,7 +61,7 @@
             }
         }
 
-        .str-article--section {
+        .str-article-section {
             display: block;
 
             .date {

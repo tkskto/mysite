@@ -1,13 +1,18 @@
 {
     "compilerOptions": {
-        "sourceMap": true,
-        "target": "es2018",
-        "module": "esnext",
+        "target": "ES2018",
+        "module": "ESNext",
         "lib": [
-            "esnext",
-            "dom"
+            "ESNext",
+            "ESNext.AsyncIterable",
+            "DOM"
         ],
         "moduleResolution": "node",
+        "sourceMap": false,
+        "esModuleInterop": true,
+        "allowJs": true,
+        "strict": true,
+        "noEmit": true,
         "experimentalDecorators": true,
         "noImplicitAny": false,
         "noImplicitThis": false,
@@ -15,7 +20,6 @@
         "removeComments": true,
         "suppressImplicitAnyIndexErrors": true,
         "allowSyntheticDefaultImports": true,
-        "allowJs": true,
         "baseUrl": ".",
         "paths": {
             "~/*": [
@@ -25,9 +29,9 @@
                 "./*"
             ]
         },
-        "typeRoots": [
-            "./node_modules/@types",
-            "./node_modules/@nuxt/vue-app/types"
+        "types": [
+            "@types/node",
+            "@nuxt/types"
         ]
     },
     "exclude": [

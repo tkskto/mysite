@@ -1,12 +1,12 @@
 <template>
-    <div class="container-text--shader">
-        <div class="text--VS">
+    <div class="container-text-shader">
+        <div class="text-VS">
             <h2>Vertex Shader</h2>
-            <p class="shader--text shader--vs" v-html="VS"></p>
+            <p class="shader-text shader-vs" v-html="VS"></p>
         </div>
-        <div class="text--FS">
+        <div class="text-FS">
             <h2>Fragment Shader</h2>
-            <p class="shader--text shader--fs" v-html="FS"></p>
+            <p class="shader-text shader-fs" v-html="FS"></p>
         </div>
         <div class="bg"></div>
     </div>
@@ -38,7 +38,7 @@
 </script>
 
 <style scoped>
-    .container-text--shader {
+    .container-text-shader {
         position: absolute;
         display: none;
         left: 0;
@@ -51,12 +51,12 @@
         justify-content: space-between;
     }
 
-    .container-text--shader h2 {
+    .container-text-shader h2 {
         margin-bottom: 20px;
     }
 
-    .container-text--shader .text--VS,
-    .container-text--shader .text--FS {
+    .container-text-shader .text-VS,
+    .container-text-shader .text-FS {
         margin: 0;
         width: 48%;
         height: 100%;
@@ -68,11 +68,11 @@
         transition: opacity 0.3s linear, transform 0.3s ease-out;
     }
 
-    .container-text--shader .text--FS {
+    .container-text-shader .text-FS {
         padding-left: 2%;
     }
 
-    .container-text--shader .bg {
+    .container-text-shader .bg {
         position: absolute;
         left: 0;
         right: 0;
@@ -84,7 +84,7 @@
         z-index: -1;
     }
 
-    .container-text--shader::after {
+    .container-text-shader::after {
         content: "";
         position: absolute;
         width: 1px;
@@ -97,20 +97,20 @@
         transition: opacity 0.3s linear;
     }
 
-    .pre-show .container-text--shader {
+    .pre-show .container-text-shader {
         display: flex;
     }
 
-    .show-shader .container-text--shader .bg {
+    .show-shader .container-text-shader .bg {
         opacity: 1;
     }
 
-    .show-shader .container-text--shader::after {
+    .show-shader .container-text-shader::after {
         opacity: 1;
     }
 
-    .show-shader .container-text--shader .text--VS,
-    .show-shader .container-text--shader .text--FS {
+    .show-shader .container-text-shader .text-VS,
+    .show-shader .container-text-shader .text-FS {
         opacity: 1;
         transform: translateY(0);
     }

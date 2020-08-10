@@ -10,13 +10,13 @@ import { GLConfig } from '../Config';
 
 export default class Mesh {
 
-    private _id: number;
+    private _id!: number;
     private _mMatrix: Float32Array;
     private _position: { x: number; y: number; z: number } = {x: 0, y: 0, z: 0};
-    private _drawType: number;
-    private _drawMethod: Function;
+    private _drawType!: number;
+    private _drawMethod!: Function;
     private _textureArr: WebGLTexture[] = [];
-    private _texture: WebGLTexture;
+    private _texture!: WebGLTexture;
     private _castShadow = false;
 
     constructor(private _gl: WebGLRenderingContext, private _prg: Program, private _geometry: Geometry, _drawType: string = GLConfig.DRAW_TYPE_TRIANGLE) {

@@ -12,12 +12,12 @@ import {GLUtils} from '../../../common/Utils';
 export default class Item11 extends Sketch {
 
     private _data: Plane = new Plane();
-    private _ctx: WebGLContext;
-    private _gl: WebGLRenderingContext;
-    private _shader: Default;
-    private _default: Program;
-    private _renderer: Renderer;
-    private _mesh: Mesh;
+    private _ctx!: WebGLContext;
+    private _gl!: WebGLRenderingContext;
+    private _shader!: Default;
+    private _default!: Program;
+    private _renderer!: Renderer;
+    private _mesh!: Mesh;
 
     constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {
         super(_store, _id);

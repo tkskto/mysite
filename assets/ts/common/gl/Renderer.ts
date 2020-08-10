@@ -6,17 +6,17 @@ import AppConfig from '../../practice/Config';
 
 export default class Renderer {
 
-    private _gl: WebGLRenderingContext;
+    private _gl!: WebGLRenderingContext;
     private _target: Mesh[] = [];
 
     private _cWidth: number;
     private _cHeight: number;
 
-    private vMatrix: Float32Array;
-    private pMatrix: Float32Array;
-    private qMatrix: Float32Array;
-    private vpMatrix: Float32Array;
-    private mvpMatrix: Float32Array;
+    private vMatrix!: Float32Array;
+    private pMatrix!: Float32Array;
+    private qMatrix!: Float32Array;
+    private vpMatrix!: Float32Array;
+    private mvpMatrix!: Float32Array;
 
     private unWatchResizeEvent;
     private unWatchStateChangeEvent;

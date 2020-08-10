@@ -1,10 +1,10 @@
 <template>
     <div class="str-category">
         <blog-name tag="h1" />
-        <div class="category--content">
+        <div class="category-content">
             <the-sidebar/>
-            <div class="str-category--item">
-                <section class="str-category--section">
+            <div class="str-category-item">
+                <section class="str-category-section">
                     <h2 class="title">{{category}}の記事一覧</h2>
                     <article-list :list="categoryData"/>
                 </section>
@@ -103,7 +103,7 @@
 
 <style lang="scss" scoped>
     .str-category {
-        .category--content {
+        .category-content {
             display: flex;
 
             @media screen and (max-width: 768px) {
@@ -112,7 +112,7 @@
         }
     }
 
-    .str-category--item {
+    .str-category-item {
         padding: 20px;
         order: 1;
         width: 70%;
@@ -128,7 +128,7 @@
             }
         }
 
-        .str-category--section {
+        .str-category-section {
             display: block;
         }
 

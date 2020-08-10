@@ -1,29 +1,29 @@
 <template>
     <div class="practice-root">
         <ul class="list-sketch">
-            <li class="sketch--item" id="01"><a href="#01">#1</a></li>
-            <li class="sketch--item" id="02"><a href="#02">#2</a></li>
-            <li class="sketch--item" id="03"><a href="#03">#3</a></li>
-            <li class="sketch--item" id="04"><a href="#04">#4</a></li>
-            <li class="sketch--item" id="05"><a href="#05">#5</a></li>
-            <li class="sketch--item" id="06"><a href="#06">#6</a></li>
-            <li class="sketch--item" id="07"><a href="#07">#7</a></li>
-            <li class="sketch--item" id="08"><a href="#08">#8</a></li>
-            <li class="sketch--item" id="09"><a href="#09">#9</a></li>
-            <li class="sketch--item" id="10"><a href="#10">#10</a></li>
-            <li class="sketch--item" id="11"><a href="#11">#11</a></li>
-            <li class="sketch--item" id="12"><a href="#12">#12</a></li>
-            <li class="sketch--item" id="13"><a href="#13">#13(with sound)</a></li>
-            <li class="sketch--item" id="14"><a href="#14">#14(with sound)</a></li>
-            <li class="sketch--item" id="15"><a href="#15">#15</a></li>
-            <li class="sketch--item" id="16"><a href="#16">#16</a></li>
-            <li class="sketch--item" id="17"><a href="#17">#17</a></li>
-            <li class="sketch--item" id="18"><a href="#18">#18</a></li>
-            <li class="sketch--item" id="19"><a href="#19">#19</a></li>
+            <li class="sketch-item" id="01"><a href="#01">#1</a></li>
+            <li class="sketch-item" id="02"><a href="#02">#2</a></li>
+            <li class="sketch-item" id="03"><a href="#03">#3</a></li>
+            <li class="sketch-item" id="04"><a href="#04">#4</a></li>
+            <li class="sketch-item" id="05"><a href="#05">#5</a></li>
+            <li class="sketch-item" id="06"><a href="#06">#6</a></li>
+            <li class="sketch-item" id="07"><a href="#07">#7</a></li>
+            <li class="sketch-item" id="08"><a href="#08">#8</a></li>
+            <li class="sketch-item" id="09"><a href="#09">#9</a></li>
+            <li class="sketch-item" id="10"><a href="#10">#10</a></li>
+            <li class="sketch-item" id="11"><a href="#11">#11</a></li>
+            <li class="sketch-item" id="12"><a href="#12">#12</a></li>
+            <li class="sketch-item" id="13"><a href="#13">#13(with sound)</a></li>
+            <li class="sketch-item" id="14"><a href="#14">#14(with sound)</a></li>
+            <li class="sketch-item" id="15"><a href="#15">#15</a></li>
+            <li class="sketch-item" id="16"><a href="#16">#16</a></li>
+            <li class="sketch-item" id="17"><a href="#17">#17</a></li>
+            <li class="sketch-item" id="18"><a href="#18">#18</a></li>
+            <li class="sketch-item" id="19"><a href="#19">#19</a></li>
         </ul>
 
         <div class="container-canvas">
-            <canvas id="canvas--GL" :width="canvasDisplayWidth" :height="canvasDisplayHeight" :style="{width: canvasPracticalWidth, height: canvasPracticalHeight}"></canvas>
+            <canvas id="canvas-GL" :width="canvasDisplayWidth" :height="canvasDisplayHeight" :style="{width: canvasPracticalWidth, height: canvasPracticalHeight}"></canvas>
             <Quote></Quote>
         </div>
 
@@ -144,11 +144,11 @@
             }
         },
         mounted() {
-            const sketch = document.querySelectorAll('.sketch--item');
+            const sketch = document.querySelectorAll('.sketch-item');
             const width = this.screenSize.width;
             const height = this.screenSize.height;
             const aspect = width > height ? height / width : height > width ? width / height : 1;
-            const _canvasGL = document.getElementById('canvas--GL');
+            const _canvasGL = document.getElementById('canvas-GL');
 
             this.setCameraPosition(new Vector(0.0, 0.0, aspect));
 
@@ -248,11 +248,11 @@
         padding: 0
     }
 
-    body.canvas2D #canvas--GL {
+    body.canvas2D #canvas-GL {
         display: none;
     }
 
-    body.webGL #canvas--2d {
+    body.webGL #canvas-2d {
         display: none;
     }
 
@@ -275,7 +275,7 @@
         z-index: 0;
     }
 
-    .container-canvas .text--quote {
+    .container-canvas .text-quote {
         position: absolute;
         bottom: 20px;
         left: 0;
@@ -291,11 +291,11 @@
         display: inline-block;
     }
 
-    .list-sketch .sketch--item {
+    .list-sketch .sketch-item {
         margin-bottom: 4px;
     }
 
-    .list-sketch .sketch--item a {
+    .list-sketch .sketch-item a {
         font-size: 1.2rem;
         text-shadow: 1px 1px 2px rgb(220, 89, 90), 0 0 1em rgb(110, 120, 200), 0 0 1em rgb(110, 120, 200);
         color: #fff;

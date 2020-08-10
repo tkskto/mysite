@@ -1,5 +1,5 @@
 <template>
-    <button class="lyt-btn--viewChange" @click="onClick">{{text}}</button>
+    <button class="lyt-btn-viewChange" @click="onClick">{{text}}</button>
 </template>
 
 <script>
@@ -34,11 +34,11 @@
 </script>
 
 <style scoped>
-    .id-19 .lyt-btn--viewChange {
+    .id-19 .lyt-btn-viewChange {
         display: none;
     }
 
-    .lyt-btn--viewChange {
+    .lyt-btn-viewChange {
         width: 44px;
         height: 44px;
         position: absolute;

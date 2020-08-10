@@ -1,5 +1,5 @@
 <template>
-    <div class="str-root--error">
+    <div class="str-root-error">
         <p>sorry, I can't find the page.</p>
         <nuxt-link to="/">gotoAndStop(home);</nuxt-link>
     </div>
@@ -22,7 +22,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .str-root--error {
+    .str-root-error {
         width: 100%;
         height: 100%;
         font-size: 1.4rem;

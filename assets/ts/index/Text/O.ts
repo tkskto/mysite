@@ -1,11 +1,12 @@
-import {Shape, Mesh, Vector3, CatmullRomCurve3, ExtrudeGeometry} from 'three'
+import {Shape, Mesh, Vector3, CatmullRomCurve3, ExtrudeGeometry, Material} from 'three'
+import {ExtrudeGeometryOptions} from 'three/src/geometries/ExtrudeGeometry';
 
 export default class O {
     private _shape: Shape;
     private _geometry: ExtrudeGeometry;
     private _mesh: Mesh;
 
-    constructor(rad, row, depth, _material, _exo) {
+    constructor(rad: number, row: number, depth: number, _material: Material, _exo: ExtrudeGeometryOptions) {
 
         this._shape = new Shape();
 

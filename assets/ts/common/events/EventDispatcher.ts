@@ -19,7 +19,7 @@ class EventListener {
      * @param handler
      * @param priority
      */
-    constructor(public type: string, public handler: Function, public priority: number = 0) {
+    constructor(public type: string, public handler: (e: Event) => void, public priority: number = 0) {
     }
 
     /**
@@ -28,7 +28,7 @@ class EventListener {
      * @param handler
      * @returns {boolean}
      */
-    equalCurrentListener(type: string, handler: Function): boolean {
+    equalCurrentListener(type: string, handler: (e: Event) => void): boolean {
         return this.type === type && this.handler === handler;
 
     }
@@ -86,7 +86,7 @@ export class EventDispatcher {
      * @param callback
      * @param priority
      */
-    addEventListener(type: string, callback: Function, priority = 0): void {
+    addEventListener(type: string, callback: (e: Event) => void, priority = 0): void {
         if (this.listeners[type] == null) {
             this.listeners[type] = [];
         }
@@ -102,7 +102,7 @@ export class EventDispatcher {
      * @param type
      * @param callback
      */
-    removeEventListener(type: string, callback: Function): void {
+    removeEventListener(type: string, callback: (e: Event) => void): void {
         if (this.hasEventListener(type, callback)) {
             for (let i = 0; i < this.listeners[type].length; i++) {
                 const listener: EventListener = this.listeners[type][i];
@@ -137,7 +137,7 @@ export class EventDispatcher {
      * @param callback
      * @returns {boolean}
      */
-    hasEventListener(type: string, callback: Function): boolean {
+    hasEventListener(type: string, callback: (e: Event) => void): boolean {
         if (this.listeners[type] == null) return false;
         for (let i = 0; i < this.listeners[type].length; i++) {
             const listener: EventListener = this.listeners[type][i];

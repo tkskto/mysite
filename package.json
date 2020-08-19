@@ -12,7 +12,7 @@
         "lint": "eslint -c .eslintrc.json . --ext .js,.ts"
     },
     "dependencies": {
-        "@nuxt/typescript-runtime": "^1.0.0",
+        "@nuxt/typescript-runtime": "1.0.0",
         "@nuxtjs/google-analytics": "2.4.0",
         "gsap": "3.4.2",
         "nuxt": "2.14.1",
@@ -22,7 +22,7 @@
     },
     "devDependencies": {
         "@babel/compat-data": "7.9.6",
-        "@nuxt/types": "^2.14.1",
+        "@nuxt/types": "2.14.1",
         "@nuxt/typescript": "2.8.1",
         "@nuxt/typescript-build": "0.6.5",
         "@nuxtjs/sitemap": "2.4.0",
@@ -36,7 +36,7 @@
         "sass-loader": "8.0.2",
         "stats-js": "1.0.1",
         "terser-webpack-plugin": "4.1.0",
-        "ts-loader": "7.0.2",
+        "ts-loader": "8.0.2",
         "ts-node": "8.10.2",
         "typescript": "3.8.3",
         "vue-class-component": "7.2.5",

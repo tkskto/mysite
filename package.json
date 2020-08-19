@@ -34,7 +34,7 @@
         "fork-ts-checker-webpack-plugin": "^5.1.0",
         "marked": "1.1.1",
         "sass": "1.26.10",
-        "sass-loader": "8.0.2",
+        "sass-loader": "9.0.3",
         "stats-js": "1.0.1",
         "terser-webpack-plugin": "4.1.0",
         "ts-loader": "8.0.2",

@@ -1,4 +1,5 @@
 import {Shape, Mesh, Material, ExtrudeGeometry} from 'three'
+import {ExtrudeGeometryOptions} from 'three/src/geometries/ExtrudeGeometry';
 
 export default class Hatena {
     private _upperGeometry: ExtrudeGeometry;
@@ -9,7 +10,7 @@ export default class Hatena {
     private _upper: Shape;
     private _lower: Shape;
 
-    constructor(_material: Material, _exo: {}) {
+    constructor(_material: Material, _exo: ExtrudeGeometryOptions) {
 
         this._upper = new Shape();
         this._lower = new Shape();

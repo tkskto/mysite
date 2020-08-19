@@ -1,4 +1,5 @@
 import {Shape, Mesh, Material, ExtrudeGeometry} from 'three'
+import {ExtrudeGeometryOptions} from 'three/src/geometries/ExtrudeGeometry';
 
 export default class W {
 
@@ -6,7 +7,7 @@ export default class W {
     private _geometry: ExtrudeGeometry;
     private _mesh: Mesh;
 
-    constructor(_material: Material, _exo: {}) {
+    constructor(_material: Material, _exo: ExtrudeGeometryOptions) {
 
         this._shape = new Shape();
 

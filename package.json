@@ -15,14 +15,14 @@
         "@nuxt/typescript-runtime": "1.0.0",
         "@nuxtjs/google-analytics": "2.4.0",
         "gsap": "3.4.2",
-        "nuxt": "2.14.1",
+        "nuxt": "2.14.3",
         "simplex-noise": "2.4.0",
         "three": "0.119.1",
         "vuex": "3.5.1"
     },
     "devDependencies": {
         "@babel/compat-data": "7.11.0",
-        "@nuxt/types": "2.14.1",
+        "@nuxt/types": "2.14.3",
         "@nuxt/typescript": "2.8.1",
         "@nuxt/typescript-build": "2.0.2",
         "@nuxtjs/sitemap": "2.4.0",

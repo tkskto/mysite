@@ -14,7 +14,7 @@
     "dependencies": {
         "@nuxt/typescript-runtime": "1.0.0",
         "@nuxtjs/google-analytics": "2.4.0",
-        "gsap": "3.5.0",
+        "gsap": "3.5.1",
         "nuxt": "2.14.3",
         "simplex-noise": "2.4.0",
         "three": "0.119.1",

@@ -83,6 +83,7 @@
             font-size: 3.0rem;
             bottom: 11%;
             text-align: center;
+            color: #fff;
         }
     }
 </style>

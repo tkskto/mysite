@@ -1,14 +1,5 @@
 import { NuxtConfig } from '@nuxt/types';
-import { readFileSync } from 'fs';
-import * as path from 'path';
 import TerserPlugin from 'terser-webpack-plugin';
-const articles = JSON.parse(readFileSync(path.join(__dirname, './static/assets/blog/articles.json'), 'utf-8'));
-const generateDynamicRoutes = (callback): void => {
-    const routes = articles.map(item => {
-        return `/blog/${item.title}/`;
-    });
-    callback(null, routes);
-};
 
 const config: NuxtConfig = {
     buildModules: ['@nuxt/typescript-build'],
@@ -57,7 +48,6 @@ const config: NuxtConfig = {
     },
     generate: {
         dir: 'public/',
-        routes: generateDynamicRoutes,
     },
     'google-analytics': {
         id: 'UA-71464541-3'
@@ -65,7 +55,6 @@ const config: NuxtConfig = {
     sitemap: {
         path: '/sitemap.xml',
         hostname: 'https://tkskto.me',
-        routes: generateDynamicRoutes,
     },
 };
 

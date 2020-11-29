@@ -3,7 +3,7 @@
         <ul>
             <li><nuxt-link to="/whois/">whois</nuxt-link></li>
             <li><nuxt-link to="/works/">works</nuxt-link></li>
-            <li><nuxt-link to="/blog/">blog</nuxt-link></li>
+            <li><a href="/blog/">blog</a></li>
         </ul>
     </nav>
 </template>

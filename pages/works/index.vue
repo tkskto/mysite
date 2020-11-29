@@ -19,10 +19,10 @@
             <h2>Playground</h2>
             <p>They are just idea. meaningless.</p>
             <ul>
-                <li><a class="img" href="https://tkskto.github.io/videoBumpMapping/"><img src="~/assets/img/works/img_01.png" alt=""></a>
+                <li><a class="img" href="https://tkskto.github.io/videoBumpMapping/"><img src="~/assets/img/works/img_01.jpg" alt=""></a>
                     Bump Mapping with video texture. [<a href="https://qiita.com/tkskto/items/8ec45cf4bfa9dae90944">Article</a>]
                 </li>
-                <li><a class="img" href="https://tkskto.github.io/WebGLMoire/"><img src="~/assets/img/works/img_02.png" alt=""></a>
+                <li><a class="img" href="https://tkskto.github.io/WebGLMoire/"><img src="~/assets/img/works/img_02.jpg" alt=""></a>
                     WebGL Moire [<a href="https://qiita.com/tkskto/items/729819f945fde7cdb89e">Article</a>]
                 </li>
             </ul>

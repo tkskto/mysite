@@ -1,5 +1,5 @@
 import {Shape, Mesh, Material, ExtrudeGeometry} from 'three'
-import {ExtrudeGeometryOptions} from 'three/src/geometries/ExtrudeGeometry';
+import {ExtrudeGeometryOptions} from 'three/src/geometries/ExtrudeBufferGeometry';
 
 export default class A {
 

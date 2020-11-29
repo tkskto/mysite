@@ -50,9 +50,9 @@ export default class Item11 extends Sketch {
         this._store.commit('Practice/SET_FS_TEXT', this._shader.fragmentString);
         this._store.commit('Common/SET_MOUSE_STATE', true);
 
-        GLUtils.createTexture(await require('../../../../img/practice/11_1.png'), this._gl, this._gl.UNSIGNED_BYTE).then(async tex => {
+        GLUtils.createTexture(await require('../../../../img/practice/11_1.jpg'), this._gl, this._gl.UNSIGNED_BYTE).then(async tex => {
             this._mesh.addTexture(tex);
-            return GLUtils.createTexture(await require('../../../../img/practice/11_2.png'), this._gl, this._gl.UNSIGNED_BYTE);
+            return GLUtils.createTexture(await require('../../../../img/practice/11_2.jpg'), this._gl, this._gl.UNSIGNED_BYTE);
         }).then(tex => {
             this._mesh.addTexture(tex);
             this.play();

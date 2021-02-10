@@ -33,7 +33,7 @@
         "eslint": "7.14.0",
         "fork-ts-checker-webpack-plugin": "6.0.4",
         "sass": "1.29.0",
-        "sass-loader": "10.1.0",
+        "sass-loader": "11.0.1",
         "stats-js": "1.0.1",
         "terser-webpack-plugin": "5.0.3",
         "ts-loader": "8.0.11",

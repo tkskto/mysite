@@ -35,9 +35,8 @@ const config: NuxtConfig = {
             css: ({ isDev }): string => isDev ? 'css/[name].css' : 'css/[name].[contenthash].css',
         },
         publicPath: '/common/',
-        ssr: false
     },
-    mode: 'spa',
+    ssr: false,
     modules: [
         '@nuxtjs/google-analytics',
         '@nuxtjs/sitemap'

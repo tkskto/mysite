@@ -1,5 +1,4 @@
-import {Shape, Mesh, Vector3, CatmullRomCurve3, ExtrudeGeometry, Material} from 'three'
-import {ExtrudeGeometryOptions} from 'three/src/geometries/ExtrudeBufferGeometry';
+import {Shape, Mesh, Vector3, CatmullRomCurve3, ExtrudeGeometry, ExtrudeGeometryOptions, Material} from 'three'
 
 export default class O {
     private _shape: Shape;

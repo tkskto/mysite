@@ -60,8 +60,4 @@
         transition: transform 0.5s cubic-bezier(.17,.67,.4,.99), opacity 0.7s;
         transform: translateX(-25%);
     }
-
-    .is-show {
-        transition: none;
-    }
 </style>

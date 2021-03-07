@@ -24,7 +24,7 @@
         "@babel/compat-data": "7.12.13",
         "@nuxt/types": "2.14.12",
         "@nuxt/typescript": "2.8.1",
-        "@nuxt/typescript-build": "2.0.4",
+        "@nuxt/typescript-build": "2.1.0",
         "@nuxtjs/sitemap": "2.4.0",
         "@types/node": "12.20.0",
         "@types/three": "0.125.1",

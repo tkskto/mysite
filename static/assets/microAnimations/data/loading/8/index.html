@@ -60,12 +60,12 @@ body {
         </svg>
     </div>
 
-<script class="lib" src="/assets/microAnimations/libs/js/jquery-3.1.1.min.js"></script>
+<script class="lib" src="/assets/microAnimations/libs/js/jquery.js" defer></script>
 
 <script>(function() {
     'use strict';
 
-    $(function() {
+    document.addEventListener('DOMContentLoaded', function () {
         var $parent = $('.loader');
         var $circle = $('#js-circle');
         var TRANSITION_END_EVENT = 'mozTransitionEnd webkitTransitionEnd transitionend';
@@ -114,7 +114,5 @@ body {
                 $circle.removeClass('min max');
             }
         });
-
-
     });
 })();</script></body></html>

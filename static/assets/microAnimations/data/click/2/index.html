@@ -33,32 +33,30 @@ button {
 <button id="btn" class="btn" type="button">
     Click!
 </button>
-<script class="lib" src="/assets/microAnimations/libs/js/jquery-3.1.1.min.js"></script>
-<script class="lib" src="/assets/microAnimations/libs/js/velocity.min.js"></script>
+<script class="lib" src="/assets/microAnimations/libs/js/jquery.js" defer></script>
+<script class="lib" src="/assets/microAnimations/libs/js/velocity.js" defer></script>
 
 <script>(function() {
     'use strict';
+    document.addEventListener('DOMContentLoaded', function () {
+        var $btn = $('#btn'),
+            isPressed = false;
 
-    var $btn = $('#btn'),
-        isPressed = false;
+        $btn.on('mousedown', function () {
+            isPressed = true;
 
-    $btn.on({'mousedown': function(e) {
-
-        isPressed = true;
-
-        $btn.stop().velocity({
-            'scaleX' : '0.7',
-            'scaleY' : '0.7'
-        }, 200, 'easeout');
-    }});
-
-    $(document).on('mouseup', function(e) {
-        if(isPressed) {
             $btn.stop().velocity({
-                'scaleX' : '1.0',
-                'scaleY' : '1.0'
-            }, 500, 'spring');
-        }
+                scale: '0.7'
+            }, 200, 'easeout');
+        });
+
+        $(document).on('mouseup', function (e) {
+            if (isPressed) {
+                $btn.stop().velocity({
+                    scale: 1
+                }, 500, 'spring');
+            }
+        });
     });
 
 })();</script></body></html>

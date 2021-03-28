@@ -1,6 +1,6 @@
 <template>
     <div class="animation-item" :data-category="category" :data-id="id">
-        <iframe :src="`/assets/microAnimations/data/${category}/${id}/index.html`"></iframe>
+        <iframe :src="`/assets/microAnimations/data/${category}/${id}/index.html`" loading="lazy"></iframe>
     </div>
 </template>
 

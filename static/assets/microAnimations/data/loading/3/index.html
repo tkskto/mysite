@@ -77,26 +77,28 @@ body {
 }</style></head>
 <body>
     <div class="loader"></div>
-<script class="lib" src="/assets/microAnimations/libs/js/jquery-3.1.1.min.js"></script>
+<script class="lib" src="/assets/microAnimations/libs/js/jquery.js" defer></script>
 <script>(function(){
     'use strict';
+    document.addEventListener('DOMContentLoaded', function () {
 
-    var $loader = $('.loader');
+        var $loader = $('.loader');
 
-    $loader.on('webkitAnimationEnd MSAnimationEnd animationend', function(e) {
-        if($loader.hasClass('anime1')) {
-            $loader.removeClass('anime1').addClass('anime2');
-        } else {
-            $loader.removeClass('anime2').addClass('anime1');
-        }
-    });
+        $loader.on('webkitAnimationEnd MSAnimationEnd animationend', function (e) {
+            if ($loader.hasClass('anime1')) {
+                $loader.removeClass('anime1').addClass('anime2');
+            } else {
+                $loader.removeClass('anime2').addClass('anime1');
+            }
+        });
 
-    $loader.on({
-        'mouseenter' : function() {
-            $loader.addClass('anime1');
-        },
-        'mouseleave' : function() {
-            $loader.removeClass('anime1 anime2');
-        }
+        $loader.on({
+            'mouseenter': function () {
+                $loader.addClass('anime1');
+            },
+            'mouseleave': function () {
+                $loader.removeClass('anime1 anime2');
+            }
+        });
     });
 })();</script></body></html>

@@ -28,12 +28,12 @@ body {
 <body>
     <div id="box" class="box" role="presentation"></div>
 
-<script class="lib" src="/assets/microAnimations/libs/js/jquery-3.1.1.min.js"></script>
-<script class="lib" src="/assets/microAnimations/libs/js/velocity.min.js"></script>
+<script class="lib" src="/assets/microAnimations/libs/js/jquery.js" defer></script>
+<script class="lib" src="/assets/microAnimations/libs/js/velocity.js" defer></script>
 <script>(function() {
     'use strict';
 
-    $(function(){
+    document.addEventListener('DOMContentLoaded', function () {
         var $box = $('#box');
 
          $box.on({

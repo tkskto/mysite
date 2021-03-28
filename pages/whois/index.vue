@@ -13,11 +13,7 @@
             </div>
             <ul>
                 <li><a href="https://twitter.com/tkskto/"><img src="~/assets/img/whois/twitter.png" alt="私のTwitterアカウント"></a></li>
-                <li><a href="https://www.facebook.com/tkskto/"><img src="~/assets/img/whois/facebook.png" alt="私のFacebookアカウント"></a></li>
                 <li><a href="https://github.com/tkskto/"><img src="~/assets/img/whois/github.png" alt="私のGithubアカウント"></a></li>
-                <li><a href="https://qiita.com/tkskto/"><img src="~/assets/img/whois/qiita.png" alt="私のQiitaアカウント"></a></li>
-                <li><a href="https://www.pinterest.jp/tkskto/"><img src="~/assets/img/whois/pinterest.png" alt="私のPinterestアカウント"></a></li>
-                <li><a href="https://www.linkedin.com/in/takeshi-kato-06a941111/"><img src="~/assets/img/whois/linkedin.png" alt="私のLinkedinアカウント"></a></li>
             </ul>
         </div>
         <profile class="profile-img" :class="{'is-show': isShow}"/>

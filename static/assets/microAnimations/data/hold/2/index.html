@@ -65,27 +65,29 @@ body {
             </path>
         </svg>
     </button>
-<script class="lib" src="/assets/microAnimations/libs/js/jquery-3.1.1.min.js"></script>
+<script class="lib" src="/assets/microAnimations/libs/js/jquery.js" defer></script>
 
 <script>(function() {
     'use strict';
 
-    var $btn = $('#btn'),
-        $path = $btn.find('.path');
+    document.addEventListener('DOMContentLoaded', function () {
 
-    $btn.on('mousedown', function() {
-        $btn.addClass('hold');
+        var $btn = $('#btn'),
+            $path = $btn.find('.path');
+
+        $btn.on('mousedown', function () {
+            $btn.addClass('hold');
+        });
+
+        $(document).on('mouseup', function () {
+            $btn.removeClass('hold holdend');
+        });
+
+        $btn.on('oTransitionEnd mozTransitionEnd webkitTransitionEnd transitionend', function () {
+
+            if ($path.css('stroke-dashoffset') === '0px') {
+                $btn.addClass('holdend');
+            }
+        });
     });
-
-    $(document).on('mouseup', function() {
-       $btn.removeClass('hold holdend');
-    });
-
-    $btn.on('oTransitionEnd mozTransitionEnd webkitTransitionEnd transitionend', function() {
-
-        if($path.css('stroke-dashoffset') === '0px') {
-            $btn.addClass('holdend');
-        }
-    });
-
 })();</script></body></html>

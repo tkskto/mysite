@@ -13,7 +13,7 @@
     },
     "dependencies": {
         "@nuxtjs/google-analytics": "2.4.0",
-        "gsap": "3.6.0",
+        "gsap": "3.6.1",
         "nuxt": "2.15.3",
         "simplex-noise": "2.4.0",
         "three": "0.126.1",

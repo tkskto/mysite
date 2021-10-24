@@ -33,38 +33,19 @@ export default class Default extends Shader {
                     float speed = time;
                     float count = 10.0;
                     float c = 0.03;
-
-                    float r = fract(length(uv) * 40.0 * sin(time * 0.2));
-
-                    float theta = PI + atan(uv.y, uv.x);
                     
-                    float pr = c * sqrt(time);
-                    float ptheta = time * PI * (137.5/180.0);
-                    
-                    float mr = sin(mod(r + pr, PI2));
-                    float mtheta = mod(theta + ptheta, PI * (137.5/180.0));
+                    for (float i = 0.0; i < count; i+=0.1) {
+                        float a = i * PI2 *(137.5/180.0) * speed;
+                        float r = 0.5 * sqrt(i);
+                        float x = r * cos(a);
+                        float y = r * sin(a);
 
-                    float rr = mr;
-                    float gg = 1.0 - mr;
-                    float bb = mtheta/(PI*(137.5/180.0));
-                    color += vec3(rr, gg, bb);
+                        vec2 circleCoords = 0.5 * vec2(x, y);
+                        float circle = distance(uv, circleCoords);
+                        circle = step(0.01, circle);
 
-                    // vec2 polar = vec2(r, theta);
-                    // color += vec3(theta / PI2, 0.0, r * time);
-                    
-                    
-                    // for (float i = 0.0; i < count; i+=0.1) {
-                    //     float a = i * PI*(137.5/180.0) * speed;
-                    //     float r = 0.5 * sqrt(i);
-                    //     float x = r * cos(a);
-                    //     float y = r * sin(a);
-                    //
-                    //     vec2 circleCoords = 0.5 * vec2(x, y);
-                    //     float circle = distance(uv, circleCoords);
-                    //     circle = step(0.01, circle);
-                    //
-                    //     color += 1.0 - circle;
-                    // }
+                        color += 1.0 - circle;
+                    }
                     
                     outColor = vec4(color, 1.0);
                 }

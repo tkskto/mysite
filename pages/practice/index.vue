@@ -20,6 +20,7 @@
             <li class="sketch-item" id="17"><a href="#17">#17</a></li>
             <li class="sketch-item" id="18"><a href="#18">#18</a></li>
             <li class="sketch-item" id="19"><a href="#19">#19</a></li>
+            <li class="sketch-item" id="20"><a href="#20">#20</a></li>
         </ul>
 
         <div class="container-canvas">
@@ -60,6 +61,7 @@
     import Item17 from '~/assets/ts/practice/sketch/17/Item17.ts';
     import Item18 from '~/assets/ts/practice/sketch/18/Item18.ts';
     import Item19 from '~/assets/ts/practice/sketch/19/Item19.ts';
+    import Item20 from '~/assets/ts/practice/sketch/20/Item20.ts';
     import PlayPauseBtn from '~/components/practice/PlayPauseBtn';
 
     export default {
@@ -218,6 +220,9 @@
                         break;
                     case '19':
                         new Item19(this.$store, _canvasGL, id);
+                        break;
+                    case '20':
+                        new Item20(this.$store, _canvasGL, id);
                         break;
                     default:
                         throw new Error('please set id and data attribute "sketch-type"');

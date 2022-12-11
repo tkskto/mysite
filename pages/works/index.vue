@@ -13,7 +13,14 @@
         </section>
         <section class="container talks">
             <h2>Talks</h2>
-            <p>2019.11.30<a href="https://jsconf.jp/2019/talk/takeshi-kato">Understanding Streams API</a></p>
+            <ul>
+                <li>2019.11.30<a href="https://jsconf.jp/2019/talk/takeshi-kato">Understanding Streams API</a></li>
+            </ul>
+        </section>
+        <section class="container">
+            <h2>Tools</h2>
+            <p>I made these tools as an OSS for my work more easily.</p>
+            <ul></ul>
         </section>
         <section class="container">
             <h2>Playground</h2>

@@ -1,28 +1,22 @@
 <template>
     <section class="container" :class="sceneName">
         <div class="wrapper">
-            <TheHeader />
+            <the-header />
             <div class="sketch" id="all">
-                <Category v-for="(value, key) in getAllItemData" :key="key" :categoryName="key" :items="value" />
+                <the-category v-for="(value, key) in getAllItemData" :key="key" :categoryName="key" :items="value" />
             </div>
         </div>
-        <Dialog :isShow=dialogState />
-        <Loading />
+        <the-Dialog :isShow=dialogState />
+        <the-Loading />
     </section>
 </template>
 
 <script>
-    import Loading from '../../components/microAnimations/Loading';
-    import TheHeader from '../../components/microAnimations/Header';
-    import Category from '../../components/microAnimations/Category';
-    import Dialog from '../../components/microAnimations/Dialog';
     import Vector from '~/assets/ts/common/gl/Vector.ts';
-    import {mapGetters, mapActions} from 'vuex';
 
     export default {
         name: 'microAnimations',
         layout: 'microAnimations',
-        components: {TheHeader, Dialog, Category, Loading},
         head () {
             return {
                 title: 'Micro Animations',
@@ -32,17 +26,17 @@
             };
         },
         computed: {
-            ...mapGetters({
-                getAllItemData: 'MicroAnimations/getAllItemData',
-                dialogState: 'MicroAnimations/dialogState',
-                sceneName: 'Common/sceneName',
-            })
+            // ...mapGetters({
+            //     getAllItemData: 'MicroAnimations/getAllItemData',
+            //     dialogState: 'MicroAnimations/dialogState',
+            //     sceneName: 'Common/sceneName',
+            // })
         },
         methods: {
-            ...mapActions({
-                setCameraPosition: 'Practice/setCameraPosition',
-                setCanvasSize: 'Common/setCanvasSize',
-            })
+            // ...mapActions({
+            //     setCameraPosition: 'Practice/setCameraPosition',
+            //     setCanvasSize: 'Common/setCanvasSize',
+            // })
         },
         created () {
             this.setCameraPosition(new Vector(0.0, 0.0, 1,0));

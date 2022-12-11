@@ -8,20 +8,16 @@
             <p class="text__text">Feel free to contact to me. Thank you!!</p>
         </div>
         <div>
-            <div class="text-min">
-                <p class="text__text">This website use Google Analytics to investigate usage.<br>Your specific information such as IP address is automatically will be sent to Google, Inc.<br>For this reason, we may also add or read cookies. </p>
-            </div>
             <ul>
-                <li><a href="https://twitter.com/tkskto/"><img src="~/assets/img/whois/twitter.png" alt="私のTwitterアカウント"></a></li>
-                <li><a href="https://github.com/tkskto/"><img src="~/assets/img/whois/github.png" alt="私のGithubアカウント"></a></li>
+                <li><a href="https://twitter.com/tkskto/"><img src="~/assets/img/whois/twitter.png" alt="my twitter account"></a></li>
+                <li><a href="https://github.com/tkskto/"><img src="~/assets/img/whois/github.png" alt="my github account"></a></li>
             </ul>
         </div>
-        <profile class="profile-img" :class="{'is-show': isShow}"/>
+        <the-profile class="profile-img" :class="{'is-show': isShow}"/>
     </section>
 </template>
 
 <script>
-import Profile from '~/components/whois/profile';
 
 export default {
     layout: 'default',
@@ -29,9 +25,6 @@ export default {
         return {
             isShow: false,
         };
-    },
-    components: {
-        Profile
     },
     head() {
         return {

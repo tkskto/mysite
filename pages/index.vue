@@ -1,71 +1,47 @@
 <template>
     <section class="container" :class="{ready: isReady}">
-        <logo></logo>
-        <intro ref="intro"></intro>
-        <p class="black-lives-matter"><strong>Black Lives Matter.</strong></p>
-        <navs></navs>
+        <index-the-logo />
+        <index-the-intro v-if="sceneName === 'first'" />
+        <p class="black-lives-matter">
+            <strong>Black Lives Matter.</strong>
+        </p>
+        <common-nav-the-navigation />
     </section>
 </template>
 
-<script>
-    import {mapGetters, mapActions} from 'vuex';
-    import Logo from '~/components/index/Logo.vue';
-    import Intro from '~/components/index/Intro.vue';
-    import Navs from '~/components/common/nav/Navigation.vue';
+<script setup>
     import {AppConfig} from '~/assets/ts/common/Config.ts';
+    import {useSceneName} from '~/composable/useSceneName';
 
-    export default {
-        components: {
-            Logo,
-            Intro,
-            Navs
-        },
-        computed: {
-            ...mapGetters({
-                sceneName: 'Common/sceneName',
-            }),
-            isReady() {
-                return this.sceneName === AppConfig.SCENE.READY;
+    useHead({
+        title: 'Takeshi Kato',
+        meta: [
+            {
+                hid: 'description',
+                name: 'description',
+                content: 'This is takeshi kato\'s Web site. I\'m a frontend developer.',
             },
-        },
-        data() {
-            return {
-                readyState: false,
-            };
-        },
-        head() {
-            return {
-                title: 'Takeshi Kato',
-                meta: [
-                    {
-                        hid: 'description',
-                        name: 'description',
-                        content: 'This is takeshi kato\'s Web site. I\'m a frontend developer.'
-                    }
-                ],
-            };
-        },
-        methods: {
-            ...mapActions({
-                changeScene: 'Common/changeScene',
-            }),
-        },
-        beforeRouteEnter(to, from, next) {
-            if (from.name) {
-                next((vm) => {
-                    vm.changeScene(AppConfig.SCENE.READY);
-                });
-            }
+        ],
+    });
 
-            next();
-        },
-        beforeRouteLeave(to, from, next) {
-            console.log(to, from);
-            this.$refs.intro.beforeLeave().then(() => {
-                next();
-            });
-        },
-    };
+    const {sceneName} = useSceneName();
+    const isReady = sceneName === AppConfig.SCENE.READY;
+
+    // beforeRouteEnter(to, from, next) {
+    //     if (from.name) {
+    //         next((vm) => {
+    //             vm.changeScene(AppConfig.SCENE.READY);
+    //         });
+    //     }
+    //
+    //     next();
+    // },
+    // beforeRouteLeave(to, from, next) {
+    //     console.log(to, from);
+    //     this.$refs.intro.beforeLeave().then(() => {
+    //         next();
+    //     });
+    // },
 </script>
 
 <style lang="scss">

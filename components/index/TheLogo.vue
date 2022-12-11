@@ -1,5 +1,5 @@
 <template>
-    <div id="mv">
+    <div id="mv" ref="root">
         <div class="mv-svg-wrapper">
             <svg ref="svg" class="mv-svg" viewBox="0, 0, 14, 4">
                 <path class="svg-path" d="M0,0 l1,0 l1,3 l1,-3 l1,0 l1,3 l1,-3 l1,0 l-1,4 l-1.5,0 l-1,-2.5 l-1,2.5 l-1.25,0 z"></path>
@@ -11,41 +11,35 @@
     </div>
 </template>
 
-<script>
-    import {mapGetters, mapActions} from 'vuex';
+<script setup>
+    // import {mapGetters, mapActions} from 'vuex';
     import {AppConfig} from '~/assets/ts/common/Config.ts';
+    import {useSceneName} from '~/composable/useSceneName';
 
-    export default {
-        name: 'logo',
-        computed: {
-            ...mapGetters({
-                sceneName: 'Common/sceneName',
-            })
-        },
-        mounted: function () {
-            if (this.sceneName === AppConfig.SCENE.LOAD) {
-                this.$refs.svg.addEventListener('transitionend', this.transitionEnd);
-                setTimeout(() => {
-                    this.$el.classList.add('show');
-                }, 10);
-            } else {
-                this.$el.classList.add('hide');
-            }
-        },
-        methods: {
-            ...mapActions({
-                changeScene: 'Common/changeScene',
-            }),
-            transitionEnd: function () {
-                if (this.sceneName === AppConfig.SCENE.LOAD) {
-                    this.$el.classList.add('hide');
-                    this.changeScene(AppConfig.SCENE.INTRO);
-                } else if (this.sceneName === AppConfig.SCENE.INTRO) {
-                    this.changeScene(AppConfig.SCENE.FIRST);
-                }
+    const {sceneName, updateScene} = useSceneName();
+    const root = ref(null);
+
+    onMounted(() => {
+        const transitionEnd = () => {
+            if (sceneName.value === AppConfig.SCENE.LOAD) {
+                root.value.classList.add('hide');
+                updateScene(AppConfig.SCENE.INTRO);
+            } else if (sceneName.value === AppConfig.SCENE.INTRO) {
+                updateScene(AppConfig.SCENE.FIRST);
             }
         }
-    };
+
+        const svg = document.querySelector('.mv-svg');
+
+        if (sceneName.value === AppConfig.SCENE.LOAD) {
+            svg.addEventListener('transitionend', transitionEnd);
+            setTimeout(() => {
+                root.value.classList.add('show');
+            }, 10);
+        } else {
+            root.value.classList.add('hide');
+        }
+    });
 </script>
 
 <style scoped lang="scss">

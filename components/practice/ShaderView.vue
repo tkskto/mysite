@@ -13,14 +13,13 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex';
     export default {
         name: "ShaderView",
         computed: {
-            ...mapGetters({
-                vertexShaderString: 'Practice/vertexShaderString',
-                fragmentShaderString: 'Practice/fragmentShaderString',
-            }),
+            // ...mapGetters({
+            //     vertexShaderString: 'Practice/vertexShaderString',
+            //     fragmentShaderString: 'Practice/fragmentShaderString',
+            // }),
             /**
              * @return {string}
              */

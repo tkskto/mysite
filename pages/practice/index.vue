@@ -25,20 +25,16 @@
 
         <div class="container-canvas">
             <canvas id="canvas-GL" :width="canvasDisplayWidth" :height="canvasDisplayHeight" :style="{width: canvasPracticalWidth, height: canvasPracticalHeight}"></canvas>
-            <Quote></Quote>
+            <quote-text></quote-text>
         </div>
 
-        <ViewChangeButton />
-        <ShaderView />
-        <PlayPauseBtn />
+        <view-change-button />
+        <shader-view />
+        <play-pause-btn />
     </div>
 </template>
 
 <script>
-    import {mapGetters, mapActions} from 'vuex';
-    import Quote from '~/components/practice/quote.vue';
-    import ViewChangeButton from '~/components/practice/ViewChangeButton';
-    import ShaderView from '~/components/practice/ShaderView';
     import AppConfig from '~/assets/ts/practice/Config.ts';
     import Vector from '~/assets/ts/common/gl/Vector.ts';
     import Item0 from '~/assets/ts/practice/sketch/00/Item0.ts';
@@ -62,7 +58,6 @@
     import Item18 from '~/assets/ts/practice/sketch/18/Item18.ts';
     import Item19 from '~/assets/ts/practice/sketch/19/Item19.ts';
     import Item20 from '~/assets/ts/practice/sketch/20/Item20.ts';
-    import PlayPauseBtn from '~/components/practice/PlayPauseBtn';
 
     export default {
         name: 'practice',
@@ -75,20 +70,14 @@
                 ],
             };
         },
-        components: {
-            PlayPauseBtn,
-            Quote,
-            ViewChangeButton,
-            ShaderView,
-        },
         computed: {
-            ...mapGetters({
-                screenSize: 'Common/screenSize',
-                canvasSize: 'Common/canvasSize',
-                ratio: 'Common/ratio',
-                sceneName: 'Common/sceneName',
-                mouseState: 'Common/mouseState',
-            }),
+            // ...mapGetters({
+            //     screenSize: 'Common/screenSize',
+            //     canvasSize: 'Common/canvasSize',
+            //     ratio: 'Common/ratio',
+            //     sceneName: 'Common/sceneName',
+            //     mouseState: 'Common/mouseState',
+            // }),
             canvasDisplayWidth() {
                 if (this.canvasSize) {
                     return this.canvasSize.width;
@@ -115,12 +104,12 @@
             },
         },
         methods: {
-            ...mapActions({
-                changeScene: 'Common/changeScene',
-                changeID: 'Practice/changeID',
-                setCameraPosition: 'Practice/setCameraPosition',
-                setMousePos: 'Common/setMousePos',
-            }),
+            // ...mapActions({
+            //     changeScene: 'Common/changeScene',
+            //     changeID: 'Practice/changeID',
+            //     setCameraPosition: 'Practice/setCameraPosition',
+            //     setMousePos: 'Common/setMousePos',
+            // }),
             onHashChange() {
                 this.changeID(location.hash.split('#')[1] || '0');
             },

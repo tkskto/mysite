@@ -5,19 +5,18 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from 'vuex';
     export default {
         computed: {
-            ...mapGetters({
-                isMusicMode: 'Practice/isMusicMode',
-                musicPlayState: 'Practice/musicPlayState'
-            }),
+            // ...mapGetters({
+            //     isMusicMode: 'Practice/isMusicMode',
+            //     musicPlayState: 'Practice/musicPlayState'
+            // }),
         },
         methods: {
-            ...mapActions({
-                setMusicPlayState: 'Practice/setMusicPlayState',
-                setMusicMode: 'Practice/setMusicMode'
-            }),
+            // ...mapActions({
+            //     setMusicPlayState: 'Practice/setMusicPlayState',
+            //     setMusicMode: 'Practice/setMusicMode'
+            // }),
             onClick() {
                 this.setMusicPlayState(!this.musicPlayState);
                 this.setMusicMode(false);

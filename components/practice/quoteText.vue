@@ -3,13 +3,12 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex';
     export default {
         name: "quote",
         computed: {
-            ...mapGetters({
-                quote: 'Practice/quote',
-            })
+            // ...mapGetters({
+            //     quote: 'Practice/quote',
+            // })
         },
     }
 </script>

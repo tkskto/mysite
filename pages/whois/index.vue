@@ -13,33 +13,31 @@
                 <li><a href="https://github.com/tkskto/"><img src="~/assets/img/whois/github.png" alt="my github account"></a></li>
             </ul>
         </div>
-        <the-profile class="profile-img" :class="{'is-show': isShow}"/>
+        <whois-the-profile class="profile-img" :class="{'is-show': isShow}"/>
     </section>
 </template>
 
-<script>
+<script setup lang="ts">
+import {Ref} from 'vue';
 
-export default {
-    layout: 'default',
-    data() {
-        return {
-            isShow: false,
-        };
-    },
-    head() {
-        return {
-            title: 'Takeshi Kato',
-            meta: [
-                { hid: 'description', name: 'description', content: 'This is takeshi kato\'s Web site. I\'m a frontend developer.' }
-            ],
-        };
-    },
-    mounted() {
-        setTimeout(() => {
-            this.isShow = true;
-        }, 100);
-    }
-};
+const isShow: Ref<boolean> = useState('isShow', () => false);
+
+useHead({
+    title: 'Takeshi Kato',
+    meta: [
+        {
+            hid: 'description',
+            name: 'description',
+            content: 'This is takeshi kato\'s Web site. I\'m a frontend developer.',
+        }
+    ],
+});
+
+onMounted(() => {
+    setTimeout(() => {
+        isShow.value = true;
+    }, 100);
+});
 </script>
 
 <style lang="scss" scoped>

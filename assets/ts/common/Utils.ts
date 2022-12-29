@@ -6,7 +6,7 @@ export class Methods {
         console.error(err || 'error');
     }
 
-    public static getJsonData(url: string): Promise<Response> {
+    public static getJsonData<T>(url: string): Promise<T> {
         return fetch(url).then(res => {
             return res.json();
         }).catch(err => {
@@ -341,10 +341,13 @@ export class GLUtils {
                     Methods.showError('unknown uniform types');
                     break;
             }
-        } catch (err) {
+        } catch (err: unknown) {
             Methods.showError(`type: ${_uniType}`);
             Methods.showError(`value: ${_value}`);
-            Methods.showError(err.message);
+
+            if (err instanceof Error) {
+                Methods.showError(err.message);
+            }
         }
     }
 }

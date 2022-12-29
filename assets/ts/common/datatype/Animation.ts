@@ -1,4 +1,6 @@
-export default class Animation {
+import {iAnimation} from '~/types/index.js';
+
+export default class Animation implements iAnimation {
     private _author: string;
     private _category: string;
     private _id: number;

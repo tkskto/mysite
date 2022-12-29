@@ -1,27 +1,19 @@
 <template>
     <transition name="button">
-        <button v-show="isMusicMode" type="button" @click="onClick">PLAY</button>
+        <button v-show="musicMode" type="button" @click="onClick">PLAY</button>
     </transition>
 </template>
 
-<script>
-    export default {
-        computed: {
-            // ...mapGetters({
-            //     isMusicMode: 'Practice/isMusicMode',
-            //     musicPlayState: 'Practice/musicPlayState'
-            // }),
-        },
-        methods: {
-            // ...mapActions({
-            //     setMusicPlayState: 'Practice/setMusicPlayState',
-            //     setMusicMode: 'Practice/setMusicMode'
-            // }),
-            onClick() {
-                this.setMusicPlayState(!this.musicPlayState);
-                this.setMusicMode(false);
-            },
-        },
+<script setup>
+    import {useMusicMode} from '~/composable/useMusicMode';
+    import {useMusicPlayState} from '~/composable/useMusicPlayState';
+
+    const {musicPlayState, updateMusicPlayState} = useMusicPlayState();
+    const {musicMode, updateMusicMode} = useMusicMode();
+
+    const onClick = () => {
+        updateMusicPlayState(!musicPlayState);
+        updateMusicMode(false);
     };
 </script>
 

@@ -37,18 +37,16 @@
     </section>
 </template>
 
-<script>
-    export default {
-        name: 'works',
-        head() {
-            return {
-                title: 'Takeshi Kato',
-                meta: [
-                    { hid: 'description', name: 'description', content: 'This is what I can do.' }
-                ],
-            };
+<script setup lang="ts">
+useHead({
+    title: 'Works | Takeshi Kato',
+    meta: [
+        {
+            name: 'description',
+            content: 'This is what I can do.',
         },
-    };
+    ],
+});
 </script>
 
 <style lang="scss" scoped>

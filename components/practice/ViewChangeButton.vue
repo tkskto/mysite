@@ -2,35 +2,33 @@
     <button class="lyt-btn-viewChange" @click="onClick">{{text}}</button>
 </template>
 
-<script>
-    export default {
-        name: "ViewChangeButton",
-        computed: {
-            text() {
-                return this._isShow ? 'PLAY' : 'GLSL';
-            },
-        },
-        methods: {
-            onClick() {
-                const body = document.body;
+<script setup lang="ts">
+import {Ref} from 'vue';
 
-                if (this._isShow) {
-                    body.classList.remove('show-shader');
+const isShow: Ref<boolean> = useState('isShow', () => false);
 
-                    setTimeout(() => {
-                        body.classList.remove('pre-show');
-                    }, 300);
-                } else {
-                    body.classList.add('pre-show');
+const text = computed(() => {
+    return isShow.value ? 'PLAY' : 'GLSL';
+});
 
-                    setTimeout(() => {
-                        body.classList.add('show-shader');
-                    }, 100);
-                }
-                this._isShow = !this._isShow;
-            }
-        },
+const onClick = () => {
+    const body = document.body;
+
+    if (isShow.value) {
+        body.classList.remove('show-shader');
+
+        setTimeout(() => {
+            body.classList.remove('pre-show');
+        }, 300);
+    } else {
+        body.classList.add('pre-show');
+
+        setTimeout(() => {
+            body.classList.add('show-shader');
+        }, 100);
     }
+    isShow.value = !isShow.value;
+};
 </script>
 
 <style scoped>

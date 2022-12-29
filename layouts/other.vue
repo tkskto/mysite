@@ -1,6 +1,6 @@
 <template>
     <div class="str-root-other">
-        <nuxt/>
+        <slot />
     </div>
 </template>
 <style lang="scss" scoped>

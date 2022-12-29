@@ -12,28 +12,18 @@
     </div>
 </template>
 
-<script>
-    export default {
-        name: "ShaderView",
-        computed: {
-            // ...mapGetters({
-            //     vertexShaderString: 'Practice/vertexShaderString',
-            //     fragmentShaderString: 'Practice/fragmentShaderString',
-            // }),
-            /**
-             * @return {string}
-             */
-            VS() {
-                return this.vertexShaderString.replace(/\n/g, '<br>').replace(/\s{20}/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
-            },
-            /**
-             * @return {string}
-             */
-            FS() {
-                return this.fragmentShaderString.replace(/\n/g, '<br>').replace(/\s{20}/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
-            }
-        }
-    }
+<script setup>
+import {useShader} from '~/composable/useShader';
+
+const {vertexShader, fragmentShader} = useShader();
+
+const VS = computed(() => {
+    return vertexShader.replace(/\n/g, '<br>').replace(/\s{20}/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+});
+
+const FS = computed(() => {
+    return fragmentShader.replace(/\n/g, '<br>').replace(/\s{20}/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+});
 </script>
 
 <style scoped>

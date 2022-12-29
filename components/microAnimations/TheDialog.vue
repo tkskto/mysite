@@ -1,9 +1,9 @@
 <template>
     <div id="intro" class="dialog" :class="{'is-show': isShow}">
-        <div class="dialog-inner" :style="{width: width + 'px', height: height + 'px'}">
+        <div class="dialog-inner" :style="{width: dialogWidth + 'px', height: dialogHeight + 'px'}">
             <div class="dialog-header">
                 <h2 class="hdg2">Introduction</h2>
-                <button type="button" class="btn-close-dialog" @click="closeDialog">閉じる</button>
+                <button type="button" class="btn-close-dialog" @click="closeDialog"><span class="btn-close-dialog-text">閉じる</span></button>
             </div>
             <section class="intro-section">
                 <h3 class="hdg3">What？</h3>
@@ -28,154 +28,157 @@
     </div>
 </template>
 
-<script>
-    export default {
-        name: 'Dialog',
-        components: {},
-        props: {
-            isShow: {
-                type: Boolean,
-                require: true,
-            }
-        },
-        computed: {
-            // ...mapGetters({
-            //     screenSize: 'Common/screenSize',
-            // }),
-            width() {
-                return this.screenSize.width - 100;
-            },
-            height() {
-                return this.screenSize.height - 50;
-            }
-        },
-        methods: {
-            // ...mapActions({
-            //     changeDialogState: 'MicroAnimations/changeDialogState',
-            //     changeScene:'Common/changeScene',
-            // }),
-            closeDialog() {
-                this.changeDialogState(false);
-                this.changeScene('top');
-            },
-        }
-    }
+<script setup>
+import {useDialogState} from '~/composable/useDialogState';
+import {useSceneName} from '~/composable/useSceneName';
+import {useScreenSize} from '~/composable/useScreenSize';
+
+const {updateDialogState} = useDialogState();
+const {updateScene} = useSceneName();
+
+const {screenSize} = useScreenSize();
+
+defineProps({
+    isShow: {
+        type: Boolean,
+        require: true,
+    },
+});
+
+const dialogWidth = computed(() => {
+    return screenSize.value.width - 100;
+});
+
+const dialogHeight = computed(() => {
+    return screenSize.value.height - 50;
+});
+
+const closeDialog = () => {
+    updateDialogState(false);
+    updateScene('microAnimationTop');
+};
 </script>
 
 <style scoped lang="scss">
-    .dialog {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        top: 100%;
-        opacity: 0;
-        transition: opacity 0.5s linear;
+.dialog {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 100%;
+    opacity: 0;
+    transition: opacity 0.5s linear;
 
-        &.is-show {
-            top: 0;
-            opacity: 1;
-
-            .dialog-inner {
-                top: 0;
-            }
-        }
-
-        &.is-hide {
-            top: 0;
-        }
-
-        .dialog-overlay {
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, .2);
-        }
+    &.is-show {
+        top: 0;
+        opacity: 1;
 
         .dialog-inner {
-            position: absolute;
-            background: #fff;
-            border-radius: 6px;
-            top: 150%;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            margin: auto;
-            transition: top 0.5s ease;
-            overflow: hidden;
+            top: 0;
         }
     }
-    #intro {
-        .dialog-inner .dialog-header {
-            background: #43a0ff;
+
+    &.is-hide {
+        top: 0;
+    }
+
+    .dialog-overlay {
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, .2);
+    }
+
+    .dialog-inner {
+        position: absolute;
+        background: #fff;
+        border-radius: 6px;
+        top: 150%;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        transition: top 0.5s ease;
+        overflow: hidden;
+    }
+}
+#intro {
+    .dialog-inner .dialog-header {
+        background: #43a0ff;
+        padding: 5px 10px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .dialog-header {
+        .hdg2{
+            color: #fff;
+        }
+
+        .btn-close-dialog {
+            position: relative;
+            color: #43a0ff;
+            background: none;
+            border: none;
+            padding: 0;
+
+            &-text {
+                opacity: 0;
+            }
+
+            &::before,
+            &::after {
+                position: absolute;
+                display: block;
+                content: "";
+                background: #fff;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+                transform: rotate(45deg);
+            }
+
+            &::before {
+                width: 2px;
+                height: 15px;
+            }
+
+            &::after {
+                width: 15px;
+                height: 2px;
+            }
+        }
+    }
+
+    .intro-section {
+        padding: 10px 20px;
+
+        .hdg3 {
+            margin-bottom: 10px;
+        }
+
+        .section-txt {
+            margin-left: 10px;
+        }
+
+        .inner-section {
             padding: 5px 10px;
-            display: flex;
-            justify-content: space-between;
-        }
+            margin-bottom: 10px;
 
-        .dialog-header {
-            .hdg2{
-                color: #fff;
+            .hdg4 {
+                margin-bottom: 5px;
             }
 
-            .btn-close-dialog {
-                position: relative;
-                color: #43a0ff;
+            .section-list01 {
+                margin-top: 15px;
+                padding-left: 30px;
 
-                &::before,
-                &::after {
-                    position: absolute;
-                    display: block;
-                    content: "";
-                    background: #fff;
-                    top: 0;
-                    bottom: 0;
-                    left: 0;
-                    right: 0;
-                    margin: auto;
-                    -webkit-transform: rotate(45deg);
-                    transform: rotate(45deg);
-                }
-
-                &::before {
-                    width: 2px;
-                    height: 15px;
-                }
-
-                &::after {
-                    width: 15px;
-                    height: 2px;
-                }
-            }
-        }
-
-        .intro-section {
-            padding: 10px 20px;
-
-            .hdg3 {
-                margin-bottom: 10px;
-            }
-
-            .section-txt {
-                margin-left: 10px;
-            }
-
-            .inner-section {
-                padding: 5px 10px;
-                margin-bottom: 10px;
-
-                .hdg4 {
+                .list-item {
+                    list-style-type: disc;
                     margin-bottom: 5px;
                 }
-
-                .section-list01 {
-                    margin-top: 15px;
-                    padding-left: 30px;
-
-                    .list-item {
-                        list-style-type: disc;
-                        margin-bottom: 5px;
-                    }
-                }
             }
         }
     }
+}
 </style>

@@ -1,14 +1,9 @@
 <template>
-    <cite v-if="quote !== ''" class="text-quote"><a id="text-quote" :href="quote" target="_blank">{{quote}}</a></cite>
+    <cite v-if="quoteText !== ''" class="text-quote"><a id="text-quote" :href="quoteText" target="_blank">{{quoteText}}</a></cite>
 </template>
 
-<script>
-    export default {
-        name: "quote",
-        computed: {
-            // ...mapGetters({
-            //     quote: 'Practice/quote',
-            // })
-        },
-    }
+<script setup>
+import {useQuoteText} from '~/composable/useQuoteText';
+
+const {quoteText} = useQuoteText();
 </script>

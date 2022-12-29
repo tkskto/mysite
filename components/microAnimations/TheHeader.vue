@@ -7,20 +7,17 @@
     </div><!-- /.wrapper -->
 </template>
 
-<script>
-    export default {
-        name: 'Header',
-        methods: {
-            // ...mapActions({
-            //     changeDialogState: 'MicroAnimations/changeDialogState',
-            //     changeScene: 'Common/changeScene'
-            // }),
-            showDialog() {
-                this.changeDialogState(true);
-                this.changeScene('dialog');
-            },
-        },
-    }
+<script setup>
+import {useDialogState} from '~/composable/useDialogState';
+import {useSceneName} from '~/composable/useSceneName';
+
+const {updateDialogState} = useDialogState();
+const {updateScene} = useSceneName();
+
+const showDialog = () => {
+    updateDialogState(true);
+    updateScene('microAnimationDialog');
+};
 </script>
 
 <style scoped lang="scss">

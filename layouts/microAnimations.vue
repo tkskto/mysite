@@ -1,20 +1,16 @@
 <template>
     <div class="str-root">
-        <nuxt/>
+        <slot />
     </div>
 </template>
 
-<script>
-    export default {
-        head() {
-            return {
-                title: 'Takeshi Kato',
-                meta: [
-                    { hid: 'description', name: 'description', content: 'This is takeshi kato\'s Web site. I\'m a frontend developer.' }
-                ],
-            };
-        },
-    };
+<script setup>
+useHead({
+    title: 'Takeshi Kato',
+    meta: [
+        { hid: 'description', name: 'description', content: 'This is takeshi kato\'s Web site. I\'m a frontend developer.'}
+    ],
+});
 </script>
 
 <style scoped>

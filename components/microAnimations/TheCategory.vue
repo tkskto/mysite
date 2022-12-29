@@ -2,25 +2,22 @@
     <section :id="categoryName" class="category">
         <h3 class="hdg3">{{categoryName}}</h3>
         <div class="animations">
-            <animation-item v-for="(item, index) in items" :key="index" :category="categoryName" :id="index + 1"></animation-item>
+            <micro-animations-animation-item v-for="(item, index) in items" :key="index" :category="categoryName" :id="index + 1" />
         </div>
     </section>
 </template>
 
-<script>
-    export default {
-        name: 'category',
-        props: {
-            categoryName: {
-                type: String,
-                required: true,
-            },
-            items: {
-                type: Array,
-                required: true,
-            },
+<script setup>
+    defineProps({
+        categoryName: {
+            type: String,
+            required: true,
         },
-    }
+        items: {
+            type: Array,
+            required: true,
+        },
+    });
 </script>
 
 <style scoped lang="scss">
@@ -33,13 +30,9 @@
         }
 
         .animations {
-            display: -webkit-flex;
             display: flex;
-            -webkit-justify-content: flex-start;
             justify-content: flex-start;
-            -webkit-align-items: center;
             align-items: center;
-            -webkit-flex-wrap: wrap;
             flex-wrap: wrap;
         }
     }

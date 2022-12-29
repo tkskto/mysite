@@ -12,7 +12,6 @@
 </template>
 
 <script setup>
-    // import {mapGetters, mapActions} from 'vuex';
     import {AppConfig} from '~/assets/ts/common/Config.ts';
     import {useSceneName} from '~/composable/useSceneName';
 

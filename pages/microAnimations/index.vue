@@ -1,48 +1,44 @@
 <template>
-    <section class="container" :class="sceneName">
-        <div class="wrapper">
-            <the-header />
-            <div class="sketch" id="all">
-                <the-category v-for="(value, key) in getAllItemData" :key="key" :categoryName="key" :items="value" />
+    <NuxtLayout name="micro-animations">
+        <section class="container" :class="sceneName">
+            <div class="wrapper">
+                <micro-animations-the-header />
+                <div id="all" class="sketch">
+                    <micro-animations-the-category v-for="(value, key) in microAnimation" :key="key" :category-name="key" :items="value" />
+                </div>
             </div>
-        </div>
-        <the-Dialog :isShow=dialogState />
-        <the-Loading />
-    </section>
+            <micro-animations-the-dialog :is-show="dialogState" />
+            <micro-animations-the-loading />
+        </section>
+    </NuxtLayout>
 </template>
 
-<script>
-    import Vector from '~/assets/ts/common/gl/Vector.ts';
+<script setup lang="ts">
+    import Vector from '~/assets/ts/common/gl/Vector';
+    import {useScreenSize} from '~/composable/useScreenSize';
+    import {useCameraPosition} from '~/composable/useCameraPosition';
+    import {useDialogState} from '~/composable/useDialogState';
+    import {useSceneName} from '~/composable/useSceneName';
+    import {useMicroAnimations} from '~/composable/useMicroAnimations';
 
-    export default {
-        name: 'microAnimations',
-        layout: 'microAnimations',
-        head () {
-            return {
-                title: 'Micro Animations',
-                meta: [
-                    { hid: 'description', name: 'description', content: 'Gallery of Micro Animations.' }
-                ]
-            };
-        },
-        computed: {
-            // ...mapGetters({
-            //     getAllItemData: 'MicroAnimations/getAllItemData',
-            //     dialogState: 'MicroAnimations/dialogState',
-            //     sceneName: 'Common/sceneName',
-            // })
-        },
-        methods: {
-            // ...mapActions({
-            //     setCameraPosition: 'Practice/setCameraPosition',
-            //     setCanvasSize: 'Common/setCanvasSize',
-            // })
-        },
-        created () {
-            this.setCameraPosition(new Vector(0.0, 0.0, 1,0));
-            this.setCanvasSize({width: 30, height: 30});
-        }
-    };
+    const {sceneName} = useSceneName();
+    const {updateCanvasSize} = useScreenSize();
+    const {updateCameraPosition} = useCameraPosition();
+    const {dialogState} = useDialogState();
+    const {microAnimation} = useMicroAnimations();
+
+    useHead({
+        title: 'Micro Animations | Takeshi Kato',
+        meta: [
+            {
+                name: 'description',
+                content: 'Gallery of Micro Animations.',
+            },
+        ],
+    });
+
+    updateCameraPosition(new Vector(0.0, 0.0, 1.0));
+    updateCanvasSize({width: 30, height: 30});
 </script>
 
 <style scoped>
@@ -66,12 +62,17 @@
         background: #ffffee;
     }
 
+    .load .wrapper {
+        height: 100dvh;
+        overflow: hidden;
+    }
+
     .load .wrapper,
-    .dialog .wrapper {
+    .microAnimationDialog .wrapper {
         opacity: 0;
     }
 
-    .dialog .wrapper #all {
+    .microAnimationDialog .wrapper #all {
         display: none;
     }
 

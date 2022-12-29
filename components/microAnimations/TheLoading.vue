@@ -1,141 +1,146 @@
 <template>
-    <div id="loading-screen" class="is-show" ref="wrap"></div>
+    <div id="loading-screen" ref="wrap" class="is-show" />
 </template>
 
-<script>
-    import Program from '~/assets/ts/common/gl/Program.ts';
-    import Renderer from '~/assets/ts/common/gl/Renderer.ts';
-    import Animation from '~/assets/ts/common/datatype/Animation.ts';
-    import {Methods} from '~/assets/ts/common/Utils.ts';
-    import {AppConfig, GLConfig} from '~/assets/ts/common/Config.ts';
-    import Loading from '~/assets/ts/common/shader/Loading.ts';
-    import LoadingData from '~/assets/ts/common/data/Loading.ts';
-    import WebGLContext from '~/assets/ts/common/gl/Context.ts';
-    import Geometry from '~/assets/ts/common/gl/Geometry.ts';
-    import Mesh from '~/assets/ts/common/gl/Mesh.ts';
+<script setup lang="ts">
+    import Program from '~/assets/ts/common/gl/Program';
+    import Renderer from '~/assets/ts/common/gl/Renderer';
+    import Animation from '~/assets/ts/common/datatype/Animation';
+    import {GLConfig} from '~/assets/ts/common/Config';
+    import Loading from '~/assets/ts/common/shader/Loading';
+    import LoadingData from '~/assets/ts/common/data/Loading';
+    import WebGLContext from '~/assets/ts/common/gl/Context';
+    import Geometry from '~/assets/ts/common/gl/Geometry';
+    import Mesh from '~/assets/ts/common/gl/Mesh';
+    import {useSceneName} from '~/composable/useSceneName';
+    import type {iAnimation, MicroAnimationCategory, MicroAnimationData} from '~/types/index';
+    import {useMicroAnimations} from '~/composable/useMicroAnimations';
+    import animations from '~/assets/microAnimations/data/list.json';
+    import Vector from '~/assets/ts/common/gl/Vector';
 
+    const {updateScene} = useSceneName();
+    const {updateMicroAnimation} = useMicroAnimations();
     const TIME_MIN = 3000;
 
-    export default {
-        name: 'Loading',
-        data() {
-            return {
-                _renderer: null,
-                _elapsed: 0,
-                _time: 0,
-            }
-        },
-        computed: {
-            // ...mapGetters({
-            //     ratio: 'Common/ratio',
-            // })
-        },
-        created: function () {
-            const dLoading = new LoadingData();
-            this._time = 0;
-            this._elapsed = 0;
-            this.canvas = document.createElement('canvas');
-            this.canvas.width = this.canvas.height = 60;
-            const gl = new WebGLContext(this.ratio, this.canvas);
-            const data = new Loading(gl.ctx);
-            let _prg = new Program(
-                gl.ctx,
-                data,
-                ['position'],
-                [3],
-                ['mvpMatrix', 'resolution', 'time'],
-                [GLConfig.UNIFORM_TYPE_MATRIX4, GLConfig.UNIFORM_TYPE_VECTOR2, GLConfig.UNIFORM_TYPE_FLOAT]
-            );
-            const plane = new Geometry(gl.ctx, dLoading).init();
-            const mesh = new Mesh(gl.ctx, _prg, plane, GLConfig.DRAW_TYPE_TRIANGLE);
-            this._renderer = new Renderer(this.$store, gl);
-            this._renderer.add(mesh);
-        },
-        mounted() {
-            const parent = document.getElementById('loading-screen');
-            parent.appendChild(this.canvas);
+    const dLoading = new LoadingData();
+    const elapsedTime = Date.now();
+    let time = 0;
+    let animationTimer: number | null = null;
 
-            this.play();
+    const canvas = document.createElement('canvas');
 
-            this.$refs.wrap.addEventListener('transitionend', this.onTransitionEnd);
+    canvas.width = canvas.height = 60;
 
-            Methods.getJsonData(AppConfig.URLS.MICRO_ANIMATION_PATH).then(res => {
-                this.parseJson(res);
-            }).catch(err => {
-                console.log(err);
-            });
-        },
-        methods: {
-            // ...mapActions({
-            //     setAllItems: 'MicroAnimations/setAllItems',
-            //     changeScene: 'Common/changeScene',
-            // }),
-            parseJson(data) {
-                const allSketch = {};
+    const gl = new WebGLContext(window.devicePixelRatio, canvas);
 
-                for(let key in data) {
-                    if(data.hasOwnProperty(key)) {
-                        const sketchArr = [];
-                        const category = data[key];
-                        let i, len = category.length;
+    const loadingData = new Loading(gl.ctx);
 
-                        for(i = 0; i < len; i++) {
-                            const animation = category[i];
-                            const sketch = new Animation(
-                                animation['author'],
-                                key,
-                                i + 1
-                            );
+    const program = new Program(
+        gl.ctx,
+        loadingData,
+        ['position'],
+        [3],
+        ['mvpMatrix', 'resolution', 'time'],
+        [GLConfig.UNIFORM_TYPE_MATRIX4, GLConfig.UNIFORM_TYPE_VECTOR2, GLConfig.UNIFORM_TYPE_FLOAT]
+    );
 
-                            sketchArr.push(sketch);
-                        }
+    const plane = new Geometry(gl.ctx, dLoading).init();
+    const mesh = new Mesh(gl.ctx, program, plane, GLConfig.DRAW_TYPE_TRIANGLE);
+    const renderer = new Renderer(gl);
 
-                        allSketch[key] = sketchArr;
-                    }
+    renderer.updateCameraPosition(new Vector(0.0, 0.0, 1.0));
+    renderer.add(mesh);
+
+    const wrap = ref<HTMLElement | null>(null);
+
+    const parseJson = (data: MicroAnimationData) => {
+        const allSketch: {[key in MicroAnimationCategory]: iAnimation[]} = {
+            click: [],
+            hold: [],
+            hover: [],
+            loading: [],
+            toggle: [],
+        };
+
+        for(const [key, value] of Object.entries(data)) {
+            if (key === 'hover' || key === 'click' || key === 'loading' || key === 'hold' || key === 'toggle') {
+                const sketchArr: iAnimation[] = [];
+
+                for (let i = 0, len = value.length; i < len; i++) {
+                    const animation = value[i];
+                    const sketch = new Animation(
+                        animation['author'],
+                        key,
+                        i + 1,
+                    );
+
+                    sketchArr.push(sketch);
                 }
 
-                this.setAllItems(allSketch);
-
-                //ここまでにかかった時間 = ローディングを表示している時間
-                let loadingTime = this._elapsed - new Date().getTime();
-
-                //早すぎるのも微妙なので、TIME_MINより短かったら、TIME_MIN秒わざとおくらせる
-                let delay = loadingTime < TIME_MIN ? TIME_MIN : 0;
-
-                setTimeout(() => {
-                    this.hideLoader();
-                }, delay);
-            },
-            play() {
-                this._timer = requestAnimationFrame(this.animate);
-            },
-            pause() {
-                if(this._timer) {
-                    cancelAnimationFrame(this._timer);
-                    this._timer = null;
-                }
-            },
-            hideLoader() {
-                this.$refs.wrap.classList.remove('is-show');
-            },
-            onTransitionEnd() {
-                this.changeScene('top');
-                this.pause();
-            },
-            animate() {
-                this._timer = requestAnimationFrame(this.animate);
-
-                this._time += 0.01;
-
-                this.render();
-            },
-            render() {
-                this._renderer.update([60, 60], this._time);
+                allSketch[key] = sketchArr;
             }
-        },
-        renderError: function (err) {
         }
+
+        updateMicroAnimation(allSketch);
+
+        //ここまでにかかった時間 = ローディングを表示している時間
+        const loadingTime = elapsedTime - new Date().getTime();
+
+        //早すぎるのも微妙なので、TIME_MINより短かったら、TIME_MIN秒わざとおくらせる
+        const delay = loadingTime < TIME_MIN ? TIME_MIN : 0;
+
+        setTimeout(() => {
+            hideLoader();
+        }, delay);
+    };
+
+    const play = () => {
+        animationTimer = requestAnimationFrame(animate);
+    };
+
+    const pause = () => {
+        if(animationTimer) {
+            cancelAnimationFrame(animationTimer);
+            animationTimer = null;
+        }
+    };
+
+    const hideLoader = () => {
+        wrap.value?.classList.remove('is-show');
+    };
+
+    const onTransitionEnd = () => {
+        updateScene('microAnimationTop');
+        pause();
+    };
+
+    const render = () => {
+        renderer.update([60, 60], time);
     }
+
+    const animate = () => {
+        animationTimer = requestAnimationFrame(animate);
+
+        time += 0.01;
+
+        render();
+    };
+
+    onMounted(() => {
+        const parent = document.getElementById('loading-screen');
+
+        if (!parent) {
+            return;
+        }
+
+        parent.appendChild(canvas);
+
+        play();
+
+        wrap.value?.addEventListener('transitionend', onTransitionEnd);
+
+        parseJson(animations);
+    });
 </script>
 
 <style scoped lang="scss">

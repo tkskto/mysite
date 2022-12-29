@@ -23,7 +23,7 @@ import {Ref} from 'vue';
 const isShow: Ref<boolean> = useState('isShow', () => false);
 
 useHead({
-    title: 'Takeshi Kato',
+    title: 'Who is | Takeshi Kato',
     meta: [
         {
             hid: 'description',

@@ -1,23 +1,20 @@
 <template>
     <div class="animation-item" :data-category="category" :data-id="id">
-        <iframe :src="`/assets/microAnimations/data/${category}/${id}/index.html`" loading="lazy"></iframe>
+        <iframe :src="`/microAnimations/data/${category}/${id}/index.html`" loading="lazy" />
     </div>
 </template>
 
-<script>
-    export default {
-        name: "item",
-        props: {
-            category: {
-                type: String,
-                required: true,
-            },
-            id: {
-                type: Number,
-                required: true,
-            }
+<script setup>
+    defineProps({
+        category: {
+            type: String,
+            required: true,
         },
-    }
+        id: {
+            type: Number,
+            required: true,
+        },
+    });
 </script>
 
 <style scoped lang="scss">
@@ -26,9 +23,7 @@
         width: calc((100% - 80px) / 5);
         margin-right: 20px;
         margin-bottom: 40px;
-        -webkit-transform: scale3d(1,1,1);
         transform: scale3d(1,1,1);
-        transition: -webkit-transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
         &:nth-child(5n) {

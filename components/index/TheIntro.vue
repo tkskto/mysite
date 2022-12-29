@@ -23,7 +23,7 @@
         Scene,
         WebGLRenderer
     } from 'three';
-    import {onBeforeRouteLeave} from 'vue-router'
+    import {onBeforeRouteLeave} from 'vue-router';
     import {useScreenSize} from '~/composable/useScreenSize';
     import {useSceneName} from '~/composable/useSceneName';
 

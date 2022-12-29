@@ -1,8 +1,8 @@
-import { MatrixUtils } from '../Utils';
+import {MatrixUtils} from '../Utils';
 import WebGLContext from './Context';
 import Vector from './Vector';
 import Mesh from './Mesh';
-import AppConfig from '../../practice/Config';
+import {ScreenSize} from '~/types/index.js';
 
 export default class Renderer {
 
@@ -18,21 +18,16 @@ export default class Renderer {
     private vpMatrix!: Float32Array;
     private mvpMatrix!: Float32Array;
 
-    private unWatchResizeEvent;
-    private unWatchStateChangeEvent;
+    private _cameraPosition: Vector = new Vector();
 
-    constructor(private _store: any, private _ctx: WebGLContext) {
-        this._cWidth = _ctx.canvas.clientWidth;
-        this._cHeight = _ctx.canvas.clientHeight;
+    constructor(private _ctx: WebGLContext) {
+        this._cWidth = _ctx.canvas.width;
+        this._cHeight = _ctx.canvas.height;
         this._gl = _ctx.ctx;
 
         this._gl.enable(this._gl.DEPTH_TEST);
         this._gl.depthFunc(this._gl.LEQUAL);
 
-        this.unWatchResizeEvent = _store.watch((state) => {
-            return state.Common.screenSize;
-        }, this.onResize);
-        this.unWatchStateChangeEvent = _store.watch(AppConfig.ON_CAMERA_STATE_CHANGED, this.initializeMatrix);
         this.initializeMatrix();
     }
 
@@ -61,14 +56,6 @@ export default class Renderer {
      */
     public dispose = (): void => {
         this._target.length = 0;
-
-        if (this.unWatchResizeEvent) {
-            this.unWatchResizeEvent();
-        }
-
-        if (this.unWatchStateChangeEvent) {
-            this.unWatchStateChangeEvent();
-        }
     };
 
     public update = (...values: any[]): void => {
@@ -96,21 +83,23 @@ export default class Renderer {
         this.qMatrix = MatrixUtils.initialize(MatrixUtils.create());
         this.vpMatrix = MatrixUtils.initialize(MatrixUtils.create());
 
-        const canvasSize = this._store.getters['Common/canvasSize'];
-        const cameraPosition = this._store.getters['Practice/cameraPosition'];
-        const aspectRatio = canvasSize.width > canvasSize.height ? canvasSize.width / canvasSize.height : canvasSize.height / canvasSize.width;
+        const aspectRatio = this._cWidth > this._cHeight ? this._cWidth / this._cHeight : this._cHeight / this._cWidth;
 
         // ビュー座標変換行列
-        MatrixUtils.lookAt(cameraPosition, new Vector(0.0, 0.0, 0.0), new Vector(0, 1, 0), this.vMatrix);
+        MatrixUtils.lookAt(this._cameraPosition, new Vector(0.0, 0.0, 0.0), new Vector(0, 1, 0), this.vMatrix);
         MatrixUtils.perspective(90, aspectRatio, 0.1, 1000, this.pMatrix);
         MatrixUtils.multiply(this.pMatrix, this.vMatrix, this.vpMatrix);
     };
 
-    private onResize = (): void => {
-        const canvasSize = this._store.getters['Common/canvasSize'];
-        this.initializeMatrix();
+    public updateCanvasSize = (canvasSize: ScreenSize): void => {
         this._cWidth = canvasSize.width;
         this._cHeight = canvasSize.height;
+        this.initializeMatrix();
         this._gl.viewport(0, 0, this._cWidth, this._cHeight);
+    }
+
+    public updateCameraPosition = (cameraPosition: Vector): void => {
+        this._cameraPosition = cameraPosition;
+        this.updateCanvasSize({width: this._cWidth, height: this._cHeight});
     }
 }

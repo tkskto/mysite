@@ -1,7 +1,7 @@
 <template>
-    <section class="container" :class="{ready: isReady}">
+    <section class="container">
         <index-the-logo />
-        <index-the-intro v-if="sceneName === 'first'" />
+        <index-the-intro v-if="isReady" ref="intro" />
         <p class="black-lives-matter">
             <strong>Black Lives Matter.</strong>
         </p>
@@ -24,23 +24,16 @@ useHead({
 });
 
 const {sceneName} = useSceneName();
-const isReady = sceneName === AppConfig.SCENE.READY;
+const isReady = computed(() => {
+    return sceneName.value === AppConfig.SCENE.FIRST || sceneName.value === AppConfig.SCENE.READY;
+});
+const intro = ref(null);
 
-// beforeRouteEnter(to, from, next) {
-//     if (from.name) {
-//         next((vm) => {
-//             vm.changeScene(AppConfig.SCENE.READY);
-//         });
-//     }
-//
-//     next();
-// },
-// beforeRouteLeave(to, from, next) {
-//     console.log(to, from);
-//     this.$refs.intro.beforeLeave().then(() => {
-//         next();
-//     });
-// },
+onBeforeRouteLeave(async () => {
+    if (intro) {
+        await intro.value.beforeLeave();
+    }
+});
 </script>
 
 <style lang="scss">

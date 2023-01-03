@@ -59,9 +59,9 @@ onMounted(() => {
 
     .text .text__text {
         opacity: 0;
-        font-size: 4.0rem;
+        font-size: 1.6rem;
         transition: transform 0.5s cubic-bezier(.17,.67,.4,.99), opacity 0.7s;
-        transform: translateX(25%);
+        transform: translateX(5%) skewX(-100deg);
 
         &:nth-child(1) {
             transition-delay: 0.12s;
@@ -86,10 +86,6 @@ onMounted(() => {
 
     .text-min {
         margin-bottom: 30px;
-
-        .text__text {
-            font-size: 1.6rem;
-        }
     }
 
     ul {
@@ -127,18 +123,6 @@ onMounted(() => {
         width: 50%;
         height: 100%;
         z-index: -1;
-    }
-
-    @media screen and (max-width: 768px) {
-        .text .text__text {
-            font-size: 3.2rem;
-        }
-    }
-
-    @media screen and (max-width: 414px) {
-        .text .text__text {
-            font-size: 2.2rem;
-        }
     }
 
     &.is-show {

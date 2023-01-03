@@ -13,14 +13,22 @@
         </section>
         <section class="container talks">
             <h2>Talks</h2>
-            <ul>
-                <li>2019.11.30<a href="https://jsconf.jp/2019/talk/takeshi-kato">Understanding Streams API</a></li>
-            </ul>
+            <p>2019.11.30<a href="https://jsconf.jp/2019/talk/takeshi-kato">Understanding Streams API</a></p>
         </section>
         <section class="container">
             <h2>Tools</h2>
             <p>I made these tools as an OSS for my work more easily.</p>
-            <ul></ul>
+            <h3>vue-component-analyzer</h3>
+            <p>vue-component-analyzer can Analyze dependency tree for Vue.js SFC (Single File Component). You can see <a href="https://tkskto.github.io/vue-component-analyzer/dist/">GitHub Pages</a> for a demo.</p>
+            <div class="links"><a href="https://github.com/tkskto/vue-component-analyzer">GitHub</a> / <a href="https://www.npmjs.com/package/@tkskto/vue-component-analyzer">npm</a></div>
+
+            <h3>git-log-nodejs</h3>
+            <p>git-log-nodejs is a tool to get git logs.</p>
+            <div class="links"><a href="https://github.com/tkskto/git-log-nodejs">GitHub</a> / <a href="https://www.npmjs.com/package/git-log-nodejs">npm</a></div>
+
+            <h3>export-vscode-snippets</h3>
+            <p>export-vscode-snippets is a tool for generating snippet files for VSCode.</p>
+            <div class="links"><a href="https://github.com/tkskto/export-vscode-snippets">GitHub</a> / <a href="https://www.npmjs.com/package/export-vscode-snippets">npm</a></div>
         </section>
         <section class="container">
             <h2>Playground</h2>
@@ -63,24 +71,35 @@ useHead({
         p {
             font-size: 2.8rem;
             color: #ffffff;
-            margin-bottom: 20px;
         }
 
         .container {
             height: auto;
             padding: 20px 40px;
 
+            a {
+                color: #ffffff;
+            }
+
             h2 {
                 font-size: 2.4rem;
                 margin-bottom: 16px;
+            }
 
-                a {
-                    color: #ffffff;
-                }
+            h3 {
+                font-size: 1.6rem;
+                margin-top: 20px;
+                margin-bottom: 8px;
             }
 
             p {
                 font-size: 1.6rem;
+            }
+
+            .links {
+                font-size: 1.4rem;
+                margin-top: 12px;
+                margin-bottom: 32px;
             }
 
             ul {

@@ -14,14 +14,14 @@
     "dependencies": {
         "@nuxtjs/google-analytics": "2.4.0",
         "gsap": "3.6.1",
-        "nuxt": "2.15.8",
+        "nuxt": "2.18.1",
         "simplex-noise": "2.4.0",
         "three": "0.141.0",
         "vuex": "3.6.2"
     },
     "devDependencies": {
         "@babel/compat-data": "7.12.13",
-        "@nuxt/types": "2.15.8",
+        "@nuxt/types": "2.18.1",
         "@nuxt/typescript": "2.8.1",
         "@nuxt/typescript-build": "2.1.0",
         "@nuxtjs/sitemap": "2.4.0",

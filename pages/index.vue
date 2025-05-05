@@ -1,81 +1,48 @@
+<script setup lang="ts">
+import Logo from '~/components/index/Logo.vue'
+import Intro from '~/components/index/Intro.vue'
+import Navs from '~/components/common/nav/Navigation.vue'
+
+// Pinia store を使う場合はここで定義
+// const store = useCommonStore()
+
+const introRef = ref<InstanceType<typeof Intro> | null>(null)
+
+useHead({
+    title: 'Takeshi Kato',
+    meta: [
+        {
+            name: 'description',
+            content: "This is takeshi kato's Web site. I'm a frontend developer.",
+        }
+    ]
+})
+
+
+onBeforeRouteLeave(async () => {
+    if (introRef.value?.beforeLeave) {
+        await introRef.value.beforeLeave()
+    }
+});
+</script>
+
 <template>
-    <section class="container" :class="{ready: isReady}">
-        <logo></logo>
-        <intro ref="intro"></intro>
+    <section class="container">
+        <logo />
+        <intro ref="intro" />
         <p class="black-lives-matter"><strong>Black Lives Matter.</strong></p>
-        <navs></navs>
+        <navs />
     </section>
 </template>
 
-<script>
-    import {mapGetters, mapActions} from 'vuex';
-    import Logo from '~/components/index/Logo.vue';
-    import Intro from '~/components/index/Intro.vue';
-    import Navs from '~/components/common/nav/Navigation.vue';
-    import {AppConfig} from '~/assets/ts/common/Config.ts';
-
-    export default {
-        components: {
-            Logo,
-            Intro,
-            Navs
-        },
-        computed: {
-            ...mapGetters({
-                sceneName: 'Common/sceneName',
-            }),
-            isReady() {
-                return this.sceneName === AppConfig.SCENE.READY;
-            },
-        },
-        data() {
-            return {
-                readyState: false,
-            };
-        },
-        head() {
-            return {
-                title: 'Takeshi Kato',
-                meta: [
-                    {
-                        hid: 'description',
-                        name: 'description',
-                        content: 'This is takeshi kato\'s Web site. I\'m a frontend developer.'
-                    }
-                ],
-            };
-        },
-        methods: {
-            ...mapActions({
-                changeScene: 'Common/changeScene',
-            }),
-        },
-        beforeRouteEnter(to, from, next) {
-            if (from.name) {
-                next((vm) => {
-                    vm.changeScene(AppConfig.SCENE.READY);
-                });
-            }
-
-            next();
-        },
-        beforeRouteLeave(to, from, next) {
-            console.log(to, from);
-            this.$refs.intro.beforeLeave().then(() => {
-                next();
-            });
-        },
-    };
-</script>
-
-<style lang="scss">
+<style>
     .container {
         position: relative;
         width: 100%;
         min-height: 100%;
         overflow: hidden;
 
-        .black-lives-matter {
+        & .black-lives-matter {
             position: absolute;
             left: 0;
             right: 0;

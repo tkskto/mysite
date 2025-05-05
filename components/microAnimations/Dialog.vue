@@ -1,6 +1,8 @@
 <template>
-    <div id="intro" class="dialog" :class="{'is-show': isShow}">
-        <div class="dialog-inner" :style="{width: width + 'px', height: height + 'px'}">
+    <UModal>
+        <UButton icon="i-lucide-search" size="md" color="neutral" variant="subtle" />
+
+        <template #content>
             <div class="dialog-header">
                 <h2 class="hdg2">Introduction</h2>
                 <button type="button" class="btn-close-dialog" @click="closeDialog">閉じる</button>
@@ -23,48 +25,11 @@
                     <p class="section-txt">アニメーションはただの雰囲気作りで追加してしまうと、ユーザを無駄に待たせてしまったり、煩わしさを与える危険性もあります。下記に注意点をまとめておきますので本当に必要かどうかをまずは検討してください。</p>
                 </section>
             </section>
-        </div>
-        <div role="presentation" class="dialog-overlay"></div>
-    </div>
+        </template>
+    </UModal>
 </template>
 
-<script>
-    import {mapGetters, mapActions} from 'vuex';
-
-    export default {
-        name: 'Dialog',
-        components: {},
-        props: {
-            isShow: {
-                type: Boolean,
-                require: true,
-            }
-        },
-        computed: {
-            ...mapGetters({
-                screenSize: 'Common/screenSize',
-            }),
-            width() {
-                return this.screenSize.width - 100;
-            },
-            height() {
-                return this.screenSize.height - 50;
-            }
-        },
-        methods: {
-            ...mapActions({
-                changeDialogState: 'MicroAnimations/changeDialogState',
-                changeScene:'Common/changeScene',
-            }),
-            closeDialog() {
-                this.changeDialogState(false);
-                this.changeScene('top');
-            },
-        }
-    }
-</script>
-
-<style scoped lang="scss">
+<style scoped>
     .dialog {
         position: fixed;
         width: 100%;
@@ -77,22 +42,18 @@
             top: 0;
             opacity: 1;
 
-            .dialog-inner {
+            & .dialog-inner {
                 top: 0;
             }
         }
 
-        &.is-hide {
-            top: 0;
-        }
-
-        .dialog-overlay {
+        & .dialog-overlay {
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, .2);
         }
 
-        .dialog-inner {
+        & .dialog-inner {
             position: absolute;
             background: #fff;
             border-radius: 6px;
@@ -105,20 +66,21 @@
             overflow: hidden;
         }
     }
+
     #intro {
-        .dialog-inner .dialog-header {
+        & .dialog-inner .dialog-header {
             background: #43a0ff;
             padding: 5px 10px;
             display: flex;
             justify-content: space-between;
         }
 
-        .dialog-header {
-            .hdg2{
+        & .dialog-header {
+            & .hdg2{
                 color: #fff;
             }
 
-            .btn-close-dialog {
+            & .btn-close-dialog {
                 position: relative;
                 color: #43a0ff;
 
@@ -133,7 +95,6 @@
                     left: 0;
                     right: 0;
                     margin: auto;
-                    -webkit-transform: rotate(45deg);
                     transform: rotate(45deg);
                 }
 
@@ -149,33 +110,23 @@
             }
         }
 
-        .intro-section {
+        & .intro-section {
             padding: 10px 20px;
 
-            .hdg3 {
+            & .hdg3 {
                 margin-bottom: 10px;
             }
 
-            .section-txt {
+            & .section-txt {
                 margin-left: 10px;
             }
 
-            .inner-section {
+            & .inner-section {
                 padding: 5px 10px;
                 margin-bottom: 10px;
 
-                .hdg4 {
+                & .hdg4 {
                     margin-bottom: 5px;
-                }
-
-                .section-list01 {
-                    margin-top: 15px;
-                    padding-left: 30px;
-
-                    .list-item {
-                        list-style-type: disc;
-                        margin-bottom: 5px;
-                    }
                 }
             }
         }

@@ -44,80 +44,79 @@
     };
 </script>
 
-<style lang="scss" scoped>
-    .container {
-        padding: 20px;
+<style scoped>
+.container {
+    padding: 20px;
+    color: #ffffff;
+
+    & h1 {
+        font-size: 4.0rem;
         color: #ffffff;
+        margin-bottom: 20px;
+    }
 
-        h1 {
-            font-size: 4.0rem;
-            color: #ffffff;
-            margin-bottom: 20px;
-        }
+    & p {
+        font-size: 2.8rem;
+        color: #ffffff;
+        margin-bottom: 20px;
+    }
 
-        p {
-            font-size: 2.8rem;
-            color: #ffffff;
-            margin-bottom: 20px;
-        }
+    & .container {
+        height: auto;
+        padding: 20px 40px;
 
-        .container {
-            height: auto;
-            padding: 20px 40px;
+        & h2 {
+            font-size: 2.4rem;
+            margin-bottom: 16px;
 
-            h2 {
-                font-size: 2.4rem;
-                margin-bottom: 16px;
-
-                a {
-                    color: #ffffff;
-                }
-            }
-
-            p {
-                font-size: 1.6rem;
-            }
-
-            ul {
-                display: flex;
-
-                > li {
-                    list-style-type: none;
-                    flex: 1 0 0%;
-                    max-width: 300px;
-                    font-size: 1.3rem;
-
-                    &:not(:last-child) {
-                        margin-right: 20px;
-                    }
-
-                    a {
-                        color: #ffffff;
-                    }
-                }
-            }
-
-            .img {
-                margin-bottom: 10px;
-                display: block;
-            }
-        }
-
-        a > img {
-            max-width: 100%;
-        }
-
-        @media screen and (max-width: 768px) {
-            .container {
-                padding: 20px;
-            }
-        }
-
-        &.talks {
-            a {
-                padding: 0 10px;
+            & a {
                 color: #ffffff;
             }
         }
+
+        & p {
+            font-size: 1.6rem;
+        }
+
+        & ul {
+            display: flex;
+
+            & > li {
+                list-style-type: none;
+                flex: 1 0 0%;
+                max-width: 300px;
+                font-size: 1.3rem;
+
+                &:not(:last-child) {
+                    margin-right: 20px;
+                }
+
+                & a {
+                    color: #ffffff;
+                }
+            }
+        }
+
+        & .img {
+            margin-bottom: 10px;
+            display: block;
+        }
     }
+
+    & a > img {
+        max-width: 100%;
+    }
+
+    &.talks a {
+        padding: 0 10px;
+        color: #ffffff;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .container .container {
+        padding: 20px;
+    }
+}
+
 </style>

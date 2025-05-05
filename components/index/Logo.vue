@@ -1,5 +1,20 @@
+<script setup lang="ts">
+const root = ref<HTMLElement | null>(null);
+const svg = ref<HTMLElement | null>(null);
+
+onMounted(() => {
+    if (svg.value) {
+        // svg.value.addEvetListener('transitionend', transitionEnd);
+    }
+    
+    if (root.value) {
+        root.value.classList.add('show');
+    }
+})
+</script>
+
 <template>
-    <div id="mv">
+    <div ref="root" id="mv">
         <div class="mv-svg-wrapper">
             <svg ref="svg" class="mv-svg" viewBox="0, 0, 14, 4">
                 <path class="svg-path" d="M0,0 l1,0 l1,3 l1,-3 l1,0 l1,3 l1,-3 l1,0 l-1,4 l-1.5,0 l-1,-2.5 l-1,2.5 l-1.25,0 z"></path>
@@ -11,44 +26,7 @@
     </div>
 </template>
 
-<script>
-    import {mapGetters, mapActions} from 'vuex';
-    import {AppConfig} from '~/assets/ts/common/Config.ts';
-
-    export default {
-        name: 'logo',
-        computed: {
-            ...mapGetters({
-                sceneName: 'Common/sceneName',
-            })
-        },
-        mounted: function () {
-            if (this.sceneName === AppConfig.SCENE.LOAD) {
-                this.$refs.svg.addEventListener('transitionend', this.transitionEnd);
-                setTimeout(() => {
-                    this.$el.classList.add('show');
-                }, 10);
-            } else {
-                this.$el.classList.add('hide');
-            }
-        },
-        methods: {
-            ...mapActions({
-                changeScene: 'Common/changeScene',
-            }),
-            transitionEnd: function () {
-                if (this.sceneName === AppConfig.SCENE.LOAD) {
-                    this.$el.classList.add('hide');
-                    this.changeScene(AppConfig.SCENE.INTRO);
-                } else if (this.sceneName === AppConfig.SCENE.INTRO) {
-                    this.changeScene(AppConfig.SCENE.FIRST);
-                }
-            }
-        }
-    };
-</script>
-
-<style scoped lang="scss">
+<style scoped>
     #mv {
         position:absolute;
         width: 100%;
@@ -57,17 +35,17 @@
         align-items: center;
         justify-content: center;
 
-        .mv-svg-wrapper {
+        & .mv-svg-wrapper {
             width: 300px;
 
 
-            .svg-path {
+            & .svg-path {
                 stroke: #fff;
                 stroke-width: 0.1;
                 fill: none;
             }
 
-            .mv-svg {
+            & .mv-svg {
                 stroke-dasharray: 32.5, 32.5;
                 stroke-dashoffset: 32.5;
                 transition: stroke-dashoffset 3s ease, transform 0.5s cubic-bezier(.5,-0.3,.83,.67);

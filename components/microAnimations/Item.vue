@@ -20,13 +20,12 @@
     }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
     .animation-item {
         position: relative;
         width: calc((100% - 80px) / 5);
         margin-right: 20px;
         margin-bottom: 40px;
-        -webkit-transform: scale3d(1,1,1);
         transform: scale3d(1,1,1);
         transition: -webkit-transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -42,7 +41,7 @@
             padding-top: 100%;
         }
 
-        iframe {
+        & iframe {
             position: absolute;
             max-width: 100%;
             max-height: 100%;

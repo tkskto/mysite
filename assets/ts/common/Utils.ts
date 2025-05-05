@@ -341,10 +341,13 @@ export class GLUtils {
                     Methods.showError('unknown uniform types');
                     break;
             }
-        } catch (err) {
+        } catch (err: unknown) {
             Methods.showError(`type: ${_uniType}`);
             Methods.showError(`value: ${_value}`);
-            Methods.showError(err.message);
+            
+            if (err instanceof Error) {
+                Methods.showError(err.message);
+            }
         }
     }
 }

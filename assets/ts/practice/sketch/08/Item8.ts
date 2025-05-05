@@ -1,3 +1,4 @@
+
 import Sketch from '../common/Sketch';
 import Default from './Shader';
 import WebGLContext from '../../../common/gl/Context';
@@ -44,7 +45,7 @@ export default class Item8 extends Sketch {
         this._store.commit('Practice/SET_VS_TEXT', this._shader.vertexString);
         this._store.commit('Practice/SET_FS_TEXT', this._shader.fragmentString);
 
-        GLUtils.createTexture(await require('../../../../img/practice/lena.png'), this._gl, this._gl.UNSIGNED_BYTE).then(tex => {
+        GLUtils.createTexture('../../../../img/practice/lena.png', this._gl, this._gl.UNSIGNED_BYTE).then(tex => {
             this._mesh.addTexture(tex);
             this.play();
         }, err => {

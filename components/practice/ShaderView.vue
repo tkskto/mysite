@@ -1,3 +1,17 @@
+<script setup lang="ts">
+const vertexShaderString = ref('');
+const fragmentShaderString = ref('');
+
+const VS = computed(() => {
+    return vertexShaderString.replace(/\n/g, '<br>').replace(/\s{20}/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+});
+
+const FS = computed(() => {
+    return fragmentShaderString.replace(/\n/g, '<br>').replace(/\s{20}/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+});
+</script>
+
+
 <template>
     <div class="container-text-shader">
         <div class="text-VS">
@@ -11,31 +25,6 @@
         <div class="bg"></div>
     </div>
 </template>
-
-<script>
-    import {mapGetters} from 'vuex';
-    export default {
-        name: "ShaderView",
-        computed: {
-            ...mapGetters({
-                vertexShaderString: 'Practice/vertexShaderString',
-                fragmentShaderString: 'Practice/fragmentShaderString',
-            }),
-            /**
-             * @return {string}
-             */
-            VS() {
-                return this.vertexShaderString.replace(/\n/g, '<br>').replace(/\s{20}/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
-            },
-            /**
-             * @return {string}
-             */
-            FS() {
-                return this.fragmentShaderString.replace(/\n/g, '<br>').replace(/\s{20}/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
-            }
-        }
-    }
-</script>
 
 <style scoped>
     .container-text-shader {

@@ -27,16 +27,16 @@
     }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
     .category {
         margin-bottom: 80px;
 
-        .hdg3 {
+        & .hdg3 {
             margin-bottom: 15px;
             font-size: 2.0rem;
         }
 
-        .animations {
+        & .animations {
             display: -webkit-flex;
             display: flex;
             -webkit-justify-content: flex-start;

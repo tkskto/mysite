@@ -1,12 +1,12 @@
 <template>
-    <div class="str-root">
-        <nuxt/>
-    </div>
+    <UApp>
+        <div class="str-root">
+            <slot/>
+        </div>
+    </UApp>
 </template>
 
 <script>
-    import {mapGetters, mapActions} from 'vuex';
-
     export default {
         head() {
             return {

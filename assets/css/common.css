@@ -1,5 +1,8 @@
 @charset "UTF-8";
 
+@import "tailwindcss";
+@import "@nuxt/ui";
+
 html, body, div, span,
 h1, h2, h3, h4, h5, h6,
 p, pre, a, img, button,
@@ -11,13 +14,9 @@ header, main, nav, footer {
 }
 
 html {
-    font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, YuGothic, "Hiragino Kaku Gothic", Meiryo, sans-serif;
-    font-size: 62.5%;
+    font-family: system-ui, -apple-system, Roboto, Noto Sans JP, YuGothic, "Hiragino Kaku Gothic", Meiryo, sans-serif;
     word-spacing: 1px;
-    -ms-text-size-adjust: 100%;
-    -webkit-text-size-adjust: 100%;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
+    text-size-adjust: 100%;
     box-sizing: border-box;
 }
 

@@ -1,30 +1,18 @@
+<script setup lang="ts">
+const isMusicMode = ref(false);
+
+const onClick = () => {
+    // TODO
+    // this.setMusicPlayState(!this.musicPlayState);
+    // this.setMusicMode(false);
+};
+</script>
+
 <template>
     <transition name="button">
         <button v-show="isMusicMode" type="button" @click="onClick">PLAY</button>
     </transition>
 </template>
-
-<script>
-    import {mapActions, mapGetters} from 'vuex';
-    export default {
-        computed: {
-            ...mapGetters({
-                isMusicMode: 'Practice/isMusicMode',
-                musicPlayState: 'Practice/musicPlayState'
-            }),
-        },
-        methods: {
-            ...mapActions({
-                setMusicPlayState: 'Practice/setMusicPlayState',
-                setMusicMode: 'Practice/setMusicMode'
-            }),
-            onClick() {
-                this.setMusicPlayState(!this.musicPlayState);
-                this.setMusicMode(false);
-            },
-        },
-    };
-</script>
 
 <style scoped>
     button {

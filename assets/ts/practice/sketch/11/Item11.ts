@@ -1,4 +1,4 @@
-import Sketch from '../common/Sketch';
+import {Sketch} from '../common/Sketch';
 import Default from './Shader';
 import WebGLContext from '../../../common/gl/Context';
 import Renderer from '../../../common/gl/Renderer';
@@ -8,27 +8,33 @@ import Program from '../../../common/gl/Program';
 import { GLConfig } from '../../../common/Config';
 import Plane from '../../utils/Plane';
 import {GLUtils} from '../../../common/Utils';
+import {useMousePosition} from '~/composables/useMousePosition';
+import {usePracticeShader} from '~/composables/usePracticeShader';
+import {useScreenSize} from '~/composables/useScreenSize';
+
+const {updateVertexShader, updateFragmentShader} = usePracticeShader();
+const {canvasSize} = useScreenSize();
+const {mousePosition, startMouseTracking, stopMouseTracking} = useMousePosition();
 
 export default class Item11 extends Sketch {
 
     private _data: Plane = new Plane();
     private _ctx!: WebGLContext;
     private _gl!: WebGLRenderingContext;
-    private _shader!: Default;
     private _default!: Program;
     private _renderer!: Renderer;
     private _mesh!: Mesh;
 
-    constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {
-        super(_store, _id);
+    constructor(private _canvas: HTMLCanvasElement, _id: string) {
+        super(_id);
     }
 
-    public setup = async (): Promise<any> => {
-        this._ctx = new WebGLContext(1, this._canvas);
+    public setup = async (): Promise<void> => {
+        this._ctx = new WebGLContext(this._canvas);
         this._gl = this._ctx.ctx;
         this.clear();
-        this._shader = new Default(this._gl);
-        this._default = new Program(this._gl, this._shader,
+        const shader = new Default(this._gl);
+        this._default = new Program(this._gl, shader,
             ['position', 'color', 'normal', 'uv'],
             [3, 4, 3, 2],
             ['mvpMatrix', 'resolution', 'tex1', 'tex2', 'mouse'],
@@ -40,25 +46,23 @@ export default class Item11 extends Sketch {
                 GLConfig.UNIFORM_TYPE_VECTOR2,
             ]
         );
-        this._renderer = new Renderer(this._store, this._ctx);
+        this._renderer = new Renderer(this._ctx);
 
         const plane: Geometry = new Geometry(this._gl, this._data).init();
         this._mesh = new Mesh(this._gl, this._default, plane, GLConfig.DRAW_TYPE_TRIANGLE);
         this._renderer.add(this._mesh);
 
-        this._store.commit('Practice/SET_VS_TEXT', this._shader.vertexString);
-        this._store.commit('Practice/SET_FS_TEXT', this._shader.fragmentString);
-        this._store.commit('Common/SET_MOUSE_STATE', true);
+        updateVertexShader(shader.vertexString);
+        updateFragmentShader(shader.fragmentString);
+        startMouseTracking();
 
-        GLUtils.createTexture(await require('../../../../img/practice/11_1.jpg'), this._gl, this._gl.UNSIGNED_BYTE).then(async tex => {
-            this._mesh.addTexture(tex);
-            return GLUtils.createTexture(await require('../../../../img/practice/11_2.jpg'), this._gl, this._gl.UNSIGNED_BYTE);
-        }).then(tex => {
-            this._mesh.addTexture(tex);
-            this.play();
-        }).catch(err => {
-            console.log(err);
-        });
+        const texture1 = await GLUtils.createTexture('/assets/img/practice/11_1.jpg', this._gl, this._gl.UNSIGNED_BYTE);
+        const texture2 = await GLUtils.createTexture('/assets/img/practice/11_2.jpg', this._gl, this._gl.UNSIGNED_BYTE);
+
+        this._mesh.addTexture(texture1);
+        this._mesh.addTexture(texture2);
+
+        this.play();
     };
 
     public clear = (): void => {
@@ -69,6 +73,8 @@ export default class Item11 extends Sketch {
 
     public dispose = (): void => {
         this.pause();
+
+        stopMouseTracking();
 
         if (this._mesh) {
             this._mesh.dispose();
@@ -86,8 +92,6 @@ export default class Item11 extends Sketch {
 
     public animate = (): void => {
         this.clear();
-        const canvasSize = this._store.getters['Common/canvasSize'];
-        const mousePosition = this._store.getters['Common/mousePosition'];
         this._renderer.update([canvasSize.width, canvasSize.height], 0, 1, [mousePosition.x, mousePosition.y]);
     };
 }

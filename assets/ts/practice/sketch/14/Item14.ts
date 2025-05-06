@@ -1,4 +1,4 @@
-import Sketch from '../common/Sketch';
+import {Sketch} from '../common/Sketch';
 import Data from '../../../common/gl/plane/pData';
 import Renderer from '../../../common/gl/Renderer';
 import Geometry from '../../../common/gl/Geometry';
@@ -9,6 +9,12 @@ import Default from './Shader';
 import FFT from '../../../common/audio/FFT';
 import {GLUtils} from '../../../common/Utils';
 import WebGLContext from '../../../common/gl/Context';
+
+import {usePracticeShader} from '~/composables/usePracticeShader';
+import {useScreenSize} from '~/composables/useScreenSize';
+
+const {updateVertexShader, updateFragmentShader} = usePracticeShader();
+const {canvasSize} = useScreenSize();
 
 export default class Item14 extends Sketch {
 
@@ -21,12 +27,12 @@ export default class Item14 extends Sketch {
     private _audioAnalyser!: AnalyserNode;
     private _frequency!: Uint8Array;
 
-    constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {
-        super(_store, _id);
+    constructor(private _canvas: HTMLCanvasElement, _id: string) {
+        super(_id);
     }
 
     public setup = (): void => {
-        const ctx = new WebGLContext(this._store.getters.ratio, this._canvas);
+        const ctx = new WebGLContext(this._canvas);
         this._gl = ctx.ctx;
         const shader = new Default(this._gl);
         this.clear();
@@ -36,14 +42,14 @@ export default class Item14 extends Sketch {
             ['mvpMatrix', 'resolution', 'time', 'fft'],
             [GLConfig.UNIFORM_TYPE_MATRIX4, GLConfig.UNIFORM_TYPE_VECTOR2, GLConfig.UNIFORM_TYPE_FLOAT, GLConfig.UNIFORM_TYPE_AUDIO_TEXTURE]
         );
-        this._renderer = new Renderer(this._store, ctx);
+        this._renderer = new Renderer(ctx);
 
         const line: Geometry = new Geometry(this._gl, this._data).init();
         const mesh: Mesh = new Mesh(this._gl, this._default, line, GLConfig.DRAW_TYPE_TRIANGLE);
         this._renderer.add(mesh);
 
-        this._store.commit('Practice/SET_VS_TEXT', shader.vertexString);
-        this._store.commit('Practice/SET_FS_TEXT', shader.fragmentString);
+        updateVertexShader(shader.vertexString);
+        updateFragmentShader(shader.fragmentString);
 
         this._audioContext = new FFT();
         this._audioAnalyser = this._audioContext.analyser;
@@ -81,7 +87,6 @@ export default class Item14 extends Sketch {
 
     public animate = (): void => {
         this.clear();
-        const canvasSize = this._store.getters['Common/canvasSize'];
         this._renderer.update([canvasSize.width, canvasSize.height], this._time, [0, this._frequency]);
     };
 }

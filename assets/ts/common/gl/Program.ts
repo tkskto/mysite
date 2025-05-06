@@ -1,5 +1,5 @@
 import { GLUtils } from '../Utils';
-import Shader from './Shader';
+import type Shader from './Shader';
 
 export default class Program {
     private _program!: WebGLProgram;

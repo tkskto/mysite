@@ -1,145 +1,145 @@
-<template>
-    <div id="loading-screen" class="is-show" ref="wrap"></div>
-</template>
+<script setup lang="ts">
+import Program from '~/assets/ts/common/gl/Program';
+import Renderer from '~/assets/ts/common/gl/Renderer';
+import Animation from '~/assets/ts/common/datatype/Animation';
+import { GLConfig } from '~/assets/ts/common/Config';
+import Loading from '~/assets/ts/common/shader/Loading';
+import LoadingData from '~/assets/ts/common/data/Loading';
+import WebGLContext from '~/assets/ts/common/gl/Context';
+import Geometry from '~/assets/ts/common/gl/Geometry';
+import Mesh from '~/assets/ts/common/gl/Mesh';
+import {useScreenSize} from '~/composables/useScreenSize';
 
-<script>
-    import {mapActions, mapGetters} from 'vuex';
-    import Program from '~/assets/ts/common/gl/Program.ts';
-    import Renderer from '~/assets/ts/common/gl/Renderer.ts';
-    import Animation from '~/assets/ts/common/datatype/Animation.ts';
-    import {Methods} from '~/assets/ts/common/Utils.ts';
-    import {AppConfig, GLConfig} from '~/assets/ts/common/Config.ts';
-    import Loading from '~/assets/ts/common/shader/Loading.ts';
-    import LoadingData from '~/assets/ts/common/data/Loading.ts';
-    import WebGLContext from '~/assets/ts/common/gl/Context.ts';
-    import Geometry from '~/assets/ts/common/gl/Geometry.ts';
-    import Mesh from '~/assets/ts/common/gl/Mesh.ts';
+type animation = {
+    author: string,
+    time: string,
+};
 
-    const TIME_MIN = 3000;
+type animationList = {
+    [key: string]: animation[]
+};
 
-    export default {
-        name: 'Loading',
-        data() {
-            return {
-                _renderer: null,
-                _elapsed: 0,
-                _time: 0,
-            }
-        },
-        computed: {
-            ...mapGetters({
-                ratio: 'Common/ratio',
-            })
-        },
-        created: function () {
-            const dLoading = new LoadingData();
-            this._time = 0;
-            this._elapsed = 0;
-            this.canvas = document.createElement('canvas');
-            this.canvas.width = this.canvas.height = 60;
-            const gl = new WebGLContext(this.ratio, this.canvas);
-            const data = new Loading(gl.ctx);
-            let _prg = new Program(
-                gl.ctx,
-                data,
-                ['position'],
-                [3],
-                ['mvpMatrix', 'resolution', 'time'],
-                [GLConfig.UNIFORM_TYPE_MATRIX4, GLConfig.UNIFORM_TYPE_VECTOR2, GLConfig.UNIFORM_TYPE_FLOAT]
-            );
-            const plane = new Geometry(gl.ctx, dLoading).init();
-            const mesh = new Mesh(gl.ctx, _prg, plane, GLConfig.DRAW_TYPE_TRIANGLE);
-            this._renderer = new Renderer(this.$store, gl);
-            this._renderer.add(mesh);
-        },
-        mounted() {
-            const parent = document.getElementById('loading-screen');
-            parent.appendChild(this.canvas);
+const {setCanvasSize} = useScreenSize();
 
-            this.play();
+const TIME_MIN = 3000;
 
-            this.$refs.wrap.addEventListener('transitionend', this.onTransitionEnd);
+// ref & DOM
+const wrap = ref<HTMLElement | null>(null);
+const canvas = ref<HTMLCanvasElement | null>(null);
 
-            Methods.getJsonData(AppConfig.URLS.MICRO_ANIMATION_PATH).then(res => {
-                this.parseJson(res);
-            }).catch(err => {
-                console.log(err);
-            });
-        },
-        methods: {
-            ...mapActions({
-                setAllItems: 'MicroAnimations/setAllItems',
-                changeScene: 'Common/changeScene',
-            }),
-            parseJson(data) {
-                const allSketch = {};
+// 状態
+let _renderer: Renderer | null = null;
+let _timer: number | null = null;
+let _time = 0;
+let _elapsed = 0;
 
-                for(let key in data) {
-                    if(data.hasOwnProperty(key)) {
-                        const sketchArr = [];
-                        const category = data[key];
-                        let i, len = category.length;
+// emitで外部に通知（例: changeScene）
+const emit = defineEmits(['loaded']); // emit('loaded', 'top')
 
-                        for(i = 0; i < len; i++) {
-                            const animation = category[i];
-                            const sketch = new Animation(
-                                animation['author'],
-                                key,
-                                i + 1
-                            );
+// 初期化
+const initGL = () => {
+    canvas.value = document.createElement('canvas');
+    canvas.value.width = canvas.value.height = 60;
+    setCanvasSize(60, 60);
 
-                            sketchArr.push(sketch);
-                        }
+    const gl = new WebGLContext(canvas.value);
+    const shaderData = new Loading(gl.ctx);
+    const program = new Program(
+        gl.ctx,
+        shaderData,
+        ['position'],
+        [3],
+        ['mvpMatrix', 'resolution', 'time'],
+        [GLConfig.UNIFORM_TYPE_MATRIX4, GLConfig.UNIFORM_TYPE_VECTOR2, GLConfig.UNIFORM_TYPE_FLOAT]
+    );
 
-                        allSketch[key] = sketchArr;
-                    }
-                }
+    const plane = new Geometry(gl.ctx, new LoadingData()).init();
+    const mesh = new Mesh(gl.ctx, program, plane, GLConfig.DRAW_TYPE_TRIANGLE);
+    _renderer = new Renderer(gl);
+    _renderer.add(mesh);
+}
 
-                this.setAllItems(allSketch);
+const animate = () => {
+    _time += 0.01;
+    render();
+    _timer = requestAnimationFrame(animate);
+};
 
-                //ここまでにかかった時間 = ローディングを表示している時間
-                let loadingTime = this._elapsed - new Date().getTime();
+const play = () => {
+    _timer = requestAnimationFrame(animate);
+};
 
-                //早すぎるのも微妙なので、TIME_MINより短かったら、TIME_MIN秒わざとおくらせる
-                let delay = loadingTime < TIME_MIN ? TIME_MIN : 0;
+const pause = () => {
+    if (_timer) {
+        cancelAnimationFrame(_timer);
+        _timer = null;
+    }
+};
 
-                setTimeout(() => {
-                    this.hideLoader();
-                }, delay);
-            },
-            play() {
-                this._timer = requestAnimationFrame(this.animate);
-            },
-            pause() {
-                if(this._timer) {
-                    cancelAnimationFrame(this._timer);
-                    this._timer = null;
-                }
-            },
-            hideLoader() {
-                this.$refs.wrap.classList.remove('is-show');
-            },
-            onTransitionEnd() {
-                this.changeScene('top');
-                this.pause();
-            },
-            animate() {
-                this._timer = requestAnimationFrame(this.animate);
+const render = () => {
+    _renderer?.update([60, 60], _time);
+}
 
-                this._time += 0.01;
+const allSketch: Record<string, Animation[]> = {};
 
-                this.render();
-            },
-            render() {
-                this._renderer.update([60, 60], this._time);
-            }
-        },
-        renderError: function (err) {
+const hideLoader = () => {
+    wrap.value?.classList.remove('is-show');
+};
+
+const onTransitionEnd = () => {
+    pause();
+    emit('loaded', allSketch);
+};
+
+const parseJson = (data: animationList) => {
+    for (const key in data) {
+        if (Object.hasOwn(data, key)) {
+            allSketch[key] = data[key].map((anim, i: number) =>
+                new Animation(anim.author, key, i + 1)
+            )
         }
     }
+
+    // 時間差計測
+    const loadingTime = new Date().getTime() - _elapsed;
+    const delay = loadingTime < TIME_MIN ? TIME_MIN - loadingTime : 0;
+
+    setTimeout(() => {
+        hideLoader();
+    }, delay);
+}
+
+// ライフサイクル
+onMounted(() => {
+    _time = 0;
+    _elapsed = new Date().getTime();
+
+    initGL();
+
+    const parent = document.getElementById('loading-screen');
+    
+    if (parent && canvas.value) {
+        parent.appendChild(canvas.value);
+    }
+
+    play();
+
+    wrap.value?.addEventListener('transitionend', onTransitionEnd);
+
+    fetch('/assets/microAnimations/data/list.json').then((response) => response.json()).then(parseJson).catch(console.error);
+});
+
+onBeforeUnmount(() => {
+    pause();
+    wrap.value?.removeEventListener('transitionend', onTransitionEnd);
+});
 </script>
 
-<style scoped lang="scss">
+<template>
+    <div id="loading-screen" ref="wrap" class="is-show" />
+</template>
+
+<style scoped>
     #loading-screen {
         position: absolute;
         left: 0;

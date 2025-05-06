@@ -1,55 +1,33 @@
+<script setup lang="ts">
+import Loading from '~/components/microAnimations/Loading.vue';
+import TheHeader from '~/components/microAnimations/Header.vue';
+import Category from '~/components/microAnimations/Category.vue';
+import Animation from 'assets/ts/common/datatype/Animation';
+
+definePageMeta({
+    layout: 'micro-animations',
+});
+
+const isLoading = ref<boolean>(true);
+const allSketchData = ref<Record<string, Animation[]>>({});
+const getAllItemData = [];
+const onLoaded = (allSketch: Record<string, Animation[]>) => {
+    isLoading.value = false;
+    allSketchData.value = allSketch;
+};
+</script>
+
 <template>
-    <section class="container" :class="sceneName">
-        <div class="wrapper">
+    <section class="section">
+        <div class="wrapper" :class="{'is-show': !isLoading}">
             <TheHeader />
-            <div class="sketch" id="all">
-                <Category v-for="(value, key) in getAllItemData" :key="key" :categoryName="key" :items="value" />
+            <div id="all" class="sketch">
+                <Category v-for="(value, key) in allSketchData" :key="key" :category-name="key" :items="value" />
             </div>
         </div>
-        <Dialog :isShow=dialogState />
-        <Loading />
+        <Loading @loaded="onLoaded" />
     </section>
 </template>
-
-<script>
-    import Loading from '../../components/microAnimations/Loading';
-    import TheHeader from '../../components/microAnimations/Header';
-    import Category from '../../components/microAnimations/Category';
-    import Dialog from '../../components/microAnimations/Dialog';
-    import Vector from '~/assets/ts/common/gl/Vector.ts';
-    import {mapGetters, mapActions} from 'vuex';
-
-    export default {
-        name: 'microAnimations',
-        layout: 'microAnimations',
-        components: {TheHeader, Dialog, Category, Loading},
-        head () {
-            return {
-                title: 'Micro Animations',
-                meta: [
-                    { hid: 'description', name: 'description', content: 'Gallery of Micro Animations.' }
-                ]
-            };
-        },
-        computed: {
-            ...mapGetters({
-                getAllItemData: 'MicroAnimations/getAllItemData',
-                dialogState: 'MicroAnimations/dialogState',
-                sceneName: 'Common/sceneName',
-            })
-        },
-        methods: {
-            ...mapActions({
-                setCameraPosition: 'Practice/setCameraPosition',
-                setCanvasSize: 'Common/setCanvasSize',
-            })
-        },
-        created () {
-            this.setCameraPosition(new Vector(0.0, 0.0, 1,0));
-            this.setCanvasSize({width: 30, height: 30});
-        }
-    };
-</script>
 
 <style scoped>
     body {
@@ -70,18 +48,11 @@
     .wrapper {
         transition: opacity 1.0s ease;
         background: #ffffee;
-    }
-
-    .load .wrapper,
-    .dialog .wrapper {
         opacity: 0;
+        transition: opacity 0.5s linear;
     }
 
-    .dialog .wrapper #all {
-        display: none;
-    }
-
-    .top .wrapper {
+    .wrapper.is-show {
         opacity: 1;
     }
 

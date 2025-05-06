@@ -1,5 +1,5 @@
 import { MatrixUtils, Methods } from '../Utils';
-import Vector from './Vector';
+import {Vector} from './Vector';
 
 /**
  * ( This class has been influenced by https://wgld.org )

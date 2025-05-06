@@ -14,7 +14,7 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
     nav {
         width: 100%;
         height: 60px;
@@ -24,20 +24,18 @@
         right: 0;
         z-index: 2;
 
-        ul {
+        & ul {
             width: 100%;
             display: flex;
             justify-content: center;
+            gap: 20px;
 
-            > li {
+            & > li {
                 font-size: 2.0rem;
                 list-style: none;
+                text-shadow: 3px 3px 30px #ba00ff;
 
-                &:not(:last-child) {
-                    margin-right: 20px;
-                }
-
-                a {
+                & a {
                     color: #ffffff;
                 }
             }

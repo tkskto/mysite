@@ -1,11 +1,19 @@
-import ISketch from './ISketch';
-import AppConfig from '../../Config';
+import {watch} from 'vue';
+import type ISketch from './ISketch';
+import {useQuoteText} from '~/composables/useQuoteText';
+import {useMusicMode} from '~/composables/useMusicMode';
+import {usePracticeScene} from '~/composables/usePracticeScene';
+import {usePracticeId} from '~/composables/usePracticeId';
+
+const {updateQuoteText} = useQuoteText();
+const {updateMusicMode} = useMusicMode();
+const {practiceScene} = usePracticeScene();
+const {practiceId} = usePracticeId();
 
 /**
  * 各スケッチが継承する基底クラス
  */
-export default class Sketch implements ISketch {
-
+export class Sketch implements ISketch {
     private _setuped = false;
     private _isPlaying = false;
     private _quote: string;
@@ -13,38 +21,34 @@ export default class Sketch implements ISketch {
     public _timer!: number;
     public _id: string;
 
-    constructor(public _store: any, _id: string, _quote = '') {
-        _store.watch(AppConfig.ON_SKETCH_CHANGED, this.onStateChanged);
+    constructor(_id: string, _quote = '') {
         this._id = _id;
         this._quote = _quote;
+        watch(practiceId, this.onStateChanged);
     }
 
     private onStateChanged = (): void => {
         this._ready = false;
-        const store = this._store.getters;
-        const scene = store['Practice/getScene'];
-        const id = store['Practice/id'];
 
-        if (scene === AppConfig.SCENE_SKETCH) {
+        if (practiceScene.value === 'sketch') {
             // 初期化
-            if (id === this._id && !this._setuped && !this._isPlaying) {
-                this._store.commit('Common/SET_MOUSE_STATE', false);
-                this._store.commit('Practice/SET_MUSIC_MODE', false);
+            if (practiceId.value === this._id && !this._setuped && !this._isPlaying) {
+                updateMusicMode(false);
                 this.setup();
                 this._setuped = true;
-                this._store.commit('Practice/SET_QUOTE_TEXT', this._quote);
+                updateQuoteText(this._quote);
             // 再生
-            } else if (id === this._id && !this._isPlaying) {
+            } else if (practiceId.value === this._id && !this._isPlaying) {
                 this.play();
             // 破棄
-            } else if (id !== this._id && this._isPlaying) {
+            } else if (practiceId.value !== this._id && this._isPlaying) {
                 this._setuped = false;
                 this.dispose();
             }
-        } else if (scene === AppConfig.SCENE_TOP) {
+        } else if (practiceScene === 'top') {
             this._setuped = false;
             this.dispose();
-        } else if (scene === AppConfig.SCENE_PAUSE) {
+        } else if (practiceScene === 'pause') {
             this.pause();
         }
     };

@@ -1,4 +1,4 @@
-import Sketch from '../common/Sketch';
+import {Sketch} from '../common/Sketch';
 import Default from './Shader';
 import WebGLContext from '../../../common/gl/Context';
 import Renderer from '../../../common/gl/Renderer';
@@ -8,48 +8,50 @@ import Program from '../../../common/gl/Program';
 import { GLConfig } from '../../../common/Config';
 import { GLUtils } from '../../../common/Utils';
 import Plane from '../../utils/Plane';
+import {usePracticeShader} from '~/composables/usePracticeShader';
+import {useScreenSize} from '~/composables/useScreenSize';
+
+const {updateVertexShader, updateFragmentShader} = usePracticeShader();
+const {canvasSize} = useScreenSize();
 
 export default class Item8 extends Sketch {
 
     private _data: Plane = new Plane();
     private _ctx!: WebGLContext;
     private _gl!: WebGLRenderingContext;
-    private _shader!: Default;
     private _default!: Program;
     private _renderer!: Renderer;
     private _time = 0;
     private _mesh!: Mesh;
 
-    constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {
-        super(_store, _id);
+    constructor(private _canvas: HTMLCanvasElement, _id: string) {
+        super(_id);
     }
 
-    public setup = async (): Promise<any> => {
-        this._ctx = new WebGLContext(1, this._canvas);
+    public setup = async (): Promise<void> => {
+        this._ctx = new WebGLContext(this._canvas);
         this._gl = this._ctx.ctx;
         this.clear();
-        this._shader = new Default(this._gl);
-        this._default = new Program(this._gl, this._shader,
+        const shader = new Default(this._gl);
+        this._default = new Program(this._gl, shader,
             ['position', 'color', 'normal', 'uv'],
             [3, 4, 3, 2],
             ['mvpMatrix', 'resolution', 'time', 'tex'],
             [GLConfig.UNIFORM_TYPE_MATRIX4, GLConfig.UNIFORM_TYPE_VECTOR2, GLConfig.UNIFORM_TYPE_FLOAT, GLConfig.UNIFORM_TYPE_TEXTURE]
         );
-        this._renderer = new Renderer(this._store, this._ctx);
+        this._renderer = new Renderer(this._ctx);
 
         const plane: Geometry = new Geometry(this._gl, this._data).init();
         this._mesh = new Mesh(this._gl, this._default, plane, GLConfig.DRAW_TYPE_TRIANGLE);
         this._renderer.add(this._mesh);
 
-        this._store.commit('Practice/SET_VS_TEXT', this._shader.vertexString);
-        this._store.commit('Practice/SET_FS_TEXT', this._shader.fragmentString);
+        updateVertexShader(shader.vertexString);
+        updateFragmentShader(shader.fragmentString);
 
-        GLUtils.createTexture(await require('../../../../img/practice/lena.png'), this._gl, this._gl.UNSIGNED_BYTE).then(tex => {
-            this._mesh.addTexture(tex);
-            this.play();
-        }, err => {
-            console.log(err);
-        });
+        const texture = await GLUtils.createTexture('/assets/img/practice/lena.png', this._gl, this._gl.UNSIGNED_BYTE);
+
+        this._mesh.addTexture(texture);
+        this.play();
     };
 
     public clear = (): void => {
@@ -79,7 +81,6 @@ export default class Item8 extends Sketch {
 
     public animate = (): void => {
         this.clear();
-        const canvasSize = this._store.getters['Common/canvasSize'];
         this._renderer.update([canvasSize.width, canvasSize.height], this._time, 0);
     };
 }

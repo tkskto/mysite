@@ -1,5 +1,5 @@
 import { GLConfig } from './Config';
-import Vector from './gl/Vector';
+import {Vector} from './gl/Vector';
 
 export class Methods {
     public static showError(err: string | null = ''): void {

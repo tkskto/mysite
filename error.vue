@@ -5,6 +5,8 @@ const props = defineProps({
     error: Object as () => NuxtError,
 });
 
+console.error(props.error);
+
 useHead({
     title: 'Takeshi Kato',
     meta: [

@@ -1,11 +1,15 @@
+import {watch} from 'vue';
 import { MatrixUtils } from '../Utils';
-import WebGLContext from './Context';
-import Vector from './Vector';
-import Mesh from './Mesh';
-import AppConfig from '../../practice/Config';
+import type WebGLContext from './Context';
+import {Vector} from './Vector';
+import type Mesh from './Mesh';
+import {useScreenSize} from '~/composables/useScreenSize';
+import {useCameraPosition} from '~/composables/useCameraPosition';
+
+const {canvasSize, screenSize} = useScreenSize();
+const {cameraPosition} = useCameraPosition();
 
 export default class Renderer {
-
     private _gl!: WebGLRenderingContext;
     private _target: Mesh[] = [];
 
@@ -21,7 +25,7 @@ export default class Renderer {
     private unWatchResizeEvent;
     private unWatchStateChangeEvent;
 
-    constructor(private _store: any, private _ctx: WebGLContext) {
+    constructor(private _ctx: WebGLContext) {
         this._cWidth = _ctx.canvas.clientWidth;
         this._cHeight = _ctx.canvas.clientHeight;
         this._gl = _ctx.ctx;
@@ -29,11 +33,10 @@ export default class Renderer {
         this._gl.enable(this._gl.DEPTH_TEST);
         this._gl.depthFunc(this._gl.LEQUAL);
 
-        this.unWatchResizeEvent = _store.watch((state) => {
-            return state.Common.screenSize;
-        }, this.onResize);
-        this.unWatchStateChangeEvent = _store.watch(AppConfig.ON_CAMERA_STATE_CHANGED, this.initializeMatrix);
-        this.initializeMatrix();
+        watch(screenSize, this.onResize);
+        watch(cameraPosition, this.onResize);
+
+        this.onResize();
     }
 
     /**
@@ -96,8 +99,6 @@ export default class Renderer {
         this.qMatrix = MatrixUtils.initialize(MatrixUtils.create());
         this.vpMatrix = MatrixUtils.initialize(MatrixUtils.create());
 
-        const canvasSize = this._store.getters['Common/canvasSize'];
-        const cameraPosition = this._store.getters['Practice/cameraPosition'];
         const aspectRatio = canvasSize.width > canvasSize.height ? canvasSize.width / canvasSize.height : canvasSize.height / canvasSize.width;
 
         // ビュー座標変換行列
@@ -107,7 +108,6 @@ export default class Renderer {
     };
 
     private onResize = (): void => {
-        const canvasSize = this._store.getters['Common/canvasSize'];
         this.initializeMatrix();
         this._cWidth = canvasSize.width;
         this._cHeight = canvasSize.height;

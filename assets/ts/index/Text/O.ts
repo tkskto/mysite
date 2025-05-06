@@ -1,4 +1,4 @@
-import {Shape, Mesh, Vector3, CatmullRomCurve3, ExtrudeGeometry, type ExtrudeGeometryOptions, Material} from 'three'
+import {Shape, Mesh, Vector3, CatmullRomCurve3, ExtrudeGeometry, type ExtrudeGeometryOptions, type Material} from 'three'
 
 export default class O {
     private _shape: Shape;

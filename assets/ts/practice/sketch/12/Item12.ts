@@ -1,4 +1,4 @@
-import Sketch from '../common/Sketch';
+import {Sketch} from '../common/Sketch';
 import Default from './Shader';
 import WebGLContext from '../../../common/gl/Context';
 import Renderer from '../../../common/gl/Renderer';
@@ -6,9 +6,14 @@ import Geometry from '../../../common/gl/Geometry';
 import Mesh from '../../../common/gl/Mesh';
 import Program from '../../../common/gl/Program';
 import { GLConfig } from '../../../common/Config';
-import Vector from '../../../common/gl/Vector';
+import {Vector} from '../../../common/gl/Vector';
 import Cube from '../../utils/Cube';
 import Sphere from '../../utils/Sphere';
+import {useCameraPosition} from '~/composables/useCameraPosition';
+import {usePracticeShader} from '~/composables/usePracticeShader';
+
+const {updateVertexShader, updateFragmentShader} = usePracticeShader();
+const {cameraPosition} = useCameraPosition();
 
 export default class Item12 extends Sketch {
 
@@ -22,12 +27,12 @@ export default class Item12 extends Sketch {
     private _dirLight: Vector = new Vector(0.0, 0.0, 0.0);
     private _ambientLight = [0.1, 0.1, 0.1, 1.0];
 
-    constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {
-        super(_store, _id);
+    constructor(private _canvas: HTMLCanvasElement, _id: string) {
+        super(_id);
     }
 
     public setup = (): void => {
-        this._ctx = new WebGLContext(1, this._canvas);
+        this._ctx = new WebGLContext(this._canvas);
         this._gl = this._ctx.ctx;
         const shader: Default = new Default(this._gl);
         this._default = new Program(this._gl, shader,
@@ -43,7 +48,7 @@ export default class Item12 extends Sketch {
                 GLConfig.UNIFORM_TYPE_VECTOR4
             ]
         );
-        this._renderer = new Renderer(this._store, this._ctx);
+        this._renderer = new Renderer(this._ctx);
 
         const dCube: Cube = new Cube(1.0);
         const dSphere: Sphere = new Sphere(64, 64, 0.1, [0.1, 0.1, 0.6]);
@@ -56,8 +61,8 @@ export default class Item12 extends Sketch {
         this._renderer.add(this._mCube);
         this._renderer.add(this._mSphere);
 
-        this._store.commit('Practice/SET_VS_TEXT', shader.vertexString);
-        this._store.commit('Practice/SET_FS_TEXT', shader.fragmentString);
+        updateVertexShader(shader.vertexString);
+        updateFragmentShader(shader.fragmentString);
 
         this.play();
     };
@@ -87,7 +92,7 @@ export default class Item12 extends Sketch {
 
     public animate = (): void => {
         this.clear();
-        const cameraPosition = this._store.getters['Practice/cameraPosition'];
+
         this._renderer.update(this._dirLight.arr(), cameraPosition.arr(), this._ambientLight, this._time);
     };
 }

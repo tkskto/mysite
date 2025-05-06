@@ -21,27 +21,24 @@ export const GLConfig = {
     DRAW_TYPE_TRIANGLE_FAN: 'triangle_fan',
 };
 
-export class AppConfig {
-    public static SCENE = {
+export const AppConfig = {
+    SCENE: {
         LOAD: 'load',
         INTRO: 'intro',
         FIRST: 'first',
         READY: 'ready',
-    };
-
-    public static CLASSNAME = {
+    },
+    CLASSNAME: {
         show: 'is-show',
         hide: 'is-hide',
         delete: 'will-delete',
-    };
-
-    public static URLS = {
+    },
+    URLS: {
         MICRO_ANIMATION_PATH: '/assets/microAnimations/data/list.json'
-    };
-
-    public static CATEGORY = {
+    },
+    CATEGORY: {
         ALL: 'all',
         SAUNA: 'sauna',
         TECH: 'tech'
-    };
-}
+    },
+};

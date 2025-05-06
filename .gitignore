@@ -11,5 +11,5 @@ npm-debug.log
 dist
 
 .idea
-static/assets/audio
-public/
+
+public/assets/audio

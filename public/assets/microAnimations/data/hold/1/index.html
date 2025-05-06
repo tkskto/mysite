@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="ja"><head>
+<meta charset="UTF-8">
+<title>Micro Animations</title>
+<style>html,body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn {
+    position: relative;
+    border: 1px solid #ccc;
+    box-shadow:none;
+    padding: 10px 20px;
+    background: none;
+    overflow: hidden;
+    cursor: pointer;
+    color: #fff;
+}
+
+.btn span {
+    position: absolute;
+    transform: translateX(-100%);
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: #ccc;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    transition: transform 0.3s ease;
+}
+
+.btn .hold {
+    transition: none;
+}</style></head>
+<body>
+    <button id="btn" class="btn">
+        hold
+        <span id="bg" role="presentation" style="transform: translateX(-100%);"></span>
+    </button>
+
+<script>(function() {
+    'use strict';
+
+    var timer;
+    var btn = document.getElementById('btn');
+    var bg = document.getElementById('bg');
+
+    var count = -100;
+
+    btn.onmousedown = function() {
+        bg.classList += 'hold';
+        timer = requestAnimationFrame(update);
+    };
+
+    btn.onmouseup = function() {
+        reset();
+    };
+
+    btn.onmouseleave = function() {
+        reset();
+    };
+
+    function update() {
+        timer = requestAnimationFrame(update);
+
+        count++;
+
+        bg.style.transform = 'translateX(' + count + '%)';
+
+        if(count === 0) {
+            pause();
+        }
+    }
+
+    function reset() {
+        pause();
+
+        bg.classList = '';
+        bg.style.transform = 'translateX(-100%)';
+
+        count = -100;
+    }
+
+    function pause() {
+        if(timer) {
+            cancelAnimationFrame(timer);
+            timer = null;
+        }
+    }
+
+})();</script></body></html>

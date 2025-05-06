@@ -2,10 +2,13 @@ import {reactive} from 'vue';
 
 let isTracking = false;
 const screenSize = reactive({ width: 0, height: 0 });
+const canvasSize = reactive({ width: 0, height: 0 });
 
 const updateScreenSize = () => {
     screenSize.width = window.innerWidth;
     screenSize.height = window.innerHeight;
+    canvasSize.width = screenSize.width * window.devicePixelRatio;
+    canvasSize.height = screenSize.height * window.devicePixelRatio;
 };
 
 const startListeningResize = () => {
@@ -28,6 +31,7 @@ export const useScreenSize = () => {
 
     return {
         screenSize,
+        canvasSize,
         startListeningResize,
         stopListeningResize,
     };

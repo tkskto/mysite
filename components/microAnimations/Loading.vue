@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
 import Program from '~/assets/ts/common/gl/Program'
 import Renderer from '~/assets/ts/common/gl/Renderer'
 import Animation from '~/assets/ts/common/datatype/Animation'
@@ -102,29 +101,28 @@ const onTransitionEnd = () => {
 
 // ライフサイクル
 onMounted(() => {
-    _time = 0
-    _elapsed = new Date().getTime()
+    _time = 0;
+    _elapsed = new Date().getTime();
 
-    initGL()
+    initGL();
 
-    const parent = document.getElementById('loading-screen')
+    const parent = document.getElementById('loading-screen');
+    
     if (parent && canvas.value) {
-        parent.appendChild(canvas.value)
+        parent.appendChild(canvas.value);
     }
 
-    play()
+    play();
 
-    wrap.value?.addEventListener('transitionend', onTransitionEnd)
+    wrap.value?.addEventListener('transitionend', onTransitionEnd);
 
-    Methods.getJsonData(AppConfig.URLS.MICRO_ANIMATION_PATH)
-    .then(parseJson)
-    .catch(console.error)
-})
+    Methods.getJsonData(AppConfig.URLS.MICRO_ANIMATION_PATH).then(parseJson).catch(console.error);
+});
 
-onUnmounted(() => {
-    pause()
-    wrap.value?.removeEventListener('transitionend', onTransitionEnd)
-})
+onBeforeUnmount(() => {
+    pause();
+    wrap.value?.removeEventListener('transitionend', onTransitionEnd);
+});
 </script>
 
 <template>

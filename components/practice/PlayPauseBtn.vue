@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const isMusicMode = ref(false);
+import {useMusicMode} from '~/composables/useMusicMode';
+
+const {musicMode} = useMusicMode();
 
 const onClick = () => {
     // TODO
@@ -10,7 +12,7 @@ const onClick = () => {
 
 <template>
     <transition name="button">
-        <button v-show="isMusicMode" type="button" @click="onClick">PLAY</button>
+        <button v-show="musicMode" type="button" @click="onClick">PLAY</button>
     </transition>
 </template>
 

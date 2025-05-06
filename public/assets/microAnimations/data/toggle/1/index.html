@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang="ja"><head>
+<meta charset="UTF-8">
+<title>Micro Animations</title>
+<style>html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button {
+    margin: 0;
+    border: none;
+    box-shadow: none;
+    width: 44px;
+    height: 44px;
+    background: none;
+    box-sizing: border-box;
+    padding: 14px 12px;
+    cursor: pointer;
+}
+
+button .bar {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: #ccc;
+    margin-bottom: 5px;
+    transition: all 0.3s ease;
+}
+
+.bar:nth-child(1),.bar:nth-child(3) {
+    transform-origin: 0;
+}
+
+.open .bar:nth-child(1) {
+    transform: rotate(43deg);
+}
+
+.open .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.open .bar:nth-child(3) {
+    transform: rotate(-43deg);
+}</style></head>
+<body>
+    <button id="toggle" class="">
+        <span class="bar" role="presentation"></span>
+        <span class="bar" role="presentation"></span>
+        <span class="bar" role="presentation"></span>
+    </button>
+<script>(function() {
+    'use strict';
+
+    var button = document.getElementById("toggle");
+    button.onclick = function() {
+
+        if(button.classList.contains('open')) {
+            button.classList.remove('open');
+        } else {
+            button.classList.add('open');
+        }
+    };
+})();</script></body></html>

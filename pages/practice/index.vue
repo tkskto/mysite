@@ -2,8 +2,7 @@
 import Quote from '~/components/practice/quote.vue';
 import ViewChangeButton from '~/components/practice/ViewChangeButton';
 import ShaderView from '~/components/practice/ShaderView';
-import AppConfig from '~/assets/ts/practice/Config.ts';
-import Vector from '~/assets/ts/common/gl/Vector.ts';
+import {Vector} from '~/assets/ts/common/gl/Vector';
 import Item0 from '~/assets/ts/practice/sketch/00/Item0.ts';
 import Item1 from '~/assets/ts/practice/sketch/01/Item1.ts';
 import Item2 from '~/assets/ts/practice/sketch/02/Item2.ts';
@@ -26,17 +25,23 @@ import Item18 from '~/assets/ts/practice/sketch/18/Item18.ts';
 import Item19 from '~/assets/ts/practice/sketch/19/Item19.ts';
 import Item20 from '~/assets/ts/practice/sketch/20/Item20.ts';
 import PlayPauseBtn from '~/components/practice/PlayPauseBtn';
+import {useMousePosition} from '~/composables/useMousePosition';
+import {useCameraPosition} from '~/composables/useCameraPosition';
+import {usePracticeScene} from '~/composables/usePracticeScene';
+import {useScreenSize} from '~/composables/useScreenSize';
+import {usePracticeId} from '~/composables/usePracticeId';
+
+const {startMouseTracking, stopMouseTracking} = useMousePosition();
+const {updateCameraPosition} = useCameraPosition();
+const {practiceScene, updatePracticeScene} = usePracticeScene();
+const {canvasSize, screenSize} = useScreenSize();
+const {updatePracticeId} = usePracticeId();
 
 definePageMeta({
     layout: 'practice',
 });
 
 const ratio = window.devicePixelRatio;
-
-const canvasSize = {
-    width: 300,
-    height: 300,
-};
 
 const canvasPracticalWidth = computed(() => {
     if (canvasSize.width) {
@@ -55,21 +60,14 @@ const canvasPracticalHeight = computed(() => {
 });
 
 const onHashChange = () => {
-    changeID(location.hash.split('#')[1] || '0');
-};
-
-const mouseTracking = (e) => {
-    setMousePos({
-        x: e.clientX * ratio,
-        y: e.clientY * ratio
-    });
+    updatePracticeId(location.hash.split('#')[1] || '0');
 };
 
 const changeSketchState = (e) => {
-    if ('Escape' === e.key) {
-        changeScene(AppConfig.SCENE_PAUSE);
-    } else if ('Escape' === e.key) {
-        changeScene(AppConfig.SCENE_SKETCH);
+    if ('Escape' === e.key && practiceScene.value === 'sketch') {
+        updatePracticeScene('pause');
+    } else if ('Escape' === e.key && practiceScene.value === 'pause') {
+        updatePracticeScene('sketch');
     }
 };
 
@@ -80,9 +78,9 @@ onMounted(() => {
     const aspect = width > height ? height / width : height > width ? width / height : 1;
     const _canvasGL = document.getElementById('canvas-GL');
 
-    setCameraPosition(new Vector(0.0, 0.0, aspect));
+    updateCameraPosition(new Vector(0.0, 0.0, aspect));
 
-    new Item0($store, _canvasGL, '0');
+    new Item0(_canvasGL, '0');
 
     for (let i = 0, len = sketch.length; i < len; i++) {
         const id = sketch.item(i).attributes.getNamedItem('id').value;
@@ -93,64 +91,64 @@ onMounted(() => {
 
         switch (id) {
             case '01':
-                new Item1($store, _canvasGL, id);
+                new Item1(_canvasGL, id);
                 break;
             case '02':
-                new Item2($store, _canvasGL, id);
+                new Item2(_canvasGL, id);
                 break;
             case '03':
-                new Item3($store, _canvasGL, id);
+                new Item3(_canvasGL, id);
                 break;
             case '04':
-                new Item4($store, _canvasGL, id);
+                new Item4(_canvasGL, id);
                 break;
             case '05':
-                new Item5($store, _canvasGL, id);
+                new Item5(_canvasGL, id);
                 break;
             case '06':
-                new Item6($store, _canvasGL, id);
+                new Item6(_canvasGL, id);
                 break;
             case '07':
-                new Item7($store, _canvasGL, id);
+                new Item7(_canvasGL, id);
                 break;
             case '08':
-                new Item8($store, _canvasGL, id);
+                new Item8(_canvasGL, id);
                 break;
             case '09':
-                new Item9($store, _canvasGL, id);
+                new Item9(_canvasGL, id);
                 break;
             case '10':
-                new Item10($store, _canvasGL, id);
+                new Item10(_canvasGL, id);
                 break;
             case '11':
-                new Item11($store, _canvasGL, id);
+                new Item11(_canvasGL, id);
                 break;
             case '12':
-                new Item12($store, _canvasGL, id);
+                new Item12(_canvasGL, id);
                 break;
             case '13':
-                new Item13($store, _canvasGL, id);
+                new Item13(_canvasGL, id);
                 break;
             case '14':
-                new Item14($store, _canvasGL, id);
+                new Item14(_canvasGL, id);
                 break;
             case '15':
-                new Item15($store, _canvasGL, id);
+                new Item15(_canvasGL, id);
                 break;
             case '16':
-                new Item16($store, _canvasGL, id);
+                new Item16(_canvasGL, id);
                 break;
             case '17':
-                new Item17($store, _canvasGL, id);
+                new Item17(_canvasGL, id);
                 break;
             case '18':
-                new Item18($store, _canvasGL, id);
+                new Item18(_canvasGL, id);
                 break;
             case '19':
-                new Item19($store, _canvasGL, id);
+                new Item19(_canvasGL, id);
                 break;
             case '20':
-                new Item20($store, _canvasGL, id);
+                new Item20(_canvasGL, id);
                 break;
             default:
                 throw new Error('please set id and data attribute "sketch-type"');
@@ -161,12 +159,13 @@ onMounted(() => {
     onHashChange();
 
     document.addEventListener('keydown', changeSketchState);
+    startMouseTracking();
 });
 
-onBeforeDestroy(() => {
+onBeforeUnmount(() => {
     window.removeEventListener('hashchange', onHashChange);
     document.removeEventListener('keydown', changeSketchState);
-    document.removeEventListener('mousemove', mouseTracking);
+    stopMouseTracking();
 });
 </script>
 
@@ -196,13 +195,13 @@ onBeforeDestroy(() => {
         </ul>
 
         <div class="container-canvas">
-            <canvas id="canvas-GL" :width="canvasDisplayWidth" :height="canvasDisplayHeight" :style="{width: canvasPracticalWidth, height: canvasPracticalHeight}" />
+            <canvas id="canvas-GL" :width="canvasSize.width" :height="canvasSize.height" :style="{width: canvasPracticalWidth, height: canvasPracticalHeight}" />
             <Quote />
         </div>
 
-        <ViewChangeButton />
-        <ShaderView />
-        <PlayPauseBtn />
+        <view-change-button />
+        <shader-view />
+        <play-pause-btn />
     </div>
 </template>
 

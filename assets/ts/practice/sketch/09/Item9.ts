@@ -1,4 +1,4 @@
-import Sketch from '../common/Sketch';
+import {Sketch} from '../common/Sketch';
 import Default from './Shader';
 import WebGLContext from '../../../common/gl/Context';
 import Renderer from '../../../common/gl/Renderer';
@@ -7,34 +7,38 @@ import Mesh from '../../../common/gl/Mesh';
 import Program from '../../../common/gl/Program';
 import { GLConfig } from '../../../common/Config';
 import Torus from '../../utils/Torus';
-import Vector from '../../../common/gl/Vector';
+import {Vector} from '../../../common/gl/Vector';
+import {usePracticeShader} from '~/composables/usePracticeShader';
+import {useScreenSize} from '~/composables/useScreenSize';
+
+const {updateVertexShader, updateFragmentShader} = usePracticeShader();
+const {canvasSize} = useScreenSize();
 
 export default class Item9 extends Sketch {
 
     private _ctx!: WebGLContext;
     private _gl!: WebGLRenderingContext;
-    private _shader!: Default;
     private _default!: Program;
     private _renderer!: Renderer;
     private _time = 0;
     private _mesh!: Mesh;
 
-    constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {
-        super(_store, _id);
+    constructor(private _canvas: HTMLCanvasElement, _id: string) {
+        super(_id);
     }
 
     public setup = (): void => {
-        this._ctx = new WebGLContext(1, this._canvas);
+        this._ctx = new WebGLContext(this._canvas);
         this._gl = this._ctx.ctx;
         this.clear();
-        this._shader = new Default(this._gl);
-        this._default = new Program(this._gl, this._shader,
+        const shader = new Default(this._gl);
+        this._default = new Program(this._gl, shader,
             ['position', 'color'],
             [3, 4],
             ['mvpMatrix', 'resolution', 'time'],
             [GLConfig.UNIFORM_TYPE_MATRIX4, GLConfig.UNIFORM_TYPE_VECTOR2, GLConfig.UNIFORM_TYPE_FLOAT]
         );
-        this._renderer = new Renderer(this._store, this._ctx);
+        this._renderer = new Renderer(this._ctx);
 
         const data: Torus = new Torus(64, 64, 0.1, 0.3);
         const sphere: Geometry = new Geometry(this._gl, data).init();
@@ -42,8 +46,8 @@ export default class Item9 extends Sketch {
 
         this._renderer.add(this._mesh);
 
-        this._store.commit('Practice/SET_VS_TEXT', this._shader.vertexString);
-        this._store.commit('Practice/SET_FS_TEXT', this._shader.fragmentString);
+        updateVertexShader(shader.vertexString);
+        updateFragmentShader(shader.fragmentString);
 
         this.play();
     };
@@ -73,7 +77,6 @@ export default class Item9 extends Sketch {
 
     public animate = (): void => {
         this.clear();
-        const canvasSize = this._store.getters['Common/canvasSize'];
         this._renderer.update([canvasSize.width, canvasSize.height], this._time);
     };
 }

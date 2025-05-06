@@ -24,7 +24,7 @@
         "@nuxt/types": "2.15.8",
         "@nuxt/typescript": "2.8.1",
         "@nuxt/typescript-build": "2.1.0",
-        "@nuxtjs/sitemap": "2.4.0",
+        "@nuxtjs/sitemap": "7.2.10",
         "@types/node": "12.20.55",
         "@types/three": "0.141.0",
         "@typescript-eslint/eslint-plugin": "4.33.0",

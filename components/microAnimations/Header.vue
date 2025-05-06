@@ -1,15 +1,13 @@
-<script>
-import TheDialog from './Dialog.vue';
+<script setup lang="ts">
+import IntroductionDialog from '~/components/microAnimations/IntroductionDialog.vue';
 </script>
 
 <template>
-    <div class="wrapper">
-        <header class="header">
-            <h1 class="hdg1">Micro Animations</h1>
-            
-            <TheDialog />
-        </header>
-    </div><!-- /.wrapper -->
+    <header class="header">
+        <h1 class="hdg1">Micro Animations</h1>
+        
+        <introduction-dialog />
+    </header>
 </template>
 
 <style scoped>

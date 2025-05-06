@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Quote from '~/components/practice/quote.vue';
-import ViewChangeButton from '~/components/practice/ViewChangeButton';
-import ShaderView from '~/components/practice/ShaderView';
+import ViewChangeButton from '~/components/practice/ViewChangeButton.vue';
+import ShaderView from '~/components/practice/ShaderView.vue';
 import {Vector} from '~/assets/ts/common/gl/Vector';
 import Item0 from '~/assets/ts/practice/sketch/00/Item0';
 import Item1 from '~/assets/ts/practice/sketch/01/Item1';

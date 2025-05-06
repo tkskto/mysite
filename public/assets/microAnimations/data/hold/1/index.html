@@ -6,6 +6,7 @@
     padding: 0;
     width: 100%;
     height: 100%;
+    background-color: #ffe;
 }
 
 body {
@@ -23,6 +24,7 @@ body {
     overflow: hidden;
     cursor: pointer;
     color: #fff;
+    z-index: 1;
 }
 
 .btn span {
@@ -43,8 +45,8 @@ body {
 }</style></head>
 <body>
     <button id="btn" class="btn">
-        hold
         <span id="bg" role="presentation" style="transform: translateX(-100%);"></span>
+        hold
     </button>
 
 <script>(function() {

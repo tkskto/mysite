@@ -9,6 +9,7 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
+    background-color: #ffe;
 }
 
 body {
@@ -21,8 +22,8 @@ body {
     position: relative;
     width: 120px;
     height: 40px;
-    background: #46b9ff;
     border-radius: 3px;
+    z-index: 1;
 }
 
 .wrapper button {
@@ -34,9 +35,10 @@ body {
     cursor: pointer;
     color: #fff;
     border-radius: 3px;
+    background: #46b9ff;
 }
 
-.wrapper::before {
+.wrapper button::before {
     content: "";
     display: block;
     position: absolute;
@@ -49,9 +51,10 @@ body {
     margin: auto;
     z-index: -1;
     transition: transform 0.3s ease;
+    top: 0;
 }
 
-.wrapper:hover::before {
+.wrapper button:hover::before {
     transform: translateY(-10px);
 }</style></head>
 <body>

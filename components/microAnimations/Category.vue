@@ -1,3 +1,13 @@
+<script setup lang="ts">
+import Item from './AnimationItem.vue'
+
+// Props を定義
+defineProps<{
+    categoryName: string,
+    items: any[],
+}>()
+</script>
+
 <template>
     <section :id="categoryName" class="category">
         <h3 class="hdg3">{{categoryName}}</h3>
@@ -7,44 +17,25 @@
     </section>
 </template>
 
-<script>
-    import Item from './Item';
-    export default {
-        name: 'category',
-        components: {
-            Item,
-        },
-        props: {
-            categoryName: {
-                type: String,
-                required: true,
-            },
-            items: {
-                type: Array,
-                required: true,
-            },
-        },
-    }
-</script>
-
 <style scoped>
-    .category {
-        margin-bottom: 80px;
+.category {
+    margin-bottom: 80px;
+}
 
-        & .hdg3 {
-            margin-bottom: 15px;
-            font-size: 2.0rem;
-        }
+.hdg3 {
+    margin-bottom: 15px;
+    font-size: 2.0rem;
+    color: #444;
+}
 
-        & .animations {
-            display: -webkit-flex;
-            display: flex;
-            -webkit-justify-content: flex-start;
-            justify-content: flex-start;
-            -webkit-align-items: center;
-            align-items: center;
-            -webkit-flex-wrap: wrap;
-            flex-wrap: wrap;
-        }
-    }
+.animations {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: flex-start;
+    justify-content: flex-start;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
 </style>

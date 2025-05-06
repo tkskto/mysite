@@ -1,24 +1,31 @@
 <script setup lang="ts">
-import Loading from '~/components/microAnimations/Loading';
-import TheHeader from '~/components/microAnimations/Header';
-import Category from '~/components/microAnimations/Category';
+import Loading from '~/components/microAnimations/Loading.vue';
+import TheHeader from '~/components/microAnimations/Header.vue';
+import Category from '~/components/microAnimations/Category.vue';
+import Animation from 'assets/ts/common/datatype/Animation';
 
 definePageMeta({
-    layout: 'microAnimations',
+    layout: 'micro-animations',
 });
 
+const isLoading = ref<boolean>(true);
+const allSketchData = ref<Record<string, Animation[]>>({});
 const getAllItemData = [];
+const onLoaded = (allSketch: Record<string, Animation[]>) => {
+    isLoading.value = false;
+    allSketchData.value = allSketch;
+};
 </script>
 
 <template>
-    <section class="container" :class="sceneName">
-        <div class="wrapper">
+    <section class="section">
+        <div class="wrapper" :class="{'is-show': !isLoading}">
             <TheHeader />
             <div id="all" class="sketch">
-                <Category v-for="(value, key) in getAllItemData" :key="key" :category-name="key" :items="value" />
+                <Category v-for="(value, key) in allSketchData" :key="key" :category-name="key" :items="value" />
             </div>
         </div>
-        <Loading />
+        <Loading @loaded="onLoaded" />
     </section>
 </template>
 
@@ -41,18 +48,11 @@ const getAllItemData = [];
     .wrapper {
         transition: opacity 1.0s ease;
         background: #ffffee;
-    }
-
-    .load .wrapper,
-    .dialog .wrapper {
         opacity: 0;
+        transition: opacity 0.5s linear;
     }
 
-    .dialog .wrapper #all {
-        display: none;
-    }
-
-    .top .wrapper {
+    .wrapper.is-show {
         opacity: 1;
     }
 

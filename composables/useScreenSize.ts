@@ -11,6 +11,11 @@ const updateScreenSize = () => {
     canvasSize.height = screenSize.height * window.devicePixelRatio;
 };
 
+const setCanvasSize = (width: number, height: number) => {
+    canvasSize.width = width;
+    canvasSize.height = height;
+};
+
 const startListeningResize = () => {
     if (!isTracking) {
         window.addEventListener('resize', updateScreenSize);
@@ -32,6 +37,7 @@ export const useScreenSize = () => {
     return {
         screenSize,
         canvasSize,
+        setCanvasSize,
         startListeningResize,
         stopListeningResize,
     };

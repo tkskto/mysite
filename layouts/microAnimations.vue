@@ -2,7 +2,7 @@
 useHead({
     title: 'Micro Animations',
     meta: [
-        { hid: 'description', name: 'description', content: 'Gallery of Micro Animations.' }
+        { name: 'description', content: 'Gallery of Micro Animations.' }
     ]
 });
 </script>

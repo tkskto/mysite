@@ -2,18 +2,9 @@
 import Loading from '~/components/microAnimations/Loading';
 import TheHeader from '~/components/microAnimations/Header';
 import Category from '~/components/microAnimations/Category';
-import Dialog from '~/components/microAnimations/Dialog';
-import Vector from '~/assets/ts/common/gl/Vector.ts';
 
 definePageMeta({
     layout: 'microAnimations',
-});
-
-useHead({
-    title: 'Micro Animations',
-    meta: [
-        { hid: 'description', name: 'description', content: 'Gallery of Micro Animations.' }
-    ]
 });
 
 const getAllItemData = [];
@@ -23,8 +14,8 @@ const getAllItemData = [];
     <section class="container" :class="sceneName">
         <div class="wrapper">
             <TheHeader />
-            <div class="sketch" id="all">
-                <Category v-for="(value, key) in getAllItemData" :key="key" :categoryName="key" :items="value" />
+            <div id="all" class="sketch">
+                <Category v-for="(value, key) in getAllItemData" :key="key" :category-name="key" :items="value" />
             </div>
         </div>
         <Loading />

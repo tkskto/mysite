@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {AmbientLight, DirectionalLight, Group, MeshPhongMaterial, PerspectiveCamera, Scene, WebGLRenderer} from 'three';
-import {gsap} from "gsap";
-import { AppConfig } from '~/assets/ts/common/Config';
+import {gsap, Elastic, Linear} from "gsap";
 
 import W from '~/assets/ts/index/Text/W';
 import H from '~/assets/ts/index/Text/H';
@@ -12,18 +11,20 @@ import M from '~/assets/ts/index/Text/M';
 import Hatena from '~/assets/ts/index/Text/Hatena';
 
 import { useScreenSize } from '~/composables/useScreenSize';
+import { useAppScene } from '~/composables/useAppScene';
 import { useMousePosition } from '~/composables/useMousePosition';
 
-// const finished = ref(false);
+let timer = null;
+const finished = ref(false);
 const ratio = window.devicePixelRatio;
-const screenSize = useScreenSize();
-// const mouse = useMousePosition();
+const {screenSize, startListeningResize, stopListeningResize} = useScreenSize();
+const {mousePosition, setMousePosition, startMouseTracking, stopMouseTracking} = useMousePosition();
+const {appScene, updateScene} = useAppScene();
 
 const canvasWrap = ref<HTMLElement | null>(null);
-
 const stage = new Scene();
-const mainCamera = new PerspectiveCamera( 60, screenSize.width / screenSize.height, 1, 1000 );
 
+const mainCamera = new PerspectiveCamera( 60, screenSize.width / screenSize.height, 1, 1000 );
 mainCamera.position.set( 0, 0, 45 );
 
 const renderer = new WebGLRenderer({
@@ -33,32 +34,154 @@ const renderer = new WebGLRenderer({
 
 renderer.setPixelRatio(ratio);
 
-const state = {
-    scaleWho: 0.1,
-    posWho: 0,
-    scaleI: 0.1,
-    posI: 0,
-    scaleAm: 0.1,
-    posAmY: -4.25,
-    posAmX: 0,
-    scaleHatena: 0.1,
-};
+const getInitialState = () => {
+    return appScene.value === 'load' ? {
+        scaleWho: 0.1,
+        posWho: 0,
+        scaleI: 0.1,
+        posI: 0,
+        scaleAm: 0.1,
+        posAmY: -4.25,
+        posAmX: 0,
+        scaleHatena: 0.1,
+    } : {
+        scaleWho: 1.2,
+        posWho: 6.5,
+        scaleI: 1.2,
+        posI: 3,
+        scaleAm: 1.2,
+        posAmY: -4.25,
+        posAmX: -2.0,
+        scaleHatena: 1.2,
+    };
+}
 
+const state = getInitialState();
 const groupWHO = new Group();
 const groupI = new Group();
 const groupAM = new Group();
 const groupHatena = new Group();
 const material = new MeshPhongMaterial({
-    color:0xcccccc,
+    color: 0xcccccc,
     specular: 0xffff99,
     shininess: 10
 });
 
-onMounted(() => {
-    renderer.setSize(
-        screenSize.width, screenSize.height
-    );
+const onCompleted = () => {
+    finished.value = true;
+    updateScene('ready');
+};
 
+const addI = () => {
+    gsap.to(state, 0.3, {
+        posWho: 3,
+        ease: Linear.ease,
+    });
+
+    stage.add(groupI);
+
+    gsap.to(state, 1, {
+        scaleI: 1.2,
+        ease: Elastic.easeOut,
+    });
+};
+
+const addAM = () => {
+    gsap.to(state, 0.3, {
+        posWho: 6.5,
+        ease: Linear.ease,
+    });
+
+    gsap.to(state, 0.3, {
+        posI: 3.0,
+        ease: Linear.ease,
+    });
+
+    stage.add(groupAM);
+
+    gsap.to(state, 1, {
+        scaleAm: 1.2,
+        ease: Elastic.easeOut,
+    });
+};
+
+const addHatena = () => {
+    gsap.to(state, 1, {
+        posAmX: -2.0,
+        ease: Elastic.easeOut,
+    });
+
+    stage.add(groupHatena);
+
+    gsap.to(state, 1, {
+        scaleHatena: 1.2,
+        ease: Elastic.easeOut,
+        onComplete: onCompleted,
+    });
+};
+
+const update = () => {
+    timer = requestAnimationFrame(update);
+    
+    const mouseX = mousePosition.x - renderer.domElement.width * 0.5;
+    const mouseY = mousePosition.y - renderer.domElement.height * 0.5;
+
+    mainCamera.position.set(mouseX * 0.001, mouseY * 0.001, 45);
+    mainCamera.lookAt(0, 0, 0);
+
+    if (!finished.value) {
+        groupWHO.scale.set(state.scaleWho, state.scaleWho, state.scaleWho);
+        groupWHO.position.set(0, state.posWho, 0);
+
+        groupI.scale.set(state.scaleI, state.scaleI, state.scaleI);
+        groupI.position.set(0, state.posI, 0);
+
+        groupAM.scale.set(state.scaleAm, state.scaleAm, state.scaleAm);
+        groupAM.position.set(state.posAmX, state.posAmY, 0);
+
+        groupHatena.scale.set(state.scaleHatena, state.scaleHatena, state.scaleHatena);
+    }
+
+    renderer.render(stage, mainCamera);
+};
+
+const play = () => {
+    update();
+
+    gsap.to(state, 1, {
+        scaleWho: 1.2,
+        ease: Elastic.easeOut
+    });
+
+    setTimeout(() => {
+        addI();
+    }, 200);
+    setTimeout(() => {
+        addAM();
+    }, 300);
+    setTimeout(() => {
+        addHatena();
+    }, 400);
+};
+
+const pause = () => {
+    if (timer !== null) {
+        cancelAnimationFrame(timer);
+        timer = null;
+    }
+};
+
+const justRender = () => {
+    stage.add(groupI);
+    stage.add(groupAM);
+    stage.add(groupHatena);
+    
+    play();
+    onCompleted();
+};
+
+onMounted(() => {
+    renderer.setSize(screenSize.width, screenSize.height);
     renderer.setClearColor(0x000000, 1);
     renderer.shadowMap.enabled = true;
     renderer.autoClear = true;
@@ -67,10 +190,9 @@ onMounted(() => {
     if (canvasWrap.value) {
         canvasWrap.value.appendChild(renderer.domElement);
     }
-    
+
     stage.add(groupWHO);
 
-    // 自然光
     const ambientLight = new AmbientLight(0x44ccbb, 0.7);
     stage.add(ambientLight);
 
@@ -122,100 +244,36 @@ onMounted(() => {
     groupHatena.add(shapeHatena.lower);
     groupHatena.position.set(5.0, -4.5, 0);
 
-    groupWHO.scale.set(state.scaleWho.value, state.scaleWho.value, state.scaleWho.value);
-});
+    groupWHO.scale.set(state.scaleWho, state.scaleWho, state.scaleWho);
 
-const addI = () => {
-    gsap.to(state, 0.3, {
-        posWho: 3,
-        ease: Linear.ease
-    });
-
-    stage.add(groupI);
-
-    gsap.to(state, 1, {
-        scaleI: 1.2,
-        ease: Elastic.easeOut
-    });
-};
-
-const addAM = () => {
-    gsap.to(state, 0.3, {
-        posWho: 6.5,
-        ease: Linear.ease
-    });
-
-    gsap.to(state, 0.3, {
-        posI: 3.0,
-        ease: Linear.ease
-    });
-
-    stage.add(groupAM);
-
-    gsap.to(state, 1, {
-        scaleAm: 1.2,
-        ease: Elastic.easeOut
-    });
-};
-
-const addHatena = () => {
-    gsap.to(state, 1, {
-        posAmX: -2.0,
-        ease: Elastic.easeOut
-    });
-
-    stage.add(groupHatena);
-
-    gsap.to(state, 1, {
-        scaleHatena: 1.2,
-        ease: Elastic.easeOut,
-        onComplete: state.sceneFinish
-    });
-};
-
-const update = () => {
-    timer = requestAnimationFrame(update);
-
-    const mouseX = mousePosition.x - renderer.domElement.width * 0.5;
-    const mouseY = mousePosition.y - renderer.domElement.height * 0.5;
-
-    mainCameraposition.set(mouseX * 0.001, mouseY * 0.001, 45);
-    mainCameralookAt(0, 0, 0);
-
-    if (!finished) {
-        groupWHO.scale.set(scaleWho, scaleWho, scaleWho);
-        groupWHO.position.set(0, posWho, 0);
-
-        groupI.scale.set(scaleI, scaleI, scaleI);
-        groupI.position.set(0, posI, 0);
-
-        groupAM.scale.set(scaleAm, scaleAm, scaleAm);
-        groupAM.position.set(posAmX, posAmY, 0);
-
-        groupHatena.scale.set(scaleHatena, scaleHatena, scaleHatena);
+    if (appScene.value === 'ready') {
+        justRender();
     }
 
-    renderer.render(stage, mainCamera);
-};
+    startMouseTracking();
+    startListeningResize();
+    setMousePosition(screenSize.width * 0.5, screenSize.height * 0.5);
+});
 
-const play = () => {
-    update();
+watch(appScene, () => {
+    if (appScene.value === 'first') {
+        finished.value = false;
+        play();
+    }
+});
 
-    gsap.to(state, 1, {
-        scaleWho: 1.2,
-        ease: Elastic.easeOut
-    });
+watch(screenSize, () => {
+    renderer.setSize(screenSize.width, screenSize.height);
+    mainCamera.aspect = screenSize.width / screenSize.height;
+    mainCamera.updateProjectionMatrix();
+});
 
-    setTimeout(() => {
-        addI();
-    }, 200);
-    setTimeout(() => {
-        addAM();
-    }, 300);
-    setTimeout(() => {
-        addHatena();
-    }, 400);
-};
+onBeforeUnmount(() => {
+    stopMouseTracking();
+    stopListeningResize();
+    pause();
+    renderer.dispose();
+});
 </script>
 
 <template>
@@ -236,6 +294,7 @@ const play = () => {
         & canvas {
             width: 100%;
             height: 100%;
+            margin-inline: auto;
         }
     }
 </style>

@@ -1,25 +1,37 @@
-import {reactive, onMounted, onUnmounted} from 'vue';
+import { reactive } from 'vue';
 
+const mousePosition = reactive({ x: 0, y: 0 });
 let isTracking = false;
-const position = reactive({x: 0, y: 0});
 
 const updatePosition = (e: MouseEvent) => {
-    position.x = e.clientX * window.devicePixelRatio;
-    position.y = e.clientY * window.devicePixelRatio;
-}
+    mousePosition.x = e.clientX * window.devicePixelRatio;
+    mousePosition.y = e.clientY * window.devicePixelRatio;
+};
+
+const setMousePosition = (x: number, y: number) => {
+    mousePosition.x = x;
+    mousePosition.y = y;
+};
+
+const startMouseTracking = () => {
+    if (!isTracking) {
+        window.addEventListener('mousemove', updatePosition);
+        isTracking = true;
+    }
+};
+
+const stopMouseTracking = () => {
+    if (isTracking) {
+        window.removeEventListener('mousemove', updatePosition);
+        isTracking = false;
+    }
+};
 
 export const useMousePosition = () => {
-    if (!isTracking) {
-        onMounted(() => {
-            window.addEventListener('mousemove', updatePosition);
-            isTracking = true;
-        });
-
-        onUnmounted(() => {
-            window.removeEventListener('mousemove', updatePosition);
-            isTracking = false;
-        });
-    }
-    
-    return position;
-}
+    return {
+        mousePosition,
+        setMousePosition,
+        startMouseTracking,
+        stopMouseTracking,
+    };
+};

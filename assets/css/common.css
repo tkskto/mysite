@@ -18,6 +18,7 @@ html {
     word-spacing: 1px;
     text-size-adjust: 100%;
     box-sizing: border-box;
+    font-size: 10px;
 }
 
 *, *:before, *:after {
@@ -40,6 +41,7 @@ body > #__nuxt {
 body {
     position: relative;
     background: #000000;
+    font-size: 1.6rem;
 }
 
 #__layout {

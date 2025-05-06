@@ -2,8 +2,8 @@
 import {useScreenSize} from '~/composables/useScreenSize';
 import {useMousePosition} from '~/composables/useMousePosition';
 
-const {width, height} = useScreenSize();
-const mouse = useMousePosition();
+const {screenSize, startListeningResize, stopListeningResize} = useScreenSize();
+const {mousePosition, startMouseTracking, stopMouseTracking} = useMousePosition();
 
 const posX1 = ref(0);
 const posY1 = ref(0);
@@ -12,10 +12,15 @@ const posY2 = ref(0);
 const posX3 = ref(0);
 const posY3 = ref(0);
 
-watch(mouse, () => {
-    const {x, y} = mouse;
-    const posX = (x / width) * 2 - 1;
-    const posY = (y / height) * 2 - 1;
+onMounted(() => {
+    startMouseTracking();
+    startListeningResize();
+});
+
+watch(mousePosition, () => {
+    const {x, y} = mousePosition;
+    const posX = (x / screenSize.width) * 2 - 1;
+    const posY = (y / screenSize.height) * 2 - 1;
 
     posX1.value = posX * 5;
     posY1.value = posY * 5;
@@ -25,6 +30,11 @@ watch(mouse, () => {
 
     posX3.value = posX * 25;
     posY3.value = posY * 25;
+});
+
+onBeforeUnmount(() => {
+    stopMouseTracking();
+    stopListeningResize();
 });
 </script>
 

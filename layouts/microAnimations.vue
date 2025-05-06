@@ -1,3 +1,12 @@
+<script setup lang="ts">
+useHead({
+    title: 'Micro Animations',
+    meta: [
+        { hid: 'description', name: 'description', content: 'Gallery of Micro Animations.' }
+    ]
+});
+</script>
+
 <template>
     <UApp>
         <div class="str-root">
@@ -5,19 +14,6 @@
         </div>
     </UApp>
 </template>
-
-<script>
-    export default {
-        head() {
-            return {
-                title: 'Takeshi Kato',
-                meta: [
-                    { hid: 'description', name: 'description', content: 'This is takeshi kato\'s Web site. I\'m a frontend developer.' }
-                ],
-            };
-        },
-    };
-</script>
 
 <style scoped>
     .str-root {

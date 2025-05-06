@@ -28,14 +28,12 @@
             width: 100%;
             display: flex;
             justify-content: center;
+            gap: 20px;
 
             & > li {
                 font-size: 2.0rem;
                 list-style: none;
-
-                &:not(:last-child) {
-                    margin-right: 20px;
-                }
+                text-shadow: 3px 3px 30px #ba00ff;
 
                 & a {
                     color: #ffffff;

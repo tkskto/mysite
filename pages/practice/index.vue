@@ -31,13 +31,6 @@ definePageMeta({
     layout: 'practice',
 });
 
-useHead({
-    title: 'Practice | Takeshi Kato',
-    meta: [
-        { hid: 'description', name: 'description', content: 'This is practice of GLSL and part of portfolio.' }
-    ],
-});
-
 const ratio = window.devicePixelRatio;
 
 const canvasSize = {
@@ -64,14 +57,6 @@ const canvasPracticalHeight = computed(() => {
 const onHashChange = () => {
     changeID(location.hash.split('#')[1] || '0');
 };
-''
-const setMouseTracker = () => {
-    if (mouseState) {
-        document.addEventListener('mousemove', mouseTracking);
-    } else {
-        document.removeEventListener('mousemove', mouseTracking);
-    }
-};
 
 const mouseTracking = (e) => {
     setMousePos({
@@ -88,7 +73,7 @@ const changeSketchState = (e) => {
     }
 };
 
-onMoutend(() => {
+onMounted(() => {
     const sketch = document.querySelectorAll('.sketch-item');
     const width = screenSize.width;
     const height = screenSize.height;
@@ -188,31 +173,31 @@ onBeforeDestroy(() => {
 <template>
     <div class="practice-root">
         <ul class="list-sketch">
-            <li class="sketch-item" id="01"><a href="#01">#1</a></li>
-            <li class="sketch-item" id="02"><a href="#02">#2</a></li>
-            <li class="sketch-item" id="03"><a href="#03">#3</a></li>
-            <li class="sketch-item" id="04"><a href="#04">#4</a></li>
-            <li class="sketch-item" id="05"><a href="#05">#5</a></li>
-            <li class="sketch-item" id="06"><a href="#06">#6</a></li>
-            <li class="sketch-item" id="07"><a href="#07">#7</a></li>
-            <li class="sketch-item" id="08"><a href="#08">#8</a></li>
-            <li class="sketch-item" id="09"><a href="#09">#9</a></li>
-            <li class="sketch-item" id="10"><a href="#10">#10</a></li>
-            <li class="sketch-item" id="11"><a href="#11">#11</a></li>
-            <li class="sketch-item" id="12"><a href="#12">#12</a></li>
-            <li class="sketch-item" id="13"><a href="#13">#13(with sound)</a></li>
-            <li class="sketch-item" id="14"><a href="#14">#14(with sound)</a></li>
-            <li class="sketch-item" id="15"><a href="#15">#15</a></li>
-            <li class="sketch-item" id="16"><a href="#16">#16</a></li>
-            <li class="sketch-item" id="17"><a href="#17">#17</a></li>
-            <li class="sketch-item" id="18"><a href="#18">#18</a></li>
-            <li class="sketch-item" id="19"><a href="#19">#19</a></li>
-            <li class="sketch-item" id="20"><a href="#20">#20</a></li>
+            <li id="01" class="sketch-item"><a href="#01">#1</a></li>
+            <li id="02" class="sketch-item"><a href="#02">#2</a></li>
+            <li id="03" class="sketch-item"><a href="#03">#3</a></li>
+            <li id="04" class="sketch-item"><a href="#04">#4</a></li>
+            <li id="05" class="sketch-item"><a href="#05">#5</a></li>
+            <li id="06" class="sketch-item"><a href="#06">#6</a></li>
+            <li id="07" class="sketch-item"><a href="#07">#7</a></li>
+            <li id="08" class="sketch-item"><a href="#08">#8</a></li>
+            <li id="09" class="sketch-item"><a href="#09">#9</a></li>
+            <li id="10" class="sketch-item"><a href="#10">#10</a></li>
+            <li id="11" class="sketch-item"><a href="#11">#11</a></li>
+            <li id="12" class="sketch-item"><a href="#12">#12</a></li>
+            <li id="13" class="sketch-item"><a href="#13">#13(with sound)</a></li>
+            <li id="14" class="sketch-item"><a href="#14">#14(with sound)</a></li>
+            <li id="15" class="sketch-item"><a href="#15">#15</a></li>
+            <li id="16" class="sketch-item"><a href="#16">#16</a></li>
+            <li id="17" class="sketch-item"><a href="#17">#17</a></li>
+            <li id="18" class="sketch-item"><a href="#18">#18</a></li>
+            <li id="19" class="sketch-item"><a href="#19">#19</a></li>
+            <li id="20" class="sketch-item"><a href="#20">#20</a></li>
         </ul>
 
         <div class="container-canvas">
-            <canvas id="canvas-GL" :width="canvasDisplayWidth" :height="canvasDisplayHeight" :style="{width: canvasPracticalWidth, height: canvasPracticalHeight}"></canvas>
-            <Quote></Quote>
+            <canvas id="canvas-GL" :width="canvasDisplayWidth" :height="canvasDisplayHeight" :style="{width: canvasPracticalWidth, height: canvasPracticalHeight}" />
+            <Quote />
         </div>
 
         <ViewChangeButton />

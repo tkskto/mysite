@@ -3,9 +3,6 @@ import Logo from '~/components/index/Logo.vue'
 import Intro from '~/components/index/Intro.vue'
 import Navs from '~/components/common/nav/Navigation.vue'
 
-// Pinia store を使う場合はここで定義
-// const store = useCommonStore()
-
 const introRef = ref<InstanceType<typeof Intro> | null>(null)
 
 useHead({
@@ -16,18 +13,17 @@ useHead({
             content: "This is takeshi kato's Web site. I'm a frontend developer.",
         }
     ]
-})
-
+});
 
 onBeforeRouteLeave(async () => {
     if (introRef.value?.beforeLeave) {
-        await introRef.value.beforeLeave()
+        await introRef.value.beforeLeave();
     }
 });
 </script>
 
 <template>
-    <section class="container">
+    <section class="section">
         <logo />
         <intro ref="intro" />
         <p class="black-lives-matter"><strong>Black Lives Matter.</strong></p>
@@ -36,7 +32,7 @@ onBeforeRouteLeave(async () => {
 </template>
 
 <style>
-    .container {
+    .section {
         position: relative;
         width: 100%;
         min-height: 100%;
@@ -51,6 +47,7 @@ onBeforeRouteLeave(async () => {
             bottom: 11%;
             text-align: center;
             color: #fff;
+            text-shadow: 3px 3px 30px #ba00ff;
         }
     }
 </style>

@@ -1,27 +1,34 @@
-import {reactive, onMounted, onUnmounted} from 'vue';
+import {reactive} from 'vue';
 
 let isTracking = false;
 const screenSize = reactive({ width: 0, height: 0 });
-const update = () => {
+
+const updateScreenSize = () => {
     screenSize.width = window.innerWidth;
     screenSize.height = window.innerHeight;
 };
 
-export const useScreenSize = () => {
+const startListeningResize = () => {
     if (!isTracking) {
-        screenSize.width = window.innerWidth;
-        screenSize.height = window.innerHeight;
-        
-        onMounted(() => {
-            window.addEventListener('resize', update);
-            isTracking = true;
-        });
-
-        onUnmounted(() => {
-            window.removeEventListener('resize', update);
-            isTracking = false;
-        });
+        window.addEventListener('resize', updateScreenSize);
+        isTracking = true;
     }
+};
 
-    return screenSize;
+const stopListeningResize = () => {
+    if (isTracking) {
+        window.removeEventListener('resize', updateScreenSize);
+        isTracking = false;
+    }
+};
+
+
+export const useScreenSize = () => {
+    updateScreenSize();
+
+    return {
+        screenSize,
+        startListeningResize,
+        stopListeningResize,
+    };
 }

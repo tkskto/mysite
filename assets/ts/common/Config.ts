@@ -1,25 +1,25 @@
-export class GLConfig {
-    public static UNIFORM_TYPE_MATRIX4 = 'matrix4fv';
-    public static UNIFORM_TYPE_MATRIX3 = 'matrix3fv';
-    public static UNIFORM_TYPE_MATRIX2 = 'matrix2fv';
-    public static UNIFORM_TYPE_VECTOR4 = '4fv';
-    public static UNIFORM_TYPE_VECTOR3 = '3fv';
-    public static UNIFORM_TYPE_VECTOR2 = '2fv';
-    public static UNIFORM_TYPE_VECTOR1 = '1fv';
-    public static UNIFORM_TYPE_FLOAT = '1f';
-    public static UNIFORM_TYPE_INT_VECTOR = '1iv';
-    public static UNIFORM_TYPE_INT = '1i';
-    public static UNIFORM_TYPE_TEXTURE = 'texture';
-    public static UNIFORM_TYPE_AUDIO_TEXTURE = 'audioTexture';
+export const GLConfig = {
+    UNIFORM_TYPE_MATRIX4: 'matrix4fv',
+    UNIFORM_TYPE_MATRIX3: 'matrix3fv',
+    UNIFORM_TYPE_MATRIX2: 'matrix2fv',
+    UNIFORM_TYPE_VECTOR4: '4fv',
+    UNIFORM_TYPE_VECTOR3: '3fv',
+    UNIFORM_TYPE_VECTOR2: '2fv',
+    UNIFORM_TYPE_VECTOR1: '1fv',
+    UNIFORM_TYPE_FLOAT: '1f',
+    UNIFORM_TYPE_INT_VECTOR: '1iv',
+    UNIFORM_TYPE_INT: '1i',
+    UNIFORM_TYPE_TEXTURE: 'texture',
+    UNIFORM_TYPE_AUDIO_TEXTURE: 'audioTexture',
 
-    public static DRAW_TYPE_POINT = 'point';
-    public static DRAW_TYPE_LINE = 'line';
-    public static DRAW_TYPE_LINE_STRIP = 'line_strip';
-    public static DRAW_TYPE_LINE_LOOP = 'line_loop';
-    public static DRAW_TYPE_TRIANGLE = 'triangle';
-    public static DRAW_TYPE_TRIANGLE_STRIP = 'triangle_strip';
-    public static DRAW_TYPE_TRIANGLE_FAN = 'triangle_fan';
-}
+    DRAW_TYPE_POINT: 'point',
+    DRAW_TYPE_LINE: 'line',
+    DRAW_TYPE_LINE_STRIP: 'line_strip',
+    DRAW_TYPE_LINE_LOOP: 'line_loop',
+    DRAW_TYPE_TRIANGLE: 'triangle',
+    DRAW_TYPE_TRIANGLE_STRIP: 'triangle_strip',
+    DRAW_TYPE_TRIANGLE_FAN: 'triangle_fan',
+};
 
 export class AppConfig {
     public static SCENE = {

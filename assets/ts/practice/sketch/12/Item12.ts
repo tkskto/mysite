@@ -93,6 +93,6 @@ export default class Item12 extends Sketch {
     public animate = (): void => {
         this.clear();
 
-        this._renderer.update(this._dirLight.arr(), cameraPosition.arr(), this._ambientLight, this._time);
+        this._renderer.update(this._dirLight.arr(), cameraPosition.value.arr(), this._ambientLight, this._time);
     };
 }

@@ -22,9 +22,6 @@ export default class Renderer {
     private vpMatrix!: Float32Array;
     private mvpMatrix!: Float32Array;
 
-    private unWatchResizeEvent;
-    private unWatchStateChangeEvent;
-
     constructor(private _ctx: WebGLContext) {
         this._cWidth = _ctx.canvas.clientWidth;
         this._cHeight = _ctx.canvas.clientHeight;
@@ -64,14 +61,8 @@ export default class Renderer {
      */
     public dispose = (): void => {
         this._target.length = 0;
-
-        if (this.unWatchResizeEvent) {
-            this.unWatchResizeEvent();
-        }
-
-        if (this.unWatchStateChangeEvent) {
-            this.unWatchStateChangeEvent();
-        }
+        
+        // todo: watchの解除が必要かどうか
     };
 
     public update = (...values: any[]): void => {
@@ -102,7 +93,7 @@ export default class Renderer {
         const aspectRatio = canvasSize.width > canvasSize.height ? canvasSize.width / canvasSize.height : canvasSize.height / canvasSize.width;
 
         // ビュー座標変換行列
-        MatrixUtils.lookAt(cameraPosition, new Vector(0.0, 0.0, 0.0), new Vector(0, 1, 0), this.vMatrix);
+        MatrixUtils.lookAt(cameraPosition.value, new Vector(0.0, 0.0, 0.0), new Vector(0, 1, 0), this.vMatrix);
         MatrixUtils.perspective(90, aspectRatio, 0.1, 1000, this.pMatrix);
         MatrixUtils.multiply(this.pMatrix, this.vMatrix, this.vpMatrix);
     };

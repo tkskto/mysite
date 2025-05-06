@@ -1,9 +1,9 @@
-import {Vector} from '~/assets/ts/common/gl/Vector.ts';
+import {Vector} from '~/assets/ts/common/gl/Vector';
 
-const cameraPosition = reactive<Vector>(new Vector(0.0, 0.0, 1));
+const cameraPosition = ref<Vector>(new Vector(0.0, 0.0, 1));
 
-const updateCameraPosition = (cameraPosition: boolean) => {
-    cameraPosition.value = cameraPosition;
+const updateCameraPosition = (position: Vector) => {
+    cameraPosition.value = position;
 };
 
 export const useCameraPosition = () => {

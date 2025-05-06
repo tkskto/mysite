@@ -1,15 +1,19 @@
+<script setup lang="ts">
+import {useQuoteText} from '~/composables/useQuoteText';
+
+const {quoteText} = useQuoteText();
+</script>
+
 <template>
-    <cite v-if="quote !== ''" class="text-quote"><a id="text-quote" :href="quote" target="_blank">{{quote}}</a></cite>
+    <cite v-if="quoteText !== ''" class="text-quote"><a id="text-quote" :href="quoteText" target="_blank">{{quoteText}}</a></cite>
 </template>
 
-<script>
-    import {mapGetters} from 'vuex';
-    export default {
-        name: "quote",
-        computed: {
-            ...mapGetters({
-                quote: 'Practice/quote',
-            })
-        },
-    }
-</script>
+<style scoped>
+.text-quote {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+</style>

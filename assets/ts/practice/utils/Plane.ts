@@ -1,4 +1,4 @@
-import IData from '../../common/datatype/IData';
+import type {IData} from '../../common/datatype/IData';
 
 export default class Plane implements IData {
 

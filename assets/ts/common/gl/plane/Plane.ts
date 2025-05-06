@@ -1,12 +1,18 @@
-import Sketch from '../../../practice/sketch/common/Sketch';
-import WebGLContext from '../Context';
+import {Sketch} from '../../../practice/sketch/common/Sketch';
+import type WebGLContext from '../Context';
 import Data from './pData';
 import Renderer from '../Renderer';
 import Geometry from '../Geometry';
 import Mesh from '../Mesh';
 import Program from '../Program';
 import { GLConfig } from '../../Config';
-import Shader from '../Shader';
+import type Shader from '../Shader';
+
+import {useScreenSize} from '~/composables/useScreenSize';
+import {usePracticeShader} from '~/composables/usePracticeShader';
+
+const {updateVertexShader, updateFragmentShader} = usePracticeShader();
+const {canvasSize} = useScreenSize();
 
 export default class Plane extends Sketch {
 
@@ -16,8 +22,8 @@ export default class Plane extends Sketch {
     private _renderer!: Renderer;
     private _time = 0;
 
-    constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string, private _shader: Shader, private _ctx: WebGLContext, quote = '') {
-        super(_store, _id, quote);
+    constructor(private _canvas: HTMLCanvasElement, _id: string, private _shader: Shader, private _ctx: WebGLContext, quote = '') {
+        super(_id, quote);
     }
 
     public setup = (): void => {
@@ -29,14 +35,14 @@ export default class Plane extends Sketch {
             ['mvpMatrix', 'resolution', 'time'],
             [GLConfig.UNIFORM_TYPE_MATRIX4, GLConfig.UNIFORM_TYPE_VECTOR2, GLConfig.UNIFORM_TYPE_FLOAT]
         );
-        this._renderer = new Renderer(this._store, this._ctx);
+        this._renderer = new Renderer(this._ctx);
 
         const line: Geometry = new Geometry(this._gl, this._data).init();
         const mesh: Mesh = new Mesh(this._gl, this._default, line, GLConfig.DRAW_TYPE_TRIANGLE);
         this._renderer.add(mesh);
 
-        this._store.commit('Practice/SET_VS_TEXT', this._shader.vertexString);
-        this._store.commit('Practice/SET_FS_TEXT', this._shader.fragmentString);
+        updateVertexShader(this._shader.vertexString);
+        updateFragmentShader(this._shader.fragmentString);
 
         this.play();
     };
@@ -64,7 +70,6 @@ export default class Plane extends Sketch {
 
     public animate = (): void => {
         this.clear();
-        const canvasSize = this._store.getters['Common/canvasSize'];
         this._renderer.update([canvasSize.width, canvasSize.height], this._time);
     };
 }

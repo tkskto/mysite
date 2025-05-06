@@ -1,4 +1,4 @@
-import IData from '../../datatype/IData';
+import type {IData} from '../../datatype/IData';
 
 export default class Data implements IData {
     _vertex: number[] = [

@@ -1,4 +1,4 @@
-import Sketch from '../common/Sketch';
+import {Sketch} from '../common/Sketch';
 import Default from './Shader';
 import WebGLContext from '../../../common/gl/Context';
 import Data from '../../../common/gl/plane/pData';
@@ -7,40 +7,44 @@ import Geometry from '../../../common/gl/Geometry';
 import Mesh from '../../../common/gl/Mesh';
 import Program from '../../../common/gl/Program';
 import { GLConfig } from '../../../common/Config';
+import {usePracticeShader} from '~/composables/usePracticeShader';
+import {useScreenSize} from '~/composables/useScreenSize';
+
+const {updateVertexShader, updateFragmentShader} = usePracticeShader();
+const {canvasSize} = useScreenSize();
 
 export default class Item3 extends Sketch {
 
     private _data: Data = new Data();
     private _ctx!: WebGLContext;
     private _gl!: WebGLRenderingContext;
-    private _shader!: Default;
     private _default!: Program;
     private _renderer!: Renderer;
     private _time = 0;
 
-    constructor(_store: any, private _canvas: HTMLCanvasElement, _id: string) {
-        super(_store, _id);
+    constructor(private _canvas: HTMLCanvasElement, _id: string) {
+        super(_id);
     }
 
     public setup = (): void => {
-        this._ctx = new WebGLContext(1, this._canvas);
+        this._ctx = new WebGLContext(this._canvas);
         this._gl = this._ctx.ctx;
         this.clear();
-        this._shader = new Default(this._gl);
-        this._default = new Program(this._gl, this._shader,
+        const shader = new Default(this._gl);
+        this._default = new Program(this._gl, shader,
             ['position', 'color'],
             [3, 4],
             ['mvpMatrix', 'resolution', 'time'],
             [GLConfig.UNIFORM_TYPE_MATRIX4, GLConfig.UNIFORM_TYPE_VECTOR2, GLConfig.UNIFORM_TYPE_FLOAT]
         );
-        this._renderer = new Renderer(this._store, this._ctx);
+        this._renderer = new Renderer(this._ctx);
 
         const line: Geometry = new Geometry(this._gl, this._data).init();
         const mesh: Mesh = new Mesh(this._gl, this._default, line, GLConfig.DRAW_TYPE_TRIANGLE);
         this._renderer.add(mesh);
 
-        this._store.commit('Practice/SET_VS_TEXT', this._shader.vertexString);
-        this._store.commit('Practice/SET_FS_TEXT', this._shader.fragmentString);
+        updateVertexShader(shader.vertexString);
+        updateFragmentShader(shader.fragmentString);
 
         this.play();
     };
@@ -68,7 +72,6 @@ export default class Item3 extends Sketch {
 
     public animate = (): void => {
         this.clear();
-        const canvasSize = this._store.getters['Common/canvasSize'];
         this._renderer.update([canvasSize.width, canvasSize.height], this._time);
     };
 }

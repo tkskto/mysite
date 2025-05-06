@@ -1,12 +1,9 @@
 import { Methods } from '../Utils';
 
 export default class WebGLContext {
-    private _canvas: HTMLCanvasElement;
     private _ctx!: WebGLRenderingContext;
 
-    constructor(private _ratio: number, _canvas: HTMLCanvasElement) {
-        this._canvas = _canvas;
-
+    constructor(private _canvas: HTMLCanvasElement) {
         this.init();
     }
 

@@ -1,23 +1,19 @@
-<template>
-    <div class="str-root">
-        <nuxt/>
-    </div>
-</template>
-
-<script>
-    import {mapGetters, mapActions} from 'vuex';
-
-    export default {
-        head() {
-            return {
-                title: 'Takeshi Kato',
-                meta: [
-                    { hid: 'description', name: 'description', content: 'This is takeshi kato\'s Web site. I\'m a frontend developer.' }
-                ],
-            };
-        },
-    };
+<script setup lang="ts">
+useHead({
+    title: 'Micro Animations',
+    meta: [
+        { name: 'description', content: 'Gallery of Micro Animations.' }
+    ]
+});
 </script>
+
+<template>
+    <UApp>
+        <div class="str-root">
+            <slot/>
+        </div>
+    </UApp>
+</template>
 
 <style scoped>
     .str-root {

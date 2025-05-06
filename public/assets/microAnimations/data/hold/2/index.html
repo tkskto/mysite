@@ -1,0 +1,91 @@
+<!DOCTYPE html><html lang="ja"><head>
+<meta charset="UTF-8">
+<title>Micro Animations</title>
+<style>/* charsetは不要です */
+html,body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #ffe;
+}
+
+body {
+    display: flex;
+    align-items:center;
+    justify-content: center;
+}
+
+
+.btn {
+    position: relative;
+    padding: 0;
+    width: 200px;
+    height: 36px;
+    box-shadow: none;
+    border:none ;
+    outline: none;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    background: none;
+}
+
+.svg {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+}
+
+.btn .path {
+    stroke-dashoffset: 520px;
+    stroke-dasharray: 520;
+    transition: stroke-dashoffset 1s linear;
+}
+
+.btn.hold .path {
+    transition: stroke-dashoffset 3s linear;
+    stroke-dashoffset: 0;
+}
+
+.btn.holdend {
+    background-color: #f94848;
+    color: #fff;
+}
+
+.btn.holdend .path {
+    stroke-dashoffset: 0;
+}</style></head>
+<body>
+    <button id="btn" class="btn" type="button">
+        hold
+        <svg class="svg" viewBox="0 0 200 60">
+            <path class="path" fill="none" stroke="#f94848" stroke-width="2" d="M 0 0 L 200 0 L 200 60 L 0 60 Z">
+            </path>
+        </svg>
+    </button>
+<script class="lib" src="/assets/microAnimations/libs/js/jquery.js" defer></script>
+
+<script>(function() {
+    'use strict';
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        var $btn = $('#btn'),
+            $path = $btn.find('.path');
+
+        $btn.on('mousedown', function () {
+            $btn.addClass('hold');
+        });
+
+        $(document).on('mouseup', function () {
+            $btn.removeClass('hold holdend');
+        });
+
+        $btn.on('oTransitionEnd mozTransitionEnd webkitTransitionEnd transitionend', function () {
+
+            if ($path.css('stroke-dashoffset') === '0px') {
+                $btn.addClass('holdend');
+            }
+        });
+    });
+})();</script></body></html>

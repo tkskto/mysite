@@ -1,7 +1,6 @@
-import {Shape, Mesh, Material, ExtrudeGeometry, type ExtrudeGeometryOptions} from 'three'
+import {Shape, Mesh, ExtrudeGeometry, type Material, type ExtrudeGeometryOptions} from 'three';
 
 export default class A {
-
     private _outerGeometry: ExtrudeGeometry;
     private _innerGeometry: ExtrudeGeometry;
     private _outerMesh: Mesh;

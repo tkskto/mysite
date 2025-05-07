@@ -2,7 +2,7 @@
 import Loading from '~/components/microAnimations/Loading.vue';
 import TheHeader from '~/components/microAnimations/Header.vue';
 import Category from '~/components/microAnimations/Category.vue';
-import Animation from 'assets/ts/common/datatype/Animation';
+import type Animation from 'assets/ts/common/datatype/Animation';
 
 definePageMeta({
     layout: 'micro-animations',
@@ -10,7 +10,6 @@ definePageMeta({
 
 const isLoading = ref<boolean>(true);
 const allSketchData = ref<Record<string, Animation[]>>({});
-const getAllItemData = [];
 const onLoaded = (allSketch: Record<string, Animation[]>) => {
     isLoading.value = false;
     allSketchData.value = allSketch;

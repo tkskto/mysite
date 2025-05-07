@@ -23,7 +23,7 @@ const FS = computed(() => {
             <h2>Fragment Shader</h2>
             <p class="shader-text shader-fs" v-html="FS" />
         </div>
-        <div class="bg"></div>
+        <div class="bg" />
     </div>
 </template>
 

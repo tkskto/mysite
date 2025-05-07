@@ -118,7 +118,7 @@ export const setAttr = (gl: WebGLRenderingContext, vbo: WebGLBuffer[], attl: num
 }
 
 export const createTexture = (src: string, _gl: WebGLRenderingContext, format: number): Promise<WebGLTexture> => {
-    return new Promise<WebGLTexture>((resolve: (value: WebGLTexture) => void, reject: (err: any) => void) => {
+    return new Promise<WebGLTexture>((resolve: (value: WebGLTexture) => void, reject: (err: ErrorEvent) => void) => {
         const img = new Image();
 
         img.addEventListener('load', () => {
@@ -127,7 +127,7 @@ export const createTexture = (src: string, _gl: WebGLRenderingContext, format: n
             resolve(texture);
         });
 
-        img.addEventListener('error', (err) => {
+        img.addEventListener('error', (err: ErrorEvent) => {
             reject(err);
         });
 

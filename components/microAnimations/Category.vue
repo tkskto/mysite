@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import Item from './AnimationItem.vue'
+import type Animation from '~/assets/ts/common/datatype/Animation';
 
 // Props を定義
 defineProps<{
     categoryName: string,
-    items: any[],
+    items: Animation[],
 }>()
 </script>
 
@@ -12,7 +13,7 @@ defineProps<{
     <section :id="categoryName" class="category">
         <h3 class="hdg3">{{categoryName}}</h3>
         <div class="animations">
-            <Item v-for="(item, index) in items" :key="index" :category="categoryName" :id="index + 1"></Item>
+            <Item v-for="(item, index) in items" :id="index + 1" :key="index" :category="categoryName" />
         </div>
     </section>
 </template>

@@ -1,4 +1,4 @@
-import {Shape, Mesh, Material, ExtrudeGeometry, type ExtrudeGeometryOptions} from 'three'
+import {Shape, Mesh, ExtrudeGeometry, type Material, type ExtrudeGeometryOptions} from 'three';
 
 export default class H {
     private _shape: Shape;

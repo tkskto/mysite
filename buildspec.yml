@@ -7,13 +7,15 @@ phases:
             nodejs: 12
         commands:
             - npm i
-    build:
+    pre_build:
         commands:
             - echo 'Running linter'
             - npm run lint
+    build:
+        commands:
             - echo 'Building'
             - npm run generate
 artifacts:
     files:
         - ./**/*
-    base-directory: 'public'
+    base-directory: '.output/public'

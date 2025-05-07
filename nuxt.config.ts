@@ -1,6 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     compatibilityDate: '2024-11-01',
+    site: {
+        url: 'https://tkskto.me'
+    },
     devtools: { enabled: true },
     modules: [
         '@nuxt/ui',
@@ -28,7 +31,4 @@ export default defineNuxtConfig({
     css: [
         '@/assets/css/common.css',
     ],
-    sitemap: {
-        url: 'https://tkskto.me'
-    },
 });

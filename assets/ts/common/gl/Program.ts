@@ -1,5 +1,5 @@
-import { GLUtils } from '../Utils';
 import type Shader from './Shader';
+import {createProgram} from '~/assets/ts/common/GLUtils';
 
 export default class Program {
     private _program!: WebGLProgram;
@@ -20,7 +20,7 @@ export default class Program {
     }
 
     private init = (): void => {
-        this._program = GLUtils.createProgram(this._gl, this._shader.VS, this._shader.FS) as WebGLProgram;
+        this._program = createProgram(this._gl, this._shader.VS, this._shader.FS) as WebGLProgram;
 
         for (let i = 0; i < this._attName.length; i++) {
             this._attl[i] = this._gl.getAttribLocation(this._program, this._attName[i]);

@@ -1,5 +1,5 @@
-import { GLUtils } from '../Utils';
-import type {IData} from '../datatype/IData';
+import {createVBO, createIBO} from '../GLUtils';
+import type {Data} from '../datatype/IData';
 
 export default class Geometry {
     private _vbo: WebGLBuffer[] = [];
@@ -11,7 +11,7 @@ export default class Geometry {
     private _NORMAL: number[];
     private _UV: number[];
 
-    constructor(private _gl: WebGLRenderingContext, _data: IData) {
+    constructor(private _gl: WebGLRenderingContext, _data: Data) {
         this._VERTEX = _data.vertex();
         this._INDEX = _data.index();
         this._COLOR = _data.color();
@@ -19,35 +19,35 @@ export default class Geometry {
         this._UV = _data.uv();
     }
 
-    public init = (...data): Geometry => {
+    public init = (...data: number[][]): Geometry => {
         let index = 0;
         if (this._VERTEX.length > 0) {
-            this._vbo[index] = GLUtils.createVBO(this._gl, this._VERTEX) as WebGLBuffer;
+            this._vbo[index] = createVBO(this._gl, this._VERTEX) as WebGLBuffer;
             index++;
         }
 
         if (this._COLOR.length > 0) {
-            this._vbo[index] = GLUtils.createVBO(this._gl, this._COLOR) as WebGLBuffer;
+            this._vbo[index] = createVBO(this._gl, this._COLOR) as WebGLBuffer;
             index++;
         }
 
         if (this._NORMAL.length > 0) {
-            this._vbo[index] = GLUtils.createVBO(this._gl, this._NORMAL) as WebGLBuffer;
+            this._vbo[index] = createVBO(this._gl, this._NORMAL) as WebGLBuffer;
             index++;
         }
 
         if (this._UV.length > 0) {
-            this._vbo[index] = GLUtils.createVBO(this._gl, this._UV) as WebGLBuffer;
+            this._vbo[index] = createVBO(this._gl, this._UV) as WebGLBuffer;
             index++;
         }
 
         for (let i = 0, len = data.length; i < len; i++) {
-            this._vbo[index] = GLUtils.createVBO(this._gl, data[i]) as WebGLBuffer;
+            this._vbo[index] = createVBO(this._gl, data[i]) as WebGLBuffer;
             index++;
         }
 
         if (this._INDEX) {
-            this._ibo = GLUtils.createIBO(this._gl, this._INDEX) as WebGLBuffer;
+            this._ibo = createIBO(this._gl, this._INDEX) as WebGLBuffer;
         }
 
         return this;

@@ -1,6 +1,6 @@
-import {MatrixUtils} from '../Utils';
 import {showError} from '../Methods';
 import {Vector} from './Vector';
+import {create} from '~/assets/ts/common/MatrixUtils';
 
 /**
  * ( This class has been influenced by https://wgld.org )
@@ -166,7 +166,7 @@ export default class Quaternion {
      * @param {Float32Array} _dest
      * @returns {Float32Array}
      */
-    public toMatrix = (_dest: Float32Array = MatrixUtils.create()): Float32Array => {
+    public toMatrix = (_dest: Float32Array = create()): Float32Array => {
         const x = this.vector.x;
         const y = this.vector.y;
         const z = this.vector.z;

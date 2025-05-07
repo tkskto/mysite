@@ -1,10 +1,10 @@
 import {watch} from 'vue';
-import { MatrixUtils } from '../Utils';
 import type WebGLContext from './Context';
 import {Vector} from './Vector';
 import type Mesh from './Mesh';
 import {useScreenSize} from '~/composables/useScreenSize';
 import {useCameraPosition} from '~/composables/useCameraPosition';
+import {create, initialize, multiply, inverse, lookAt, perspective} from '~/assets/ts/common/MatrixUtils';
 
 const {canvasSize, screenSize} = useScreenSize();
 const {cameraPosition} = useCameraPosition();
@@ -70,13 +70,13 @@ export default class Renderer {
     };
 
     private render = (...values: any[]): void => {
-        this.mvpMatrix = MatrixUtils.initialize(MatrixUtils.create());
+        this.mvpMatrix = initialize(create());
         for (const target of this._target) {
-            MatrixUtils.multiply(this.vpMatrix, target.mMatrix, this.mvpMatrix);
+            multiply(this.vpMatrix, target.mMatrix, this.mvpMatrix);
             const uniforms: any[] = [this.mvpMatrix];
             target.useProgram();
             if (target.castShadow) {
-                uniforms.push(target.mMatrix, MatrixUtils.inverse(target.mMatrix));
+                uniforms.push(target.mMatrix, inverse(target.mMatrix));
             }
             target.ready(uniforms.concat(...values));
             target.draw();
@@ -85,17 +85,17 @@ export default class Renderer {
     };
 
     private initializeMatrix = (): void => {
-        this.vMatrix = MatrixUtils.initialize(MatrixUtils.create());
-        this.pMatrix = MatrixUtils.initialize(MatrixUtils.create());
-        this.qMatrix = MatrixUtils.initialize(MatrixUtils.create());
-        this.vpMatrix = MatrixUtils.initialize(MatrixUtils.create());
+        this.vMatrix = initialize(create());
+        this.pMatrix = initialize(create());
+        this.qMatrix = initialize(create());
+        this.vpMatrix = initialize(create());
 
         const aspectRatio = canvasSize.width > canvasSize.height ? canvasSize.width / canvasSize.height : canvasSize.height / canvasSize.width;
 
         // ビュー座標変換行列
-        MatrixUtils.lookAt(cameraPosition.value, new Vector(0.0, 0.0, 0.0), new Vector(0, 1, 0), this.vMatrix);
-        MatrixUtils.perspective(90, aspectRatio, 0.1, 1000, this.pMatrix);
-        MatrixUtils.multiply(this.pMatrix, this.vMatrix, this.vpMatrix);
+        lookAt(cameraPosition.value, new Vector(0.0, 0.0, 0.0), new Vector(0, 1, 0), this.vMatrix);
+        perspective(90, aspectRatio, 0.1, 1000, this.pMatrix);
+        multiply(this.pMatrix, this.vMatrix, this.vpMatrix);
     };
 
     private onResize = (): void => {

@@ -7,10 +7,10 @@ import Mesh from '../../../common/gl/Mesh';
 import Program from '../../../common/gl/Program';
 import { GLConfig } from '../../../common/Config';
 import Plane from '../../utils/Plane';
-import {GLUtils} from '../../../common/Utils';
 import {useMousePosition} from '~/composables/useMousePosition';
 import {usePracticeShader} from '~/composables/usePracticeShader';
 import {useScreenSize} from '~/composables/useScreenSize';
+import {createTexture} from '~/assets/ts/common/GLUtils';
 
 const {updateVertexShader, updateFragmentShader} = usePracticeShader();
 const {canvasSize} = useScreenSize();
@@ -56,8 +56,8 @@ export default class Item11 extends Sketch {
         updateFragmentShader(shader.fragmentString);
         startMouseTracking();
 
-        const texture1 = await GLUtils.createTexture('/assets/img/practice/11_1.jpg', this._gl, this._gl.UNSIGNED_BYTE);
-        const texture2 = await GLUtils.createTexture('/assets/img/practice/11_2.jpg', this._gl, this._gl.UNSIGNED_BYTE);
+        const texture1 = await createTexture('/assets/img/practice/11_1.jpg', this._gl, this._gl.UNSIGNED_BYTE);
+        const texture2 = await createTexture('/assets/img/practice/11_2.jpg', this._gl, this._gl.UNSIGNED_BYTE);
 
         this._mesh.addTexture(texture1);
         this._mesh.addTexture(texture2);

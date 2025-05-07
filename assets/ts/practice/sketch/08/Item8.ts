@@ -6,10 +6,10 @@ import Geometry from '../../../common/gl/Geometry';
 import Mesh from '../../../common/gl/Mesh';
 import Program from '../../../common/gl/Program';
 import { GLConfig } from '../../../common/Config';
-import { GLUtils } from '../../../common/Utils';
 import Plane from '../../utils/Plane';
 import {usePracticeShader} from '~/composables/usePracticeShader';
 import {useScreenSize} from '~/composables/useScreenSize';
+import {createTexture} from '~/assets/ts/common/GLUtils';
 
 const {updateVertexShader, updateFragmentShader} = usePracticeShader();
 const {canvasSize} = useScreenSize();
@@ -48,7 +48,7 @@ export default class Item8 extends Sketch {
         updateVertexShader(shader.vertexString);
         updateFragmentShader(shader.fragmentString);
 
-        const texture = await GLUtils.createTexture('/assets/img/practice/lena.png', this._gl, this._gl.UNSIGNED_BYTE);
+        const texture = await createTexture('/assets/img/practice/lena.png', this._gl, this._gl.UNSIGNED_BYTE);
 
         this._mesh.addTexture(texture);
         this.play();

@@ -1,4 +1,4 @@
-import { GLUtils } from '../Utils';
+import {createFragmentShader, createVertexShader} from '~/assets/ts/common/GLUtils';
 
 export default class Shader {
     private readonly _vertexString: string;
@@ -20,8 +20,8 @@ export default class Shader {
 
     public compile = (): Shader => {
         this._compiled = true;
-        this._VS = GLUtils.createVertexShader(this._vertexString, this._gl) as WebGLShader;
-        this._FS = GLUtils.createFragmentShader(this._fragmentString, this._gl) as WebGLShader;
+        this._VS = createVertexShader(this._vertexString, this._gl) as WebGLShader;
+        this._FS = createFragmentShader(this._fragmentString, this._gl) as WebGLShader;
 
         return this;
     };

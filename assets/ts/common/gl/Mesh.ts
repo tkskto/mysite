@@ -2,12 +2,13 @@
  * This class has been influenced by https://wgld.org
  */
 
-import { GLUtils, MatrixUtils } from '../Utils';
 import {showError} from '../Methods';
 import {Vector} from './Vector';
 import type Geometry from './Geometry';
 import type Program from './Program';
 import { GLConfig } from '../Config';
+import {setAttr, setUniform} from '~/assets/ts/common/GLUtils';
+import {create, initialize, multiply} from '~/assets/ts/common/MatrixUtils';
 
 export default class Mesh {
 
@@ -21,14 +22,14 @@ export default class Mesh {
     private _castShadow = false;
 
     constructor(private _gl: WebGLRenderingContext, private _prg: Program, private _geometry: Geometry, _drawType: string = GLConfig.DRAW_TYPE_TRIANGLE) {
-        this._mMatrix = MatrixUtils.initialize(MatrixUtils.create());
+        this._mMatrix = initialize(create());
 
         this.setDrawType(_drawType);
         this.setDrawMethod();
     }
 
     public reset = (): void => {
-        MatrixUtils.initialize(this._mMatrix);
+        initialize(this._mMatrix);
         this._position = {x: 0, y: 0, z: 0};
     };
 
@@ -37,7 +38,7 @@ export default class Mesh {
     };
 
     public ready = (_values: any[]): void => {
-        GLUtils.setAttr(this._gl, this._geometry.vbo, this._prg.attl, this._prg.atts);
+        setAttr(this._gl, this._geometry.vbo, this._prg.attl, this._prg.atts);
 
         if (this._geometry.ibo) {
             this._gl.bindBuffer(this._gl.ELEMENT_ARRAY_BUFFER, this._geometry.ibo);
@@ -55,7 +56,7 @@ export default class Mesh {
                     this.updateFFTData(_values[i][1]);
                     this.setTexture(_values[i][0]);
                 }
-                GLUtils.setUniform(this._gl, this._prg.uniType[i], this._prg.unil[i], _values[i]);
+                setUniform(this._gl, this._prg.uniType[i], this._prg.unil[i], _values[i]);
             }
         }
     };
@@ -287,11 +288,11 @@ export default class Mesh {
     };
 
     public setMatrix = (_vpMatrix: Float32Array): Float32Array => {
-        return MatrixUtils.multiply(this._mMatrix, _vpMatrix);
+        return multiply(this._mMatrix, _vpMatrix);
     };
 
     public setQuaternion = (_qMatrix: Float32Array): void => {
-        this._mMatrix = MatrixUtils.multiply(this._mMatrix, _qMatrix, this._mMatrix);
+        this._mMatrix = multiply(this._mMatrix, _qMatrix, this._mMatrix);
     };
 
     public addTexture = (_texture: WebGLTexture): void => {

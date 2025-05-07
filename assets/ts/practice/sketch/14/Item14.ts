@@ -7,8 +7,8 @@ import Program from '../../../common/gl/Program';
 import { GLConfig } from '../../../common/Config';
 import Default from './Shader';
 import FFT from '../../../common/audio/FFT';
-import {GLUtils} from '../../../common/Utils';
 import WebGLContext from '../../../common/gl/Context';
+import {createAudioTexture} from '~/assets/ts/common/GLUtils';
 
 import {usePracticeShader} from '~/composables/usePracticeShader';
 import {useScreenSize} from '~/composables/useScreenSize';
@@ -54,7 +54,7 @@ export default class Item14 extends Sketch {
         this._audioContext = new FFT();
         this._audioAnalyser = this._audioContext.analyser;
         this._frequency = new Uint8Array(this._audioAnalyser.frequencyBinCount);
-        mesh.addTexture(GLUtils.createAudioTexture(this._gl, this._audioAnalyser.frequencyBinCount, this._frequency));
+        mesh.addTexture(createAudioTexture(this._gl, this._audioAnalyser.frequencyBinCount, this._frequency));
         this._audioContext.ready('/assets/audio/1.mp3').then(() => {
             this._audioContext.play(false);
             this.play();

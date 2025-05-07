@@ -1,7 +1,7 @@
-import {Methods} from '../../common/Utils';
-import type {IData} from '../../common/datatype/IData';
+import {hsv2RGB} from '../../common/Methods';
+import type {Data} from '../../common/datatype/IData';
 
-export default class Cube implements IData {
+export default class Cube implements Data {
 
     _vertex: number[] = [];
     _normal: number[] = [];
@@ -33,7 +33,7 @@ export default class Cube implements IData {
         for (let i = 0; i < this._vertex.length; i++) {
             let color: number[] = _color.concat();
             if (color.length === 0) {
-                color = Methods.hsv2RGB(i, 100, 100, 50);
+                color = hsv2RGB(i, 100, 100, 50);
             }
 
             this._color.push(color[0], color[1], color[2], color[3]);

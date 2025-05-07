@@ -1,7 +1,7 @@
-import {Methods} from '../../common/Utils';
-import type {IData} from '../../common/datatype/IData';
+import {hsv2RGB} from '../../common/Methods';
+import type {Data} from '../../common/datatype/IData';
 
-export default class Sphere implements IData {
+export default class Sphere implements Data {
 
     _vertex: number[] = [];
     _normal: number[] = [];
@@ -25,7 +25,7 @@ export default class Sphere implements IData {
                 let color: number[] = _color.concat();
 
                 if (color.length === 0) {
-                    color = Methods.hsv2RGB(_row * i, 100, 100, 50);
+                    color = hsv2RGB(_row * i, 100, 100, 50);
                 }
 
                 this._vertex.push(tx, ty, tz);

@@ -1,4 +1,5 @@
-import { MatrixUtils, Methods } from '../Utils';
+import {MatrixUtils} from '../Utils';
+import {showError} from '../Methods';
 import {Vector} from './Vector';
 
 /**
@@ -94,7 +95,7 @@ export default class Quaternion {
         let sq: number = axis.length;
 
         if (!sq) {
-            Methods.showError('回転軸がおかしいです。');
+            showError('回転軸がおかしいです。');
             return null;
         }
 
@@ -123,7 +124,7 @@ export default class Quaternion {
             }
 
         } else {
-            Methods.showError('axis is unknown types.');
+            showError('axis is unknown types.');
         }
 
         const s = Math.sin(angle * 0.5);

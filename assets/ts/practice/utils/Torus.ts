@@ -1,7 +1,7 @@
-import {Methods} from '../../common/Utils';
-import type {IData} from '../../common/datatype/IData';
+import {hsv2RGB} from '../../common/Methods';
+import type {Data} from '../../common/datatype/IData';
 
-export default class Torus implements IData {
+export default class Torus implements Data {
 
     _vertex: number[] = [];
     _normal: number[] = [];
@@ -24,7 +24,7 @@ export default class Torus implements IData {
                 this._vertex.push(tx, ty, tz);
 
                 if (_color.length === 0) {
-                    _color = Methods.hsv2RGB(360 / _col * j, 1, 1, 1);
+                    _color = hsv2RGB(360 / _col * j, 1, 1, 1);
                 }
 
                 this._color.push(_color[0], _color[1], _color[2], _color[3]);

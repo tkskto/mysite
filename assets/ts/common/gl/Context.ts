@@ -1,4 +1,4 @@
-import { Methods } from '../Utils';
+import { showError } from '../Methods';
 
 export default class WebGLContext {
     private _ctx!: WebGLRenderingContext;
@@ -11,7 +11,7 @@ export default class WebGLContext {
         this._ctx = this._canvas.getContext('webgl2') as WebGLRenderingContext;
 
         if (!this._ctx) {
-            Methods.showError('Browser dose not support WebGL2.');
+            showError('Browser dose not support WebGL2.');
         }
     };
 

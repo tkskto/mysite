@@ -2,7 +2,8 @@
  * This class has been influenced by https://wgld.org
  */
 
-import { GLUtils, MatrixUtils, Methods } from '../Utils';
+import { GLUtils, MatrixUtils } from '../Utils';
+import {showError} from '../Methods';
 import {Vector} from './Vector';
 import type Geometry from './Geometry';
 import type Program from './Program';
@@ -208,7 +209,7 @@ export default class Mesh {
             this._mMatrix[10] = mat[10] * _vec[2];
             this._mMatrix[11] = mat[11] * _vec[2];
         } else {
-            Methods.showError('_vec is unknown types');
+            showError('_vec is unknown types');
         }
 
         this._mMatrix[12] = mat[12];

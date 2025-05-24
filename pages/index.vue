@@ -2,8 +2,9 @@
 import Logo from '~/components/index/Logo.vue'
 import Intro from '~/components/index/Intro.vue'
 import Navs from '~/components/common/nav/Navigation.vue'
+import {useAppScene} from '~/composables/useAppScene';
 
-const introRef = ref<InstanceType<typeof Intro> | null>(null)
+const {updateScene} = useAppScene();
 
 useHead({
     title: 'Takeshi Kato',
@@ -15,17 +16,19 @@ useHead({
     ]
 });
 
-onBeforeRouteLeave(async () => {
-    if (introRef.value?.beforeLeave) {
-        await introRef.value.beforeLeave();
-    }
+onBeforeRouteLeave((to, from, next) => {
+    updateScene('exit');
+    
+    setTimeout(() => {
+        next();
+    }, 700);
 });
 </script>
 
 <template>
     <section class="section">
         <logo />
-        <intro ref="intro" />
+        <intro />
         <p class="black-lives-matter"><strong>Black Lives Matter.</strong></p>
         <navs />
     </section>

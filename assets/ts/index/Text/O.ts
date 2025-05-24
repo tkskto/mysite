@@ -23,19 +23,17 @@ export default class O {
             const r = PI2 / row * i;
             const rx = Math.cos(r) * rad;
             const ry = Math.sin(r) * rad;
+
             points.push(new Vector3(0.0, rx, ry));
         }
 
-        const path: CatmullRomCurve3 = new CatmullRomCurve3(points);
-        path['type'] = 'catmullrom';
-        path['closed'] = true;
-
+        const path: CatmullRomCurve3 = new CatmullRomCurve3(points, true, 'catmullrom');
         const extrudeOptionWithPath = {..._exo};
+
         extrudeOptionWithPath['extrudePath'] = path;
         extrudeOptionWithPath['steps'] = 100;
 
         this._geometry = new ExtrudeGeometry(this._shape, extrudeOptionWithPath);
-
         this._mesh = new Mesh(this._geometry, _material);
     }
 

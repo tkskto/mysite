@@ -1,4 +1,4 @@
-type Scene = 'load' | 'intro' | 'first' | 'ready';
+type Scene = 'load' | 'intro' | 'first' | 'ready' | 'exit';
 
 const appScene = ref<Scene>('load');
 

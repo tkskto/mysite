@@ -45,7 +45,6 @@ const onLoaded = (allSketch: Record<string, Animation[]>) => {
     }
 
     .wrapper {
-        transition: opacity 1.0s ease;
         background: #ffffee;
         opacity: 0;
         transition: opacity 0.5s linear;

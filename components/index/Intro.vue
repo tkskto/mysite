@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {AmbientLight, DirectionalLight, Group, MeshPhongMaterial, PerspectiveCamera, Scene, WebGLRenderer} from 'three';
-import {gsap, Elastic, Linear} from "gsap";
+import {gsap, Elastic, Linear, Back} from "gsap";
 
 import W from '~/assets/ts/index/Text/W';
 import H from '~/assets/ts/index/Text/H';
@@ -14,7 +14,7 @@ import { useScreenSize } from '~/composables/useScreenSize';
 import { useAppScene } from '~/composables/useAppScene';
 import { useMousePosition } from '~/composables/useMousePosition';
 
-let timer = null;
+let timer: number | null = null;
 const finished = ref(false);
 const ratio = window.devicePixelRatio;
 const {screenSize, startListeningResize, stopListeningResize} = useScreenSize();
@@ -73,49 +73,56 @@ const onCompleted = () => {
 };
 
 const addI = () => {
-    gsap.to(state, 0.3, {
+    gsap.to(state,  {
         posWho: 3,
-        ease: Linear.ease,
+        ease: Linear.easeOut,
+        duration: 0.3,
     });
 
     stage.add(groupI);
 
-    gsap.to(state, 1, {
+    gsap.to(state, {
         scaleI: 1.2,
         ease: Elastic.easeOut,
+        duration: 1,
     });
 };
 
 const addAM = () => {
-    gsap.to(state, 0.3, {
+    gsap.to(state, {
         posWho: 6.5,
-        ease: Linear.ease,
+        ease: Linear.easeOut,
+        duration: 0.3
     });
 
-    gsap.to(state, 0.3, {
+    gsap.to(state,  {
         posI: 3.0,
-        ease: Linear.ease,
+        ease: Linear.easeOut,
+        duration: 0.3,
     });
 
     stage.add(groupAM);
 
-    gsap.to(state, 1, {
+    gsap.to(state,  {
         scaleAm: 1.2,
         ease: Elastic.easeOut,
+        duration: 1,
     });
 };
 
 const addHatena = () => {
-    gsap.to(state, 1, {
+    gsap.to(state,  {
         posAmX: -2.0,
         ease: Elastic.easeOut,
+        duration: 1,
     });
 
     stage.add(groupHatena);
 
-    gsap.to(state, 1, {
+    gsap.to(state, {
         scaleHatena: 1.2,
         ease: Elastic.easeOut,
+        duration: 1,
         onComplete: onCompleted,
     });
 };
@@ -148,9 +155,10 @@ const update = () => {
 const play = () => {
     update();
 
-    gsap.to(state, 1, {
+    gsap.to(state, {
         scaleWho: 1.2,
-        ease: Elastic.easeOut
+        ease: Elastic.easeOut,
+        duration: 1,
     });
 
     setTimeout(() => {
@@ -246,7 +254,7 @@ onMounted(() => {
 
     groupWHO.scale.set(state.scaleWho, state.scaleWho, state.scaleWho);
 
-    if (appScene.value === 'ready') {
+    if (appScene.value === 'ready' || appScene.value === 'exit') {
         justRender();
     }
 
@@ -259,6 +267,35 @@ watch(appScene, () => {
     if (appScene.value === 'first') {
         finished.value = false;
         play();
+    } else if (appScene.value === 'exit') {
+        finished.value = false;
+
+        gsap.to(state, {
+            scaleHatena: 0.0001,
+            ease: Back.easeIn.config(2),
+            duration: 0.3,
+        });
+
+        gsap.to(state, {
+            scaleAm: 0.0001,
+            delay: 0.1,
+            ease: Back.easeIn.config(2),
+            duration: 0.3,
+        });
+        
+        gsap.to(state, {
+            scaleI: 0.0001,
+            delay: 0.2,
+            ease: Back.easeIn.config(2),
+            duration: 0.3
+        });
+
+        gsap.to(state, {
+            scaleWho: 0.0001,
+            delay: 0.3,
+            ease: Back.easeIn.config(2),
+            duration: 0.3
+        });
     }
 });
 

@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxt/eslint',
     '@nuxtjs/sitemap',
+    '@nuxt/content',
   ],
   app: {
     head: {

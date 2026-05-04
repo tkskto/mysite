@@ -1,12 +1,12 @@
 <script setup>
-const { data: posts } = await useAsyncData('resume', () => $fetch('/api/resume'))
+const { data: posts } = await useAsyncData('resume', () => queryCollection('resume').all())
 </script>
 
 <template>
     <section class="section">
         <ul>
             <li v-for="post in posts" :key="post.id">
-                <article v-if="post" v-html="post.html" />
+                <ContentRenderer v-if="post" :value="post" />
             </li>
         </ul>
     </section>
@@ -83,8 +83,8 @@ const { data: posts } = await useAsyncData('resume', () => $fetch('/api/resume')
         max-width: 100%;
     }
 
-    & :deep(article > h3),
-    & :deep(article > h4) {
+    & :deep(h3),
+    & :deep(h4) {
         margin-bottom: 16px;
     }
 

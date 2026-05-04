@@ -44,11 +44,12 @@
 *   [inert属性の使いどころ](https://www.mitsue.co.jp/knowledge/blog/frontend/202206/03_1016.html)
 *   [Interop 2023の注力エリアの公募が開始されました](https://www.mitsue.co.jp/knowledge/blog/frontend/202210/03_1911.html)
 *   [font-paletteでカラーフォントを扱う](https://www.mitsue.co.jp/knowledge/blog/frontend/202301/30_1855.html)
-*   [:user-validと:user-invalid擬似クラス](https://www.mitsue.co.jp/knowledge/blog/frontend/202305/30_1750.html)
+*   [user-validとuser-invalid擬似クラス](https://www.mitsue.co.jp/knowledge/blog/frontend/202305/30_1750.html)
 *   [scriptingメディア特性のinitial-onlyについて](https://www.mitsue.co.jp/knowledge/blog/frontend/202307/24_1450.html)
 *   [Sanitizer APIのその後](https://www.mitsue.co.jp/knowledge/blog/frontend/202407/04_0815.html)
 *   [Chrome User Experience Reportのデータを確認するための新しいツール](https://www.mitsue.co.jp/knowledge/blog/frontend/202410/15_1351.html)
 *   [スクロールの状態にマッチする3つ目のコンテナクエリー「Scroll State Container Queries」](https://www.mitsue.co.jp/knowledge/blog/frontend/202412/20_1438.html)
+*   [サイト内検索で使うCSSカスタムハイライトAPI | X-tech Blog | ミツエーリンクス](https://www.mitsue.co.jp/knowledge/blog/x-tech/202603/09_0938.html)
 
 ### コラム
 
@@ -59,3 +60,4 @@ Blogはどちらかというと技術者向けの情報発信ですが、企業�
 *   [開発の視点から考える運用ファースト](https://www.mitsue.co.jp/knowledge/column/20210611.html)
 *   [PWAのQ&A](https://www.mitsue.co.jp/knowledge/column/20220422.html)
 *   [ヘッドレスCMSでWeb担当者が見落としがちな盲点とは？](https://www.mitsue.co.jp/knowledge/column/20250829.html)
+*   [AIトランスフォーメーション推進・浸透統括グループの取り組み](https://www.mitsue.co.jp/knowledge/column/20260317.html)

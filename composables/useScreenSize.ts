@@ -5,6 +5,10 @@ const screenSize = reactive({ width: 0, height: 0 });
 const canvasSize = reactive({ width: 0, height: 0 });
 
 const updateScreenSize = () => {
+    if (!import.meta.client) {
+        return;
+    }
+
     screenSize.width = window.innerWidth;
     screenSize.height = window.innerHeight;
     canvasSize.width = screenSize.width * window.devicePixelRatio;
@@ -32,7 +36,9 @@ const stopListeningResize = () => {
 
 
 export const useScreenSize = () => {
-    updateScreenSize();
+    if (import.meta.client && screenSize.width === 0 && screenSize.height === 0) {
+        updateScreenSize();
+    }
 
     return {
         screenSize,

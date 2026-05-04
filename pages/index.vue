@@ -28,7 +28,9 @@ onBeforeRouteLeave((to, from, next) => {
 <template>
     <section class="section">
         <logo />
-        <intro />
+        <ClientOnly>
+            <intro />
+        </ClientOnly>
         <p class="black-lives-matter"><strong>Black Lives Matter.</strong></p>
         <navs />
     </section>

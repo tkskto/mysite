@@ -41,11 +41,11 @@ definePageMeta({
     layout: 'practice',
 });
 
-const ratio = window.devicePixelRatio;
+const ratio = computed(() => import.meta.client ? window.devicePixelRatio : 1);
 
 const canvasPracticalWidth = computed(() => {
     if (canvasSize.width) {
-        return canvasSize.width / ratio + 'px';
+        return canvasSize.width / ratio.value + 'px';
     }
 
     return '0';
@@ -53,7 +53,7 @@ const canvasPracticalWidth = computed(() => {
 
 const canvasPracticalHeight = computed(() => {
     if (canvasSize.height) {
-        return canvasSize.height / ratio + 'px';
+        return canvasSize.height / ratio.value + 'px';
     }
 
     return '0';

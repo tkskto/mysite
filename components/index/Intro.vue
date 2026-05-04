@@ -16,7 +16,7 @@ import { useMousePosition } from '~/composables/useMousePosition';
 
 let timer: number | null = null;
 const finished = ref(false);
-const ratio = window.devicePixelRatio;
+const ratio = import.meta.client ? window.devicePixelRatio : 1;
 const {screenSize, startListeningResize, stopListeningResize} = useScreenSize();
 const {mousePosition, setMousePosition, startMouseTracking, stopMouseTracking} = useMousePosition();
 const {appScene, updateScene} = useAppScene();
